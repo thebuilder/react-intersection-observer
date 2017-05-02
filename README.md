@@ -19,12 +19,12 @@ See https://thebuilder.github.io/react-intersection-observer/ for a demo.
 
 Install using [Yarn](https://yarnpkg.com):
 ```sh
-yarn add react-view-pager
+yarn add react-intersection-observer
 ```
 
 or NPM:
 ```sh
-npm install react-view-pager --save
+npm install react-intersection-observer --save
 ```
 
 ## Props
