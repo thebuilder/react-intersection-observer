@@ -1,0 +1,23 @@
+language: node_js
+node_js:
+  - "7"
+cache: yarn
+script:
+  - yarn test
+branches:
+  only:
+    - master
+    - /^greenkeeper-.*$/
+master:
+  script:
+    - build:storybook
+deploy:
+  local_dir: example
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
+  on:
+    branch: master
+notifications:
+  slack: in2:t4HfbJOtRL7uekgIPh2DUIKb
+  email: false
