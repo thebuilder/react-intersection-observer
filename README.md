@@ -1,4 +1,6 @@
 # react-intersection-observer
+
+[![Travis](https://travis-ci.org/thebuilder/react-intersection-observer.svg?branch=master)](https://travis-ci.org/thebuilder/react-intersection-observer)
 [![Dependency Status](https://david-dm.org/thebuilder/react-intersection-observer.svg)](https://david-dm.org/thebuilder/react-intersection-observer)
 [![npm version](https://badge.fury.io/js/react-intersection-observer.svg)](https://www.npmjs.com/package/react-intersection-observer)
 
