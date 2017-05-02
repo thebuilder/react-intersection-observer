@@ -2,9 +2,8 @@
 .cache
 node_modules
 reports
-dist
-dist-storybook
-.bin/
+example
+lib/
 nuget
 npm-debug.log*
 .DS_store

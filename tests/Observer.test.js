@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import Observer from '../src/Observer.js'
+import Observer from '../src/index.js'
 
 jest.mock('../src/intersection')
 
