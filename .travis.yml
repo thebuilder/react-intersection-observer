@@ -4,20 +4,19 @@ node_js:
 cache: yarn
 script:
   - yarn test
+  - build:storybook
 branches:
   only:
     - master
     - /^greenkeeper-.*$/
-master:
-  script:
-    - build:storybook
+
 deploy:
   local_dir: example
   provider: pages
   skip_cleanup: true
   github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
   on:
-    branch: master
+   tags: true
 notifications:
   slack: in2:t4HfbJOtRL7uekgIPh2DUIKb
   email: false
