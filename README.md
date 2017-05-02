@@ -1,5 +1,6 @@
 # react-intersection-observer
 [![Dependency Status](https://david-dm.org/thebuilder/react-intersection-observer.svg)](https://david-dm.org/thebuilder/react-intersection-observer)
+[![npm version](https://badge.fury.io/js/react-intersection-observer.svg)](https://www.npmjs.com/package/react-intersection-observer)
 
 React component that allows triggers a function when the component enters or leaves the viewport.
 
@@ -12,7 +13,7 @@ import Observer from 'react-intersection-observer'
 ```
 
 ## Demo
-https://thebuilder.github.io/react-intersection-observer/
+See https://thebuilder.github.io/react-intersection-observer/ for a demo.
 
 ## Installation
 
@@ -90,7 +91,7 @@ import Observer from 'react-intersection-observer'
 </Observer>
 ```
 
-### Universal rendering
+## Universal rendering
 The IntersectionObserver polyfill requires `window` and `document`, and will crash if you try to import it outside the browser. 
 To allow the Observer to be rendered universally, it sets `global.window` and `global.document` to empty objects if they are not defined.
 
