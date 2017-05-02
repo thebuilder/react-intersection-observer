@@ -11,6 +11,9 @@ import Observer from 'react-intersection-observer'
 </Observer>
 ```
 
+## Demo
+https://thebuilder.github.io/react-intersection-observer/
+
 ## Installation
 
 Install using [Yarn](https://yarnpkg.com):
@@ -35,7 +38,7 @@ The **`<Observer />`** accepts the following props:
 | onChange         | Func      |                   | false    | Call this function whenever the in view state changes |
 | render           | Func      |                   | false    | Use render method to only render content when inView  |
 
-## Examples
+## Example code
 
 ### Child as function
 The basic usage pass a function as the child. It will be called whenever the state changes, with the new value of `inView`.
