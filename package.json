@@ -4,6 +4,10 @@
   "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
   "main": "lib/index.js",
   "author": "Daniel Schmidt",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thebuilder/react-intersection-observer"
+  },
   "license": "MIT",
   "keywords": [
     "react",
