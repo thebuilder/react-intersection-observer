@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
   "main": "lib/index.js",
+  "browser": "lib/Observer.js",
   "author": "Daniel Schmidt",
   "repository": {
     "type": "git",
@@ -17,7 +18,7 @@
     "inview"
   ],
   "scripts": {
-    "build:lib": "NODE_ENV=development babel src --out-dir lib",
+    "build:lib": "rm -rf lib && NODE_ENV=development babel src --out-dir lib",
     "build:storybook": "build-storybook --output-dir example",
     "deploy": "npm run build:storybook && git-directory-deploy --directory example --branch gh-pages",
     "lint": "eslint src/.",
@@ -47,7 +48,7 @@
     ]
   },
   "jest": {
-    "testEnvironment": "jsdom",
+    "testEnvironment": "node",
     "snapshotSerializers": [
       "<rootDir>/node_modules/enzyme-to-json/serializer"
     ]
