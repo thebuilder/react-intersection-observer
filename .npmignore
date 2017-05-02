@@ -1,0 +1,22 @@
+# Mac OSX Files
+.DS_Store
+.Trashes
+.LSOverride
+
+# Node Modules
+node_modules
+npm-debug.log
+
+# General Files
+.sass-cache
+.hg
+.idea
+.svn
+.cache
+.project
+.tmp
+.eslintignore
+yarn.lock
+stories
+.storybook
+tests
