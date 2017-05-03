@@ -9,7 +9,6 @@ branches:
   only:
     - master
     - /^greenkeeper-.*$/
-    - /^greenkeeper/.*$/
 deploy:
   local_dir: example
   provider: pages
