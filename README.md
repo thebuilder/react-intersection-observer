@@ -18,6 +18,9 @@ import Observer from 'react-intersection-observer'
 ## Demo
 See https://thebuilder.github.io/react-intersection-observer/ for a demo.
 
+#### Scroll monitor
+This module is used in [react-scroll-percentage](https://github.com/thebuilder/react-scroll-percentage) to monitor the scroll position of elements in view.
+
 ## Installation
 
 Install using [Yarn](https://yarnpkg.com):
