@@ -95,8 +95,4 @@ import Observer from 'react-intersection-observer'
 
 ## Universal rendering
 The IntersectionObserver polyfill requires `window` and `document`, and will crash if you try to import it outside the browser. 
-To allow the Observer to be rendered universally, it sets `global.window` and `global.document` to empty objects if they are not defined.
-
-Ideally you would **noop** the IntersectionObserver when rendering outside the browser, but to make integration easier i've included the hack in the module.
-
-It could potentially conflict with other modules that checks for the existence of `window` and `document`. You can always require `lib/Observer.js` directly, to skip the window check. `lib/Observer.js` is also set as the `"browser"` field.
+To allow the Observer to be rendered universally, it only loads the IntersectionObserver polyfill if `window` exists.

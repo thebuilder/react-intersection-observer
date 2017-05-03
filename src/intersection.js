@@ -1,4 +1,7 @@
-import 'intersection-observer'
+if (global.window && !process.env.SERVER) {
+  // eslint-disable-next-line global-require
+  require('intersection-observer')
+}
 
 const INSTANCE_MAP = new Map()
 const OBSERVER_MAP = new Map()
