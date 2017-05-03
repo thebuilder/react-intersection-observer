@@ -1,6 +1,6 @@
 import React from 'react'
 import { storiesOf, action } from '@kadira/storybook'
-import Observer from '../src/Observer'
+import Observer from '../src/index'
 import ScrollWrapper from './ScrollWrapper'
 
 storiesOf('Intersection Observer', module)
