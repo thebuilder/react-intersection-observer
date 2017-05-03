@@ -20,12 +20,12 @@
   "scripts": {
     "build:lib": "rm -rf lib && NODE_ENV=development babel src --out-dir lib",
     "build:storybook": "build-storybook --output-dir example",
-    "lint": "eslint src/.",
+    "lint": "eslint {src,stories,tests}/. ",
     "precommit": "lint-staged",
     "prepublish": "npm run build:lib",
     "pretty": "prettier '{src,tests,stories}/**/*.js' --write --no-semi --single-quote --trailing-comma all",
     "storybook": "start-storybook -p 9000",
-    "test": "eslint src/. && jest"
+    "test": "eslint {src,stories,tests}/. && jest"
   },
   "lint-staged": {
     "*.js": [
