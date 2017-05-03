@@ -1,7 +1,6 @@
 # react-intersection-observer
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/thebuilder/react-intersection-observer.svg)](https://greenkeeper.io/)
-
 [![Travis](https://travis-ci.org/thebuilder/react-intersection-observer.svg?branch=master)](https://travis-ci.org/thebuilder/react-intersection-observer)
 [![Dependency Status](https://david-dm.org/thebuilder/react-intersection-observer.svg)](https://david-dm.org/thebuilder/react-intersection-observer)
 [![npm](https://img.shields.io/npm/v/react-intersection-observer.svg)](https://www.npmjs.com/package/react-intersection-observer)
