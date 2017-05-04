@@ -381,7 +381,7 @@ aws4@^1.2.1:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/aws4/-/aws4-1.6.0.tgz#83ef5ca860b2b32e4a0deedee8c771b9db57471e"
 
-babel-cli@6.24.1:
+babel-cli@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-cli/-/babel-cli-6.24.1.tgz#207cd705bba61489b2ea41b5312341cf6aca2283"
   dependencies:
@@ -410,7 +410,7 @@ babel-code-frame@6.22.0, babel-code-frame@^6.11.0, babel-code-frame@^6.16.0, bab
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
-babel-core@6.24.1, babel-core@^6.0.0, babel-core@^6.11.4, babel-core@^6.24.1:
+babel-core@^6.0.0, babel-core@^6.11.4, babel-core@^6.24.1:
   version "6.24.1"
   resolved "https://registry.yarnpkg.com/babel-core/-/babel-core-6.24.1.tgz#8c428564dce1e1f41fb337ec34f4c3b022b5ad83"
   dependencies:
@@ -565,7 +565,7 @@ babel-helpers@^6.24.1:
     babel-runtime "^6.22.0"
     babel-template "^6.24.1"
 
-babel-jest@19.0.0, babel-jest@^19.0.0:
+babel-jest@^19.0.0:
   version "19.0.0"
   resolved "https://registry.yarnpkg.com/babel-jest/-/babel-jest-19.0.0.tgz#59323ced99a3a84d359da219ca881074ffc6ce3f"
   dependencies:
@@ -899,28 +899,28 @@ babel-plugin-transform-react-display-name@^6.22.0, babel-plugin-transform-react-
   dependencies:
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-react-jsx-self@6.11.0:
+babel-plugin-transform-react-jsx-self@6.11.0, babel-plugin-transform-react-jsx-self@^6.11.0:
   version "6.11.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-react-jsx-self/-/babel-plugin-transform-react-jsx-self-6.11.0.tgz#605c9450c1429f97a930f7e1dfe3f0d9d0dbd0f4"
   dependencies:
     babel-plugin-syntax-jsx "^6.8.0"
     babel-runtime "^6.9.0"
 
-babel-plugin-transform-react-jsx-self@6.22.0, babel-plugin-transform-react-jsx-self@^6.11.0, babel-plugin-transform-react-jsx-self@^6.22.0:
+babel-plugin-transform-react-jsx-self@6.22.0, babel-plugin-transform-react-jsx-self@^6.22.0:
   version "6.22.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-react-jsx-self/-/babel-plugin-transform-react-jsx-self-6.22.0.tgz#df6d80a9da2612a121e6ddd7558bcbecf06e636e"
   dependencies:
     babel-plugin-syntax-jsx "^6.8.0"
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-react-jsx-source@6.22.0, babel-plugin-transform-react-jsx-source@^6.22.0, babel-plugin-transform-react-jsx-source@^6.3.13:
+babel-plugin-transform-react-jsx-source@6.22.0, babel-plugin-transform-react-jsx-source@^6.22.0:
   version "6.22.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-react-jsx-source/-/babel-plugin-transform-react-jsx-source-6.22.0.tgz#66ac12153f5cd2d17b3c19268f4bf0197f44ecd6"
   dependencies:
     babel-plugin-syntax-jsx "^6.8.0"
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-react-jsx-source@6.9.0:
+babel-plugin-transform-react-jsx-source@6.9.0, babel-plugin-transform-react-jsx-source@^6.3.13:
   version "6.9.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-react-jsx-source/-/babel-plugin-transform-react-jsx-source-6.9.0.tgz#af684a05c2067a86e0957d4f343295ccf5dccf00"
   dependencies:
@@ -935,7 +935,7 @@ babel-plugin-transform-react-jsx@6.22.0, babel-plugin-transform-react-jsx@^6.22.
     babel-plugin-syntax-jsx "^6.8.0"
     babel-runtime "^6.22.0"
 
-babel-plugin-transform-regenerator@6.16.1:
+babel-plugin-transform-regenerator@6.16.1, babel-plugin-transform-regenerator@^6.6.0:
   version "6.16.1"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-regenerator/-/babel-plugin-transform-regenerator-6.16.1.tgz#a75de6b048a14154aae14b0122756c5bed392f59"
   dependencies:
@@ -943,7 +943,7 @@ babel-plugin-transform-regenerator@6.16.1:
     babel-types "^6.16.0"
     private "~0.1.5"
 
-babel-plugin-transform-regenerator@6.22.0, babel-plugin-transform-regenerator@^6.6.0:
+babel-plugin-transform-regenerator@6.22.0:
   version "6.22.0"
   resolved "https://registry.yarnpkg.com/babel-plugin-transform-regenerator/-/babel-plugin-transform-regenerator-6.22.0.tgz#65740593a319c44522157538d690b84094617ea6"
   dependencies:
@@ -1106,22 +1106,6 @@ babel-preset-latest@6.16.0:
     babel-preset-es2016 "^6.16.0"
     babel-preset-es2017 "^6.16.0"
 
-babel-preset-react-app@2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/babel-preset-react-app/-/babel-preset-react-app-2.2.0.tgz#3143bcf316049f78b5f9d0422fd7822ca4715ca4"
-  dependencies:
-    babel-plugin-transform-class-properties "6.22.0"
-    babel-plugin-transform-object-rest-spread "6.22.0"
-    babel-plugin-transform-react-constant-elements "6.22.0"
-    babel-plugin-transform-react-jsx "6.22.0"
-    babel-plugin-transform-react-jsx-self "6.22.0"
-    babel-plugin-transform-react-jsx-source "6.22.0"
-    babel-plugin-transform-regenerator "6.22.0"
-    babel-plugin-transform-runtime "6.22.0"
-    babel-preset-env "1.2.1"
-    babel-preset-react "6.22.0"
-    babel-runtime "6.22.0"
-
 babel-preset-react-app@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/babel-preset-react-app/-/babel-preset-react-app-1.0.0.tgz#e7613500859d96f177ba7a38a3ed0a923ee50da8"
@@ -1139,6 +1123,22 @@ babel-preset-react-app@^1.0.0:
     babel-preset-latest "6.16.0"
     babel-preset-react "6.16.0"
     babel-runtime "6.11.6"
+
+babel-preset-react-app@^2.2.0:
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/babel-preset-react-app/-/babel-preset-react-app-2.2.0.tgz#3143bcf316049f78b5f9d0422fd7822ca4715ca4"
+  dependencies:
+    babel-plugin-transform-class-properties "6.22.0"
+    babel-plugin-transform-object-rest-spread "6.22.0"
+    babel-plugin-transform-react-constant-elements "6.22.0"
+    babel-plugin-transform-react-jsx "6.22.0"
+    babel-plugin-transform-react-jsx-self "6.22.0"
+    babel-plugin-transform-react-jsx-source "6.22.0"
+    babel-plugin-transform-regenerator "6.22.0"
+    babel-plugin-transform-runtime "6.22.0"
+    babel-preset-env "1.2.1"
+    babel-preset-react "6.22.0"
+    babel-runtime "6.22.0"
 
 babel-preset-react@6.16.0:
   version "6.16.0"
@@ -2166,7 +2166,7 @@ entities@^1.1.1, entities@~1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/entities/-/entities-1.1.1.tgz#6e5c2d0a5621b5dadaecef80b90edfb5cd7772f0"
 
-enzyme-to-json@1.5.1:
+enzyme-to-json@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/enzyme-to-json/-/enzyme-to-json-1.5.1.tgz#e34f4d126bb3f4696ce3800b51f9ed83df708799"
   dependencies:
@@ -2178,7 +2178,7 @@ enzyme-to-json@1.5.1:
     object-values "^1.0.0"
     object.entries "^1.0.3"
 
-enzyme@2.8.2:
+enzyme@^2.8.2:
   version "2.8.2"
   resolved "https://registry.yarnpkg.com/enzyme/-/enzyme-2.8.2.tgz#6c8bcb05012abc4aa4bc3213fb23780b9b5b1714"
   dependencies:
@@ -2320,7 +2320,7 @@ eslint-config-airbnb@^14.1.0:
   dependencies:
     eslint-config-airbnb-base "^11.1.0"
 
-eslint-config-insilico@2.1.5:
+eslint-config-insilico@^2.1.5:
   version "2.1.5"
   resolved "https://registry.yarnpkg.com/eslint-config-insilico/-/eslint-config-insilico-2.1.5.tgz#91a178d9c81f7ebae26b1a845dc02f119dbee170"
   dependencies:
@@ -2332,7 +2332,7 @@ eslint-config-insilico@2.1.5:
     eslint-plugin-jsx-a11y "^4.0.0"
     eslint-plugin-react "^6.10.3"
 
-eslint-config-prettier@1.7.0:
+eslint-config-prettier@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/eslint-config-prettier/-/eslint-config-prettier-1.7.0.tgz#cda3ce22df1e852daa9370f1f3446e8b8a02ce44"
   dependencies:
@@ -2409,7 +2409,7 @@ eslint-plugin-react@^6.10.3:
     jsx-ast-utils "^1.3.4"
     object.assign "^4.0.4"
 
-eslint@3.19.0:
+eslint@^3.19.0:
   version "3.19.0"
   resolved "https://registry.yarnpkg.com/eslint/-/eslint-3.19.0.tgz#c8fc6201c7f40dd08941b87c085767386a679acc"
   dependencies:
@@ -3037,7 +3037,7 @@ https-browserify@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-0.0.1.tgz#3f91365cabe60b77ed0ebba24b454e3e09d95a82"
 
-husky@0.13.3:
+husky@^0.13.3:
   version "0.13.3"
   resolved "https://registry.yarnpkg.com/husky/-/husky-0.13.3.tgz#bc2066080badc8b8fe3516e881f5bc68a57052ff"
   dependencies:
@@ -3133,7 +3133,7 @@ interpret@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.0.3.tgz#cbc35c62eeee73f19ab7b10a801511401afc0f90"
 
-intersection-observer@0.2.1:
+intersection-observer@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/intersection-observer/-/intersection-observer-0.2.1.tgz#cb55175f4eebef6436d957a7d1774d39a9248e5e"
 
@@ -3646,7 +3646,7 @@ jest-validate@^19.0.2:
     leven "^2.0.0"
     pretty-format "^19.0.0"
 
-jest@19.0.2:
+jest@^19.0.2:
   version "19.0.2"
   resolved "https://registry.yarnpkg.com/jest/-/jest-19.0.2.tgz#b794faaf8ff461e7388f28beef559a54f20b2c10"
   dependencies:
@@ -3790,7 +3790,7 @@ levn@^0.3.0, levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-lint-staged@3.4.1:
+lint-staged@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-3.4.1.tgz#96cd1cf7a1ac92d81662643c37d1cca28b91b046"
   dependencies:
@@ -4953,9 +4953,9 @@ preserve@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/preserve/-/preserve-0.2.0.tgz#815ed1f6ebc65926f865b310c0713bcb3315ce4b"
 
-prettier@1.3.0:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.3.0.tgz#cb02314f1ae2a99e951c17acb77a4096a1060ac2"
+prettier@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.3.1.tgz#fa0ea84b45ac0ba6de6a1e4cecdcff900d563151"
   dependencies:
     ast-types "0.9.8"
     babel-code-frame "6.22.0"
@@ -4996,7 +4996,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@15.5.8, prop-types@^15.5.4, prop-types@^15.5.7, prop-types@~15.5.7:
+prop-types@^15.5.4, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@~15.5.7:
   version "15.5.8"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.5.8.tgz#6b7b2e141083be38c8595aa51fc55775c7199394"
   dependencies:
@@ -5094,7 +5094,7 @@ react-docgen@^2.12.1:
     node-dir "^0.1.10"
     recast "^0.11.5"
 
-react-dom@15.5.4:
+react-dom@^15.5.4:
   version "15.5.4"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.5.4.tgz#ba0c28786fd52ed7e4f2135fe0288d462aef93da"
   dependencies:
@@ -5161,14 +5161,14 @@ react-stubber@^1.0.0:
   dependencies:
     babel-runtime "^6.5.0"
 
-react-test-renderer@15.5.4:
+react-test-renderer@^15.5.4:
   version "15.5.4"
   resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-15.5.4.tgz#d4ebb23f613d685ea8f5390109c2d20fbf7c83bc"
   dependencies:
     fbjs "^0.8.9"
     object-assign "^4.1.0"
 
-react@15.5.4:
+react@^15.5.4:
   version "15.5.4"
   resolved "https://registry.yarnpkg.com/react/-/react-15.5.4.tgz#fa83eb01506ab237cdc1c8c3b1cea8de012bf047"
   dependencies:
