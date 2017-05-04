@@ -38,6 +38,33 @@ storiesOf('Intersection Observer', module)
       </Observer>
     </ScrollWrapper>
   ))
+  .add('Trigger once', () => (
+    <ScrollWrapper>
+      <Observer
+        threshold={1}
+        triggerOnce
+        onChange={action('Child Observer inview')}
+      >
+        {inView => (
+          <Header>{`Header was fully inside the viewport: ${inView}`}</Header>
+        )}
+      </Observer>
+    </ScrollWrapper>
+  ))
+  .add('Multiple observers', () => (
+    <ScrollWrapper>
+      <Observer threshold={1} onChange={action('Child Observer inview')}>
+        {inView => (
+          <Header>{`Header 1 is fully inside the viewport: ${inView}`}</Header>
+        )}
+      </Observer>
+      <Observer threshold={1} onChange={action('Child Observer inview')}>
+        {inView => (
+          <Header>{`Header 2 is fully inside the viewport: ${inView}`}</Header>
+        )}
+      </Observer>
+    </ScrollWrapper>
+  ))
   .add('Render method', () => (
     <ScrollWrapper>
       <Observer

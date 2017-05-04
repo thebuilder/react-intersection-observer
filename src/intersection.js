@@ -73,17 +73,23 @@ function onChange(changes) {
         visible,
         threshold,
       } = INSTANCE_MAP.get(intersection.target)
-      // Trigger on 0 ratio only when not visible.
-      const inView = visible
-        ? intersection.intersectionRatio > threshold
-        : intersection.intersectionRatio >= threshold
+      let inView
+      if (typeof intersection.isIntersecting === 'boolean') {
+        // Use the new "isIntersecting" property if available.
+        inView = intersection.isIntersecting
+      } else {
+        // Trigger on 0 ratio only when not visible.
+        inView = visible
+          ? intersection.intersectionRatio > threshold
+          : intersection.intersectionRatio >= threshold
+      }
 
       if (callback) {
         callback(inView)
       }
 
       // Remove element once it becomes visible
-      if (removeWhenVisible) {
+      if (inView && removeWhenVisible) {
         unobserve(intersection.target)
       } else {
         INSTANCE_MAP.set(intersection.target, {
