@@ -68,12 +68,7 @@ class Observer extends Component {
   handleNode = node => {
     if (this.node) unobserve(this.node)
     if (node) {
-      observe(
-        node,
-        this.handleChange,
-        this.props.triggerOnce,
-        this.props.threshold,
-      )
+      observe(node, this.handleChange, this.props.threshold)
     }
     this.node = node
   }
