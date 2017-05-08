@@ -30,7 +30,7 @@ export function observe(element, callback, threshold = 0) {
 
 /**
  * Stop observing an element. If an element is removed from the DOM or otherwise destroyed,
- * make sure to call this method. This is called automatically if an element has "removeWhenVisible" set to true.
+ * make sure to call this method.
  * @param element {HTMLElement}
  */
 export function unobserve(element) {
@@ -60,12 +60,9 @@ export function unobserve(element) {
 function onChange(changes) {
   changes.forEach(intersection => {
     if (INSTANCE_MAP.has(intersection.target)) {
-      const {
-        callback,
-        removeWhenVisible,
-        visible,
-        threshold,
-      } = INSTANCE_MAP.get(intersection.target)
+      const { callback, visible, threshold } = INSTANCE_MAP.get(
+        intersection.target,
+      )
       let inView
       if (typeof intersection.isIntersecting === 'boolean') {
         // Use the new "isIntersecting" property if available.
@@ -77,16 +74,15 @@ function onChange(changes) {
           : intersection.intersectionRatio >= threshold
       }
 
-      if (callback) {
-        callback(inView)
-      }
-
       INSTANCE_MAP.set(intersection.target, {
         callback,
-        removeWhenVisible,
         visible: inView,
         threshold,
       })
+
+      if (callback) {
+        callback(inView)
+      }
     }
   })
 }
