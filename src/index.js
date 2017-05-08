@@ -42,6 +42,17 @@ class Observer extends Component {
   componentWillUpdate(nextProps, nextState) {
     if (!!this.props.onChange && nextState.inView !== this.state.inView) {
       this.props.onChange(nextState.inView)
+      if (nextState.inView && nextProps.unobserve) {
+      }
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.inView !== this.state.inView) {
+      if (this.state.inView && this.props.triggerOnce) {
+        unobserve(this.node)
+        this.node = null
+      }
     }
   }
 

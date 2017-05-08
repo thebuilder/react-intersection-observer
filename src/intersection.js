@@ -10,15 +10,9 @@ const OBSERVER_MAP = new Map()
  * Monitor element, and trigger callback when element becomes visible
  * @param element {HTMLElement}
  * @param callback {Function} - Called with inView
- * @param removeWhenVisible {Boolean} Removes the observer when it's triggered the first time.
  * @param threshold {Number} Number between 0 and 1, indicating how much of the element should be visible before triggering
  */
-export function observe(
-  element,
-  callback,
-  removeWhenVisible = true,
-  threshold = 0,
-) {
+export function observe(element, callback, threshold = 0) {
   if (!element || !callback) return
   let observerInstance = OBSERVER_MAP.get(threshold)
   if (!observerInstance) {
@@ -28,7 +22,6 @@ export function observe(
 
   INSTANCE_MAP.set(element, {
     callback,
-    removeWhenVisible,
     visible: false,
     threshold,
   })
@@ -88,17 +81,12 @@ function onChange(changes) {
         callback(inView)
       }
 
-      // Remove element once it becomes visible
-      if (inView && removeWhenVisible) {
-        unobserve(intersection.target)
-      } else {
-        INSTANCE_MAP.set(intersection.target, {
-          callback,
-          removeWhenVisible,
-          visible: inView,
-          threshold,
-        })
-      }
+      INSTANCE_MAP.set(intersection.target, {
+        callback,
+        removeWhenVisible,
+        visible: inView,
+        threshold,
+      })
     }
   })
 }

@@ -60,15 +60,15 @@
     "react": "^0.14.0 || ^15.0.0"
   },
   "devDependencies": {
-    "@kadira/storybook": "^2.21.0",
+    "@kadira/storybook": "^2.35.3",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
-    "babel-jest": "^19.0.0",
+    "babel-jest": "^20.0.0",
     "babel-preset-react-app": "^2.2.0",
     "enzyme": "^2.8.2",
     "enzyme-to-json": "^1.5.1",
     "eslint": "^3.19.0",
-    "eslint-config-insilico": "^3.0.0",
+    "eslint-config-insilico": "^3.0.1",
     "eslint-config-prettier": "^2.0.0",
     "husky": "^0.13.3",
     "jest": "^20.0.0",
