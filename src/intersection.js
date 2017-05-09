@@ -45,7 +45,7 @@ export function unobserve(element) {
       observerInstance.unobserve(element)
     }
 
-    const itemsLeft = Array.from(INSTANCE_MAP.values()).some(
+    const itemsLeft = INSTANCE_MAP.values().some(
       item => item.threshold === instance.threshold,
     )
 
