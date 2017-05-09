@@ -45,12 +45,16 @@ export function unobserve(element) {
       observerInstance.unobserve(element)
     }
 
-    const itemsLeft = INSTANCE_MAP.values().some(
-      item => item.threshold === instance.threshold,
-    )
+    // Check if we are stilling observing any elements with the same threshold.
+    let itemsLeft = false
+    INSTANCE_MAP.forEach(item => {
+      if (item.threshold === instance.threshold) {
+        itemsLeft = true
+      }
+    })
 
     if (observerInstance && !itemsLeft) {
-      // No more elements to observe, disconnect
+      // No more elements to observe for threshold, disconnect observer
       observerInstance.disconnect()
       OBSERVER_MAP.delete(instance.threshold)
     }
