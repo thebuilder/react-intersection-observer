@@ -63,20 +63,15 @@ export function unobserve(element) {
 
 function onChange(changes) {
   changes.forEach(intersection => {
+    console.log(intersection)
     if (INSTANCE_MAP.has(intersection.target)) {
       const { callback, visible, threshold } = INSTANCE_MAP.get(
         intersection.target,
       )
-      let inView
-      if (typeof intersection.isIntersecting === 'boolean') {
-        // Use the new "isIntersecting" property if available.
-        inView = intersection.isIntersecting
-      } else {
-        // Trigger on 0 ratio only when not visible.
-        inView = visible
-          ? intersection.intersectionRatio > threshold
-          : intersection.intersectionRatio >= threshold
-      }
+      // Trigger on 0 ratio only when not visible.
+      const inView = visible
+        ? intersection.intersectionRatio > threshold
+        : intersection.intersectionRatio >= threshold
 
       INSTANCE_MAP.set(intersection.target, {
         callback,
