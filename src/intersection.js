@@ -63,7 +63,6 @@ export function unobserve(element) {
 
 function onChange(changes) {
   changes.forEach(intersection => {
-    console.log(intersection)
     if (INSTANCE_MAP.has(intersection.target)) {
       const { callback, visible, threshold } = INSTANCE_MAP.get(
         intersection.target,
