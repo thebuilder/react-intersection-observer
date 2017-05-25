@@ -96,7 +96,3 @@ import Observer from 'react-intersection-observer'
   </h2>
 </Observer>
 ```
-
-## Universal rendering
-The IntersectionObserver polyfill requires `window` and `document`, and will crash if you try to import it outside the browser. 
-To allow the Observer to be rendered universally, it only loads the IntersectionObserver polyfill if `window` exists.
