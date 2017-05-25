@@ -1,6 +1,6 @@
 {
   "name": "react-intersection-observer",
-  "version": "0.2.13",
+  "version": "0.3.0",
   "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
   "main": "lib/index.js",
   "browser": "lib/index.js",
@@ -55,8 +55,7 @@
       "<rootDir>/node_modules/enzyme-to-json/serializer"
     ]
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "peerDependencies": {
     "prop-types": "^15.5.10",
     "react": "^0.14.0 || ^15.0.0"
