@@ -56,8 +56,7 @@
     ]
   },
   "dependencies": {
-    "babel-plugin-transform-es2015-modules-commonjs": "6.24.1",
-    "intersection-observer": "^0.2.1"
+    "babel-plugin-transform-es2015-modules-commonjs": "6.24.1"
   },
   "peerDependencies": {
     "prop-types": "^15.5.10",
