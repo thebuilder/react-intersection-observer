@@ -5,7 +5,7 @@
 [![Dependency Status](https://david-dm.org/thebuilder/react-intersection-observer.svg)](https://david-dm.org/thebuilder/react-intersection-observer)
 [![npm](https://img.shields.io/npm/v/react-intersection-observer.svg)](https://www.npmjs.com/package/react-intersection-observer)
 
-React component that allows triggers a function when the component enters or leaves the viewport.
+React component that triggers a function when the component enters or leaves the viewport. No complex configuration needed, just wrap your views and it handles the events.
 
 ```js
 import Observer from 'react-intersection-observer'
@@ -19,7 +19,7 @@ import Observer from 'react-intersection-observer'
 See https://thebuilder.github.io/react-intersection-observer/ for a demo.
 
 #### Scroll monitor
-This module is used in [react-scroll-percentage](https://github.com/thebuilder/react-scroll-percentage) to monitor the scroll position of elements in view.
+This module is used in [react-scroll-percentage](https://github.com/thebuilder/react-scroll-percentage) to monitor the scroll position of elements in view. This module is also a great example of using `react-intersection-observer` as the basis for more complex needs.
 
 ## Installation
 
