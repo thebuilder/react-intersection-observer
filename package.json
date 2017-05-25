@@ -3,7 +3,7 @@
   "version": "0.2.13",
   "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
   "main": "lib/index.js",
-  "browser": "lib/Observer.js",
+  "browser": "lib/index.js",
   "author": "Daniel Schmidt",
   "repository": {
     "type": "git",
