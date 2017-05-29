@@ -1,6 +1,7 @@
 import React from 'react'
 import { configure } from '@kadira/storybook'
 import './base.css'
+import 'intersection-observer'
 
 /**
  * Use require.context to load dynamically: https://webpack.github.io/docs/context.html
