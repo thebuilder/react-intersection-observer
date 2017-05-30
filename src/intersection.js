@@ -30,12 +30,11 @@ export function observe(element, callback, threshold = 0) {
  */
 export function unobserve(element) {
   if (!element) return
-  const instance = INSTANCE_MAP.get(element)
 
-  if (instance) {
-    INSTANCE_MAP.delete(element)
+  if (INSTANCE_MAP.has(element)) {
+    const { threshold } = INSTANCE_MAP.get(element)
+    const observerInstance = OBSERVER_MAP.get(threshold)
 
-    const observerInstance = OBSERVER_MAP.get(instance.threshold)
     if (observerInstance) {
       observerInstance.unobserve(element)
     }
@@ -43,7 +42,7 @@ export function unobserve(element) {
     // Check if we are stilling observing any elements with the same threshold.
     let itemsLeft = false
     INSTANCE_MAP.forEach(item => {
-      if (item.threshold === instance.threshold) {
+      if (item.threshold === threshold) {
         itemsLeft = true
       }
     })
@@ -51,8 +50,11 @@ export function unobserve(element) {
     if (observerInstance && !itemsLeft) {
       // No more elements to observe for threshold, disconnect observer
       observerInstance.disconnect()
-      OBSERVER_MAP.delete(instance.threshold)
+      OBSERVER_MAP.delete(threshold)
     }
+
+    // Remove reference to element
+    INSTANCE_MAP.delete(element)
   }
 }
 
