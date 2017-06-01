@@ -3,7 +3,8 @@
   "version": "0.3.1",
   "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
   "main": "lib/index.js",
-  "browser": "lib/index.js",
+  "module": "es/index.js",
+  "jsnext:main": "es/index.js",
   "author": "Daniel Schmidt",
   "repository": {
     "type": "git",
@@ -18,11 +19,14 @@
     "inview"
   ],
   "scripts": {
-    "build:lib": "rm -rf lib && NODE_ENV=development babel src --out-dir lib",
+    "build": "rm -rf lib && npm run build:lib && npm run build:es",
+    "build:es": "BABEL_ENV=es babel src --out-dir  es --ignore __*,*.story.js,*.test.js",
+    "build:lib": "babel src --out-dir lib --ignore __*,*.story.js,*.test.js",
     "build:storybook": "build-storybook --output-dir example",
+    "dev": "concurrently -k -r 'jest --watch' 'npm run storybook'",
     "lint": "eslint {src,stories,tests}/. ",
     "precommit": "lint-staged",
-    "prepublish": "npm run build:lib",
+    "prepublish": "npm run build",
     "pretty": "prettier '{src,tests,stories}/**/*.js' --write --no-semi --single-quote --trailing-comma all",
     "storybook": "start-storybook -p 9000",
     "test": "eslint {src,stories,tests}/. && jest"
@@ -36,11 +40,24 @@
   },
   "babel": {
     "presets": [
-      "react-app"
+      "env",
+      "react",
+      "stage-2"
     ],
-    "plugins": [
-      "transform-es2015-modules-commonjs"
-    ]
+    "env": {
+      "es": {
+        "presets": [
+          [
+            "env",
+            {
+              "modules": false
+            }
+          ],
+          "react",
+          "stage-2"
+        ]
+      }
+    }
   },
   "eslintConfig": {
     "extends": [
@@ -61,13 +78,15 @@
     "react": "^0.14.0 || ^15.0.0"
   },
   "devDependencies": {
-    "@kadira/storybook": "^2.35.3",
+    "@storybook/addon-options": "^3.0.0",
+    "@storybook/react": "^3.0.0",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
     "babel-jest": "^20.0.3",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
-    "babel-preset-react-app": "^3.0.0",
-    "babel-runtime": "6.23.0",
+    "babel-preset-env": "1.5.1",
+    "babel-preset-react": "6.24.1",
+    "babel-preset-stage-2": "6.24.1",
+    "concurrently": "3.4.0",
     "enzyme": "^2.8.2",
     "enzyme-to-json": "^1.5.1",
     "eslint": "^3.19.0",

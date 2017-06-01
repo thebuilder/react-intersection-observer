@@ -4,6 +4,7 @@ node_modules
 reports
 example
 lib/
+es/
 nuget
 npm-debug.log*
 .DS_store

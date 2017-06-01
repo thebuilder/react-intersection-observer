@@ -1,7 +1,13 @@
 import React from 'react'
-import { configure } from '@kadira/storybook'
+import { configure } from '@storybook/react'
+import { setOptions } from '@storybook/addon-options'
+import pck from '../package.json'
 import './base.css'
-import 'intersection-observer'
+
+setOptions({
+  name: pck.name,
+  url: pck.repository ? pck.repository.url : null,
+})
 
 /**
  * Use require.context to load dynamically: https://webpack.github.io/docs/context.html
