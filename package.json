@@ -93,7 +93,7 @@
     "eslint": "^4.0.0",
     "eslint-config-insilico": "^4.0.0",
     "eslint-config-prettier": "^2.1.1",
-    "husky": "^0.13.4",
+    "husky": "^0.14.0",
     "intersection-observer": "^0.3.0",
     "jest": "^20.0.4",
     "lint-staged": "^4.0.0",
