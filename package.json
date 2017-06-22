@@ -87,7 +87,7 @@
     "babel-preset-env": "1.5.2",
     "babel-preset-react": "6.24.1",
     "babel-preset-stage-2": "6.24.1",
-    "concurrently": "3.4.0",
+    "concurrently": "3.5.0",
     "enzyme": "^2.8.2",
     "enzyme-to-json": "^1.5.1",
     "eslint": "^4.0.0",
