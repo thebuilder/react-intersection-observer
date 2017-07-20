@@ -19,7 +19,9 @@ const Header = props =>
       ...props.style,
     }}
   >
-    <h2>{props.children}</h2>
+    <h2>
+      {props.children}
+    </h2>
   </div>
 
 storiesOf('Intersection Observer', module)
