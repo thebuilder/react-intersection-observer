@@ -19,7 +19,7 @@ class Observer extends Component {
     tag: PropTypes.node,
     /** Children should be either a function or a node */
     children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
-    /** Only trigger this method once */
+    /** Only trigger the inView callback once */
     triggerOnce: PropTypes.bool,
     /** Number between 0 and 1 indicating the the percentage that should be visible before triggering */
     threshold: PropTypes.number,

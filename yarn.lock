@@ -3324,9 +3324,9 @@ interpret@^1.0.0:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.0.3.tgz#cbc35c62eeee73f19ab7b10a801511401afc0f90"
 
-intersection-observer@^0.3.3:
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/intersection-observer/-/intersection-observer-0.3.3.tgz#e82848a34a68793a1ee1b1ee9db954ce767bc8e2"
+intersection-observer@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/intersection-observer/-/intersection-observer-0.4.0.tgz#e7c3580be96fc1698170250b500da986c59824fb"
 
 invariant@2.x.x, invariant@^2.2.0, invariant@^2.2.2:
   version "2.2.2"
