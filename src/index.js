@@ -22,7 +22,14 @@ class Observer extends Component {
     /** Only trigger the inView callback once */
     triggerOnce: PropTypes.bool,
     /** Number between 0 and 1 indicating the the percentage that should be visible before triggering */
-    threshold: PropTypes.number,
+    threshold: PropTypes.oneOfType([PropTypes.array, PropTypes.number]),
+    /** The element that is used as the viewport for checking visibility of the target. Defaults to the browser viewport if not specified or if null.*/
+    root: PropTypes.shape({
+      id: PropTypes.string,
+      getAttribute: PropTypes.func,
+    }),
+    /** Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left). */
+    rootMargin: PropTypes.string,
     /** Call this function whenever the in view state changes */
     onChange: PropTypes.func,
     /** Use render method to only render content when inView */
@@ -42,12 +49,20 @@ class Observer extends Component {
   componentWillUpdate(nextProps, nextState) {
     if (!!this.props.onChange && nextState.inView !== this.state.inView) {
       this.props.onChange(nextState.inView)
-      if (nextState.inView && nextProps.unobserve) {
-      }
     }
   }
 
   componentDidUpdate(prevProps, prevState) {
+    // If a IntersectionObserver option changed, reinit the observer
+    if (
+      prevProps.rootMargin !== this.props.rootMargin ||
+      prevProps.root !== this.props.root ||
+      prevProps.threshold !== this.props.threshold
+    ) {
+      unobserve(this.node)
+      this.observeNode()
+    }
+
     if (prevState.inView !== this.state.inView) {
       if (this.state.inView && this.props.triggerOnce) {
         unobserve(this.node)
@@ -65,12 +80,21 @@ class Observer extends Component {
 
   node = null
 
+  observeNode() {
+    if (!this.node) return
+    observe(
+      this.node,
+      this.handleChange,
+      this.props.threshold,
+      this.props.root,
+      this.props.rootMargin,
+    )
+  }
+
   handleNode = node => {
     if (this.node) unobserve(this.node)
-    if (node) {
-      observe(node, this.handleChange, this.props.threshold)
-    }
     this.node = node
+    this.observeNode()
   }
 
   handleChange = inView => this.setState({ inView })
@@ -82,8 +106,11 @@ class Observer extends Component {
       tag,
       triggerOnce,
       threshold,
+      root,
+      rootMargin,
       ...props
     } = this.props
+
     const { inView } = this.state
 
     return createElement(
