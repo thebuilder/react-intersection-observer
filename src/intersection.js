@@ -4,22 +4,43 @@ const OBSERVER_MAP = new Map()
 /**
  * Monitor element, and trigger callback when element becomes visible
  * @param element {HTMLElement}
- * @param callback {Function} - Called with inView
+ * @param callback {Function} Called with inView
  * @param threshold {Number} Number between 0 and 1, indicating how much of the element should be visible before triggering
+ * @param root {HTMLElement} It should have a unique id or data-intersection-id in order for the Observer to reused.
+ * @param rootMargin {String} The CSS margin to apply to the root element.
  */
-export function observe(element, callback, threshold = 0) {
+export function observe(
+  element,
+  callback,
+  threshold = 0,
+  root = null,
+  rootMargin = '0px',
+) {
   if (!element || !callback) return
-  let observerInstance = OBSERVER_MAP.get(threshold)
+  let observerId = `${threshold}_${rootMargin}`
+
+  if (root) {
+    const rootId = root.id || root.getAttribute('data-intersection-id')
+    observerId = rootId ? `${rootId}_${observerId}` : null
+  }
+
+  let observerInstance = observerId ? OBSERVER_MAP.get(observerId) : null
   if (!observerInstance) {
-    observerInstance = new IntersectionObserver(onChange, { threshold })
-    OBSERVER_MAP.set(threshold, observerInstance)
+    observerInstance = new IntersectionObserver(onChange, {
+      threshold,
+      root,
+      rootMargin,
+    })
+    if (observerId) OBSERVER_MAP.set(observerId, observerInstance)
   }
 
   INSTANCE_MAP.set(element, {
     callback,
     visible: false,
     threshold,
+    observerId,
   })
+
   observerInstance.observe(element)
 }
 
@@ -32,8 +53,8 @@ export function unobserve(element) {
   if (!element) return
 
   if (INSTANCE_MAP.has(element)) {
-    const { threshold } = INSTANCE_MAP.get(element)
-    const observerInstance = OBSERVER_MAP.get(threshold)
+    const { observerId } = INSTANCE_MAP.get(element)
+    const observerInstance = OBSERVER_MAP.get(observerId)
 
     if (observerInstance) {
       observerInstance.unobserve(element)
@@ -42,7 +63,7 @@ export function unobserve(element) {
     // Check if we are stilling observing any elements with the same threshold.
     let itemsLeft = false
     INSTANCE_MAP.forEach(item => {
-      if (item.threshold === threshold) {
+      if (item.observerId === observerId) {
         itemsLeft = true
       }
     })
@@ -50,7 +71,7 @@ export function unobserve(element) {
     if (observerInstance && !itemsLeft) {
       // No more elements to observe for threshold, disconnect observer
       observerInstance.disconnect()
-      OBSERVER_MAP.delete(threshold)
+      OBSERVER_MAP.delete(observerId)
     }
 
     // Remove reference to element
@@ -58,11 +79,25 @@ export function unobserve(element) {
   }
 }
 
+/**
+ * Destroy all IntersectionObservers currently connected
+ **/
+export function destroy() {
+  OBSERVER_MAP.forEach(observer => {
+    observer.disconnect()
+  })
+
+  OBSERVER_MAP.clear()
+  INSTANCE_MAP.clear()
+}
+
 function onChange(changes) {
   changes.forEach(intersection => {
     if (INSTANCE_MAP.has(intersection.target)) {
       const { isIntersecting, intersectionRatio, target } = intersection
-      const { callback, visible, threshold } = INSTANCE_MAP.get(target)
+      const { callback, visible, threshold, observerId } = INSTANCE_MAP.get(
+        target,
+      )
 
       // Trigger on 0 ratio only when not visible. This is fallback for browsers without isIntersecting support
       let inView = visible
@@ -79,6 +114,7 @@ function onChange(changes) {
         callback,
         visible: inView,
         threshold,
+        observerId,
       })
 
       if (callback) {
@@ -91,4 +127,5 @@ function onChange(changes) {
 export default {
   observe,
   unobserve,
+  destroy,
 }

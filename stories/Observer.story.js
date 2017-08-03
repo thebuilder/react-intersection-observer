@@ -48,6 +48,18 @@ storiesOf('Intersection Observer', module)
       </Observer>
     </ScrollWrapper>,
   )
+  .add('With rootMargin', () =>
+    <ScrollWrapper>
+      <Observer
+        threshold={0}
+        rootMargin="100px"
+        onChange={action('Child Observer inview')}
+      >
+        {inView =>
+          <Header>{`Header is fully inside the viewport: ${inView}`}</Header>}
+      </Observer>
+    </ScrollWrapper>,
+  )
   .add('Trigger once', () =>
     <ScrollWrapper>
       <Observer
