@@ -4,6 +4,7 @@ import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import Observer from '../src/index'
 import ScrollWrapper from './ScrollWrapper'
+import RootComponent from './Root'
 
 const Header = props =>
   <div
@@ -60,17 +61,41 @@ storiesOf('Intersection Observer', module)
       </Observer>
     </ScrollWrapper>,
   )
-  .add('With rootMargin', () =>
-    <ScrollWrapper>
-      <Observer
-        threshold={0}
-        rootMargin="100px"
-        onChange={action('Child Observer inview')}
-      >
-        {inView =>
-          <Header>{`Header is fully inside the viewport: ${inView}`}</Header>}
-      </Observer>
-    </ScrollWrapper>,
+  .add('With root', () =>
+    <RootComponent>
+      {node =>
+        <ScrollWrapper>
+          <Observer
+            threshold={0}
+            root={node}
+            rootMargin="64px"
+            rootId="window1"
+            onChange={action('Child Observer inview')}
+          >
+            {inView =>
+              <Header
+              >{`Header is inside the root viewport: ${inView}`}</Header>}
+          </Observer>
+        </ScrollWrapper>}
+    </RootComponent>,
+  )
+  .add('With root and rootMargin', () =>
+    <RootComponent style={{ padding: 64 }}>
+      {node =>
+        <ScrollWrapper>
+          <Observer
+            threshold={0}
+            root={node}
+            rootMargin="64px"
+            rootId="window2"
+            onChange={action('Child Observer inview')}
+          >
+            {inView =>
+              <Header
+              >{`Header is inside the root viewport: ${inView}`}</Header>}
+          </Observer>
+        </ScrollWrapper>}
+    </RootComponent>,
   )
   .add('Trigger once', () =>
     <ScrollWrapper>
