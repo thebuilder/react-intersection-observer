@@ -97,11 +97,20 @@ function onChange(changes) {
       const { callback, visible, options, observerId } = INSTANCE_MAP.get(
         target,
       )
+      let inView
 
-      // Trigger on 0 ratio only when not visible. This is fallback for browsers without isIntersecting support
-      let inView = visible
-        ? intersectionRatio > options.threshold
-        : intersectionRatio >= options.threshold
+      if (Array.isArray(options.threshold)) {
+        inView = options.threshold.some(threshold => {
+          return visible
+            ? intersectionRatio > threshold
+            : intersectionRatio >= threshold
+        })
+      } else {
+        // Trigger on 0 ratio only when not visible. This is fallback for browsers without isIntersecting support
+        inView = visible
+          ? intersectionRatio > options.threshold
+          : intersectionRatio >= options.threshold
+      }
 
       if (isIntersecting !== undefined) {
         // If isIntersecting is defined, ensure that the element is actually intersecting.

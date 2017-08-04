@@ -50,7 +50,7 @@ class Observer extends Component {
   }
 
   componentWillUpdate(nextProps, nextState) {
-    if (!!this.props.onChange && nextState.inView !== this.state.inView) {
+    if (!!this.props.onChange && nextState !== this.state) {
       this.props.onChange(nextState.inView)
     }
   }
@@ -114,6 +114,7 @@ class Observer extends Component {
       triggerOnce,
       threshold,
       root,
+      rootId,
       rootMargin,
       ...props
     } = this.props
