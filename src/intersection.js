@@ -33,15 +33,19 @@ export function observe(
     if (observerId) OBSERVER_MAP.set(observerId, observerInstance)
   }
 
-  INSTANCE_MAP.set(element, {
+  const instance = {
     callback,
     visible: false,
     options,
     observerId,
     observer: !observerId ? observerInstance : undefined,
-  })
+  }
+
+  INSTANCE_MAP.set(element, instance)
 
   observerInstance.observe(element)
+
+  return instance
 }
 
 /**
