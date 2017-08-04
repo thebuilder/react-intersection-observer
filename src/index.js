@@ -22,14 +22,17 @@ class Observer extends Component {
     /** Only trigger the inView callback once */
     triggerOnce: PropTypes.bool,
     /** Number between 0 and 1 indicating the the percentage that should be visible before triggering */
-    threshold: PropTypes.oneOfType([PropTypes.array, PropTypes.number]),
-    /** The element that is used as the viewport for checking visibility of the target. Defaults to the browser viewport if not specified or if null.*/
-    root: PropTypes.shape({
-      id: PropTypes.string,
-      getAttribute: PropTypes.func,
-    }),
+    threshold: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.number),
+      PropTypes.number,
+    ]),
+    /** The HTMLElement that is used as the viewport for checking visibility of the target. Defaults to the browser viewport if not specified or if null.*/
+    root: PropTypes.object,
     /** Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left). */
     rootMargin: PropTypes.string,
+    /** Unique identifier for the root element - This is used to identify the IntersectionObserver instance, so it can be reused.
+     * If you defined a root element, without adding an id, it will create a new instance for all components. */
+    rootId: PropTypes.string,
     /** Call this function whenever the in view state changes */
     onChange: PropTypes.func,
     /** Use render method to only render content when inView */
@@ -82,12 +85,16 @@ class Observer extends Component {
 
   observeNode() {
     if (!this.node) return
+    const { threshold, root, rootMargin, rootId } = this.props
     observe(
       this.node,
       this.handleChange,
-      this.props.threshold,
-      this.props.root,
-      this.props.rootMargin,
+      {
+        threshold,
+        root,
+        rootMargin,
+      },
+      rootId,
     )
   }
 
