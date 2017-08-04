@@ -21,7 +21,7 @@ class Observer extends Component {
     children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
     /** Only trigger the inView callback once */
     triggerOnce: PropTypes.bool,
-    /** Number between 0 and 1 indicating the the percentage that should be visible before triggering */
+    /** Number between 0 and 1 indicating the the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. */
     threshold: PropTypes.oneOfType([
       PropTypes.arrayOf(PropTypes.number),
       PropTypes.number,
