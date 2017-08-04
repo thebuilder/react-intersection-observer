@@ -38,6 +38,7 @@ export function observe(
     visible: false,
     options,
     observerId,
+    observer: !observerId ? observerInstance : undefined,
   })
 
   observerInstance.observe(element)
@@ -52,8 +53,10 @@ export function unobserve(element) {
   if (!element) return
 
   if (INSTANCE_MAP.has(element)) {
-    const { observerId } = INSTANCE_MAP.get(element)
-    const observerInstance = OBSERVER_MAP.get(observerId)
+    const { observerId, observer } = INSTANCE_MAP.get(element)
+    const observerInstance = observerId
+      ? OBSERVER_MAP.get(observerId)
+      : observer
 
     if (observerInstance) {
       observerInstance.unobserve(element)
@@ -61,11 +64,13 @@ export function unobserve(element) {
 
     // Check if we are stilling observing any elements with the same threshold.
     let itemsLeft = false
-    INSTANCE_MAP.forEach((item, key) => {
-      if (item.observerId === observerId && key !== element) {
-        itemsLeft = true
-      }
-    })
+    if (observerId) {
+      INSTANCE_MAP.forEach((item, key) => {
+        if (item.observerId === observerId && key !== element) {
+          itemsLeft = true
+        }
+      })
+    }
 
     if (observerInstance && !itemsLeft) {
       // No more elements to observe for threshold, disconnect observer
@@ -94,20 +99,21 @@ function onChange(changes) {
   changes.forEach(intersection => {
     if (INSTANCE_MAP.has(intersection.target)) {
       const { isIntersecting, intersectionRatio, target } = intersection
-      const { callback, visible, options, observerId } = INSTANCE_MAP.get(
-        target,
-      )
+      const instance = INSTANCE_MAP.get(target)
+      const options = instance.options
+
       let inView
 
       if (Array.isArray(options.threshold)) {
+        // If threshold is an array, check if any of them intersects. This just triggers the onChange event multiple times.
         inView = options.threshold.some(threshold => {
-          return visible
+          return instance.visible
             ? intersectionRatio > threshold
             : intersectionRatio >= threshold
         })
       } else {
         // Trigger on 0 ratio only when not visible. This is fallback for browsers without isIntersecting support
-        inView = visible
+        inView = instance.visible
           ? intersectionRatio > options.threshold
           : intersectionRatio >= options.threshold
       }
@@ -118,15 +124,11 @@ function onChange(changes) {
         inView = inView && isIntersecting
       }
 
-      INSTANCE_MAP.set(target, {
-        callback,
-        visible: inView,
-        options,
-        observerId,
-      })
+      // Update the visible value on the instance
+      instance.visible = inView
 
-      if (callback) {
-        callback(inView)
+      if (instance.callback) {
+        instance.callback(inView)
       }
     }
   })
