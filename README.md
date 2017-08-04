@@ -42,7 +42,7 @@ You can import the [polyfill](https://yarnpkg.com/en/package/intersection-observ
 yarn add intersection-observer
 ```
 
-Then import it in your app
+Then import it in your app:
 
 ```js
 import 'intersection-observer'
@@ -53,10 +53,10 @@ The **`<Observer />`** accepts the following props:
 
 | Name             | Type      | Default           | Required | Description                                           |
 | ---------------- | --------- | ----------------- | -------- | ----------------------------------------------------- |
+| children         | func/node |                   | true     | Children should be either a function or a node        |
 | tag              | String    |                   | false    | Element tag to use for the wrapping component         |
-| children         | func/node |                   | false    | Children should be either a function or a node        |
-| triggerOnce      | Bool      | false             | true     | Only trigger this method once                         |
 | threshold        | Number    | 0                 | false    | Number between 0 and 1 indicating the the percentage that should be visible before triggering  |
+| triggerOnce      | Bool      | false             | false     | Only trigger this method once                         |
 | onChange         | Func      |                   | false    | Call this function whenever the in view state changes |
 | render           | Func      |                   | false    | Use render method to only render content when inView  |
 
