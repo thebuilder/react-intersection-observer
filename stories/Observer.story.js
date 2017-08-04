@@ -44,7 +44,19 @@ storiesOf('Intersection Observer', module)
     <ScrollWrapper>
       <Observer threshold={0.5} onChange={action('Child Observer inview')}>
         {inView =>
-          <Header>{`Header is fully inside the viewport: ${inView}`}</Header>}
+          <Header>{`Header is 50% inside the viewport: ${inView}`}</Header>}
+      </Observer>
+    </ScrollWrapper>,
+  )
+  .add('With threshold array', () =>
+    <ScrollWrapper>
+      <Observer
+        threshold={[0, 0.25, 0.5, 0.75, 1]}
+        onChange={action('Hit threshold trigger')}
+      >
+        {inView =>
+          <Header
+          >{`Header is inside threshold: ${inView} - onChange triggers multiple times.`}</Header>}
       </Observer>
     </ScrollWrapper>,
   )
