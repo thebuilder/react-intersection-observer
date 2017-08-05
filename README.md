@@ -66,7 +66,7 @@ The **`<Observer />`** accepts the following props:
 ## Example code
 
 ### Child as function
-The basic usage pass a function as the child. It will be called whenever the state changes, with the new value of `inView`.
+The default way to use the `Observer`, is to pass a function as the child. It will be called whenever the state changes, with the new value of `inView`.
 
 ```js
 import Observer from 'react-intersection-observer'
