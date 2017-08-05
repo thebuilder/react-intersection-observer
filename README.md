@@ -77,7 +77,7 @@ import Observer from 'react-intersection-observer'
 ```
 
 ### Render callback
-For simple usecases where you wan't to only render a component when it enters view, you can use the `render` prop.
+For simple use cases where you want to only render a component when it enters view, you can use the `render` prop.
 
 ```js
 import Observer from 'react-intersection-observer'
