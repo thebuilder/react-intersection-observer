@@ -48,6 +48,36 @@ Then import it in your app:
 import 'intersection-observer'
 ```
 
+If you are using Webpack (or similar) you could use [dynamic imports](https://webpack.js.org/api/module-methods/#import-), to load the Polyfill only if needed. 
+A basic implementation could look something like this:
+
+```js
+loadPolyfills()
+  .then(() => /* Render React application now that your Polyfills are ready */)
+
+/**
+* Do feature detection, to figure out which polyfills needs to be imported.
+**/
+function loadPolyfills() {
+  const polyfills = []
+
+  if (!supportsIntersectionObserver()) {
+    polyfills.push(import('intersection-observer'))
+  }
+
+  return Promise.all(polyfills)
+}
+
+function supportsIntersectionObserver() {
+  return (
+    'IntersectionObserver' in global &&
+    'IntersectionObserverEntry' in global &&
+    'intersectionRatio' in IntersectionObserverEntry.prototype
+  )
+}
+
+```
+
 ## Props
 The **`<Observer />`** accepts the following props:
 
