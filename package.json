@@ -96,7 +96,7 @@
     "eslint-config-prettier": "^2.3.0",
     "husky": "^0.14.3",
     "intersection-observer": "^0.4.0",
-    "jest": "^20.0.4",
+    "jest": "^21.0.0",
     "lint-staged": "^4.0.2",
     "prettier": "^1.5.3",
     "prop-types": "^15.5.10",
