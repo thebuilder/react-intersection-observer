@@ -6,7 +6,7 @@ import Observer from '../src/index'
 import ScrollWrapper from './ScrollWrapper'
 import RootComponent from './Root'
 
-const Header = props =>
+const Header = props => (
   <div
     style={{
       display: 'flex',
@@ -20,50 +20,52 @@ const Header = props =>
       ...props.style,
     }}
   >
-    <h2>
-      {props.children}
-    </h2>
+    <h2>{props.children}</h2>
   </div>
+)
 
 storiesOf('Intersection Observer', module)
-  .add('Child as function', () =>
+  .add('Child as function', () => (
     <ScrollWrapper>
       <Observer onChange={action('Child Observer inview')}>
         {inView => <Header>{`Header inside viewport: ${inView}`}</Header>}
       </Observer>
-    </ScrollWrapper>,
-  )
-  .add('With threshold 100%', () =>
+    </ScrollWrapper>
+  ))
+  .add('With threshold 100%', () => (
     <ScrollWrapper>
       <Observer threshold={1} onChange={action('Child Observer inview')}>
-        {inView =>
-          <Header>{`Header is fully inside the viewport: ${inView}`}</Header>}
+        {inView => (
+          <Header>{`Header is fully inside the viewport: ${inView}`}</Header>
+        )}
       </Observer>
-    </ScrollWrapper>,
-  )
-  .add('With threshold 50%', () =>
+    </ScrollWrapper>
+  ))
+  .add('With threshold 50%', () => (
     <ScrollWrapper>
       <Observer threshold={0.5} onChange={action('Child Observer inview')}>
-        {inView =>
-          <Header>{`Header is 50% inside the viewport: ${inView}`}</Header>}
+        {inView => (
+          <Header>{`Header is 50% inside the viewport: ${inView}`}</Header>
+        )}
       </Observer>
-    </ScrollWrapper>,
-  )
-  .add('With threshold array', () =>
+    </ScrollWrapper>
+  ))
+  .add('With threshold array', () => (
     <ScrollWrapper>
       <Observer
         threshold={[0, 0.25, 0.5, 0.75, 1]}
         onChange={action('Hit threshold trigger')}
       >
-        {inView =>
+        {inView => (
           <Header
-          >{`Header is inside threshold: ${inView} - onChange triggers multiple times.`}</Header>}
+          >{`Header is inside threshold: ${inView} - onChange triggers multiple times.`}</Header>
+        )}
       </Observer>
-    </ScrollWrapper>,
-  )
-  .add('With root', () =>
+    </ScrollWrapper>
+  ))
+  .add('With root', () => (
     <RootComponent>
-      {node =>
+      {node => (
         <ScrollWrapper>
           <Observer
             threshold={0}
@@ -72,16 +74,17 @@ storiesOf('Intersection Observer', module)
             rootId="window1"
             onChange={action('Child Observer inview')}
           >
-            {inView =>
-              <Header
-              >{`Header is inside the root viewport: ${inView}`}</Header>}
+            {inView => (
+              <Header>{`Header is inside the root viewport: ${inView}`}</Header>
+            )}
           </Observer>
-        </ScrollWrapper>}
-    </RootComponent>,
-  )
-  .add('With root and rootMargin', () =>
+        </ScrollWrapper>
+      )}
+    </RootComponent>
+  ))
+  .add('With root and rootMargin', () => (
     <RootComponent style={{ padding: 64 }}>
-      {node =>
+      {node => (
         <ScrollWrapper>
           <Observer
             threshold={0}
@@ -90,43 +93,47 @@ storiesOf('Intersection Observer', module)
             rootId="window2"
             onChange={action('Child Observer inview')}
           >
-            {inView =>
-              <Header
-              >{`Header is inside the root viewport: ${inView}`}</Header>}
+            {inView => (
+              <Header>{`Header is inside the root viewport: ${inView}`}</Header>
+            )}
           </Observer>
-        </ScrollWrapper>}
-    </RootComponent>,
-  )
-  .add('Trigger once', () =>
+        </ScrollWrapper>
+      )}
+    </RootComponent>
+  ))
+  .add('Trigger once', () => (
     <ScrollWrapper>
       <Observer
         threshold={1}
         triggerOnce
         onChange={action('Child Observer inview')}
       >
-        {inView =>
-          <Header>{`Header was fully inside the viewport: ${inView}`}</Header>}
+        {inView => (
+          <Header>{`Header was fully inside the viewport: ${inView}`}</Header>
+        )}
       </Observer>
-    </ScrollWrapper>,
-  )
-  .add('Multiple observers', () =>
+    </ScrollWrapper>
+  ))
+  .add('Multiple observers', () => (
     <ScrollWrapper>
       <Observer threshold={1} onChange={action('Child Observer inview')}>
-        {inView =>
-          <Header>{`Header 1 is fully inside the viewport: ${inView}`}</Header>}
+        {inView => (
+          <Header>{`Header 1 is fully inside the viewport: ${inView}`}</Header>
+        )}
       </Observer>
       <Observer threshold={1} onChange={action('Child Observer inview')}>
-        {inView =>
-          <Header>{`Header 2 is fully inside the viewport: ${inView}`}</Header>}
+        {inView => (
+          <Header>{`Header 2 is fully inside the viewport: ${inView}`}</Header>
+        )}
       </Observer>
-    </ScrollWrapper>,
-  )
-  .add('Render method', () =>
+    </ScrollWrapper>
+  ))
+  .add('Render method', () => (
     <ScrollWrapper>
       <Observer
         style={{ height: 200, position: 'relative' }}
         onChange={action('Render Observer inview')}
-        render={() =>
+        render={() => (
           <div
             style={{
               position: 'absolute',
@@ -140,16 +147,17 @@ storiesOf('Intersection Observer', module)
               Header is only rendered once observer is in view. Make sure that
               the Observer controls the height, so it does not change.
             </Header>
-          </div>}
+          </div>
+        )}
       />
-    </ScrollWrapper>,
-  )
-  .add('Plain child', () =>
+    </ScrollWrapper>
+  ))
+  .add('Plain child', () => (
     <ScrollWrapper>
       <Observer onChange={action('Plain Observer inview')}>
         <Header>
           Plain children are always rendered. Use onChange to monitor state.
         </Header>
       </Observer>
-    </ScrollWrapper>,
-  )
+    </ScrollWrapper>
+  ))

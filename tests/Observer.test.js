@@ -6,21 +6,13 @@ jest.mock('../src/intersection')
 
 it('Should render <Observer />', () => {
   const callback = jest.fn()
-  shallow(
-    <Observer>
-      {callback}
-    </Observer>,
-  )
+  shallow(<Observer>{callback}</Observer>)
   expect(callback).toHaveBeenCalledWith(false)
 })
 
 it('Should render <Observer /> inview', () => {
   const callback = jest.fn()
-  const wrapper = shallow(
-    <Observer>
-      {callback}
-    </Observer>,
-  )
+  const wrapper = shallow(<Observer>{callback}</Observer>)
   wrapper.setState({ inView: true })
   expect(callback).toHaveBeenLastCalledWith(true)
 })
