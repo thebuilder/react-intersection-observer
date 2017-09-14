@@ -70,7 +70,7 @@ export function unobserve(element) {
     let itemsLeft = false
     if (observerId) {
       INSTANCE_MAP.forEach((item, key) => {
-        if (item.observerId === observerId && key !== element) {
+        if (item && item.observerId === observerId && key !== element) {
           itemsLeft = true
         }
       })
