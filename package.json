@@ -92,7 +92,7 @@
     "enzyme": "^2.9.1",
     "enzyme-to-json": "^2.0.0",
     "eslint": "^4.3.0",
-    "eslint-config-insilico": "^4.1.1",
+    "eslint-config-insilico": "^5.0.0",
     "eslint-config-prettier": "^2.3.0",
     "husky": "^0.14.3",
     "intersection-observer": "^0.4.0",
