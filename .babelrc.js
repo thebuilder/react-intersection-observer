@@ -4,7 +4,6 @@ module.exports = {
       'env',
       process.env.BABEL_ENV === 'es'
         ? {
-            targets: { node: '7' },
             modules: false,
           }
         : {},
