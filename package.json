@@ -1,8 +1,7 @@
 {
   "name": "react-intersection-observer",
-  "version": "1.0.1",
-  "description":
-    "Monitor if a component is inside the viewport, using IntersectionObserver API",
+  "version": "1.1.0",
+  "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
   "main": "lib/index.js",
   "module": "es/index.js",
   "jsnext:main": "es/index.js",
@@ -12,11 +11,16 @@
     "url": "https://github.com/thebuilder/react-intersection-observer"
   },
   "license": "MIT",
-  "keywords": ["react", "component", "viewport", "intersection", "inview"],
+  "keywords": [
+    "react",
+    "component",
+    "viewport",
+    "intersection",
+    "inview"
+  ],
   "scripts": {
     "build": "rm -rf lib && npm run build:lib && npm run build:es",
-    "build:es":
-      "BABEL_ENV=es babel src --out-dir  es --ignore __*,*.story.js,*.test.js",
+    "build:es": "BABEL_ENV=es babel src --out-dir  es --ignore __*,*.story.js,*.test.js",
     "build:lib": "babel src --out-dir lib --ignore __*,*.story.js,*.test.js",
     "build:storybook": "build-storybook --output-dir example",
     "dev": "concurrently -k -r 'jest --watch' 'npm run storybook'",
@@ -24,8 +28,7 @@
     "precommit": "lint-staged",
     "postcommit": "git reset",
     "prepublish": "npm run build",
-    "pretty":
-      "prettier '{src,tests,stories}/**/*.js' --write --no-semi --single-quote --trailing-comma all",
+    "pretty": "prettier '{src,tests,stories}/**/*.js' --write --no-semi --single-quote --trailing-comma all",
     "storybook": "start-storybook -p 9000",
     "test": "eslint {src,stories,tests}/. && jest"
   },
@@ -37,15 +40,23 @@
     ]
   },
   "eslintConfig": {
-    "extends": ["insilico"]
+    "extends": [
+      "insilico"
+    ]
   },
   "babel": {
-    "presets": ["./.babelrc.js"]
+    "presets": [
+      "./.babelrc.js"
+    ]
   },
   "jest": {
     "testEnvironment": "node",
-    "snapshotSerializers": ["enzyme-to-json/serializer"],
-    "setupFiles": ["<rootDir>/jest-setup.js"]
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
+    "setupFiles": [
+      "<rootDir>/jest-setup.js"
+    ]
   },
   "dependencies": {},
   "peerDependencies": {
