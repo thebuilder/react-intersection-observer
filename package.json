@@ -1,7 +1,8 @@
 {
   "name": "react-intersection-observer",
   "version": "1.0.1",
-  "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
+  "description":
+    "Monitor if a component is inside the viewport, using IntersectionObserver API",
   "main": "lib/index.js",
   "module": "es/index.js",
   "jsnext:main": "es/index.js",
@@ -11,16 +12,11 @@
     "url": "https://github.com/thebuilder/react-intersection-observer"
   },
   "license": "MIT",
-  "keywords": [
-    "react",
-    "component",
-    "viewport",
-    "intersection",
-    "inview"
-  ],
+  "keywords": ["react", "component", "viewport", "intersection", "inview"],
   "scripts": {
     "build": "rm -rf lib && npm run build:lib && npm run build:es",
-    "build:es": "BABEL_ENV=es babel src --out-dir  es --ignore __*,*.story.js,*.test.js",
+    "build:es":
+      "BABEL_ENV=es babel src --out-dir  es --ignore __*,*.story.js,*.test.js",
     "build:lib": "babel src --out-dir lib --ignore __*,*.story.js,*.test.js",
     "build:storybook": "build-storybook --output-dir example",
     "dev": "concurrently -k -r 'jest --watch' 'npm run storybook'",
@@ -28,7 +24,8 @@
     "precommit": "lint-staged",
     "postcommit": "git reset",
     "prepublish": "npm run build",
-    "pretty": "prettier '{src,tests,stories}/**/*.js' --write --no-semi --single-quote --trailing-comma all",
+    "pretty":
+      "prettier '{src,tests,stories}/**/*.js' --write --no-semi --single-quote --trailing-comma all",
     "storybook": "start-storybook -p 9000",
     "test": "eslint {src,stories,tests}/. && jest"
   },
@@ -39,39 +36,16 @@
       "git add"
     ]
   },
-  "babel": {
-    "presets": [
-      "env",
-      "react",
-      "stage-2"
-    ],
-    "env": {
-      "es": {
-        "presets": [
-          [
-            "env",
-            {
-              "modules": false
-            }
-          ],
-          "react",
-          "stage-2"
-        ]
-      }
-    }
-  },
   "eslintConfig": {
-    "extends": [
-      "insilico",
-      "prettier",
-      "prettier/react"
-    ]
+    "extends": ["insilico"]
+  },
+  "babel": {
+    "presets": ["./.babelrc.js"]
   },
   "jest": {
     "testEnvironment": "node",
-    "snapshotSerializers": [
-      "<rootDir>/node_modules/enzyme-to-json/serializer"
-    ]
+    "snapshotSerializers": ["enzyme-to-json/serializer"],
+    "setupFiles": ["<rootDir>/jest-setup.js"]
   },
   "dependencies": {},
   "peerDependencies": {
@@ -79,29 +53,29 @@
     "react": "^0.14.0 || ^15.0.0 || ^16.0.0"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^3.1.9",
-    "@storybook/addon-options": "^3.1.6",
-    "@storybook/react": "^3.1.9",
+    "@storybook/addon-actions": "^3.2.11",
+    "@storybook/addon-options": "^3.2.10",
+    "@storybook/react": "^3.2.11",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
-    "babel-jest": "^21.0.0",
+    "babel-jest": "^21.2.0",
     "babel-preset-env": "^1.6.0",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "concurrently": "3.5.0",
-    "enzyme": "^2.9.1",
-    "enzyme-to-json": "^2.0.0",
-    "eslint": "^4.3.0",
+    "enzyme": "^3.0.0",
+    "enzyme-adapter-react-16": "^1.0.0",
+    "enzyme-to-json": "^3.0.1",
+    "eslint": "^4.7.2",
     "eslint-config-insilico": "^5.0.0",
-    "eslint-config-prettier": "^2.3.0",
     "husky": "^0.14.3",
     "intersection-observer": "^0.4.0",
-    "jest": "^21.0.0",
-    "lint-staged": "^4.0.2",
-    "prettier": "^1.5.3",
-    "prop-types": "^15.5.10",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "react-test-renderer": "^15.6.1"
+    "jest": "^21.2.0",
+    "lint-staged": "^4.2.3",
+    "prettier": "^1.7.0",
+    "prop-types": "^15.6.0",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-test-renderer": "^16.0.0"
   }
 }
