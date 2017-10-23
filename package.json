@@ -62,7 +62,7 @@
     "prop-types": "^15.6.0"
   },
   "peerDependencies": {
-    "react": ">=0.15.0"
+    "react": "^16.0.0"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^3.2.12",
