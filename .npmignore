@@ -16,8 +16,13 @@ npm-debug.log
 .project
 .tmp
 .eslintignore
+.flowconfig
+.travis.yml
+.babelrc.js
+.editorconfig
 yarn.lock
 stories
 .storybook
 tests
 example
+jest-setup.js
