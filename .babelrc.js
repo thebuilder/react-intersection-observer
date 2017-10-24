@@ -1,14 +1,3 @@
 module.exports = {
-  presets: [
-    [
-      'env',
-      process.env.BABEL_ENV === 'es'
-        ? {
-            modules: false,
-          }
-        : {},
-    ],
-    'react',
-    'stage-2',
-  ],
+  presets: ['env', 'react', 'stage-2'],
 }

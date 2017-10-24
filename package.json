@@ -3,8 +3,6 @@
   "version": "1.2.1",
   "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
   "main": "lib/index.js",
-  "module": "es/index.js",
-  "jsnext:main": "es/index.js",
   "author": "Daniel Schmidt",
   "repository": {
     "type": "git",
@@ -19,10 +17,10 @@
     "inview"
   ],
   "scripts": {
-    "build": "rm -rf lib && npm run build:lib && npm run build:es",
-    "build:es": "BABEL_ENV=es babel src --out-dir es --ignore __*,*.story.js,*.test.js",
+    "build": "rm -rf lib es && npm run build:lib && npm run build:flow",
     "build:lib": "babel src --out-dir lib --ignore __*,*.story.js,*.test.js",
     "build:storybook": "build-storybook --output-dir example",
+    "build:flow": "flow-copy-source -v src lib",
     "dev": "concurrently -k -r 'jest --watch' 'npm run storybook'",
     "lint": "eslint {src,stories,tests}/. ",
     "precommit": "flow && lint-staged",
@@ -58,8 +56,7 @@
       "<rootDir>/jest-setup.js"
     ]
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "peerDependencies": {
     "react": "^15.0.0 || ^16.0.0 || ^17.0.0"
   },
@@ -80,6 +77,7 @@
     "eslint": "^4.9.0",
     "eslint-config-insilico": "^5.0.1",
     "flow-bin": "^0.57.3",
+    "flow-copy-source": "^1.2.1",
     "husky": "^0.14.3",
     "intersection-observer": "^0.4.0",
     "jest": "^21.2.1",
