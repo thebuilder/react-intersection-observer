@@ -1,4 +1,5 @@
-import React, { PureComponent } from 'react'
+// @flow
+import * as React from 'react'
 
 const style = {
   margin: '64px',
@@ -11,13 +12,23 @@ const style = {
   bottom: '0',
 }
 
-class RootComponent extends PureComponent {
+type Props = {
+  children: (node: HTMLElement) => React.Node,
+  style?: {
+    [key: string]: string | number,
+  },
+}
+
+type State = {
+  node: ?HTMLElement,
+}
+
+class RootComponent extends React.PureComponent<Props, State> {
   state = {
     node: null,
   }
 
-  handleNode = node => {
-    this.rootNode = node
+  handleNode = (node: ?HTMLElement) => {
     this.setState({
       node,
     })

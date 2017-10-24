@@ -1,5 +1,16 @@
-const INSTANCE_MAP = new Map()
-const OBSERVER_MAP = new Map()
+// @flow
+type Callback = (inView: boolean) => void
+
+type Instance = {
+  callback: Callback,
+  visible: boolean,
+  options: IntersectionObserverOptions,
+  observerId: ?string,
+  observer: ?IntersectionObserver,
+}
+
+const INSTANCE_MAP: Map<HTMLElement, Instance> = new Map()
+const OBSERVER_MAP: Map<?string, IntersectionObserver> = new Map()
 
 /**
  * Monitor element, and trigger callback when element becomes visible
@@ -12,16 +23,19 @@ const OBSERVER_MAP = new Map()
  * @param rootId {String} Unique identifier for the root element, to enable reusing the IntersectionObserver
  */
 export function observe(
-  element,
-  callback,
-  options = {
+  element: HTMLElement,
+  callback: Callback,
+  options: IntersectionObserverOptions = {
     threshold: 0,
   },
-  rootId = null,
+  rootId?: string,
 ) {
-  const { threshold, root, rootMargin } = options
+  const { root, rootMargin } = options
+  const threshold = options.threshold || 0
   if (!element || !callback) return
-  let observerId = rootMargin ? `${threshold}_${rootMargin}` : `${threshold}`
+  let observerId = rootMargin
+    ? `${threshold.toString()}_${rootMargin}`
+    : `${threshold.toString()}`
 
   if (root) {
     observerId = rootId ? `${rootId}_${observerId}` : null
@@ -33,7 +47,7 @@ export function observe(
     if (observerId) OBSERVER_MAP.set(observerId, observerInstance)
   }
 
-  const instance = {
+  const instance: Instance = {
     callback,
     visible: false,
     options,
@@ -53,16 +67,18 @@ export function observe(
  * make sure to call this method.
  * @param element {HTMLElement}
  */
-export function unobserve(element) {
+export function unobserve(element: ?HTMLElement) {
   if (!element) return
+  const instance = INSTANCE_MAP.get(element)
 
-  if (INSTANCE_MAP.has(element)) {
-    const { observerId, observer } = INSTANCE_MAP.get(element)
+  if (instance) {
+    const { observerId, observer } = instance
     const observerInstance = observerId
       ? OBSERVER_MAP.get(observerId)
       : observer
 
     if (observerInstance) {
+      // $FlowFixMe - the interface in bom.js is wrong. Spec should accept the element.
       observerInstance.unobserve(element)
     }
 
@@ -101,12 +117,12 @@ export function destroy() {
 
 function onChange(changes) {
   changes.forEach(intersection => {
-    if (INSTANCE_MAP.has(intersection.target)) {
-      const { isIntersecting, intersectionRatio, target } = intersection
-      const instance = INSTANCE_MAP.get(target)
+    const { isIntersecting, intersectionRatio, target } = intersection
+    const instance = INSTANCE_MAP.get(target)
+    if (instance) {
       const options = instance.options
 
-      let inView
+      let inView = false
 
       if (Array.isArray(options.threshold)) {
         // If threshold is an array, check if any of them intersects. This just triggers the onChange event multiple times.
@@ -115,7 +131,7 @@ function onChange(changes) {
             ? intersectionRatio > threshold
             : intersectionRatio >= threshold
         })
-      } else {
+      } else if (options.threshold !== undefined) {
         // Trigger on 0 ratio only when not visible. This is fallback for browsers without isIntersecting support
         inView = instance.visible
           ? intersectionRatio > options.threshold

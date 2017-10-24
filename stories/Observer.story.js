@@ -1,12 +1,17 @@
-/* eslint-disable react/prop-types */
-import React from 'react'
+// @flow
+import * as React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import Observer from '../src/index'
 import ScrollWrapper from './ScrollWrapper'
 import RootComponent from './Root'
 
-const Header = props => (
+type Props = {
+  style?: Object,
+  children?: React.Node,
+}
+
+const Header = (props: Props) => (
   <div
     style={{
       display: 'flex',
@@ -28,7 +33,9 @@ storiesOf('Intersection Observer', module)
   .add('Child as function', () => (
     <ScrollWrapper>
       <Observer onChange={action('Child Observer inview')}>
-        {inView => <Header>{`Header inside viewport: ${inView}`}</Header>}
+        {inView => (
+          <Header>{`Header inside viewport: ${inView.toString()}`}</Header>
+        )}
       </Observer>
     </ScrollWrapper>
   ))
@@ -36,7 +43,8 @@ storiesOf('Intersection Observer', module)
     <ScrollWrapper>
       <Observer threshold={1} onChange={action('Child Observer inview')}>
         {inView => (
-          <Header>{`Header is fully inside the viewport: ${inView}`}</Header>
+          <Header
+          >{`Header is fully inside the viewport: ${inView.toString()}`}</Header>
         )}
       </Observer>
     </ScrollWrapper>
@@ -45,7 +53,8 @@ storiesOf('Intersection Observer', module)
     <ScrollWrapper>
       <Observer threshold={0.5} onChange={action('Child Observer inview')}>
         {inView => (
-          <Header>{`Header is 50% inside the viewport: ${inView}`}</Header>
+          <Header
+          >{`Header is 50% inside the viewport: ${inView.toString()}`}</Header>
         )}
       </Observer>
     </ScrollWrapper>
@@ -58,7 +67,7 @@ storiesOf('Intersection Observer', module)
       >
         {inView => (
           <Header
-          >{`Header is inside threshold: ${inView} - onChange triggers multiple times.`}</Header>
+          >{`Header is inside threshold: ${inView.toString()} - onChange triggers multiple times.`}</Header>
         )}
       </Observer>
     </ScrollWrapper>
@@ -75,7 +84,8 @@ storiesOf('Intersection Observer', module)
             onChange={action('Child Observer inview')}
           >
             {inView => (
-              <Header>{`Header is inside the root viewport: ${inView}`}</Header>
+              <Header
+              >{`Header is inside the root viewport: ${inView.toString()}`}</Header>
             )}
           </Observer>
         </ScrollWrapper>
@@ -94,7 +104,8 @@ storiesOf('Intersection Observer', module)
             onChange={action('Child Observer inview')}
           >
             {inView => (
-              <Header>{`Header is inside the root viewport: ${inView}`}</Header>
+              <Header
+              >{`Header is inside the root viewport: ${inView.toString()}`}</Header>
             )}
           </Observer>
         </ScrollWrapper>
@@ -109,7 +120,8 @@ storiesOf('Intersection Observer', module)
         onChange={action('Child Observer inview')}
       >
         {inView => (
-          <Header>{`Header was fully inside the viewport: ${inView}`}</Header>
+          <Header
+          >{`Header was fully inside the viewport: ${inView.toString()}`}</Header>
         )}
       </Observer>
     </ScrollWrapper>
@@ -118,12 +130,14 @@ storiesOf('Intersection Observer', module)
     <ScrollWrapper>
       <Observer threshold={1} onChange={action('Child Observer inview')}>
         {inView => (
-          <Header>{`Header 1 is fully inside the viewport: ${inView}`}</Header>
+          <Header
+          >{`Header 1 is fully inside the viewport: ${inView.toString()}`}</Header>
         )}
       </Observer>
       <Observer threshold={1} onChange={action('Child Observer inview')}>
         {inView => (
-          <Header>{`Header 2 is fully inside the viewport: ${inView}`}</Header>
+          <Header
+          >{`Header 2 is fully inside the viewport: ${inView.toString()}`}</Header>
         )}
       </Observer>
     </ScrollWrapper>
@@ -143,7 +157,7 @@ storiesOf('Intersection Observer', module)
               right: 0,
             }}
           >
-            <Header style={{ minHeight: 0, height: '100%' }}>
+            <Header style={{ minHeight: '0', height: '100%' }}>
               Header is only rendered once observer is in view. Make sure that
               the Observer controls the height, so it does not change.
             </Header>
