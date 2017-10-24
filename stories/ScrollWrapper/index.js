@@ -1,5 +1,5 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+// @flow
+import * as React from 'react'
 
 const style = {
   height: '101vh',
@@ -11,11 +11,15 @@ const style = {
   backgroundColor: 'papayawhip',
 }
 
+type Props = {
+  children: React.Node,
+}
+
 /**
  * ScrollWrapper directs the user to scroll the page to reveal it's children.
  * Use this on Modules that have scroll and/or observer triggers.
  */
-function ScrollWrapper({ children, ...props }) {
+function ScrollWrapper({ children, ...props }: Props) {
   return (
     <div {...props}>
       <section style={{ ...style }}>
@@ -27,10 +31,6 @@ function ScrollWrapper({ children, ...props }) {
       </section>
     </div>
   )
-}
-
-ScrollWrapper.propTypes = {
-  children: PropTypes.node,
 }
 
 export default ScrollWrapper
