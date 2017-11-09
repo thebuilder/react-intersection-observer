@@ -4,11 +4,8 @@ node_js:
 cache: yarn
 script:
   - yarn test
+  - yarn flow
   - yarn build:storybook
-branches:
-  only:
-    - master
-    - /^greenkeeper-.*$/
 deploy:
   local_dir: example
   provider: pages
