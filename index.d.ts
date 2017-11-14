@@ -1,9 +1,9 @@
 declare module 'react-intersection-observer' {
-  import * as React from 'react';
+  import React = require('react');
 
-  export type IntersectionObserverProps = {
+  export interface IntersectionObserverProps {
     /** Children should be either a function or a node */
-    children: JSX.Element | null | ((inView: boolean) => JSX.Element | null);
+    children?: React.ReactNode | ((inView: boolean) => React.ReactNode);
 
     /**
      * The `HTMLElement` that is used as the viewport for checking visibility of
@@ -47,10 +47,10 @@ declare module 'react-intersection-observer' {
     triggerOnce?: boolean;
 
     /** Call this function whenever the in view state changes */
-    onChange?(inView: boolean): void;
+    onChange?(inView: boolean|React.FormEvent<HTMLElement>): void;
 
     /** Use `render` method to only render content when inView */
-    render?(): JSX.Element | null;
+    render?(): React.ReactNode;
   };
 
   export default class IntersectionObserver extends React.Component<
