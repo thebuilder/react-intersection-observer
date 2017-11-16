@@ -12,9 +12,13 @@ the events.
 ```js
 import Observer from 'react-intersection-observer'
 
-<Observer>
-  {inView => <h2>{`Header inside viewport ${inView}.`}</h2>}
-</Observer>
+const Component = () => (
+  <Observer>
+    {inView => <h2>{`Header inside viewport ${inView}.`}</h2>}
+  </Observer>
+)
+
+export default Component
 ```
 
 ## Demo
@@ -121,9 +125,13 @@ will be called whenever the state changes, with the new value of `inView`.
 ```js
 import Observer from 'react-intersection-observer'
 
-<Observer>
-  {inView => <h2>{`Header inside viewport ${inView}.`}</h2>}
-</Observer>
+const Component = () => (
+  <Observer>
+    {inView => <h2>{`Header inside viewport ${inView}.`}</h2>}
+  </Observer>
+)
+
+export default Component
 ```
 
 ### Render callback
@@ -134,22 +142,26 @@ view, you can use the `render` prop.
 ```js
 import Observer from 'react-intersection-observer'
 
-<Observer
-  style={{ height: 200, position: 'relative' }}
-  render={() => (
-    <div
-      style={{
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-      }}
-    >
-      <p>
-        {'Make sure that the Observer controls the height, so it does not change change when element is added.'}
-      </p>
-    </div>
-  )}
-/>
+const Component = () => (
+  <Observer
+    style={{ height: 200, position: 'relative' }}
+    render={() => (
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          bottom: 0,
+        }}
+      >
+        <p>
+          {'Make sure that the Observer controls the height, so it does not change change when element is added.'}
+        </p>
+      </div>
+    )}
+  />
+)
+
+export default Component
 ```
 
 ### OnChange callback
@@ -160,9 +172,13 @@ component. The child node will always be rendered.
 ```js
 import Observer from 'react-intersection-observer'
 
-<Observer onChange={(inView) => console.log('Inview:', inView)}>
-  <h2>
-    Plain children are always rendered. Use onChange to monitor state.
-  </h2>
-</Observer>
+const Component = () => (
+  <Observer onChange={(inView) => console.log('Inview:', inView)}>
+    <h2>
+      Plain children are always rendered. Use onChange to monitor state.
+    </h2>
+  </Observer>
+)
+
+export default Component
 ```
