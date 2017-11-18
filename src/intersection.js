@@ -82,7 +82,7 @@ export function unobserve(element: ?HTMLElement) {
       observerInstance.unobserve(element)
     }
 
-    // Check if we are stilling observing any elements with the same threshold.
+    // Check if we are still observing any elements with the same threshold.
     let itemsLeft = false
     if (observerId) {
       INSTANCE_MAP.forEach((item, key) => {
