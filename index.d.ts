@@ -51,6 +51,9 @@ declare module 'react-intersection-observer' {
 
     /** Use `render` method to only render content when inView */
     render?(): React.ReactNode;
+
+    /** Get a reference to the the inner DOM node */
+    innerRef?(element?: HTMLElement): void;
   }
 
   export default class IntersectionObserver extends React.Component<

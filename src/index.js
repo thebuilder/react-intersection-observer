@@ -22,6 +22,8 @@ type Props = {
   onChange?: (inView: boolean) => void,
   /** Use render method to only render content when inView */
   render?: () => React.Node,
+  /** Get a reference to the the inner DOM node */
+  innerRef?: (element: ?HTMLElement) => void,
 }
 
 type State = {
@@ -101,6 +103,10 @@ class Observer extends React.Component<Props, State> {
     if (this.node) unobserve(this.node)
     this.node = node
     this.observeNode()
+
+    if (this.props.innerRef) {
+      this.props.innerRef(node)
+    }
   }
 
   handleChange = (inView: boolean) => this.setState({ inView })
@@ -110,6 +116,7 @@ class Observer extends React.Component<Props, State> {
       children,
       render,
       tag,
+      innerRef,
       triggerOnce,
       threshold,
       root,

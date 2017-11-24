@@ -1,5 +1,5 @@
 import React from 'react'
-import { shallow } from 'enzyme'
+import { shallow, mount } from 'enzyme'
 import Observer from '../src/index.js'
 
 jest.mock('../src/intersection')
@@ -49,4 +49,12 @@ it('Should render <Observer /> render when in view', () => {
   wrapper.setState({ inView: true })
 
   expect(wrapper).toMatchSnapshot()
+})
+
+it('Should get innerRef', () => {
+  const ref = jest.fn()
+  const wrapper = mount(<Observer className="observer" innerRef={ref} />)
+  const node = wrapper.getDOMNode()
+
+  expect(ref).toHaveBeenCalledWith(node)
 })

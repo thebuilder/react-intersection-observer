@@ -103,17 +103,18 @@ function supportsIntersectionObserver() {
 
 The **`<Observer />`** accepts the following props:
 
-| Name        | Type        | Default | Required | Description                                                                                                                                                                                                                      |
-| ----------- | ----------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Name            | Type        | Default | Required | Description                                                                                                                                                                                                                      |
+| --------------- | ----------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **children**    | func/node   |         | true     | Children should be either a function or a node                                                                                                                                                                                   |
 | **root**        | HTMLElement |         | false    | The HTMLElement that is used as the viewport for checking visibility of the target. Defaults to the browser viewport if not specified or if null.                                                                                |
 | **rootId**      | String      |         | false    | Unique identifier for the root element - This is used to identify the IntersectionObserver instance, so it can be reused. If you defined a root element, without adding an id, it will create a new instance for all components. |
 | **rootMargin**  | String      | '0px'   | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                                                                                               |
-| **tag**        | String      | 'div'   | false    | Element tag to use for the wrapping component                                                                                                                                                                                    |
+| **tag**         | String      | 'div'   | false    | Element tag to use for the wrapping component                                                                                                                                                                                    |
 | **threshold**   | Number      | 0       | false    | Number between 0 and 1 indicating the the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                               |
 | **triggerOnce** | Bool        | false   | false    | Only trigger this method once                                                                                                                                                                                                    |
 | **onChange**    | Func        |         | false    | Call this function whenever the in view state changes                                                                                                                                                                            |
 | **render**      | Func        |         | false    | Use render method to only render content when inView                                                                                                                                                                             |
+| **innerRef**    | Func        |         | false    | Get a reference to the the inner DOM node                                                                                                                                                                                        |
 
 ## Example code
 
@@ -154,7 +155,9 @@ const Component = () => (
         }}
       >
         <p>
-          {'Make sure that the Observer controls the height, so it does not change change when element is added.'}
+          {
+            'Make sure that the Observer controls the height, so it does not change change when element is added.'
+          }
         </p>
       </div>
     )}
@@ -173,10 +176,8 @@ component. The child node will always be rendered.
 import Observer from 'react-intersection-observer'
 
 const Component = () => (
-  <Observer onChange={(inView) => console.log('Inview:', inView)}>
-    <h2>
-      Plain children are always rendered. Use onChange to monitor state.
-    </h2>
+  <Observer onChange={inView => console.log('Inview:', inView)}>
+    <h2>Plain children are always rendered. Use onChange to monitor state.</h2>
   </Observer>
 )
 

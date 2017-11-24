@@ -49,7 +49,7 @@
     ]
   },
   "jest": {
-    "testEnvironment": "node",
+    "testEnvironment": "jsdom",
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ],
