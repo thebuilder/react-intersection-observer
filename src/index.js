@@ -23,7 +23,7 @@ type Props = {
   /** Use render method to only render content when inView */
   render?: () => React.Node,
   /** Get a reference to the the inner DOM node */
-  innerRef?: (element: ?HTMLElement) => void,
+  innerRef?: Function,
 }
 
 type State = {
