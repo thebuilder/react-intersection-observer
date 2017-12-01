@@ -77,7 +77,7 @@
     "enzyme-to-json": "^3.2.2",
     "eslint": "^4.10.0",
     "eslint-config-insilico": "^5.0.1",
-    "flow-bin": "^0.59.0",
+    "flow-bin": "^0.60.0",
     "flow-copy-source": "^1.2.1",
     "husky": "^0.14.3",
     "intersection-observer": "^0.5.0",
