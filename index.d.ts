@@ -10,7 +10,7 @@ declare module 'react-intersection-observer' {
      * the target.
      * Defaults to the browser viewport if not specified or if `null`.
      */
-    root?: HTMLElement;
+    root?: HTMLElement | null;
 
     /**
      * Unique identifier for the root element - This is used to identify the
@@ -38,7 +38,7 @@ declare module 'react-intersection-observer' {
      * multiple trigger points.
      * @default `0`
      */
-    threshold?: number;
+    threshold?: number | number[];
 
     /**
      * Only trigger this method once
