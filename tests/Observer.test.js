@@ -37,14 +37,20 @@ it('Should render <Observer /> with children inview', () => {
 
 it('Should not render <Observer /> render outside view', () => {
   const wrapper = shallow(
-    <Observer className="observer" render={() => <div>Render method</div>} />,
+    <Observer
+      className="observer"
+      render={inView => <div>Inview: {inView.toString()}</div>}
+    />,
   )
   expect(wrapper).toMatchSnapshot()
 })
 
 it('Should render <Observer /> render when in view', () => {
   const wrapper = shallow(
-    <Observer className="observer" render={() => <div>Render method</div>} />,
+    <Observer
+      className="observer"
+      render={inView => <div>Inview: {inView.toString()}</div>}
+    />,
   )
   wrapper.setState({ inView: true })
 

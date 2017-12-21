@@ -9,6 +9,8 @@ type Props = {
   triggerOnce: boolean,
   /** Children should be either a function or a node */
   children?: ((inView: boolean) => React.Node) | React.Node,
+  /** Render prop boolean indicating inView state */
+  render?: (inView: boolean) => React.Node,
   /** Number between 0 and 1 indicating the the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. */
   threshold?: number | Array<number>,
   /** The HTMLElement that is used as the viewport for checking visibility of the target. Defaults to the browser viewport if not specified or if null.*/
@@ -20,8 +22,6 @@ type Props = {
   rootId?: string,
   /** Call this function whenever the in view state changes */
   onChange?: (inView: boolean) => void,
-  /** Use render method to only render content when inView */
-  render?: () => React.Node,
   /** Get a reference to the the inner DOM node */
   innerRef?: Function,
 }
@@ -134,9 +134,9 @@ class Observer extends React.Component<Props, State> {
         ref: this.handleNode,
       },
       // If render is a function, use it to render content when in view
-      inView && typeof render === 'function' ? render() : null,
-      // // If children is a function, render it with the current inView status.
-      // // Otherwise always render children. Assume onChange is being used outside, to control the the state of children.
+      typeof render === 'function' ? render(inView) : null,
+      // If children is a function, render it with the current inView status.
+      // Otherwise always render children. Assume onChange is being used outside, to control the the state of children.
       typeof children === 'function' ? children(inView) : children,
     )
   }
