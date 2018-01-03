@@ -58,6 +58,17 @@ storiesOf('Intersection Observer', module)
       </Observer>
     </ScrollWrapper>
   ))
+  .add('Taller then viewport', () => (
+    <ScrollWrapper>
+      <Observer>
+        {inView => (
+          <Header style={{ height: '150vh' }}>
+            Header is fully inside the viewport: {inView.toString()}
+          </Header>
+        )}
+      </Observer>
+    </ScrollWrapper>
+  ))
   .add('With threshold 100%', () => (
     <ScrollWrapper>
       <Observer threshold={1} onChange={action('Child Observer inview')}>
@@ -75,6 +86,17 @@ storiesOf('Intersection Observer', module)
         {inView => (
           <Header>
             Header is 50% inside the viewport: ${inView.toString()}
+          </Header>
+        )}
+      </Observer>
+    </ScrollWrapper>
+  ))
+  .add('Taller then viewport with threshold 100%', () => (
+    <ScrollWrapper>
+      <Observer threshold={1}>
+        {inView => (
+          <Header style={{ height: '150vh' }}>
+            Header is fully inside the viewport: {inView.toString()}
           </Header>
         )}
       </Observer>
