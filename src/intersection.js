@@ -123,9 +123,11 @@ function onChange(changes) {
       const options = instance.options
 
       let inView = false
-      if (intersectionRatio < 0 && isIntersecting) {
-        // Firefox bug, causes intersectionRatio to sometimes be less than zero if element is larger than viewport
-        inView = true
+
+      if (isIntersecting !== undefined) {
+        // If isIntersecting is defined, use it to confirm the intersection.
+        // Firefox can report a negative intersectionRatio, but it will still have correctly set isIntersecting
+        inView = isIntersecting
       } else if (Array.isArray(options.threshold)) {
         // If threshold is an array, check if any of them intersects. This just triggers the onChange event multiple times.
         inView = options.threshold.some(threshold => {
@@ -138,12 +140,6 @@ function onChange(changes) {
         inView = instance.visible
           ? intersectionRatio > options.threshold
           : intersectionRatio >= options.threshold
-      }
-
-      if (isIntersecting !== undefined) {
-        // If isIntersecting is defined, ensure that the element is actually intersecting.
-        // Otherwise it reports a threshold of 0
-        inView = inView && isIntersecting
       }
 
       // Update the visible value on the instance
