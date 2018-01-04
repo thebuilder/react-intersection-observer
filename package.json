@@ -1,6 +1,6 @@
 {
   "name": "react-intersection-observer",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
   "main": "lib/index.js",
   "author": "Daniel Schmidt",
@@ -67,11 +67,11 @@
     "@storybook/react": "^3.2.14",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
-    "babel-runtime": "^6.25.0",
     "babel-jest": "^22.0.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
+    "babel-runtime": "^6.25.0",
     "concurrently": "3.5.1",
     "enzyme": "^3.1.1",
     "enzyme-adapter-react-16": "^1.0.4",
@@ -85,10 +85,10 @@
     "jest": "^22.0.0",
     "lint-staged": "^6.0.0",
     "prettier": "^1.8.1",
-    "request": "~2.83.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
-    "react-test-renderer": "^16.2.0"
+    "react-test-renderer": "^16.2.0",
+    "request": "~2.83.0"
   },
   "resolutions": {
     "react": "^16.2.0",
