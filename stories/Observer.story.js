@@ -33,9 +33,7 @@ storiesOf('Intersection Observer', module)
   .add('Child as function', () => (
     <ScrollWrapper>
       <Observer onChange={action('Child Observer inview')}>
-        {inView => (
-          <Header>Header inside viewport: ${inView.toString()}</Header>
-        )}
+        {inView => <Header>Header inside viewport: {inView.toString()}</Header>}
       </Observer>
     </ScrollWrapper>
   ))
@@ -60,10 +58,10 @@ storiesOf('Intersection Observer', module)
   ))
   .add('Taller then viewport', () => (
     <ScrollWrapper>
-      <Observer>
+      <Observer onChange={action('Child Observer inview')}>
         {inView => (
           <Header style={{ height: '150vh' }}>
-            Header is fully inside the viewport: {inView.toString()}
+            Header is inside the viewport: {inView.toString()}
           </Header>
         )}
       </Observer>
@@ -74,7 +72,7 @@ storiesOf('Intersection Observer', module)
       <Observer threshold={1} onChange={action('Child Observer inview')}>
         {inView => (
           <Header>
-            Header is fully inside the viewport: ${inView.toString()}
+            Header is fully inside the viewport: {inView.toString()}
           </Header>
         )}
       </Observer>
@@ -85,7 +83,7 @@ storiesOf('Intersection Observer', module)
       <Observer threshold={0.5} onChange={action('Child Observer inview')}>
         {inView => (
           <Header>
-            Header is 50% inside the viewport: ${inView.toString()}
+            Header is 50% inside the viewport: {inView.toString()}
           </Header>
         )}
       </Observer>
@@ -110,7 +108,7 @@ storiesOf('Intersection Observer', module)
       >
         {inView => (
           <Header>
-            Header is inside threshold: ${inView.toString()} - onChange triggers
+            Header is inside threshold: {inView.toString()} - onChange triggers
             multiple times.
           </Header>
         )}
@@ -130,7 +128,7 @@ storiesOf('Intersection Observer', module)
           >
             {inView => (
               <Header>
-                Header is inside the root viewport: ${inView.toString()}
+                Header is inside the root viewport: {inView.toString()}
               </Header>
             )}
           </Observer>
@@ -151,7 +149,7 @@ storiesOf('Intersection Observer', module)
           >
             {inView => (
               <Header>
-                Header is inside the root viewport: ${inView.toString()}
+                Header is inside the root viewport: {inView.toString()}
               </Header>
             )}
           </Observer>
@@ -168,7 +166,7 @@ storiesOf('Intersection Observer', module)
       >
         {inView => (
           <Header>
-            Header was fully inside the viewport: ${inView.toString()}
+            Header was fully inside the viewport: {inView.toString()}
           </Header>
         )}
       </Observer>
@@ -179,14 +177,14 @@ storiesOf('Intersection Observer', module)
       <Observer threshold={1} onChange={action('Child Observer inview')}>
         {inView => (
           <Header>
-            Header 1 is fully inside the viewport: ${inView.toString()}
+            Header 1 is fully inside the viewport: {inView.toString()}
           </Header>
         )}
       </Observer>
       <Observer threshold={1} onChange={action('Child Observer inview')}>
         {inView => (
           <Header>
-            Header 2 is fully inside the viewport: ${inView.toString()}
+            Header 2 is fully inside the viewport: {inView.toString()}
           </Header>
         )}
       </Observer>

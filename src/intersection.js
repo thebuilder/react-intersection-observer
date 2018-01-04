@@ -119,16 +119,14 @@ function onChange(changes) {
   changes.forEach(intersection => {
     const { isIntersecting, intersectionRatio, target } = intersection
     const instance = INSTANCE_MAP.get(target)
-    if (instance) {
+
+    // Firefox can report a negative intersectionRatio when scrolling. Ignore this, and
+    if (instance && intersectionRatio >= 0) {
       const options = instance.options
 
       let inView = false
 
-      if (isIntersecting !== undefined) {
-        // If isIntersecting is defined, use it to confirm the intersection.
-        // Firefox can report a negative intersectionRatio, but it will still have correctly set isIntersecting
-        inView = isIntersecting
-      } else if (Array.isArray(options.threshold)) {
+      if (Array.isArray(options.threshold)) {
         // If threshold is an array, check if any of them intersects. This just triggers the onChange event multiple times.
         inView = options.threshold.some(threshold => {
           return instance.visible
@@ -142,8 +140,11 @@ function onChange(changes) {
           : intersectionRatio >= options.threshold
       }
 
-      // Update the visible value on the instance
-      instance.visible = inView
+      if (isIntersecting !== undefined) {
+        // If isIntersecting is defined, ensure that the element is actually intersecting.
+        // Otherwise it reports a threshold of 0
+        inView = inView && isIntersecting
+      }
 
       if (instance.callback) {
         instance.callback(inView)
