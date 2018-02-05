@@ -50,12 +50,6 @@ class Observer extends React.Component<Props, State> {
     inView: false,
   }
 
-  componentWillUpdate(nextProps: Props, nextState: State) {
-    if (!!this.props.onChange && nextState !== this.state) {
-      this.props.onChange(nextState.inView)
-    }
-  }
-
   componentDidUpdate(prevProps: Props, prevState: State) {
     // If a IntersectionObserver option changed, reinit the observer
     if (
@@ -109,7 +103,12 @@ class Observer extends React.Component<Props, State> {
     }
   }
 
-  handleChange = (inView: boolean) => this.setState({ inView })
+  handleChange = (inView: boolean) => {
+    this.setState({ inView })
+    if (this.props.onChange) {
+      this.props.onChange(inView)
+    }
+  }
 
   render() {
     const {
