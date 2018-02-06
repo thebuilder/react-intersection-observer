@@ -143,9 +143,9 @@ import Observer from 'react-intersection-observer'
 
 const Component = () => (
   <Observer
-    render={(inView) => (
+    render={
       inView => <h2>{`Header inside viewport ${inView}.`}</h2>
-    )}
+    }
   />
 )
 
