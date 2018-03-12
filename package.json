@@ -88,7 +88,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-test-renderer": "^16.2.0",
-    "request": "~2.83.0"
+    "request": "~2.84.0"
   },
   "resolutions": {
     "react": "^16.2.0",
