@@ -6,7 +6,7 @@ declare module 'react-intersection-observer' {
     children?: React.ReactNode | ((inView: boolean) => React.ReactNode)
 
     /** Render prop boolean indicating inView state */
-    render?(inView: boolean): React.ReactNode
+    render?: (inView: boolean) => React.ReactNode
 
     /**
      * The `HTMLElement` that is used as the viewport for checking visibility of
@@ -50,10 +50,10 @@ declare module 'react-intersection-observer' {
     triggerOnce?: boolean
 
     /** Call this function whenever the in view state changes */
-    onChange?(inView: boolean | React.FormEvent<HTMLElement>): void
+    onChange?: (inView: boolean) => void
 
     /** Get a reference to the the inner DOM node */
-    innerRef?(element?: HTMLElement): void
+    innerRef?: (element?: HTMLElement) => void
   }
 
   export default class IntersectionObserver extends React.Component<
