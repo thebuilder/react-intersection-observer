@@ -57,17 +57,19 @@
       "<rootDir>/jest-setup.js"
     ]
   },
-  "dependencies": {},
+  "dependencies": {
+    "invariant": "^2.2.4"
+  },
   "peerDependencies": {
     "react": "^15.0.0 || ^16.0.0 || ^17.0.0"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^3.3.12",
-    "@storybook/addon-options": "^3.3.12",
-    "@storybook/react": "^3.3.12",
+    "@storybook/addon-actions": "^3.4.3",
+    "@storybook/addon-options": "^3.4.3",
+    "@storybook/react": "^3.4.3",
     "babel-cli": "^6.24.1",
-    "babel-core": "^6.25.0",
-    "babel-jest": "^22.1.0",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^22.4.3",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
@@ -75,20 +77,20 @@
     "concurrently": "3.5.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.0.4",
-    "enzyme-to-json": "^3.3.1",
-    "eslint": "^4.17.0",
-    "eslint-config-insilico": "^5.1.0",
+    "enzyme-to-json": "^3.3.3",
+    "eslint": "^4.19.1",
+    "eslint-config-insilico": "^5.2.0",
     "flow-bin": "^0.71.0",
-    "flow-copy-source": "^1.2.2",
+    "flow-copy-source": "^1.3.0",
     "husky": "^0.14.3",
     "intersection-observer": "^0.5.0",
-    "jest": "^22.1.4",
+    "jest": "^22.4.3",
     "lint-staged": "^7.0.0",
-    "prettier": "^1.10.2",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-test-renderer": "^16.2.0",
-    "request": "~2.84.0"
+    "prettier": "^1.12.1",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
+    "react-test-renderer": "^16.3.2",
+    "request": "~2.85.0"
   },
   "resolutions": {
     "react": "^16.2.0",

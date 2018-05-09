@@ -9,10 +9,12 @@ import RootComponent from './Root'
 type Props = {
   style?: Object,
   children?: React.Node,
+  innerRef?: Function,
 }
 
 const Header = (props: Props) => (
   <div
+    ref={props.innerRef}
     style={{
       display: 'flex',
       minHeight: '25vh',
@@ -41,7 +43,7 @@ storiesOf('Intersection Observer', module)
     <ScrollWrapper>
       <Observer
         onChange={action('Render Observer inview')}
-        render={inView => (
+        render={({ inView, ref }) => (
           <Header>Header is inside viewport: {inView.toString()}</Header>
         )}
       />

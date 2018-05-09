@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react'
 import { observe, unobserve } from './intersection'
+import invariant from 'invariant'
 
 type Props = {
   /** Element tag to use for the wrapping */
@@ -10,7 +11,10 @@ type Props = {
   /** Children should be either a function or a node */
   children?: ((inView: boolean) => React.Node) | React.Node,
   /** Render prop boolean indicating inView state */
-  render?: (inView: boolean) => React.Node,
+  render?: ({
+    inView: boolean,
+    ref: (node: ?HTMLElement) => void,
+  }) => React.Node,
   /** Number between 0 and 1 indicating the the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. */
   threshold?: number | Array<number>,
   /** The HTMLElement that is used as the viewport for checking visibility of the target. Defaults to the browser viewport if not specified or if null.*/
@@ -22,8 +26,6 @@ type Props = {
   rootId?: string,
   /** Call this function whenever the in view state changes */
   onChange?: (inView: boolean) => void,
-  /** Get a reference to the the inner DOM node */
-  innerRef?: Function,
 }
 
 type State = {
@@ -48,6 +50,15 @@ class Observer extends React.Component<Props, State> {
 
   state = {
     inView: false,
+  }
+
+  componentDidMount() {
+    if (typeof this.props.render === 'function') {
+      invariant(
+        this.node,
+        `react-intersection-observer: No DOM node found. Make sure you forward "ref" to the root DOM element you want to observe, when using render prop.`,
+      )
+    }
   }
 
   componentDidUpdate(prevProps: Props, prevState: State) {
@@ -97,10 +108,6 @@ class Observer extends React.Component<Props, State> {
     if (this.node) unobserve(this.node)
     this.node = node
     this.observeNode()
-
-    if (this.props.innerRef) {
-      this.props.innerRef(node)
-    }
   }
 
   handleChange = (inView: boolean) => {
@@ -115,7 +122,6 @@ class Observer extends React.Component<Props, State> {
       children,
       render,
       tag,
-      innerRef,
       triggerOnce,
       threshold,
       root,
@@ -126,14 +132,16 @@ class Observer extends React.Component<Props, State> {
 
     const { inView } = this.state
 
+    if (typeof render === 'function') {
+      return render({ inView, ref: this.handleNode })
+    }
+
     return React.createElement(
       tag,
       {
         ...props,
         ref: this.handleNode,
       },
-      // If render is a function, use it to render content when in view
-      typeof render === 'function' ? render(inView) : null,
       // If children is a function, render it with the current inView status.
       // Otherwise always render children. Assume onChange is being used outside, to control the the state of children.
       typeof children === 'function' ? children(inView) : children,
