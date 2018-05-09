@@ -1,8 +1,10 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import Observer from '../src/index.js'
+import invariant from 'invariant'
 
 jest.mock('../src/intersection')
+jest.mock('invariant')
 
 it('Should render <Observer />', () => {
   const callback = jest.fn()
@@ -60,11 +62,15 @@ it('Should render <Observer /> render when in view', () => {
 })
 
 it('Should throw error when not passing ref', () => {
-  expect(() =>
-    mount(
-      <Observer
-        render={({ inView, ref }) => <div>Inview: {inView.toString()}</div>}
-      />,
-    ),
-  ).toThrow()
+  invariant.mockReset()
+
+  mount(
+    <Observer
+      render={({ inView, ref }) => <div>Inview: {inView.toString()}</div>}
+    />,
+  )
+  expect(invariant).toHaveBeenLastCalledWith(
+    null,
+    'react-intersection-observer: No DOM node found. Make sure you forward "ref" to the root DOM element you want to observe, when using render prop.',
+  )
 })
