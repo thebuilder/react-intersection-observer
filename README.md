@@ -113,7 +113,7 @@ The **`<Observer />`** accepts the following props:
 | **threshold**   | Number      | 0       | false    | Number between 0 and 1 indicating the the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                               |
 | **triggerOnce** | Bool        | false   | false    | Only trigger this method once                                                                                                                                                                                                    |
 | **onChange**    | Func        |         | false    | Call this function whenever the in view state changes                                                                                                                                                                            |
-| **render**      | Func        |         | false    | Render prop boolean indicating inView state                                                                                                                                                                             |
+| **render**      | Func        |         | false    | Render prop boolean indicating inView state                                                                                                                                                                                      |
 | **innerRef**    | Func        |         | false    | Get a reference to the the inner DOM node                                                                                                                                                                                        |
 
 ## Example code
@@ -137,16 +137,11 @@ export default Component
 
 ### Render prop
 
-
 ```js
 import Observer from 'react-intersection-observer'
 
 const Component = () => (
-  <Observer
-    render={(inView) => (
-      inView => <h2>{`Header inside viewport ${inView}.`}</h2>
-    )}
-  />
+  <Observer render={inView => <h2>{`Header inside viewport ${inView}.`}</h2>} />
 )
 
 export default Component
