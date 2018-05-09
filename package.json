@@ -26,7 +26,7 @@
     "lint": "eslint {src,stories,tests}/. ",
     "precommit": "flow && lint-staged",
     "postcommit": "git reset",
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "pretty": "prettier '**/*.{js,md,json}' --write",
     "storybook": "start-storybook -p 9000",
     "test": "eslint {src,stories,tests}/. && jest"
