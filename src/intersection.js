@@ -146,6 +146,7 @@ function onChange(changes) {
         inView = inView && isIntersecting
       }
 
+      instance.visible = inView
       if (instance.callback) {
         instance.callback(inView)
       }
