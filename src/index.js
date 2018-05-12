@@ -4,7 +4,7 @@ import { observe, unobserve } from './intersection'
 import invariant from 'invariant'
 
 type Props = {
-  /** Element tag to use for the wrapping */
+  /** Element tag to use for the wrapping element when rendering using 'children'. Defaults to 'div' */
   tag: string,
   /** Only trigger the inView callback once */
   triggerOnce: boolean,

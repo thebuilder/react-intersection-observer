@@ -44,7 +44,9 @@ storiesOf('Intersection Observer', module)
       <Observer
         onChange={action('Render Observer inview')}
         render={({ inView, ref }) => (
-          <Header>Header is inside viewport: {inView.toString()}</Header>
+          <Header innerRef={ref}>
+            Header is inside viewport: {inView.toString()}
+          </Header>
         )}
       />
     </ScrollWrapper>
