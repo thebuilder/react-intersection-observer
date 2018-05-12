@@ -91,9 +91,5 @@
     "react-dom": "^16.3.2",
     "react-test-renderer": "^16.3.2",
     "request": "~2.85.0"
-  },
-  "resolutions": {
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0"
   }
 }
