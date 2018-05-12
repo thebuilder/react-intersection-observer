@@ -25,17 +25,21 @@
     "dev": "concurrently -k -r 'jest --watch' 'npm run storybook'",
     "lint": "eslint {src,stories,tests}/. ",
     "precommit": "flow && lint-staged",
-    "postcommit": "git reset",
+    "postcommit": "git update-index --again",
     "prepare": "npm run build",
     "pretty": "prettier '**/*.{js,md,json}' --write",
     "storybook": "start-storybook -p 9000",
     "test": "eslint {src,stories,tests}/. && jest"
   },
   "lint-staged": {
-    "*.js": [
-      "prettier --write --no-semi --single-quote --trailing-comma all",
-      "eslint",
+    "*.{js,json,css,md,ts}": [
+      "prettier --write",
       "git add"
+    ],
+    "src/**/*.js": [
+      "eslint",
+      "jest --findRelatedTests",
+      "flow force-recheck --focus"
     ]
   },
   "eslintConfig": {
