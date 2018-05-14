@@ -1,43 +1,63 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Should not render <Observer /> render outside view 1`] = `
-<div
-  className="observer"
+<Observer
+  render={[Function]}
+  tag="div"
+  threshold={0}
+  triggerOnce={false}
 >
   <div>
     Inview: 
     false
   </div>
-</div>
+</Observer>
 `;
 
 exports[`Should render <Observer /> render when in view 1`] = `
-<div
-  className="observer"
+<Observer
+  render={[Function]}
+  tag="div"
+  threshold={0}
+  triggerOnce={false}
 >
   <div>
     Inview: 
     true
   </div>
-</div>
+</Observer>
 `;
 
 exports[`Should render <Observer /> with children inview 1`] = `
-<div
+<Observer
   className="observer"
+  tag="div"
+  threshold={0}
+  triggerOnce={false}
 >
-  <div>
-    Content
+  <div
+    className="observer"
+  >
+    <div>
+      Content
+    </div>
   </div>
-</div>
+</Observer>
 `;
 
 exports[`Should render <Observer /> with children outside view 1`] = `
-<div
+<Observer
   className="observer"
+  tag="div"
+  threshold={0}
+  triggerOnce={false}
 >
-  <div>
-    Content
+  <div
+    className="observer"
+  >
+    <div>
+      Content
+    </div>
   </div>
-</div>
+</Observer>
 `;
