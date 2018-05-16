@@ -5,6 +5,7 @@ reports
 example
 lib/
 es/
+coverage/
 nuget
 npm-debug.log*
 .DS_store

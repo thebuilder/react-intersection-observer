@@ -25,6 +25,8 @@ or NPM:
 npm install react-intersection-observer --save
 ```
 
+> You also want to add the [intersection-observer](https://www.npmjs.com/package/react-intersection-observer) polyfill for full browser support. Check out adding the [polyfill](#polyfill) for details.
+
 ## Usage
 
 ### Child as function
@@ -69,7 +71,7 @@ export default Component
 ### OnChange callback
 
 You can monitor the onChange method, and control the state in your own
-component.
+component. This works with plain children, child as function or render props.
 
 ```js
 import Observer from 'react-intersection-observer'
@@ -99,25 +101,28 @@ The **`<Observer />`** accepts the following props:
 | **triggerOnce** | Bool                    | false   | false    | Only trigger this method once                                                                                                                                                                                                    |
 | **onChange**    | Func                    |         | false    | Call this function whenever the in view state changes                                                                                                                                                                            |
 
+## Usage in other projects
 
-## Scroll monitor
+### react-scroll-percentage
 
 This module is used in
 [react-scroll-percentage](https://github.com/thebuilder/react-scroll-percentage)
-to monitor the scroll position of elements in view. This module is also a great
-example of using `react-intersection-observer` as the basis for more complex
-needs.
+to monitor the scroll position of elements in view, useful for animating items as
+they become visible. This module is also a great example of using `react-intersection-observer`
+as the basis for more complex needs.
 
-## Polyfill for intersection-observer
+## Intersection Observer
 
-The component requires the [intersection-observer
-API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
-to be available on the global namespace. At the moment you should include a
-polyfill to ensure support in all browsers.
+[Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
+is the API is used to determine if an element is inside the viewport or not. Browser support is pretty good, but Safari is still missing support.
+
+> [Can i use intersectionobserver?](https://caniuse.com/#feat=intersectionobserver)
+
+### Polyfill
 
 You can import the
-[polyfill](https://yarnpkg.com/en/package/intersection-observer) directly or use
-a service like [polyfill.io](https://polyfill.io/v2/docs/) that can add it when
+[polyfill](https://www.npmjs.com/package/react-intersection-observer) directly or use
+a service like [polyfill.io](https://polyfill.io/v2/docs/) to add it when
 needed.
 
 ```sh
