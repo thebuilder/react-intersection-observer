@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default-member */
 import React from 'react'
 import { mount } from 'enzyme'
 import Observer from '../src/index.js'
@@ -123,7 +124,7 @@ it('Should recreate observer when root change', () => {
   expect(instance.observeNode).toHaveBeenCalled()
 })
 
-it('Should recreate observer when root change', () => {
+it('Should recreate observer when rootMargin change', () => {
   const wrapper = mount(<Observer>Content</Observer>)
   const instance = wrapper.instance()
   jest.spyOn(instance, 'observeNode')

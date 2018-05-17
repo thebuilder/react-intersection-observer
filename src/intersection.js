@@ -120,7 +120,7 @@ function onChange(changes) {
     const { isIntersecting, intersectionRatio, target } = intersection
     const instance = INSTANCE_MAP.get(target)
 
-    // Firefox can report a negative intersectionRatio when scrolling. Ignore this, and
+    // Firefox can report a negative intersectionRatio when scrolling.
     if (instance && intersectionRatio >= 0) {
       const options = instance.options
 
