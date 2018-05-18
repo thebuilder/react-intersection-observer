@@ -60,6 +60,10 @@
     ],
     "setupFiles": [
       "<rootDir>/jest-setup.js"
+    ],
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      "jest-setup.js"
     ]
   },
   "dependencies": {
