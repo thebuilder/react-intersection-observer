@@ -7,7 +7,7 @@ script:
   - yarn test --coverage
   - yarn flow
   - yarn build:storybook
-  after_success:
+after_success:
   - yarn coveralls
 deploy:
   local_dir: example
