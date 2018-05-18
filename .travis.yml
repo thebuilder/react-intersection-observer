@@ -16,10 +16,9 @@ deploy:
     github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
     on:
      branch: master
-  - provider: scripts
+  - provider: script
     skip_cleanup: true
-    script:
-      - yarn travis-deploy-once "yarn semantic-release"
+    script: yarn travis-deploy-once "yarn semantic-release"
 notifications:
   slack: in2:t4HfbJOtRL7uekgIPh2DUIKb
   email: false
