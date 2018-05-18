@@ -18,6 +18,7 @@
     "inview"
   ],
   "scripts": {
+    "coveralls": "cat ./coverage/lcov.info | coveralls",
     "build": "rm -rf lib es && npm run build:lib && npm run build:flow",
     "build:lib": "babel src --out-dir lib --ignore __*,*.story.js,*.test.js",
     "build:storybook": "build-storybook --output-dir example",
@@ -29,7 +30,7 @@
     "prepare": "npm run build",
     "pretty": "prettier '**/*.{js,md,json}' --write",
     "storybook": "start-storybook -p 9000",
-    "test": "eslint {src,stories,tests}/. && jest"
+    "test": "jest"
   },
   "lint-staged": {
     "*.{js,json,css,md,ts}": [
@@ -79,6 +80,7 @@
     "babel-preset-stage-2": "^6.24.1",
     "babel-runtime": "^6.25.0",
     "concurrently": "3.5.1",
+    "coveralls": "^3.0.1",
     "enzyme": "^3.3.0",
     "enzyme-adapter-react-16": "^1.0.4",
     "enzyme-to-json": "^3.3.3",

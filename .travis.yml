@@ -1,11 +1,14 @@
 language: node_js
 node_js:
-  - "9"
+  - "10"
 cache: yarn
 script:
-  - yarn test
+  - yarn lint
+  - yarn test --coverage
   - yarn flow
   - yarn build:storybook
+  after_success:
+  - yarn coveralls
 deploy:
   local_dir: example
   provider: pages
