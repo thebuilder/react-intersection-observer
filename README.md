@@ -1,12 +1,13 @@
-# react-intersection-observer
+# react-intersection-observer <sup>[![Version Badge][npm-version-svg]][package-url]</sup>
 
-[![Travis](https://travis-ci.org/thebuilder/react-intersection-observer.svg?branch=master)](https://travis-ci.org/thebuilder/react-intersection-observer)
-[![Coverage Status](https://coveralls.io/repos/github/thebuilder/react-intersection-observer/badge.svg?branch=master)](https://coveralls.io/github/thebuilder/react-intersection-observer?branch=master)
-
-[![npm](https://img.shields.io/npm/v/react-intersection-observer.svg)](https://www.npmjs.com/package/react-intersection-observer)
-![npm](https://img.shields.io/npm/dm/react-intersection-observer.svg)
-[![Greenkeeper badge](https://badges.greenkeeper.io/thebuilder/react-intersection-observer.svg)](https://greenkeeper.io/)
-[![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
+[![Build Status][travis-svg]][travis-url]
+[![Coverage Statu][coveralls-svg]][coveralls-url]
+[![dependency status][deps-svg]][deps-url]
+[![dev dependency status][dev-deps-svg]][dev-deps-url]
+[![License][license-image]][license-url]
+[![Downloads][downloads-image]][downloads-url]
+[![Greenkeeper badge][greenkeeper-svg]][greenkeeper-url]
+[![styled with prettier][prettier-svg]][prettier-url]
 
 React component that triggers a function when the component enters or leaves the
 viewport. No complex configuration needed, just wrap your views and it handles
@@ -167,3 +168,22 @@ function supportsIntersectionObserver() {
   )
 }
 ```
+
+[package-url]: https://npmjs.org/package/react-intersection-observer
+[npm-version-svg]: http://versionbadg.es/thebuilder/react-intersection-observer.svg
+[travis-svg]: https://travis-ci.org/thebuilder/react-intersection-observer.svg
+[travis-url]: https://travis-ci.org/thebuilder/react-intersection-observer
+[coveralls-svg]: https://coveralls.io/repos/github/thebuilder/react-intersection-observer/badge.svg?branch=master
+[coveralls-url]: https://coveralls.io/github/thebuilder/react-intersection-observer?branch=master
+[deps-svg]: https://david-dm.org/thebuilder/react-intersection-observer.svg
+[deps-url]: https://david-dm.org/thebuilder/react-intersection-observer
+[dev-deps-svg]: https://david-dm.org/thebuilder/react-intersection-observer/dev-status.svg
+[dev-deps-url]: https://david-dm.org/thebuilder/react-intersection-observer#info=devDependencies
+[license-image]: http://img.shields.io/npm/l/react-intersection-observer.svg
+[license-url]: LICENSE
+[downloads-image]: http://img.shields.io/npm/dm/react-intersection-observer.svg
+[downloads-url]: http://npm-stat.com/charts.html?package=react-intersection-observer
+[greenkeeper-svg]: https://badges.greenkeeper.io/thebuilder/react-intersection-observer.svg
+[greenkeeper-url]: https://greenkeeper.io/
+[prettier-svg]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg
+[prettier-url]: https://github.com/prettier/prettier
