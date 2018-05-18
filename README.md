@@ -1,8 +1,10 @@
 # react-intersection-observer
 
-[![npm](https://img.shields.io/npm/v/react-intersection-observer.svg)](https://www.npmjs.com/package/react-intersection-observer)
 [![Travis](https://travis-ci.org/thebuilder/react-intersection-observer.svg?branch=master)](https://travis-ci.org/thebuilder/react-intersection-observer)
 [![Coverage Status](https://coveralls.io/repos/github/thebuilder/react-intersection-observer/badge.svg?branch=master)](https://coveralls.io/github/thebuilder/react-intersection-observer?branch=master)
+
+[![npm](https://img.shields.io/npm/v/react-intersection-observer.svg)](https://www.npmjs.com/package/react-intersection-observer)
+![npm](https://img.shields.io/npm/dm/react-intersection-observer.svg)
 [![Greenkeeper badge](https://badges.greenkeeper.io/thebuilder/react-intersection-observer.svg)](https://greenkeeper.io/)
 [![styled with prettier](https://img.shields.io/badge/styled_with-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
