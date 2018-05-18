@@ -10,12 +10,16 @@ script:
 after_success:
   - yarn coveralls
 deploy:
-  local_dir: example
-  provider: pages
-  skip_cleanup: true
-  github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
-  on:
-   branch: master
+  - provider: pages
+    local_dir: example
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN # Set in travis-ci.org dashboard
+    on:
+     branch: master
+  - provider: scripts
+    skip_cleanup: true
+    script:
+      - yarn travis-deploy-once "yarn semantic-release"
 notifications:
   slack: in2:t4HfbJOtRL7uekgIPh2DUIKb
   email: false
