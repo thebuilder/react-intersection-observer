@@ -5,6 +5,7 @@
   "main": "dist/react-intersection-observer.cjs.js",
   "jsnext:main": "dist/react-intersection-observer.esm.js",
   "module": "dist/react-intersection-observer.esm.js",
+  "unpkg": "dist/react-intersection-observer.umd.min.js",
   "author": "Daniel Schmidt",
   "typings": "index.d.ts",
   "files": [
