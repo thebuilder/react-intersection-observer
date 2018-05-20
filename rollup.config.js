@@ -36,7 +36,7 @@ export default [
   {
     input: 'src/index.js',
     output: {
-      name: 'reactIntersectionObserver',
+      name: 'ReactIntersectionObserver',
       globals: {
         react: 'React',
       },
