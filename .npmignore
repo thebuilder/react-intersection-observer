@@ -20,9 +20,10 @@ npm-debug.log
 .travis.yml
 .babelrc.js
 .editorconfig
-yarn.lock
-stories
 .storybook
+yarn.lock
+coverage
+stories
 tests
 example
 jest-setup.js

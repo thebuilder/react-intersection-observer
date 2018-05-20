@@ -8,8 +8,8 @@
   "author": "Daniel Schmidt",
   "typings": "index.d.ts",
   "files": [
-    "dist",
-    "src"
+    "dist/*",
+    "src/*"
   ],
   "repository": {
     "type": "git",
