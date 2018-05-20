@@ -29,7 +29,7 @@ or NPM:
 npm install react-intersection-observer --save
 ```
 
-> You also want to add the [intersection-observer](https://www.npmjs.com/package/react-intersection-observer) polyfill for full browser support. Check out adding the [polyfill](#polyfill) for details.
+> ⚠️You also want to add the [intersection-observer](https://www.npmjs.com/package/react-intersection-observer) polyfill for full browser support. Check out adding the [polyfill](#polyfill) for details about how you can include it.
 
 ## Usage
 
