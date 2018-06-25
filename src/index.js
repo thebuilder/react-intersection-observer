@@ -145,7 +145,11 @@ class Observer extends React.Component<Props, State> {
       return renderMethod({ inView, ref: this.handleNode })
     }
 
-    return <div ref={this.handleNode}>{children}</div>
+    return (
+      <div ref={this.handleNode} {...props}>
+        {children}
+      </div>
+    )
   }
 }
 

@@ -9,11 +9,10 @@ import RootComponent from './Root'
 type Props = {
   style?: Object,
   children?: React.Node,
-  ref?: Function,
 }
 
 // $FlowFixMe forwardRef is not known
-const Header = React.forwardRef((props, ref) => (
+const Header = React.forwardRef((props:Props, ref) => (
   <div
     ref={ref}
     style={{
