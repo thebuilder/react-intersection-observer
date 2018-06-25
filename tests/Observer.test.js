@@ -11,54 +11,36 @@ jest.mock('invariant')
 afterEach(() => {})
 
 it('Should render <Observer />', () => {
-  const callback = jest.fn()
+  const callback = jest.fn(() => null)
   mount(<Observer>{callback}</Observer>)
-  expect(callback).toHaveBeenCalledWith(false)
+  expect(callback).toHaveBeenLastCalledWith(
+    expect.objectContaining({ inView: false }),
+  )
 })
 
 it('Should render <Observer /> inview', () => {
-  const callback = jest.fn()
+  const callback = jest.fn(() => null)
   const wrapper = mount(<Observer>{callback}</Observer>)
   wrapper.setState({ inView: true })
-  expect(callback).toHaveBeenLastCalledWith(true)
-})
-
-it('Should render <Observer /> with children outside view', () => {
-  const wrapper = mount(
-    <Observer className="observer">
-      <div>Content</div>
-    </Observer>,
+  expect(callback).toHaveBeenLastCalledWith(
+    expect.objectContaining({ inView: true }),
   )
-  expect(wrapper).toMatchSnapshot()
-})
-
-it('Should render <Observer /> with children inview', () => {
-  const wrapper = mount(
-    <Observer className="observer">
-      <div>Content</div>
-    </Observer>,
-  )
-  expect(wrapper).toMatchSnapshot()
 })
 
 it('Should not render <Observer /> render outside view', () => {
   const wrapper = mount(
-    <Observer
-      render={({ inView, ref }) => (
-        <div ref={ref}>Inview: {inView.toString()}</div>
-      )}
-    />,
+    <Observer>
+      {({ inView, ref }) => <div ref={ref}>Inview: {inView.toString()}</div>}
+    </Observer>,
   )
   expect(wrapper).toMatchSnapshot()
 })
 
 it('Should render <Observer /> render when in view', () => {
   const wrapper = mount(
-    <Observer
-      render={({ inView, ref }) => (
-        <div ref={ref}>Inview: {inView.toString()}</div>
-      )}
-    />,
+    <Observer>
+      {({ inView, ref }) => <div ref={ref}>Inview: {inView.toString()}</div>}
+    </Observer>,
   )
   wrapper.setState({ inView: true })
 
@@ -66,7 +48,11 @@ it('Should render <Observer /> render when in view', () => {
 })
 
 it('Should unobserve old node', () => {
-  const wrapper = mount(<Observer>Content</Observer>)
+  const wrapper = mount(
+    <Observer>
+      {({ inView, ref }) => <div ref={ref}>Inview: {inView.toString()}</div>}
+    </Observer>,
+  )
   const instance = wrapper.instance()
   jest.spyOn(instance, 'observeNode')
   const node = wrapper.getDOMNode()
@@ -151,7 +137,7 @@ it('Should unobserve when triggerOnce comes into view', () => {
   expect(intersection.unobserve).toHaveBeenCalledWith(node)
 })
 
-it('Should unobserve when unounted', () => {
+it('Should unobserve when unmounted', () => {
   const wrapper = mount(<Observer>Content</Observer>)
   const node = wrapper.getDOMNode()
   wrapper.instance().componentWillUnmount()
@@ -162,12 +148,12 @@ it('Should throw error when not passing ref', () => {
   invariant.mockReset()
 
   mount(
-    <Observer
-      render={({ inView, ref }) => <div>Inview: {inView.toString()}</div>}
-    />,
+    <Observer>
+      {({ inView, ref }) => <div>Inview: {inView.toString()}</div>}
+    </Observer>,
   )
   expect(invariant).toHaveBeenLastCalledWith(
     null,
-    'react-intersection-observer: No DOM node found. Make sure you forward "ref" to the root DOM element you want to observe, when using render prop.',
+    'react-intersection-observer: No DOM node found. Make sure you forward "ref" to the root DOM element you want to observe.',
   )
 })
