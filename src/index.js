@@ -58,6 +58,10 @@ class Observer extends React.Component<Props, State> {
         console.warn(
           `react-intersection-observer: "render" is deprecated, and should be replaced with "children"`,
         )
+      } else if (typeof this.props.children !== 'function') {
+        console.warn(
+          `react-intersection-observer: plain "children" is deprecated. You should convert it to a function that handles the "ref" manually.`,
+        )
       }
       invariant(
         this.node,
@@ -141,7 +145,7 @@ class Observer extends React.Component<Props, State> {
       return renderMethod({ inView, ref: this.handleNode })
     }
 
-    return null
+    return <div ref={this.handleNode}>{children}</div>
   }
 }
 

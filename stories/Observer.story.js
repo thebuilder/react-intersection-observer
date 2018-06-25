@@ -57,7 +57,7 @@ storiesOf('Intersection Observer', module)
   .add('Taller then viewport', () => (
     <ScrollWrapper>
       <Observer onChange={action('Child Observer inview')}>
-        {({inView, ref}) => (
+        {({ inView, ref }) => (
           <Header ref={ref} style={{ height: '150vh' }}>
             Header is inside the viewport: {inView.toString()}
           </Header>
