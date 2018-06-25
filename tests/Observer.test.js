@@ -8,10 +8,11 @@ import invariant from 'invariant'
 jest.mock('../src/intersection')
 jest.mock('invariant')
 
+const plainChild = ({ ref }) => <div ref={ref} />
 afterEach(() => {})
 
 it('Should render <Observer />', () => {
-  const callback = jest.fn(() => null)
+  const callback = jest.fn(plainChild)
   mount(<Observer>{callback}</Observer>)
   expect(callback).toHaveBeenLastCalledWith(
     expect.objectContaining({ inView: false }),
@@ -19,7 +20,7 @@ it('Should render <Observer />', () => {
 })
 
 it('Should render <Observer /> inview', () => {
-  const callback = jest.fn(() => null)
+  const callback = jest.fn(plainChild)
   const wrapper = mount(<Observer>{callback}</Observer>)
   wrapper.setState({ inView: true })
   expect(callback).toHaveBeenLastCalledWith(
@@ -63,7 +64,7 @@ it('Should unobserve old node', () => {
 })
 
 it('Should ensure node exists before observering', () => {
-  const wrapper = mount(<Observer>Content</Observer>)
+  const wrapper = mount(<Observer>{plainChild}</Observer>)
   const instance = wrapper.instance()
   intersection.observe.mockReset()
   instance.handleNode(null)
@@ -71,7 +72,7 @@ it('Should ensure node exists before observering', () => {
 })
 
 it('Should ensure node exists before unmounting', () => {
-  const wrapper = mount(<Observer>Content</Observer>)
+  const wrapper = mount(<Observer>{plainChild}</Observer>)
   const instance = wrapper.instance()
   instance.handleNode(null)
 
@@ -81,7 +82,7 @@ it('Should ensure node exists before unmounting', () => {
 })
 
 it('Should update state onChange', () => {
-  const wrapper = mount(<Observer>Content</Observer>)
+  const wrapper = mount(<Observer>{plainChild}</Observer>)
   wrapper.instance().handleChange(true)
   expect(wrapper.state().inView).toBe(true)
   wrapper.instance().handleChange(false)
@@ -89,7 +90,7 @@ it('Should update state onChange', () => {
 })
 
 it('Should recreate observer when threshold change', () => {
-  const wrapper = mount(<Observer>Content</Observer>)
+  const wrapper = mount(<Observer>{plainChild}</Observer>)
   const instance = wrapper.instance()
   jest.spyOn(instance, 'observeNode')
 
@@ -100,7 +101,7 @@ it('Should recreate observer when threshold change', () => {
 })
 
 it('Should recreate observer when root change', () => {
-  const wrapper = mount(<Observer>Content</Observer>)
+  const wrapper = mount(<Observer>{plainChild}</Observer>)
   const instance = wrapper.instance()
   jest.spyOn(instance, 'observeNode')
 
@@ -111,7 +112,7 @@ it('Should recreate observer when root change', () => {
 })
 
 it('Should recreate observer when rootMargin change', () => {
-  const wrapper = mount(<Observer>Content</Observer>)
+  const wrapper = mount(<Observer>{plainChild}</Observer>)
   const instance = wrapper.instance()
   jest.spyOn(instance, 'observeNode')
 
@@ -123,7 +124,7 @@ it('Should recreate observer when rootMargin change', () => {
 
 it('Should trigger onChange callback', () => {
   const onChange = jest.fn()
-  const wrapper = mount(<Observer onChange={onChange}>Content</Observer>)
+  const wrapper = mount(<Observer onChange={onChange}>{plainChild}</Observer>)
   wrapper.instance().handleChange(true)
   expect(onChange).toHaveBeenLastCalledWith(true)
   wrapper.instance().handleChange(false)
@@ -131,14 +132,14 @@ it('Should trigger onChange callback', () => {
 })
 
 it('Should unobserve when triggerOnce comes into view', () => {
-  const wrapper = mount(<Observer triggerOnce>Content</Observer>)
+  const wrapper = mount(<Observer triggerOnce>{plainChild}</Observer>)
   wrapper.setState({ inView: true })
   const node = wrapper.getDOMNode()
   expect(intersection.unobserve).toHaveBeenCalledWith(node)
 })
 
 it('Should unobserve when unmounted', () => {
-  const wrapper = mount(<Observer>Content</Observer>)
+  const wrapper = mount(<Observer>{plainChild}</Observer>)
   const node = wrapper.getDOMNode()
   wrapper.instance().componentWillUnmount()
   expect(intersection.unobserve).toHaveBeenCalledWith(node)
@@ -156,4 +157,30 @@ it('Should throw error when not passing ref', () => {
     null,
     'react-intersection-observer: No DOM node found. Make sure you forward "ref" to the root DOM element you want to observe.',
   )
+})
+
+describe('deprecated methods', () => {
+  beforeEach(() => {
+    jest.spyOn(global.console, 'warn').mockImplementation(() => {})
+  })
+  afterEach(() => {
+    global.console.warn.mockReset()
+  })
+  it('should render plain children', () => {
+    mount(<Observer>inner</Observer>)
+    expect(global.console.warn).toHaveBeenCalledWith(
+      'react-intersection-observer: plain "children" is deprecated. You should convert it to a function that handles the "ref" manually.',
+    )
+  })
+  it('should render using "render"', () => {
+    mount(<Observer render={plainChild} />)
+    expect(global.console.warn).toHaveBeenCalledWith(
+      'react-intersection-observer: "render" is deprecated, and should be replaced with "children"',
+    )
+  })
+  it('should not warn in production', () => {
+    process.env.NODE_ENV = 'production'
+    mount(<Observer render={plainChild} />)
+    expect(global.console.warn).not.toHaveBeenCalled()
+  })
 })
