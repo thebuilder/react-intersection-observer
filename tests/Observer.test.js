@@ -179,8 +179,10 @@ describe('deprecated methods', () => {
     )
   })
   it('should not warn in production', () => {
+    const orgEnv = process.env.NODE_ENV
     process.env.NODE_ENV = 'production'
     mount(<Observer render={plainChild} />)
     expect(global.console.warn).not.toHaveBeenCalled()
+    process.env.NODE_ENV = orgEnv // Reset the env
   })
 })
