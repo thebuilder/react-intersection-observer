@@ -14,6 +14,8 @@ type Props = {
     inView: boolean,
     ref: (node: ?HTMLElement) => void,
   }) => React.Node,
+  /** @deprecated */
+  tag?: string,
   /** Number between 0 and 1 indicating the the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. */
   threshold?: number | Array<number>,
   /** Only trigger the inView callback once */
@@ -57,10 +59,12 @@ class Observer extends React.Component<Props, State> {
       if (this.props.hasOwnProperty('render')) {
         console.warn(
           `react-intersection-observer: "render" is deprecated, and should be replaced with "children"`,
+          this.node,
         )
       } else if (typeof this.props.children !== 'function') {
         console.warn(
           `react-intersection-observer: plain "children" is deprecated. You should convert it to a function that handles the "ref" manually.`,
+          this.node,
         )
       }
       invariant(
@@ -130,6 +134,7 @@ class Observer extends React.Component<Props, State> {
     const {
       children,
       render,
+      tag,
       triggerOnce,
       threshold,
       root,
@@ -145,10 +150,10 @@ class Observer extends React.Component<Props, State> {
       return renderMethod({ inView, ref: this.handleNode })
     }
 
-    return (
-      <div ref={this.handleNode} {...props}>
-        {children}
-      </div>
+    return React.createElement(
+      tag || 'div',
+      { ref: this.handleNode, ...props },
+      children,
     )
   }
 }

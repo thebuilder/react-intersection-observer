@@ -170,12 +170,14 @@ describe('deprecated methods', () => {
     mount(<Observer>inner</Observer>)
     expect(global.console.warn).toHaveBeenCalledWith(
       'react-intersection-observer: plain "children" is deprecated. You should convert it to a function that handles the "ref" manually.',
+      expect.any(Object),
     )
   })
   it('should render using "render"', () => {
     mount(<Observer render={plainChild} />)
     expect(global.console.warn).toHaveBeenCalledWith(
       'react-intersection-observer: "render" is deprecated, and should be replaced with "children"',
+      expect.any(Object),
     )
   })
   it('should not warn in production', () => {
