@@ -1,5 +1,6 @@
-# react-intersection-observer <sup>[![Version Badge][npm-version-svg]][package-url]</sup>
+# react-intersection-observer
 
+[![Version Badge][npm-version-svg]][package-url]
 [![Build Status][travis-svg]][travis-url]
 [![Coverage Statu][coveralls-svg]][coveralls-url]
 [![dependency status][deps-svg]][deps-url]
@@ -134,7 +135,7 @@ function supportsIntersectionObserver() {
 ```
 
 [package-url]: https://npmjs.org/package/react-intersection-observer
-[npm-version-svg]: http://versionbadg.es/thebuilder/react-intersection-observer.svg
+[npm-version-svg]: https://img.shields.io/npm/v/react-intersection-observer.svg
 [travis-svg]: https://travis-ci.org/thebuilder/react-intersection-observer.svg
 [travis-url]: https://travis-ci.org/thebuilder/react-intersection-observer
 [coveralls-svg]: https://coveralls.io/repos/github/thebuilder/react-intersection-observer/badge.svg?branch=master
