@@ -4,19 +4,22 @@ import { observe, unobserve } from './intersection'
 import invariant from 'invariant'
 
 type Props = {
-  /** Element tag to use for the wrapping element when rendering using 'children'. Defaults to 'div' */
-  tag: string,
-  /** Only trigger the inView callback once */
-  triggerOnce: boolean,
-  /** Children should be either a function or a node */
-  children?: ((inView: boolean) => React.Node) | React.Node,
-  /** Render prop boolean indicating inView state */
+  /** Children expects a function that recieves an object contain an `inView` boolean and `ref` that should be assigned to the element root. */
+  children?: ({
+    inView: boolean,
+    ref: (node: ?HTMLElement) => void,
+  }) => React.Node,
+  /** @deprecated replace render with children */
   render?: ({
     inView: boolean,
     ref: (node: ?HTMLElement) => void,
   }) => React.Node,
+  /** @deprecated */
+  tag?: string,
   /** Number between 0 and 1 indicating the the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. */
   threshold?: number | Array<number>,
+  /** Only trigger the inView callback once */
+  triggerOnce: boolean,
   /** The HTMLElement that is used as the viewport for checking visibility of the target. Defaults to the browser viewport if not specified or if null.*/
   root?: HTMLElement,
   /** Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left). */
@@ -36,14 +39,13 @@ type State = {
  * Monitors scroll, and triggers the children function with updated props
  *
  <Observer>
- {inView => (
-   <h1>{`${inView}`}</h1>
+ {({inView, ref}) => (
+   <h1 ref={ref}>{`${inView}`}</h1>
  )}
  </Observer>
  */
 class Observer extends React.Component<Props, State> {
   static defaultProps = {
-    tag: 'div',
     threshold: 0,
     triggerOnce: false,
   }
@@ -53,10 +55,21 @@ class Observer extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    if (typeof this.props.render === 'function') {
+    if (process.env.NODE_ENV !== 'production') {
+      if (this.props.hasOwnProperty('render')) {
+        console.warn(
+          `react-intersection-observer: "render" is deprecated, and should be replaced with "children"`,
+          this.node,
+        )
+      } else if (typeof this.props.children !== 'function') {
+        console.warn(
+          `react-intersection-observer: plain "children" is deprecated. You should convert it to a function that handles the "ref" manually.`,
+          this.node,
+        )
+      }
       invariant(
         this.node,
-        `react-intersection-observer: No DOM node found. Make sure you forward "ref" to the root DOM element you want to observe, when using render prop.`,
+        `react-intersection-observer: No DOM node found. Make sure you forward "ref" to the root DOM element you want to observe.`,
       )
     }
   }
@@ -131,20 +144,16 @@ class Observer extends React.Component<Props, State> {
     } = this.props
 
     const { inView } = this.state
+    const renderMethod = children || render
 
-    if (typeof render === 'function') {
-      return render({ inView, ref: this.handleNode })
+    if (typeof renderMethod === 'function') {
+      return renderMethod({ inView, ref: this.handleNode })
     }
 
     return React.createElement(
-      tag,
-      {
-        ...props,
-        ref: this.handleNode,
-      },
-      // If children is a function, render it with the current inView status.
-      // Otherwise always render children. Assume onChange is being used outside, to control the the state of children.
-      typeof children === 'function' ? children(inView) : children,
+      tag || 'div',
+      { ref: this.handleNode, ...props },
+      children,
     )
   }
 }

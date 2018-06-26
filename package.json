@@ -31,7 +31,7 @@
     "build:lib": "run-p rollup:*",
     "build:storybook": "build-storybook --output-dir example",
     "build:flow": "node scripts/create-flow",
-    "dev": "concurrently -k -r 'jest --watch' 'npm run storybook'",
+    "dev": "concurrently -k -r 'jest --watch' 'yarn run storybook'",
     "lint": "eslint {src,stories,tests}/**/*.js ",
     "rollup:es": "rollup -c --environment FORMAT:es",
     "rollup:cjs": "rollup -c --environment FORMAT:cjs",
