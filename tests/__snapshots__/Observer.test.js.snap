@@ -23,3 +23,40 @@ exports[`Should render <Observer /> render when in view 1`] = `
   </div>
 </Observer>
 `;
+
+exports[`should render plain children 1`] = `
+<Observer
+  threshold={0}
+  triggerOnce={false}
+>
+  <div>
+    inner
+  </div>
+</Observer>
+`;
+
+exports[`should render with className 1`] = `
+<Observer
+  className="inner-class"
+  threshold={0}
+  triggerOnce={false}
+>
+  <div
+    className="inner-class"
+  >
+    inner
+  </div>
+</Observer>
+`;
+
+exports[`should render with tag 1`] = `
+<Observer
+  tag="span"
+  threshold={0}
+  triggerOnce={false}
+>
+  <span>
+    inner
+  </span>
+</Observer>
+`;

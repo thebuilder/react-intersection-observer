@@ -30,7 +30,7 @@ or NPM:
 npm install react-intersection-observer --save
 ```
 
-> ⚠️You also want to add the [intersection-observer](https://www.npmjs.com/package/react-intersection-observer) polyfill for full browser support. Check out adding the [polyfill](#polyfill) for details about how you can include it.
+> ⚠️ You also want to add the [intersection-observer](https://www.npmjs.com/package/react-intersection-observer) polyfill for full browser support. Check out adding the [polyfill](#polyfill) for details about how you can include it.
 
 ## Usage
 
@@ -40,7 +40,7 @@ To use the `Observer`, you pass it a function. It will be called whenever the st
 In addition to the `inView` prop, children also receives a `ref` that should be set on the containing DOM element.
 This is the element that the IntersectionObserver will monitor.
 
-```js
+```jsx
 import Observer from 'react-intersection-observer'
 
 const Component = () => (
@@ -56,19 +56,40 @@ const Component = () => (
 export default Component
 ```
 
+### Plain children
+
+You can pass any element to the `<Observer />`, and it will handle creating the wrapping DOM element.
+Add a handler to the `onChange` method, and control the state in your own component.
+It will pass any extra props to the HTML element, allowing you set the `className`, `style`, etc.
+
+```jsx
+import Observer from 'react-intersection-observer'
+
+const Component = () => (
+  <Observer tag="div" onChange={inView => console.log('Inview:', inView)}>
+    <h2>Plain children are always rendered. Use onChange to monitor state.</h2>
+  </Observer>
+)
+
+export default Component
+```
+
+> ⚠️ When rendering a plain child, make sure you keep your HTML output semantic.
+> Change the `tag` to match the context, and add a `className` to style the `<Observer />`.
+
 ## Props
 
 The **`<Observer />`** accepts the following props:
 
-| Name            | Type                    | Default | Required | Description                                                                                                                                                                                                                      |
-| --------------- | ----------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **children**    | ({inView, ref}) => Node |         | true     | Children expects a function that recieves an object contain an `inView` boolean and `ref` that should be assigned to the element root.                                                                                           |
-| **onChange**    | (inView) => void        |         | false    | Call this function whenever the in view state changes                                                                                                                                                                            |
-| **root**        | HTMLElement             |         | false    | The HTMLElement that is used as the viewport for checking visibility of the target. Defaults to the browser viewport if not specified or if null.                                                                                |
-| **rootId**      | String                  |         | false    | Unique identifier for the root element - This is used to identify the IntersectionObserver instance, so it can be reused. If you defined a root element, without adding an id, it will create a new instance for all components. |
-| **rootMargin**  | String                  | '0px'   | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                                                                                               |
-| **threshold**   | Number                  | 0       | false    | Number between 0 and 1 indicating the the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                               |
-| **triggerOnce** | Bool                    | false   | false    | Only trigger this method once                                                                                                                                                                                                    |
+| Name            | Type                                       | Default | Required | Description                                                                                                                                                                                                                       |
+| --------------- | ------------------------------------------ | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **children**    | ({inView, ref}) => React.Node / React.Node |         | true     | Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. Alternately pass a plain child, to have the `<Observer />` deal with the wrapping element. |
+| **onChange**    | (inView) => void                           |         | false    | Call this function whenever the in view state changes                                                                                                                                                                             |
+| **root**        | HTMLElement                                |         | false    | The HTMLElement that is used as the viewport for checking visibility of the target. Defaults to the browser viewport if not specified or if null.                                                                                 |
+| **rootId**      | String                                     |         | false    | Unique identifier for the root element - This is used to identify the IntersectionObserver instance, so it can be reused. If you defined a root element, without adding an id, it will create a new instance for all components.  |
+| **rootMargin**  | String                                     | '0px'   | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                                                                                                |
+| **threshold**   | Number                                     | 0       | false    | Number between 0 and 1 indicating the the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                                |
+| **triggerOnce** | Bool                                       | false   | false    | Only trigger this method once                                                                                                                                                                                                     |
 
 ## Usage in other projects
 
