@@ -5,10 +5,12 @@ import invariant from 'invariant'
 
 type Props = {
   /** Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. */
-  children?: ({
-    inView: boolean,
-    ref: (node: ?HTMLElement) => void,
-  }) => React.Node | React.Node,
+  children?:
+    | (({
+        inView: boolean,
+        ref: (node: ?HTMLElement) => void,
+      }) => React.Node)
+    | React.Node,
   /** @deprecated replace render with children */
   render?: ({
     inView: boolean,
