@@ -7,7 +7,7 @@ export interface RenderProps {
 
 export interface IntersectionObserverProps {
   /** Children expects a function that recieves an object contain an `inView` boolean and `ref` that should be assigned to the element root. */
-  children?: (fields: RenderProps) => React.ReactNode
+  children?: React.ReactNode | ((fields: RenderProps) => React.ReactNode)
 
   /**
    * The `HTMLElement` that is used as the viewport for checking visibility of
@@ -30,6 +30,12 @@ export interface IntersectionObserverProps {
    * e.g. `"10px 20px 30px 40px"` (top, right, bottom, left).
    */
   rootMargin?: string
+
+  /**
+   * Element tag to use for the wrapping component
+   * @default `'div'`
+   */
+  tag?: string
 
   /** Number between 0 and 1 indicating the the percentage that should be
    * visible before triggering. Can also be an array of numbers, to create

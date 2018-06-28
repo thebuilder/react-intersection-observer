@@ -19,6 +19,19 @@ it('Should render <Observer />', () => {
   )
 })
 
+it('should render plain children', () => {
+  const wrapper = mount(<Observer>inner</Observer>)
+  expect(wrapper).toMatchSnapshot()
+})
+it('should render with tag', () => {
+  const wrapper = mount(<Observer tag="span">inner</Observer>)
+  expect(wrapper).toMatchSnapshot()
+})
+it('should render with className', () => {
+  const wrapper = mount(<Observer className="inner-class">inner</Observer>)
+  expect(wrapper).toMatchSnapshot()
+})
+
 it('Should render <Observer /> inview', () => {
   const callback = jest.fn(plainChild)
   const wrapper = mount(<Observer>{callback}</Observer>)
@@ -165,13 +178,6 @@ describe('deprecated methods', () => {
   })
   afterEach(() => {
     global.console.warn.mockReset()
-  })
-  it('should render plain children', () => {
-    mount(<Observer>inner</Observer>)
-    expect(global.console.warn).toHaveBeenCalledWith(
-      'react-intersection-observer: plain "children" is deprecated. You should convert it to a function that handles the "ref" manually.',
-      expect.any(Object),
-    )
   })
   it('should render using "render"', () => {
     mount(<Observer render={plainChild} />)

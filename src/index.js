@@ -4,17 +4,19 @@ import { observe, unobserve } from './intersection'
 import invariant from 'invariant'
 
 type Props = {
-  /** Children expects a function that recieves an object contain an `inView` boolean and `ref` that should be assigned to the element root. */
-  children?: ({
-    inView: boolean,
-    ref: (node: ?HTMLElement) => void,
-  }) => React.Node,
+  /** Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. */
+  children?:
+    | (({
+        inView: boolean,
+        ref: (node: ?HTMLElement) => void,
+      }) => React.Node)
+    | React.Node,
   /** @deprecated replace render with children */
   render?: ({
     inView: boolean,
     ref: (node: ?HTMLElement) => void,
   }) => React.Node,
-  /** @deprecated */
+  /** Element tag to use for the wrapping element when rendering a plain React.Node. Defaults to 'div'  */
   tag?: string,
   /** Number between 0 and 1 indicating the the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. */
   threshold?: number | Array<number>,
@@ -59,11 +61,6 @@ class Observer extends React.Component<Props, State> {
       if (this.props.hasOwnProperty('render')) {
         console.warn(
           `react-intersection-observer: "render" is deprecated, and should be replaced with "children"`,
-          this.node,
-        )
-      } else if (typeof this.props.children !== 'function') {
-        console.warn(
-          `react-intersection-observer: plain "children" is deprecated. You should convert it to a function that handles the "ref" manually.`,
           this.node,
         )
       }

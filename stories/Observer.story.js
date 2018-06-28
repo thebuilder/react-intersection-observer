@@ -41,16 +41,11 @@ storiesOf('Intersection Observer', module)
       </Observer>
     </ScrollWrapper>
   ))
-  .add('Render prop', () => (
+  .add('Plain children', () => (
     <ScrollWrapper>
-      <Observer
-        onChange={action('Render Observer inview')}
-        render={({ inView, ref }) => (
-          <Header ref={ref}>
-            Header is inside viewport: {inView.toString()}
-          </Header>
-        )}
-      />
+      <Observer onChange={action('Child Observer inview')}>
+        <Header>Plain children</Header>
+      </Observer>
     </ScrollWrapper>
   ))
   .add('Taller then viewport', () => (
