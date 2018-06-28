@@ -78,7 +78,6 @@ export function unobserve(element: ?HTMLElement) {
       : observer
 
     if (observerInstance) {
-      // $FlowFixMe - the interface in bom.js is wrong. Spec should accept the element.
       observerInstance.unobserve(element)
     }
 
@@ -147,9 +146,7 @@ function onChange(changes) {
       }
 
       instance.visible = inView
-      if (instance.callback) {
-        instance.callback(inView)
-      }
+      instance.callback(inView)
     }
   })
 }

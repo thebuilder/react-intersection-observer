@@ -91,6 +91,10 @@ it('should unobserve', () => {
   unobserve(el)
 })
 
+it('should only unobserve if it gets an element', () => {
+  unobserve()
+})
+
 it('should keep observer when unobserve with multiple elements', () => {
   observe(el, jest.fn())
   observe({ el: 'htmlElement2' }, jest.fn())
