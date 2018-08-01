@@ -2,11 +2,11 @@ import React = require('react')
 
 export interface RenderProps {
   inView: boolean
-  ref: Function
+  ref: React.RefObject<any>
 }
 
 export interface IntersectionObserverProps {
-  /** Children expects a function that recieves an object contain an `inView` boolean and `ref` that should be assigned to the element root. */
+  /** Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. */
   children?: React.ReactNode | ((fields: RenderProps) => React.ReactNode)
 
   /**
@@ -54,7 +54,7 @@ export interface IntersectionObserverProps {
   onChange?: (inView: boolean) => void
 }
 
-export default class IntersectionObserver extends React.Component<
+export default class ReactIntersectionObserver extends React.Component<
   IntersectionObserverProps,
   {}
 > {}
