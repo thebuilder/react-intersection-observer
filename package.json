@@ -96,7 +96,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "babel-runtime": "^6.25.0",
-    "concurrently": "3.6.1",
+    "concurrently": "4.0.0",
     "coveralls": "^3.0.1",
     "enzyme": "^3.4.4",
     "enzyme-adapter-react-16": "^1.2.0",
