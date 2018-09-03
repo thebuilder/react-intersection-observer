@@ -12,9 +12,13 @@ const umd = format === 'umd'
 const cjs = format === 'cjs'
 
 let output
+let targets = {}
 
 if (es) {
   output = { file: pkg.module, format: 'es' }
+  targets = {
+    node: true,
+  }
 } else if (umd) {
   if (minify) {
     output = {
@@ -56,9 +60,16 @@ export default [
       commonjs({ include: 'node_modules/**' }),
       babel({
         exclude: 'node_modules/**',
-        babelrc: false,
-        presets: [['env', { loose: true, modules: false }], 'react', 'stage-2'],
-        plugins: ['external-helpers'],
+        externalHelpers: false,
+        presets: [
+          [
+            '@babel/preset-env',
+            {
+              loose: true,
+              targets,
+            },
+          ],
+        ],
       }),
       umd
         ? replace({
