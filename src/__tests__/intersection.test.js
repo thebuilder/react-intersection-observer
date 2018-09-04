@@ -1,4 +1,4 @@
-import { observe, unobserve, destroy } from '../src/intersection'
+import { observe, unobserve, destroy } from '../intersection'
 
 global.IntersectionObserver = jest.fn(() => ({
   observe: jest.fn(),

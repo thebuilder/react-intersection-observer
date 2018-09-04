@@ -25,6 +25,17 @@
     "intersection",
     "inview"
   ],
+  "prettier": {
+    "singleQuote": true,
+    "semi": false,
+    "trailingComma": "all"
+  },
+  "eslintIgnore": [
+    "*.snap",
+    "dist/**",
+    "lib/**",
+    "webpack.config.js"
+  ],
   "scripts": {
     "coveralls": "cat ./coverage/lcov.info | coveralls",
     "build": "rm -rf dist && yarn run build:lib && yarn run build:flow",

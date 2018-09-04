@@ -1,9 +1,0 @@
-# Ignore snapshots
-*.snap
-
-# Ignore dist
-dist/**
-lib/**
-
-# Ignore webpack
-webpack.config.js

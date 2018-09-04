@@ -1,11 +1,11 @@
 /* eslint-disable import/no-named-as-default-member */
 import React from 'react'
 import { mount } from 'enzyme'
-import Observer from '../src/index.js'
-import intersection from '../src/intersection'
+import Observer from '../index.js'
+import intersection from '../intersection'
 import invariant from 'invariant'
 
-jest.mock('../src/intersection')
+jest.mock('../intersection')
 jest.mock('invariant')
 
 const plainChild = ({ ref }) => <div ref={ref} />
