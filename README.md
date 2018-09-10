@@ -111,7 +111,7 @@ is the API is used to determine if an element is inside the viewport or not. Bro
 ### Polyfill
 
 You can import the
-[polyfill](https://www.npmjs.com/package/react-intersection-observer) directly or use
+[polyfill](https://www.npmjs.com/package/intersection-observer) directly or use
 a service like [polyfill.io](https://polyfill.io/v2/docs/) to add it when
 needed.
 
