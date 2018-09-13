@@ -23,6 +23,12 @@ it('should observe', () => {
   })
 })
 
+it('should throw error if already observering', () => {
+  const cb = jest.fn()
+  observe(el, cb)
+  expect(() => observe(el, cb)).toThrowError()
+})
+
 it('should observe with options', () => {
   const cb = jest.fn()
   const instance = observe(el, cb, { threshold: 0 })

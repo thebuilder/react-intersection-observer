@@ -1,4 +1,6 @@
 // @flow
+import invariant from 'invariant'
+
 type Callback = (inView: boolean) => void
 
 type Instance = {
@@ -30,6 +32,12 @@ export function observe(
   },
   rootId?: string,
 ) {
+  // Validate that the element is not being used in another <Observer />
+  invariant(
+    !INSTANCE_MAP.has(element),
+    "react-intersection-observer: Trying to observe %s, but it's already being observed by another instance.\nMake sure the `ref` is only used by a single <Observer /> instance.\n\n%s",
+    element,
+  )
   const { root, rootMargin } = options
   const threshold = options.threshold || 0
   if (!element || !callback) return
