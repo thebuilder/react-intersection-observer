@@ -121,7 +121,7 @@ it('should trigger onChange with ratio 0', () => {
     },
   ])
 
-  expect(cb).toHaveBeenCalledWith(true)
+  expect(cb).toHaveBeenCalledWith(true, 0)
   expect(instance.visible).toBe(true)
 })
 
@@ -139,7 +139,7 @@ it('should trigger onChange with multiple thresholds ', () => {
     },
   ])
 
-  expect(cb).toHaveBeenCalledWith(true)
+  expect(cb).toHaveBeenCalledWith(true, 0)
   expect(instance.visible).toBe(true)
 })
 
@@ -158,7 +158,7 @@ it('should trigger onChange with isIntersection', () => {
     },
   ])
 
-  expect(cb).toHaveBeenCalledWith(true)
+  expect(cb).toHaveBeenCalledWith(true, 0)
   expect(instance.visible).toBe(true)
 })
 
@@ -176,7 +176,7 @@ it('should not trigger if threshold is undefined', () => {
     },
   ])
 
-  expect(cb).toHaveBeenCalledWith(false)
+  expect(cb).toHaveBeenCalledWith(false, 0)
   expect(instance.visible).toBe(false)
 })
 
@@ -195,7 +195,7 @@ it('should trigger onChange with isIntersection false', () => {
     },
   ])
 
-  expect(cb).toHaveBeenCalledWith(false)
+  expect(cb).toHaveBeenCalledWith(false, 0)
   expect(instance.visible).toBe(false)
 })
 
