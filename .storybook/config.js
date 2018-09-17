@@ -2,6 +2,7 @@ import React from 'react'
 import { configure } from '@storybook/react'
 import { setOptions } from '@storybook/addon-options'
 import pck from '../package.json'
+import 'intersection-observer'
 import './base.css'
 
 setOptions({
