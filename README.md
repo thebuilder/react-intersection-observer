@@ -1,6 +1,7 @@
 # react-intersection-observer
 
 [![Version Badge][npm-version-svg]][package-url]
+[![GZipped size][npm-minzip-svg]][bundlephobia-url]
 [![Build Status][travis-svg]][travis-url]
 [![Coverage Statu][coveralls-svg]][coveralls-url]
 [![dependency status][deps-svg]][deps-url]
@@ -157,6 +158,8 @@ function supportsIntersectionObserver() {
 
 [package-url]: https://npmjs.org/package/react-intersection-observer
 [npm-version-svg]: https://img.shields.io/npm/v/react-intersection-observer.svg
+[npm-minzip-svg]: https://img.shields.io/bundlephobia/minzip/react.svg
+[bundlephobia-url]: https://bundlephobia.com/result?p=react-intersection-observer
 [travis-svg]: https://travis-ci.org/thebuilder/react-intersection-observer.svg
 [travis-url]: https://travis-ci.org/thebuilder/react-intersection-observer
 [coveralls-svg]: https://coveralls.io/repos/github/thebuilder/react-intersection-observer/badge.svg?branch=master
