@@ -134,6 +134,6 @@
     "rollup-plugin-commonjs": "^9.1.6",
     "rollup-plugin-node-resolve": "^3.3.0",
     "rollup-plugin-replace": "^2.0.0",
-    "rollup-plugin-uglify": "^5.0.2"
+    "rollup-plugin-uglify": "^6.0.0"
   }
 }
