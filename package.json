@@ -110,7 +110,7 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/runtime": "^7.0.0",
-    "@storybook/addon-actions": "^3.4.10",
+    "@storybook/addon-actions": "^4.0.0",
     "@storybook/addon-options": "^3.4.10",
     "@storybook/react": "^3.4.10",
     "babel-core": "^7.0.0-bridge.0",
