@@ -48,7 +48,7 @@
     "rollup:umd": "rollup -c --environment FORMAT:umd",
     "rollup:umd.min": "rollup -c --environment MINIFY,FORMAT:umd",
     "prepare": "yarn build",
-    "pretty": "prettier '**/*.{js,md,json}' --write",
+    "pretty": "prettier '**/*.{js,md,json,yml,html}' --write",
     "storybook": "start-storybook -p 9000",
     "test": "jest"
   },
