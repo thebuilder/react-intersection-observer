@@ -1,11 +1,11 @@
 import React from 'react'
 import { configure } from '@storybook/react'
-import { setOptions } from '@storybook/addon-options'
+import { withOptions } from '@storybook/addon-options'
 import pck from '../package.json'
 import 'intersection-observer'
 import './base.css'
 
-setOptions({
+withOptions({
   name: pck.name,
   url: pck.repository ? pck.repository.url : null,
 })
