@@ -2,9 +2,10 @@
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import Observer from '../src/index'
+import Observer, { useInView } from '../src/index'
 import ScrollWrapper from './ScrollWrapper'
 import RootComponent from './Root'
+import type { IntersectionOptions } from '../src'
 
 type Props = {
   style?: Object,
@@ -30,6 +31,13 @@ const Header = React.forwardRef((props: Props, ref) => (
     <h2>{props.children}</h2>
   </div>
 ))
+
+const HookComponent = (options: IntersectionOptions) => {
+  // $FlowFixMe
+  const ref = React.useRef()
+  const inView = useInView(ref, options)
+  return <Header ref={ref}>Header inside viewport: {inView.toString()}</Header>
+}
 
 storiesOf('Intersection Observer', module)
   .add('Basic', () => (

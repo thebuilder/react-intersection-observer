@@ -7,22 +7,26 @@ const pkg = require('../package')
  * https://blog.kentcdodds.com/distributing-flow-type-definitions-for-node-and-browser-modules-3952ad38b357
  */
 function createFlow() {
-  fs.writeFileSync(
-    path.join(process.cwd(), pkg.main + '.flow'),
-    createFlowFile(),
-    'utf-8',
-  )
-  fs.writeFileSync(
-    path.join(process.cwd(), pkg.module + '.flow'),
-    createFlowFile(),
-    'utf-8',
-  )
+  if (pkg.main) {
+    fs.writeFileSync(
+      path.join(process.cwd(), pkg.main + '.flow'),
+      createFlowFile(),
+      'utf-8',
+    )
+  }
+  if (pkg.module) {
+    fs.writeFileSync(
+      path.join(process.cwd(), pkg.module + '.flow'),
+      createFlowFile(),
+      'utf-8',
+    )
+  }
 }
 
 function createFlowFile(file = 'index.js') {
   return `// @flow
 export * from '../src/${file}'
-export { default } from '../src/${file}'
+export { default, InView, useInView } from '../src/${file}'
 `
 }
 

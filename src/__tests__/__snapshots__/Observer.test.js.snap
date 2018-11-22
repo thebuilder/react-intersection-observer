@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Should not render <Observer /> render outside view 1`] = `
-<Observer
+<InView
   threshold={0}
   triggerOnce={false}
 >
@@ -9,11 +9,11 @@ exports[`Should not render <Observer /> render outside view 1`] = `
     Inview: 
     false
   </div>
-</Observer>
+</InView>
 `;
 
 exports[`Should render <Observer /> render when in view 1`] = `
-<Observer
+<InView
   threshold={0}
   triggerOnce={false}
 >
@@ -21,22 +21,22 @@ exports[`Should render <Observer /> render when in view 1`] = `
     Inview: 
     true
   </div>
-</Observer>
+</InView>
 `;
 
 exports[`should render plain children 1`] = `
-<Observer
+<InView
   threshold={0}
   triggerOnce={false}
 >
   <div>
     inner
   </div>
-</Observer>
+</InView>
 `;
 
 exports[`should render with className 1`] = `
-<Observer
+<InView
   className="inner-class"
   threshold={0}
   triggerOnce={false}
@@ -46,11 +46,11 @@ exports[`should render with className 1`] = `
   >
     inner
   </div>
-</Observer>
+</InView>
 `;
 
 exports[`should render with tag 1`] = `
-<Observer
+<InView
   tag="span"
   threshold={0}
   triggerOnce={false}
@@ -58,5 +58,5 @@ exports[`should render with tag 1`] = `
   <span>
     inner
   </span>
-</Observer>
+</InView>
 `;
