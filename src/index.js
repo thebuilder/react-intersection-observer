@@ -43,11 +43,11 @@ type State = {
 /**
  * Monitors scroll, and triggers the children function with updated props
  *
- <Observer>
+ <InView>
  {({inView, ref}) => (
    <h1 ref={ref}>{`${inView}`}</h1>
  )}
- </Observer>
+ </InView>
  */
 export class InView extends React.Component<Props, State> {
   static defaultProps = {
