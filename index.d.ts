@@ -5,10 +5,7 @@ export interface RenderProps {
   ref: React.RefObject<any>
 }
 
-export interface IntersectionObserverProps {
-  /** Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. */
-  children?: React.ReactNode | ((fields: RenderProps) => React.ReactNode)
-
+export interface IntersectionOptions {
   /**
    * The `HTMLElement` that is used as the viewport for checking visibility of
    * the target.
@@ -31,12 +28,6 @@ export interface IntersectionObserverProps {
    */
   rootMargin?: string
 
-  /**
-   * Element tag to use for the wrapping component
-   * @default `'div'`
-   */
-  tag?: string
-
   /** Number between 0 and 1 indicating the the percentage that should be
    * visible before triggering. Can also be an array of numbers, to create
    * multiple trigger points.
@@ -49,10 +40,27 @@ export interface IntersectionObserverProps {
    * @default `false`
    */
   triggerOnce?: boolean
+}
+
+export interface IntersectionObserverProps extends IntersectionOptions {
+  /**
+   * Children expects a function that receives an object
+   * contain an `inView` boolean and `ref` that should be
+   * assigned to the element root.
+   */
+  children?: React.ReactNode | ((fields: RenderProps) => React.ReactNode)
+
+  /**
+   * Element tag to use for the wrapping component
+   * @default `'div'`
+   */
+  tag?: string
 
   /** Call this function whenever the in view state changes */
   onChange?: (inView: boolean) => void
 }
+
+export class InView extends React.Component<IntersectionObserverProps, {}> {}
 
 export default class ReactIntersectionObserver extends React.Component<
   IntersectionObserverProps,

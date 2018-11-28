@@ -1,0 +1,26 @@
+{
+  "dist/react-intersection-observer.cjs.js": {
+    "bundled": 10178,
+    "minified": 4474,
+    "gzipped": 1693
+  },
+  "dist/react-intersection-observer.umd.min.js": {
+    "bundled": 4648,
+    "minified": 4648,
+    "gzipped": 2043
+  },
+  "dist/react-intersection-observer.esm.js": {
+    "bundled": 9882,
+    "minified": 4257,
+    "gzipped": 1629,
+    "treeshaked": {
+      "rollup": {
+        "code": 2882,
+        "import_statements": 376
+      },
+      "webpack": {
+        "code": 4129
+      }
+    }
+  }
+}
