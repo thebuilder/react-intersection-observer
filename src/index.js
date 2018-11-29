@@ -160,9 +160,7 @@ export class InView extends React.Component<Props, State> {
 
 export function useInView(
   ref: React.ElementRef<*>,
-  options: IntersectionOptions = {
-    threshold: 0,
-  },
+  options: IntersectionOptions = {},
 ) {
   // $FlowFixMe - useState is not exposed in React Flow lib yet
   const [isInView, setInView] = React.useState(false)

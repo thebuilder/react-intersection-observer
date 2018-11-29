@@ -49,6 +49,13 @@ storiesOf('Intersection Observer', module)
       </Observer>
     </ScrollWrapper>
   ))
+  .add('Start in view', () => (
+    <Observer onChange={action('Child Observer inview')}>
+      {({ inView, ref }) => (
+        <Header ref={ref}>Header inside viewport: {inView.toString()}</Header>
+      )}
+    </Observer>
+  ))
   .add('Plain children', () => (
     <ScrollWrapper>
       <Observer onChange={action('Child Observer inview')}>
