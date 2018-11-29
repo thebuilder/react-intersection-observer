@@ -162,7 +162,7 @@ it('should trigger onChange with isIntersection', () => {
   expect(instance.visible).toBe(true)
 })
 
-it('should not trigger if threshold is undefined', () => {
+it('should not ensure threshold is 0 if undefined', () => {
   const cb = jest.fn()
   const instance = observe(el, cb, { threshold: undefined })
   const calls = global.IntersectionObserver.mock.calls
@@ -176,8 +176,8 @@ it('should not trigger if threshold is undefined', () => {
     },
   ])
 
-  expect(cb).toHaveBeenCalledWith(false)
-  expect(instance.visible).toBe(false)
+  expect(cb).toHaveBeenCalledWith(true)
+  expect(instance.visible).toBe(true)
 })
 
 it('should trigger onChange with isIntersection false', () => {

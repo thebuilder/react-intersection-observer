@@ -2,9 +2,8 @@
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import Observer, { useInView } from '../src/index'
+import { useInView } from '../src/index'
 import ScrollWrapper from './ScrollWrapper'
-import RootComponent from './Root'
 import type { IntersectionOptions } from '../src'
 
 type Props = {
@@ -33,6 +32,7 @@ const HookComponent = ({ options, style, children, ...rest }: Props) => {
         color: 'azure',
         ...style,
       }}
+      {...rest}
     >
       <h2>
         {children || 'Header is inside the viewport'}: {inView.toString()}
@@ -47,6 +47,7 @@ storiesOf('useInView hook', module)
       <HookComponent />
     </ScrollWrapper>
   ))
+  .add('Start in view', () => <HookComponent />)
   .add('Taller then viewport', () => (
     <ScrollWrapper>
       <HookComponent style={{ height: '150vh' }} />
