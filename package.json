@@ -110,7 +110,7 @@
     "enzyme-adapter-react-16": "^1.7.0",
     "enzyme-to-json": "^3.3.4",
     "eslint": "^5.9.0",
-    "eslint-config-insilico": "^5.2.0",
+    "eslint-config-insilico": "^6.0.0",
     "flow-bin": "^0.87.0",
     "flow-copy-source": "^2.0.2",
     "husky": "^1.1.3",
