@@ -123,7 +123,7 @@
     "react": "^16.7.0-alpha",
     "react-dom": "^16.7.0-alpha",
     "react-test-renderer": "^16.7.0-alpha",
-    "rollup": "^0.67.1",
+    "rollup": "^0.68.0",
     "rollup-plugin-babel": "^4.0.1",
     "rollup-plugin-commonjs": "^9.2.0",
     "rollup-plugin-node-resolve": "^3.3.0",
