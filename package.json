@@ -120,7 +120,7 @@
     "lint-staged": "^8.0.4",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.15.2",
-    "react": "^16.7.0-alpha",
+    "react": "16.7.0-alpha.2",
     "react-dom": "^16.7.0-alpha",
     "react-test-renderer": "^16.7.0-alpha",
     "rollup": "^0.67.1",
