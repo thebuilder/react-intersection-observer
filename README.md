@@ -133,10 +133,10 @@ export default Component
 
 The **`<InView />`** component also accepts the following props:
 
-| Name         | Type                                       | Default | Required | Description                                                                                                                                                                                                                       |
-| ------------ | ------------------------------------------ | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **children** | ({inView, ref}) => React.Node / React.Node |         | true     | Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. Alternately pass a plain child, to have the `<Observer />` deal with the wrapping element. |
-| **onChange** | (inView) => void                           |         | false    | Call this function whenever the in view state changes                                                                                                                                                                             |
+| Name         | Type                                                          | Default | Required | Description                                                                                                                                                                                                                                                                     |
+| ------------ | ------------------------------------------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **children** | ({inView, intersectionRatio, ref}) => React.Node / React.Node |         | true     | Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. Alternately pass a plain child, to have the `<Observer />` deal with the wrapping element. You also receive the last `intersectionRatio` |
+| **onChange** | (inView, intersectionRatio) => void                           |         | false    | Call this function whenever the in view state changes                                                                                                                                                                                                                           |
 
 ## Usage in other projects
 
