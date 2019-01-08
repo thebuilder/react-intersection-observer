@@ -2,6 +2,7 @@
 import * as React from 'react'
 import { observe, unobserve } from './intersection'
 import invariant from 'invariant'
+export { useInView } from './hooks/useInView'
 
 export type IntersectionOptions = {
   /** Number between 0 and 1 indicating the the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. */
@@ -156,45 +157,6 @@ export class InView extends React.Component<Props, State> {
       children,
     )
   }
-}
-
-export function useInView(
-  ref: React.ElementRef<*>,
-  options: IntersectionOptions = {},
-) {
-  // $FlowFixMe - useState is not exposed in React Flow lib yet
-  const [isInView, setInView] = React.useState(false)
-
-  // $FlowFixMe - useEffect is not exposed in React Flow lib yet
-  React.useEffect(
-    () => {
-      if (ref.current) {
-        observe(
-          ref.current,
-          inView => {
-            setInView(inView)
-            if (inView && options.triggerOnce) {
-              // If it should only trigger once, unobserve the element after it's inView
-              unobserve(ref.current)
-            }
-          },
-          {
-            threshold: options.threshold,
-            root: options.root,
-            rootMargin: options.rootMargin,
-          },
-          options.rootId,
-        )
-      }
-
-      return () => {
-        unobserve(ref.current)
-      }
-    },
-    [options.threshold, options.root, options.rootMargin, options.rootId],
-  )
-
-  return isInView
 }
 
 export default InView

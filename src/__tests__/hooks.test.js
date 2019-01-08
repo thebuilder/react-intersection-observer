@@ -1,6 +1,6 @@
 import React, { useRef } from 'react'
 import * as ReactDOM from 'react-dom'
-import { useInView } from '../index'
+import { useInView } from '../hooks/useInView'
 import { mount } from 'enzyme'
 import { observe, unobserve } from '../intersection'
 
