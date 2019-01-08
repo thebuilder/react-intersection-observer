@@ -27,9 +27,7 @@ const OBSERVER_MAP: Map<?string, IntersectionObserver> = new Map()
 export function observe(
   element: HTMLElement,
   callback: Callback,
-  options: IntersectionObserverOptions = {
-    threshold: 0,
-  },
+  options: IntersectionObserverOptions = {},
   rootId?: string,
 ) {
   // Validate that the element is not being used in another <Observer />
@@ -38,12 +36,15 @@ export function observe(
     "react-intersection-observer: Trying to observe %s, but it's already being observed by another instance.\nMake sure the `ref` is only used by a single <Observer /> instance.\n\n%s",
     element,
   )
-  const { root, rootMargin } = options
-  const threshold = options.threshold || 0
+  // IntersectionObserver needs a threshold to trigger, so set it to 0 if it's not defined.
+  // Modify the options object, since it's used in the onChange handler.
+  if (!options.threshold) options.threshold = 0
+
+  const { root, rootMargin, threshold } = options
   if (!element || !callback) return
   let observerId = rootMargin
     ? `${threshold.toString()}_${rootMargin}`
-    : `${threshold.toString()}`
+    : threshold.toString()
 
   if (root) {
     observerId = rootId ? `${rootId}_${observerId}` : null
