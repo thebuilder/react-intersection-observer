@@ -1,11 +1,10 @@
 /* eslint-disable import/no-extraneous-dependencies */
-const pkg = require('./package')
 import path from 'path'
 import babel from 'rollup-plugin-babel'
 import resolve from 'rollup-plugin-node-resolve'
 import commonjs from 'rollup-plugin-commonjs'
 import { uglify } from 'rollup-plugin-uglify'
-import { sizeSnapshot } from 'rollup-plugin-size-snapshot'
+import pkg from './package.json'
 
 const root = process.platform === 'win32' ? path.resolve('/') : '/'
 const external = id => !id.startsWith('.') && !id.startsWith(root)
@@ -26,10 +25,7 @@ export default [
         input: './src/index.js',
         output: { file: pkg.module, format: 'esm', exports: 'named' },
         external,
-        plugins: [
-          babel(getBabelOptions({ useESModules: true })),
-          sizeSnapshot(),
-        ],
+        plugins: [babel(getBabelOptions({ useESModules: true }))],
       }
     : null,
   pkg.main
@@ -56,7 +52,6 @@ export default [
           babel(getBabelOptions({ useESModules: true })),
           commonjs({ include: '**/node_modules/**' }),
           uglify(),
-          sizeSnapshot(),
         ],
       }
     : null,
