@@ -2,6 +2,7 @@ import React = require('react')
 
 export interface RenderProps {
   inView: boolean
+  intersectionRatio: number
   ref: React.RefObject<any>
 }
 
@@ -57,7 +58,7 @@ export interface IntersectionObserverProps extends IntersectionOptions {
   tag?: string
 
   /** Call this function whenever the in view state changes */
-  onChange?: (inView: boolean) => void
+  onChange?: (inView: boolean, intersectionRatio: number) => void
 }
 
 export class InView extends React.Component<IntersectionObserverProps, {}> {}

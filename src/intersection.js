@@ -1,7 +1,7 @@
 // @flow
 import invariant from 'invariant'
 
-type Callback = (inView: boolean) => void
+type Callback = (inView: boolean, intersectionRatio: number) => void
 
 type Instance = {
   callback: Callback,
@@ -155,7 +155,7 @@ function onChange(changes) {
       }
 
       instance.visible = inView
-      instance.callback(inView)
+      instance.callback(inView, intersectionRatio)
     }
   })
 }

@@ -23,22 +23,25 @@ type Props = IntersectionOptions & {
   children?:
     | (({
         inView: boolean,
+        intersectionRatio?: number,
         ref: (node: ?HTMLElement) => void,
       }) => React.Node)
     | React.Node,
   /** @deprecated replace render with children */
   render?: ({
     inView: boolean,
+    intersectionRatio?: number,
     ref: (node: ?HTMLElement) => void,
   }) => React.Node,
   /** Element tag to use for the wrapping element when rendering a plain React.Node. Defaults to 'div'  */
   tag?: string,
   /** Call this function whenever the in view state changes */
-  onChange?: (inView: boolean) => void,
+  onChange?: (inView: boolean, intersectionRatio: number) => void,
 }
 
 type State = {
   inView: boolean,
+  intersectionRatio: number,
 }
 
 /**
@@ -58,6 +61,7 @@ export class InView extends React.Component<Props, State> {
 
   state = {
     inView: false,
+    intersectionRatio: 0,
   }
 
   componentDidMount() {
@@ -124,10 +128,10 @@ export class InView extends React.Component<Props, State> {
     this.observeNode()
   }
 
-  handleChange = (inView: boolean) => {
-    this.setState({ inView })
+  handleChange = (inView: boolean, intersectionRatio: number) => {
+    this.setState({ inView, intersectionRatio })
     if (this.props.onChange) {
-      this.props.onChange(inView)
+      this.props.onChange(inView, intersectionRatio)
     }
   }
 
@@ -144,11 +148,11 @@ export class InView extends React.Component<Props, State> {
       ...props
     } = this.props
 
-    const { inView } = this.state
+    const { inView, intersectionRatio } = this.state
     const renderMethod = children || render
 
     if (typeof renderMethod === 'function') {
-      return renderMethod({ inView, ref: this.handleNode })
+      return renderMethod({ inView, intersectionRatio, ref: this.handleNode })
     }
 
     return React.createElement(

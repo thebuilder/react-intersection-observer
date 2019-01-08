@@ -138,10 +138,10 @@ it('Should recreate observer when rootMargin change', () => {
 it('Should trigger onChange callback', () => {
   const onChange = jest.fn()
   const wrapper = mount(<Observer onChange={onChange}>{plainChild}</Observer>)
-  wrapper.instance().handleChange(true)
-  expect(onChange).toHaveBeenLastCalledWith(true)
-  wrapper.instance().handleChange(false)
-  expect(onChange).toHaveBeenLastCalledWith(false)
+  wrapper.instance().handleChange(true, 1)
+  expect(onChange).toHaveBeenLastCalledWith(true, 1)
+  wrapper.instance().handleChange(false, 0)
+  expect(onChange).toHaveBeenLastCalledWith(false, 0)
 })
 
 it('Should unobserve when triggerOnce comes into view', () => {
