@@ -126,7 +126,7 @@ export default Component
 | **root**        | HTMLElement |         | false    | The HTMLElement that is used as the viewport for checking visibility of the target. Defaults to the browser viewport if not specified or if null.                                                                                |
 | **rootId**      | String      |         | false    | Unique identifier for the root element - This is used to identify the IntersectionObserver instance, so it can be reused. If you defined a root element, without adding an id, it will create a new instance for all components. |
 | **rootMargin**  | String      | '0px'   | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                                                                                               |
-| **threshold**   | Number      | 0       | false    | Number between 0 and 1 indicating the the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                               |
+| **threshold**   | Number      | 0       | false    | Number between 0 and 1 indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                                   |
 | **triggerOnce** | Bool        | false   | false    | Only trigger this method once                                                                                                                                                                                                    |
 
 ### InView Props
