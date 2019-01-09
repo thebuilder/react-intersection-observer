@@ -63,6 +63,11 @@ export interface IntersectionObserverProps extends IntersectionOptions {
 
 export class InView extends React.Component<IntersectionObserverProps, {}> {}
 
+export type useInView = (
+  ref: React.RefObject<any>,
+  options: IntersectionOptions,
+) => boolean
+
 export default class ReactIntersectionObserver extends React.Component<
   IntersectionObserverProps,
   {}
