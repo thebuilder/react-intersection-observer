@@ -121,7 +121,12 @@ it('should trigger onChange with ratio 0', () => {
     },
   ])
 
-  expect(cb).toHaveBeenCalledWith(true, 0)
+  expect(cb).toHaveBeenCalledWith(
+    true,
+    expect.objectContaining({
+      intersectionRatio: 0,
+    }),
+  )
   expect(instance.visible).toBe(true)
 })
 
@@ -139,7 +144,12 @@ it('should trigger onChange with multiple thresholds ', () => {
     },
   ])
 
-  expect(cb).toHaveBeenCalledWith(true, 0)
+  expect(cb).toHaveBeenCalledWith(
+    true,
+    expect.objectContaining({
+      intersectionRatio: 0,
+    }),
+  )
   expect(instance.visible).toBe(true)
 })
 
@@ -158,7 +168,12 @@ it('should trigger onChange with isIntersection', () => {
     },
   ])
 
-  expect(cb).toHaveBeenCalledWith(true, 0)
+  expect(cb).toHaveBeenCalledWith(
+    true,
+    expect.objectContaining({
+      intersectionRatio: 0,
+    }),
+  )
   expect(instance.visible).toBe(true)
 })
 
@@ -176,7 +191,12 @@ it('should ensure threshold is 0 if undefined', () => {
     },
   ])
 
-  expect(cb).toHaveBeenCalledWith(true, 0)
+  expect(cb).toHaveBeenCalledWith(
+    true,
+    expect.objectContaining({
+      intersectionRatio: 0,
+    }),
+  )
   expect(instance.visible).toBe(true)
 })
 
@@ -195,7 +215,12 @@ it('should trigger onChange with isIntersection false', () => {
     },
   ])
 
-  expect(cb).toHaveBeenCalledWith(false, 0)
+  expect(cb).toHaveBeenCalledWith(
+    false,
+    expect.objectContaining({
+      intersectionRatio: 0,
+    }),
+  )
   expect(instance.visible).toBe(false)
 })
 

@@ -27,3 +27,4 @@ stories
 tests
 example
 jest-setup.js
+__tests__

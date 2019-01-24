@@ -3,6 +3,7 @@ import * as React from 'react'
 import { observe, unobserve } from './intersection'
 import invariant from 'invariant'
 export { useInView } from './hooks/useInView'
+export { useIntersectionObserver } from './hooks/useIntersectionObserver'
 
 export type IntersectionOptions = {
   /** Number between 0 and 1 indicating the the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. */
@@ -24,6 +25,7 @@ type Props = IntersectionOptions & {
     | (({
         inView: boolean,
         intersectionRatio?: number,
+        intersection?: IntersectionObserverEntry,
         ref: (node: ?HTMLElement) => void,
       }) => React.Node)
     | React.Node,
@@ -36,12 +38,12 @@ type Props = IntersectionOptions & {
   /** Element tag to use for the wrapping element when rendering a plain React.Node. Defaults to 'div'  */
   tag?: string,
   /** Call this function whenever the in view state changes */
-  onChange?: (inView: boolean, intersectionRatio: number) => void,
+  onChange?: (inView: boolean, intersection: IntersectionObserverEntry) => void,
 }
 
 type State = {
   inView: boolean,
-  intersectionRatio: number,
+  intersection?: IntersectionObserverEntry,
 }
 
 /**
@@ -61,7 +63,7 @@ export class InView extends React.Component<Props, State> {
 
   state = {
     inView: false,
-    intersectionRatio: 0,
+    intersection: undefined,
   }
 
   componentDidMount() {
@@ -128,10 +130,10 @@ export class InView extends React.Component<Props, State> {
     this.observeNode()
   }
 
-  handleChange = (inView: boolean, intersectionRatio: number) => {
-    this.setState({ inView, intersectionRatio })
+  handleChange = (inView: boolean, intersection: IntersectionObserverEntry) => {
+    this.setState({ inView, intersection })
     if (this.props.onChange) {
-      this.props.onChange(inView, intersectionRatio)
+      this.props.onChange(inView, intersection)
     }
   }
 
@@ -148,11 +150,11 @@ export class InView extends React.Component<Props, State> {
       ...props
     } = this.props
 
-    const { inView, intersectionRatio } = this.state
+    const { inView, intersection } = this.state
     const renderMethod = children || render
 
     if (typeof renderMethod === 'function') {
-      return renderMethod({ inView, intersectionRatio, ref: this.handleNode })
+      return renderMethod({ inView, intersection, ref: this.handleNode })
     }
 
     return React.createElement(

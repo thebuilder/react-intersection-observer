@@ -3,6 +3,7 @@ import React = require('react')
 export interface RenderProps {
   inView: boolean
   intersectionRatio: number
+  intersection: IntersectionObserverEntry
   ref: React.RefObject<any>
 }
 
@@ -58,7 +59,7 @@ export interface IntersectionObserverProps extends IntersectionOptions {
   tag?: string
 
   /** Call this function whenever the in view state changes */
-  onChange?: (inView: boolean, intersectionRatio: number) => void
+  onChange?: (inView: boolean, intersection: IntersectionObserverEntry) => void
 }
 
 export class InView extends React.Component<IntersectionObserverProps, {}> {}
@@ -67,6 +68,14 @@ export type useInView = (
   ref: React.RefObject<any>,
   options: IntersectionOptions,
 ) => boolean
+
+export type useIntersectionObserver = (
+  ref: React.RefObject<any>,
+  options: IntersectionOptions,
+) => {
+  inView: boolean
+  intersection: IntersectionObserverEntry
+}
 
 export default class ReactIntersectionObserver extends React.Component<
   IntersectionObserverProps,
