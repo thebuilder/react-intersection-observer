@@ -5,7 +5,7 @@ cache: yarn
 script:
   - yarn lint
   - yarn test --coverage
-  - yarn flow check
+  - yarn tsc
   - yarn build:storybook
 after_success:
   - yarn coveralls

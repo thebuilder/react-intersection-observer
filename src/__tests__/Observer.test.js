@@ -1,7 +1,7 @@
 /* eslint-disable import/no-named-as-default-member */
 import React from 'react'
 import { mount } from 'enzyme'
-import Observer from '../index.js'
+import Observer from '../'
 import intersection from '../intersection'
 import invariant from 'invariant'
 
