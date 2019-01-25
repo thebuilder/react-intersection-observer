@@ -23,7 +23,6 @@ export function useIntersectionObserver(
         (inView, intersection) => {
           setInView(inView)
           setIntersectionEntry(intersection)
-
           if (inView && options.triggerOnce) {
             // If it should only trigger once, unobserve the element after it's inView
             unobserve(ref.current)
