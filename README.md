@@ -47,7 +47,8 @@ npm install react-intersection-observer --save
 
 The new Hooks feature, makes it even easier than before to monitor the `inView`
 state of your components. You can import the `useInView` hook, and pass it a ref
-to the DOM node you want to observe.
+to the DOM node you want to observe. It will then return `true` once the element
+enter the viewport.
 
 It also accepts an [options](#options) object, to control the Intersection
 Observer.
@@ -70,6 +71,10 @@ const Component = () => {
   )
 }
 ```
+
+If you need to know more details about the intersection, you can call the
+`useIntersectionObserver` hook instead. It takes the same input, but will return
+an object containing `inView` and `intersection`.
 
 ### Child as function
 
@@ -133,10 +138,10 @@ export default Component
 
 The **`<InView />`** component also accepts the following props:
 
-| Name         | Type                                                          | Default | Required | Description                                                                                                                                                                                                                                                                     |
-| ------------ | ------------------------------------------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **children** | ({inView, intersectionRatio, ref}) => React.Node / React.Node |         | true     | Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. Alternately pass a plain child, to have the `<Observer />` deal with the wrapping element. You also receive the last `intersectionRatio` |
-| **onChange** | (inView, intersectionRatio) => void                           |         | false    | Call this function whenever the in view state changes                                                                                                                                                                                                                           |
+| Name         | Type                                                                             | Default | Required | Description                                                                                                                                                                                                                                                                                                                    |
+| ------------ | -------------------------------------------------------------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **children** | `({inView, intersection, intersectionRatio, ref}) => React.Node` or `React.Node` |         | true     | Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. Alternately pass a plain child, to have the `<Observer />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `intersection, giving you more details. |
+| **onChange** | `(inView, intersection) => void`                                                 |         | false    | Call this function whenever the in view state changes                                                                                                                                                                                                                                                                          |
 
 ## Usage in other projects
 
