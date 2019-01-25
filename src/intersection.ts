@@ -1,4 +1,3 @@
-// @flow
 import invariant from 'invariant'
 
 type Callback = (
@@ -7,15 +6,15 @@ type Callback = (
 ) => void
 
 type Instance = {
-  callback: Callback,
-  visible: boolean,
-  options: IntersectionObserverOptions,
-  observerId: ?string,
-  observer: ?IntersectionObserver,
+  callback: Callback
+  visible: boolean
+  options: IntersectionObserverInit
+  observerId?: string
+  observer?: IntersectionObserver
 }
 
-const INSTANCE_MAP: Map<HTMLElement, Instance> = new Map()
-const OBSERVER_MAP: Map<?string, IntersectionObserver> = new Map()
+const INSTANCE_MAP: Map<Element, Instance> = new Map()
+const OBSERVER_MAP: Map<string, IntersectionObserver> = new Map()
 
 /**
  * Monitor element, and trigger callback when element becomes visible
@@ -30,7 +29,7 @@ const OBSERVER_MAP: Map<?string, IntersectionObserver> = new Map()
 export function observe(
   element: HTMLElement,
   callback: Callback,
-  options: IntersectionObserverOptions = {},
+  options: IntersectionObserverInit = {},
   rootId?: string,
 ) {
   // Validate that the element is not being used in another <Observer />
@@ -45,12 +44,12 @@ export function observe(
 
   const { root, rootMargin, threshold } = options
   if (!element || !callback) return
-  let observerId = rootMargin
+  let observerId: string | undefined = rootMargin
     ? `${threshold.toString()}_${rootMargin}`
     : threshold.toString()
 
   if (root) {
-    observerId = rootId ? `${rootId}_${observerId}` : null
+    observerId = rootId ? `${rootId}_${observerId}` : undefined
   }
 
   let observerInstance = observerId ? OBSERVER_MAP.get(observerId) : null
@@ -79,7 +78,7 @@ export function observe(
  * make sure to call this method.
  * @param element {HTMLElement}
  */
-export function unobserve(element: ?HTMLElement) {
+export function unobserve(element: HTMLElement | null) {
   if (!element) return
   const instance = INSTANCE_MAP.get(element)
 
@@ -106,7 +105,7 @@ export function unobserve(element: ?HTMLElement) {
     if (observerInstance && !itemsLeft) {
       // No more elements to observe for threshold, disconnect observer
       observerInstance.disconnect()
-      OBSERVER_MAP.delete(observerId)
+      if (observerId) OBSERVER_MAP.delete(observerId)
     }
 
     // Remove reference to element
@@ -126,7 +125,7 @@ export function destroy() {
   INSTANCE_MAP.clear()
 }
 
-function onChange(changes) {
+function onChange(changes: IntersectionObserverEntry[]) {
   changes.forEach(intersection => {
     const { isIntersecting, intersectionRatio, target } = intersection
     const instance = INSTANCE_MAP.get(target)

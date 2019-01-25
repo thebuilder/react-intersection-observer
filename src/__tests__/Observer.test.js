@@ -171,26 +171,3 @@ it('Should throw error when not passing ref', () => {
     'react-intersection-observer: No DOM node found. Make sure you forward "ref" to the root DOM element you want to observe.',
   )
 })
-
-describe('deprecated methods', () => {
-  beforeEach(() => {
-    jest.spyOn(global.console, 'warn').mockImplementation(() => {})
-  })
-  afterEach(() => {
-    global.console.warn.mockReset()
-  })
-  it('should render using "render"', () => {
-    mount(<Observer render={plainChild} />)
-    expect(global.console.warn).toHaveBeenCalledWith(
-      'react-intersection-observer: "render" is deprecated, and should be replaced with "children"',
-      expect.any(Object),
-    )
-  })
-  it('should not warn in production', () => {
-    const orgEnv = process.env.NODE_ENV
-    process.env.NODE_ENV = 'production'
-    mount(<Observer render={plainChild} />)
-    expect(global.console.warn).not.toHaveBeenCalled()
-    process.env.NODE_ENV = orgEnv // Reset the env
-  })
-})

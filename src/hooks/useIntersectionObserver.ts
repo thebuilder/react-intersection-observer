@@ -1,14 +1,20 @@
-// @flow
 import * as React from 'react'
+import { IntersectionOptions } from '../'
 import { observe, unobserve } from '../intersection'
-import type { IntersectionOptions } from '../index'
+
+export type HookResponse = {
+  inView: boolean
+  intersection?: IntersectionObserverEntry
+}
 
 export function useIntersectionObserver(
-  ref: React.ElementRef<*>,
+  ref: React.RefObject<HTMLElement>,
   options: IntersectionOptions = {},
-): { inView: boolean, intersection: IntersectionObserverEntry } {
-  const [isInView, setInView] = React.useState(false)
-  const [intersectionEntry, setIntersectionEntry] = React.useState({})
+): HookResponse {
+  const [isInView, setInView] = React.useState<boolean>(false)
+  const [intersectionEntry, setIntersectionEntry] = React.useState<
+    IntersectionObserverEntry | undefined
+  >(undefined)
 
   React.useEffect(() => {
     if (ref.current) {

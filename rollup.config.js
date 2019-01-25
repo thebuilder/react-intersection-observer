@@ -9,7 +9,7 @@ import pkg from './package.json'
 
 const root = process.platform === 'win32' ? path.resolve('/') : '/'
 const external = id => !id.startsWith('.') && !id.startsWith(root)
-
+const extensions = ['.js', '.jsx', '.ts', '.tsx']
 const globals = {
   react: 'React',
 }
@@ -17,29 +17,38 @@ const globals = {
 const getBabelOptions = ({ useESModules }) => ({
   exclude: '**/node_modules/**',
   runtimeHelpers: true,
+  extensions,
+  include: ['src/**/*'],
+  presets: ['@babel/preset-typescript'],
   plugins: [['@babel/transform-runtime', { regenerator: false, useESModules }]],
 })
 
 export default [
   pkg.module
     ? {
-        input: './src/index.js',
+        input: './src/index.tsx',
         output: { file: pkg.module, format: 'esm', exports: 'named' },
         external,
-        plugins: [babel(getBabelOptions({ useESModules: true }))],
+        plugins: [
+          resolve({ extensions }),
+          babel(getBabelOptions({ useESModules: true })),
+        ],
       }
     : null,
   pkg.main
     ? {
-        input: './src/index.js',
+        input: './src/index.tsx',
         output: { file: pkg.main, format: 'cjs', exports: 'named' },
         external,
-        plugins: [babel(getBabelOptions({ useESModules: false }))],
+        plugins: [
+          resolve({ extensions }),
+          babel(getBabelOptions({ useESModules: false })),
+        ],
       }
     : null,
   pkg.unpkg
     ? {
-        input: './src/index.js',
+        input: './src/index.tsx',
         output: {
           file: pkg.unpkg,
           format: 'umd',
@@ -49,7 +58,7 @@ export default [
         },
         external: Object.keys(globals),
         plugins: [
-          resolve(),
+          resolve({ extensions }),
           replace({ 'process.env.NODE_ENV': JSON.stringify('production') }),
           babel(getBabelOptions({ useESModules: true })),
           commonjs({ include: '**/node_modules/**' }),

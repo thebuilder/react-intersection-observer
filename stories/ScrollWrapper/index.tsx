@@ -1,7 +1,7 @@
-// @flow
 import * as React from 'react'
+import { CSSProperties } from 'react'
 
-const style = {
+const style: CSSProperties = {
   height: '101vh',
   textAlign: 'center',
   display: 'flex',
@@ -12,7 +12,7 @@ const style = {
 }
 
 type Props = {
-  children: React.Node,
+  children: React.ReactNode
 }
 
 /**
