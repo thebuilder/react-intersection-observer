@@ -95,7 +95,6 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.2.0",
-    "@types/react": "^16.7.20",
     "invariant": "^2.2.4"
   },
   "peerDependencies": {
@@ -114,6 +113,7 @@
     "@storybook/addon-options": "^4.1.4",
     "@storybook/react": "^4.1.4",
     "@types/jest": "^23.3.13",
+    "@types/react": "^16.7.20",
     "@types/storybook__addon-actions": "^3.4.1",
     "@types/storybook__addon-links": "^3.3.3",
     "@types/storybook__react": "^4.0.0",

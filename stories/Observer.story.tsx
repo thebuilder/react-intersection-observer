@@ -122,7 +122,6 @@ storiesOf('Intersection Observer', module)
             threshold={0}
             root={node}
             rootMargin="64px"
-            rootId="window1"
             onChange={action('Child Observer inview')}
           >
             {({ inView, ref }) => (
@@ -143,7 +142,6 @@ storiesOf('Intersection Observer', module)
             threshold={0}
             root={node}
             rootMargin="64px"
-            rootId="window2"
             onChange={action('Child Observer inview')}
           >
             {({ inView, ref }) => (

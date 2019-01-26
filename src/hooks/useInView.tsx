@@ -3,10 +3,10 @@ import { IntersectionOptions } from '../index'
 import { useIntersectionObserver } from './useIntersectionObserver'
 
 /**
- * Returns true if the element is inside the viewport
+ * Hook to observe an Element, and return boolean indicating if it's inside the viewport
  **/
 export function useInView(
-  ref: React.RefObject<HTMLElement>,
+  ref: React.RefObject<Element>,
   options: IntersectionOptions = {},
 ): boolean {
   const intersection = useIntersectionObserver(ref, options)

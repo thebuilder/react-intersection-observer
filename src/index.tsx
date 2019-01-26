@@ -7,19 +7,16 @@ export { useIntersectionObserver } from './hooks/useIntersectionObserver'
 export type RenderProps = {
   inView: boolean
   intersection: IntersectionObserverEntry | undefined
-  ref: React.RefObject<any> | ((node?: HTMLElement) => void)
+  ref: React.RefObject<Element> | ((node?: Element) => void)
 }
 
 export type IntersectionOptions = {
   /** Number between 0 and 1 indicating the the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. */
   threshold?: number | Array<number>
   /** The HTMLElement that is used as the viewport for checking visibility of the target. Defaults to the browser viewport if not specified or if null.*/
-  root?: HTMLElement
+  root?: Element
   /** Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left). */
   rootMargin?: string
-  /** Unique identifier for the root element - This is used to identify the IntersectionObserver instance, so it can be reused.
-   * If you defined a root element, without adding an id, it will create a new instance for all components. */
-  rootId?: string
   /** Only trigger the inView callback once */
   triggerOnce?: boolean
 }
@@ -106,17 +103,12 @@ export class InView extends React.Component<IntersectionObserverProps, State> {
 
   observeNode() {
     if (!this.node) return
-    const { threshold, root, rootMargin, rootId } = this.props
-    observe(
-      this.node,
-      this.handleChange,
-      {
-        threshold,
-        root,
-        rootMargin,
-      },
-      rootId,
-    )
+    const { threshold, root, rootMargin } = this.props
+    observe(this.node, this.handleChange, {
+      threshold,
+      root,
+      rootMargin,
+    })
   }
 
   handleNode = (node?: HTMLElement) => {
@@ -139,7 +131,6 @@ export class InView extends React.Component<IntersectionObserverProps, State> {
       triggerOnce,
       threshold,
       root,
-      rootId,
       rootMargin,
       ...props
     } = this.props

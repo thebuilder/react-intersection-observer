@@ -7,52 +7,64 @@ type Callback = (
 
 type Instance = {
   callback: Callback
-  visible: boolean
-  options: IntersectionObserverInit
-  observerId?: string
-  observer?: IntersectionObserver
+  inView: boolean
+  observerId: string
+  observer: IntersectionObserver
 }
 
 const INSTANCE_MAP: Map<Element, Instance> = new Map()
 const OBSERVER_MAP: Map<string, IntersectionObserver> = new Map()
+const ROOT_IDS: WeakMap<Element, string> = new WeakMap()
+
+let consecutiveRootId = 0
 
 /**
- * Monitor element, and trigger callback when element becomes visible
+ * Generate a unique ID for the root element
+ * @param root
+ */
+function getRootId(root?: Element | null) {
+  if (!root) return ''
+  if (ROOT_IDS.has(root)) return ROOT_IDS.get(root)
+  consecutiveRootId += 1
+  ROOT_IDS.set(root, consecutiveRootId.toString())
+  return ROOT_IDS.get(root) + '_'
+}
+
+/**
+ * Monitor element, and trigger callback when element becomes inView
  * @param element {HTMLElement}
  * @param callback {Function} Called with inView
  * @param options {Object} InterSection observer options
- * @param options.threshold {Number} Number between 0 and 1, indicating how much of the element should be visible before triggering
- * @param options.root {HTMLElement} It should have a unique id or data-intersection-id in order for the Observer to reused.
+ * @param options.threshold {Number} Number between 0 and 1, indicating how much of the element should be inView before triggering
+ * @param options.root {HTMLElement}
  * @param options.rootMargin {String} The CSS margin to apply to the root element.
- * @param rootId {String} Unique identifier for the root element, to enable reusing the IntersectionObserver
  */
 export function observe(
-  element: HTMLElement,
+  element: Element,
   callback: Callback,
   options: IntersectionObserverInit = {},
-  rootId?: string,
 ) {
+  // IntersectionObserver needs a threshold to trigger, so set it to 0 if it's not defined.
+  // Modify the options object, since it's used in the onChange handler.
+  if (!options.threshold) options.threshold = 0
+  const { root, rootMargin, threshold } = options
   // Validate that the element is not being used in another <Observer />
   invariant(
     !INSTANCE_MAP.has(element),
     "react-intersection-observer: Trying to observe %s, but it's already being observed by another instance.\nMake sure the `ref` is only used by a single <Observer /> instance.\n\n%s",
     element,
   )
-  // IntersectionObserver needs a threshold to trigger, so set it to 0 if it's not defined.
-  // Modify the options object, since it's used in the onChange handler.
-  if (!options.threshold) options.threshold = 0
 
-  const { root, rootMargin, threshold } = options
-  if (!element || !callback) return
-  let observerId: string | undefined = rootMargin
-    ? `${threshold.toString()}_${rootMargin}`
-    : threshold.toString()
+  if (!element) return
+  // Create a unique ID for this observer instance, based on the root, root margin and threshold.
+  // An observer with the same options can be reused, so lets use this fact
+  let observerId: string =
+    getRootId(root) +
+    (rootMargin
+      ? `${threshold.toString()}_${rootMargin}`
+      : threshold.toString())
 
-  if (root) {
-    observerId = rootId ? `${rootId}_${observerId}` : undefined
-  }
-
-  let observerInstance = observerId ? OBSERVER_MAP.get(observerId) : null
+  let observerInstance = OBSERVER_MAP.get(observerId)
   if (!observerInstance) {
     observerInstance = new IntersectionObserver(onChange, options)
     if (observerId) OBSERVER_MAP.set(observerId, observerInstance)
@@ -60,14 +72,12 @@ export function observe(
 
   const instance: Instance = {
     callback,
-    visible: false,
-    options,
+    inView: false,
     observerId,
-    observer: !observerId ? observerInstance : undefined,
+    observer: observerInstance,
   }
 
   INSTANCE_MAP.set(element, instance)
-
   observerInstance.observe(element)
 
   return instance
@@ -76,21 +86,16 @@ export function observe(
 /**
  * Stop observing an element. If an element is removed from the DOM or otherwise destroyed,
  * make sure to call this method.
- * @param element {HTMLElement}
+ * @param element {Element}
  */
-export function unobserve(element: HTMLElement | null) {
+export function unobserve(element: Element | null) {
   if (!element) return
   const instance = INSTANCE_MAP.get(element)
 
   if (instance) {
     const { observerId, observer } = instance
-    const observerInstance = observerId
-      ? OBSERVER_MAP.get(observerId)
-      : observer
 
-    if (observerInstance) {
-      observerInstance.unobserve(element)
-    }
+    observer.unobserve(element)
 
     // Check if we are still observing any elements with the same threshold.
     let itemsLeft = false
@@ -102,10 +107,9 @@ export function unobserve(element: HTMLElement | null) {
       })
     }
 
-    if (observerInstance && !itemsLeft) {
+    if (observer && !itemsLeft) {
       // No more elements to observe for threshold, disconnect observer
-      observerInstance.disconnect()
-      if (observerId) OBSERVER_MAP.delete(observerId)
+      observer.disconnect()
     }
 
     // Remove reference to element
@@ -123,6 +127,7 @@ export function destroy() {
 
   OBSERVER_MAP.clear()
   INSTANCE_MAP.clear()
+  consecutiveRootId = 0
 }
 
 function onChange(changes: IntersectionObserverEntry[]) {
@@ -132,23 +137,14 @@ function onChange(changes: IntersectionObserverEntry[]) {
 
     // Firefox can report a negative intersectionRatio when scrolling.
     if (instance && intersectionRatio >= 0) {
-      const options = instance.options
+      const thresholds = instance.observer.thresholds
 
-      let inView = false
-
-      if (Array.isArray(options.threshold)) {
-        // If threshold is an array, check if any of them intersects. This just triggers the onChange event multiple times.
-        inView = options.threshold.some(threshold => {
-          return instance.visible
-            ? intersectionRatio > threshold
-            : intersectionRatio >= threshold
-        })
-      } else if (options.threshold !== undefined) {
-        // Trigger on 0 ratio only when not visible. This is fallback for browsers without isIntersecting support
-        inView = instance.visible
-          ? intersectionRatio > options.threshold
-          : intersectionRatio >= options.threshold
-      }
+      // If threshold is an array, check if any of them intersects. This just triggers the onChange event multiple times.
+      let inView = thresholds.some(threshold => {
+        return instance.inView
+          ? intersectionRatio > threshold
+          : intersectionRatio >= threshold
+      })
 
       if (isIntersecting !== undefined) {
         // If isIntersecting is defined, ensure that the element is actually intersecting.
@@ -156,7 +152,7 @@ function onChange(changes: IntersectionObserverEntry[]) {
         inView = inView && isIntersecting
       }
 
-      instance.visible = inView
+      instance.inView = inView
       instance.callback(inView, intersection)
     }
   })
