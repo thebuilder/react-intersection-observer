@@ -3,7 +3,7 @@ import React = require('react')
 export interface RenderProps {
   inView: boolean
   intersection: IntersectionObserverEntry | undefined
-  ref: React.RefObject<Element> | ((node?: Element) => void)
+  ref: React.RefObject<any>
 }
 
 export interface IntersectionOptions {
