@@ -67,6 +67,7 @@ export function observe(
   let observerInstance = OBSERVER_MAP.get(observerId)
   if (!observerInstance) {
     observerInstance = new IntersectionObserver(onChange, options)
+    /* istanbul ignore else  */
     if (observerId) OBSERVER_MAP.set(observerId, observerInstance)
   }
 

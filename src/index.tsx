@@ -65,6 +65,7 @@ export class InView extends React.Component<IntersectionObserverProps, State> {
   }
 
   componentDidMount() {
+    /* istanbul ignore else  */
     if (process.env.NODE_ENV !== 'production') {
       invariant(
         this.node,
