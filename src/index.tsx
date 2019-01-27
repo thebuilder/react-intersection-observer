@@ -7,7 +7,7 @@ export { useIntersectionObserver } from './hooks/useIntersectionObserver'
 export type RenderProps = {
   inView: boolean
   intersection: IntersectionObserverEntry | undefined
-  ref: React.RefObject<Element> | ((node?: Element) => void)
+  ref: React.RefObject<any> | ((node?: Element | null) => void)
 }
 
 export type IntersectionOptions = {
@@ -30,8 +30,14 @@ export type IntersectionObserverProps = IntersectionOptions & {
   children?: React.ReactNode | ((fields: RenderProps) => React.ReactNode)
 
   /**
-   * Element tag to use for the wrapping component
+   * Render the wrapping element as this element.
    * @default `'div'`
+   */
+  as?: string
+
+  /**
+   * Element tag to use for the wrapping component
+   * @deprecated Replace with the 'as' prop
    */
   tag?: string
 
@@ -128,6 +134,7 @@ export class InView extends React.Component<IntersectionObserverProps, State> {
   render() {
     const {
       children,
+      as,
       tag,
       triggerOnce,
       threshold,
@@ -144,7 +151,7 @@ export class InView extends React.Component<IntersectionObserverProps, State> {
     }
 
     return React.createElement(
-      tag || 'div',
+      as || tag || 'div',
       { ref: this.handleNode, ...props },
       children,
     )
