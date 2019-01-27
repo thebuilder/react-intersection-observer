@@ -1,10 +1,9 @@
 import * as React from 'react'
 import { observe, unobserve } from './intersection'
 import invariant from 'invariant'
-export { useInView } from './hooks/useInView'
-export { useIntersectionObserver } from './hooks/useIntersectionObserver'
+export { useInView, useIntersectionObserver } from './hooks'
 
-export type RenderProps = {
+type RenderProps = {
   inView: boolean
   intersection: IntersectionObserverEntry | undefined
   ref: React.RefObject<any> | ((node?: Element | null) => void)

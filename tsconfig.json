@@ -16,7 +16,8 @@
     "downlevelIteration": true,
     "declaration": true,
     "emitDeclarationOnly": true,
-    "declarationDir": "dist"
+    "declarationDir": "dist/typings"
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": ["dist"]
 }
