@@ -22,7 +22,7 @@ build it according to your needs.
   for top and bottom, so the Intersection Observer gets triggered before the
   image enters the viewport. This gives the image a chance to be loaded before
   the user even sees it. Try and start with something like `200px 0px`, but
-  experiment with until you find the right value
+  experiment with it until you find the right value.
 - Set `triggerOnce`, so you don't keep monitoring for changes.
 - You should always create a wrapping element, that sets the correct aspect
   ratio for the image. You can set the padding bottom to be
@@ -30,7 +30,7 @@ build it according to your needs.
 - Either hide the `<img />` with CSS, or skip rendering it until it's inside the
   viewport.
 - Don't set the `src` (or `srcset`) on the image until it's visible. Images will
-  load their `src`, if even you set `display: none;`.
+  load their `src`, even if you set `display: none;`.
 
 ```jsx
 
