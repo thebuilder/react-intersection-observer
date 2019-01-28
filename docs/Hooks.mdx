@@ -1,3 +1,8 @@
+---
+name: Hooks
+order: 8
+---
+
 # Hooks 🎣
 
 > 🚨 Hooks are a new feature proposal that lets you use state and other React
@@ -8,9 +13,9 @@
 ## `useInView`
 
 The new React Hooks, makes it easier then ever to monitor the `inView` state of
-your components. You can import the `useInView` hook, and pass it a `r`ef to the
-DOM node you want to observe. It will then return `true` once the element enter
-the viewport.
+your components. You can import the `useInView` hook, and pass it a `ref` to the
+DOM node you want to observe, alongside some optional [options](#options). It
+will then return `true` once the element enter the viewport.
 
 ```jsx
 import React, { useRef } from 'react'
@@ -60,3 +65,12 @@ const Component = () => {
   )
 }
 ```
+
+## Options
+
+| Name            | Type                | Required | Description                                                                                                                                                    |
+| --------------- | ------------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **root**        | `element`           | false    | The Element that is used as the viewport for checking visibility of the target. Defaults to the browser viewport (`window`) if not specified or if null.       |
+| **rootMargin**  | `string`            | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. `"10px 20px 30px 40px"` (top, right, bottom, left).                           |
+| **threshold**   | `number` `number[]` | false    | Number between 0 and 1 indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. |
+| **triggerOnce** | `boolean`           | false    | Only trigger this method once.                                                                                                                                 |

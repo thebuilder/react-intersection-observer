@@ -16,18 +16,15 @@ export default {
   themeConfig: {
     mode: 'dark',
     codemirrorTheme: 'dracula',
+    showPlaygroundEditor: false,
     colors: {
       primary: '#ad57ea',
     },
     styles: {
-      html: { background: '#13161F' },
       body: {
         fontFamily:
           '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";\n',
-      },
-      h1: {
-        fontSize: '4em',
-        fontWeight: 700,
+        background: '#13161F',
       },
       h2: {
         fontWeight: 200,

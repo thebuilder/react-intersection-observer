@@ -4527,7 +4527,7 @@ docz-core@^0.13.7:
     ws "^6.1.2"
     yargs "^12.0.5"
 
-docz-theme-default@^0.13.7:
+docz-theme-default@0.13.7:
   version "0.13.7"
   resolved "https://registry.yarnpkg.com/docz-theme-default/-/docz-theme-default-0.13.7.tgz#16a2641df2364bb6b1ec5d8f10e21d8eb02b5060"
   integrity sha512-N/T6IJG4K9VldqgnA07AkzOxAZ5eUS3wa4XlvOZ+ADOM8b3s6O3RFD6Fr1xVaHpEKmPi1Ia9qVVYZuYxN0vfYA==
@@ -4586,7 +4586,7 @@ docz-utils@^0.13.6:
     unist-util-is "^2.1.2"
     unist-util-visit "^1.4.0"
 
-docz@^0.13.7:
+docz@0.13.7, docz@^0.13.7:
   version "0.13.7"
   resolved "https://registry.yarnpkg.com/docz/-/docz-0.13.7.tgz#dcf6bd4bcdec121cbd973a21da25eef2108a4ac3"
   integrity sha512-kxbluFEkkIZFC6P2AYNDCi2qQAyRXj6AL0z3mebptvctu0veuB1YqEL1GqTZ9DtuUr4ZLsqmg34MqJrJNzhlHw==
@@ -5175,9 +5175,9 @@ eslint@5.x:
     text-table "^0.2.0"
 
 esm@^3.0.84:
-  version "3.1.3"
-  resolved "https://registry.yarnpkg.com/esm/-/esm-3.1.3.tgz#63b025cda7c10caa4a8d759b877a860daf9c5a45"
-  integrity sha512-W5DKpMvvvtdn4Wzwl9scBUlsdiy4sXALG5oKIrCgnalg6db6vAztKVHWfOW4R8TlFvXlZDjipXSTrqhJDHpdRg==
+  version "3.1.4"
+  resolved "https://registry.yarnpkg.com/esm/-/esm-3.1.4.tgz#d75f7c1b16e5be57e0446c267d8c0fda9566983d"
+  integrity sha512-GScwIz0110RTNzBmAQEdqaAYkD9zVhj2Jo+jeizjIcdyTw+C6S0Zv/dlPYgfF41hRTu2f1vQYliubzIkusx2gA==
 
 espree@^5.0.0:
   version "5.0.0"
@@ -10180,9 +10180,9 @@ react-error-overlay@^5.1.0, react-error-overlay@^5.1.2:
   integrity sha512-7kEBKwU9R8fKnZJBRa5RSIfay4KJwnYvKB6gODGicUmDSAhQJ7Tdnll5S0RLtYrzRfMVXlqYw61rzrSpP4ThLQ==
 
 react-feather@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.yarnpkg.com/react-feather/-/react-feather-1.1.5.tgz#f7f9384c17d2d061b5b8298f46efc0e497f48469"
-  integrity sha512-hAPWatSFnhTNp9Ub96B7LMgOnWzXonA/LxqC2ANfUuc57jJocuWyO96yow2flUUDpitodh9mf6iOZzkyGYmAng==
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/react-feather/-/react-feather-1.1.6.tgz#2a547e3d5cd5e383d3da0128d593cbdb3c1b32f7"
+  integrity sha512-iCofWhTjX+vQwvDmg7o6vg0XrUg1c41yBDZG+l83nz1FiCsleJoUgd3O+kHpOeWMXuPrRIFfCixvcqyOLGOgIg==
 
 react-fuzzy@^0.5.2:
   version "0.5.2"

@@ -3,10 +3,12 @@ name: Polyfill
 route: /polyfill
 ---
 
+# Polyfill
+
 You can import the
-[intersection-observer polyfill](https://www.npmjs.com/package/intersection-observer) directly or use
-a service like [polyfill.io](https://polyfill.io/v2/docs/) to add it when
-needed.
+[intersection-observer polyfill](https://www.npmjs.com/package/intersection-observer)
+directly or use a service like [polyfill.io](https://polyfill.io/v2/docs/) to
+add it when needed.
 
 ```
 yarn add intersection-observer
@@ -19,8 +21,8 @@ import 'intersection-observer'
 ```
 
 If you are using Webpack (or similar) you could use
-[dynamic imports](https://webpack.js.org/api/module-methods/#import-), to load
-the Polyfill only if needed.
+[dynamic imports](https://webpack.js.org/api/module-methods/#import-), to only
+load the Polyfill when needed.
 
 ```js
 /**
