@@ -41,12 +41,12 @@ export type IntersectionObserverProps = IntersectionOptions & {
   tag?: string
 
   /** Call this function whenever the in view state changes */
-  onChange?: (inView: boolean, intersection: IntersectionObserverEntry) => void
+  onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void
 }
 
 type State = {
   inView: boolean
-  intersection?: IntersectionObserverEntry
+  entry?: IntersectionObserverEntry
 }
 
 /**
@@ -64,9 +64,9 @@ export class InView extends React.Component<IntersectionObserverProps, State> {
     triggerOnce: false,
   }
 
-  state = {
+  state: State = {
     inView: false,
-    intersection: undefined,
+    entry: undefined,
   }
 
   componentDidMount() {
@@ -123,10 +123,10 @@ export class InView extends React.Component<IntersectionObserverProps, State> {
     this.observeNode()
   }
 
-  handleChange = (inView: boolean, intersection: IntersectionObserverEntry) => {
-    this.setState({ inView, intersection })
+  handleChange = (inView: boolean, entry: IntersectionObserverEntry) => {
+    this.setState({ inView, entry })
     if (this.props.onChange) {
-      this.props.onChange(inView, intersection)
+      this.props.onChange(inView, entry)
     }
   }
 
@@ -142,11 +142,11 @@ export class InView extends React.Component<IntersectionObserverProps, State> {
       ...props
     } = this.props
 
-    const { inView, intersection } = this.state
+    const { inView, entry } = this.state
 
     if (typeof children === 'function') {
       // @ts-ignore doesn't properly detect the function here...
-      return children({ inView, intersection, ref: this.handleNode })
+      return children({ inView, entry, ref: this.handleNode })
     }
 
     return React.createElement(

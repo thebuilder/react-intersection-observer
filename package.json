@@ -44,7 +44,7 @@
     "docz:build": "docz build",
     "lint": "eslint . --ext js,ts,tsx",
     "now-build": "docz build",
-    "prepublish": "yarn build",
+    "preversion": "yarn build",
     "pretty": "prettier '**/*.{js,ts,tsx,md,json,yml,html}' --write",
     "storybook": "start-storybook -p 9000",
     "test": "jest"

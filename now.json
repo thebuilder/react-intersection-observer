@@ -1,6 +1,7 @@
 {
   "version": 2,
   "name": "react-intersection-observer",
+  "alias": "react-intersection-observer.now.sh",
   "builds": [
     {
       "src": "package.json",
