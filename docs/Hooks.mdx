@@ -1,0 +1,62 @@
+# Hooks 🎣
+
+> 🚨 Hooks are a new feature proposal that lets you use state and other React
+> features without writing a class. They’re currently in React v16.7.0-alpha and
+> being discussed in an [open RFC](https://github.com/reactjs/rfcs/pull/68). If
+> you decide to use it in production, keep in mind that it may very well break.
+
+## `useInView`
+
+The new React Hooks, makes it easier then ever to monitor the `inView` state of
+your components. You can import the `useInView` hook, and pass it a `r`ef to the
+DOM node you want to observe. It will then return `true` once the element enter
+the viewport.
+
+```jsx
+import React, { useRef } from 'react'
+import { useInView } from 'react-intersection-observer'
+
+const Component = () => {
+  const ref = useRef()
+  const inView = useInView(ref, {
+    /* Optional options */
+    threshold: 0,
+  })
+
+  return (
+    <div ref={ref}>
+      <h2>{`Header inside viewport ${inView}.`}</h2>
+    </div>
+  )
+}
+```
+
+## `useIntersectionObserver`
+
+If you need to know more details about the intersection, you can import the
+`useIntersectionObserver` hook instead. It takes the same input, but will return
+an object with `inView` and `intersection`. If `intersection` is defined, it
+contains the
+[IntersectionObserverEntry](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry),
+that triggered the observer.
+
+```jsx
+import React, { useRef } from 'react'
+import { useIntersectionObserver } from 'react-intersection-observer'
+
+const Component = () => {
+  const ref = useRef()
+  const { inView, intersection } = useIntersectionObserver(ref, {
+    threshold: 0,
+  })
+
+  return (
+    <div ref={ref}>
+      <h2>{`Header inside viewport ${inView}.`}</h2>
+      <pre>
+        <code>{JSON.stringify(intersection || {})}</code>
+      </pre>
+    </div>
+  )
+}
+```

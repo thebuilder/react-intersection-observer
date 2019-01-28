@@ -1,5 +1,6 @@
 .vscode
 .cache
+.docz
 node_modules
 reports
 example

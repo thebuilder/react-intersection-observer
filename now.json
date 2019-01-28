@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "name": "react-intersection-observer",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@now/static-build",
+      "config": { "distDir": ".docz/dist" }
+    }
+  ]
+}

@@ -76,12 +76,13 @@ If you need to know more details about the intersection, you can call the
 `useIntersectionObserver` hook instead. It takes the same input, but will return
 an object containing `inView` and `intersection`.
 
-### Child as function
+### Render props
 
-To use the `Observer`, you pass it a function. It will be called whenever the
-state changes, with the new value of `inView`. In addition to the `inView` prop,
-children also receives a `ref` that should be set on the containing DOM element.
-This is the element that the IntersectionObserver will monitor.
+To use the `<InView>` component , you pass it a function. It will be called
+whenever the state changes, with the new value of `inView`. In addition to the
+`inView` prop, children also receives a `ref` that should be set on the
+containing DOM element. This is the element that the IntersectionObserver will
+monitor.
 
 ```jsx
 import { InView } from 'react-intersection-observer'
@@ -101,7 +102,7 @@ export default Component
 
 ### Plain children
 
-You can pass any element to the `<Observer />`, and it will handle creating the
+You can pass any element to the `<InView />`, and it will handle creating the
 wrapping DOM element. Add a handler to the `onChange` method, and control the
 state in your own component. It will pass any extra props to the HTML element,
 allowing you set the `className`, `style`, etc.
@@ -120,18 +121,18 @@ export default Component
 
 > ⚠️ When rendering a plain child, make sure you keep your HTML output semantic.
 > Change the `tag` to match the context, and add a `className` to style the
-> `<Observer />`.
+> `<InView />`.
 
 ## API
 
 ### Options
 
-| Name            | Type    | Default       | Required | Description                                                                                                                                              |
-| --------------- | ------- | ------------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **root**        | Element |               | false    | The Element that is used as the viewport for checking visibility of the target. Defaults to the browser viewport (`window`) if not specified or if null. |
-| **rootMargin**  | String  | '0px'         | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                       |
-| **threshold**   | Number  | Array<Number> | 0        | false                                                                                                                                                    | Number between 0 and 1 indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. |
-| **triggerOnce** | Bool    | false         | false    | Only trigger this method once                                                                                                                            |
+| Name            | Type               | Default | Required | Description                                                                                                                                                    |
+| --------------- | ------------------ | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **root**        | Element            |         | false    | The Element that is used as the viewport for checking visibility of the target. Defaults to the browser viewport (`window`) if not specified or if null.       |
+| **rootMargin**  | String             | '0px'   | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                             |
+| **threshold**   | Number \| number[] | 0       | false    | Number between 0 and 1 indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. |
+| **triggerOnce** | Bool               | false   | false    | Only trigger this method once                                                                                                                                  |
 
 ### InView Props
 
