@@ -130,9 +130,9 @@ export default Component
 | Name            | Type               | Default | Required | Description                                                                                                                                                    |
 | --------------- | ------------------ | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **root**        | Element            |         | false    | The Element that is used as the viewport for checking visibility of the target. Defaults to the browser viewport (`window`) if not specified or if null.       |
-| **rootMargin**  | String             | '0px'   | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                             |
-| **threshold**   | Number \| number[] | 0       | false    | Number between 0 and 1 indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. |
-| **triggerOnce** | Bool               | false   | false    | Only trigger this method once                                                                                                                                  |
+| **rootMargin**  | string             | '0px'   | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                             |
+| **threshold**   | number \| number[] | 0       | false    | Number between 0 and 1 indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. |
+| **triggerOnce** | boolean               | false   | false    | Only trigger this method once                                                                                                                                  |
 
 ### InView Props
 
