@@ -22,8 +22,12 @@ npm-debug.log
 .editorconfig
 .storybook
 yarn.lock
+
+# Project files
 coverage
 stories
 tests
 example
 jest-setup.js
+__tests__
+global-types.d.ts

@@ -1,20 +1,17 @@
-// @flow
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { useInView } from '../src/index'
-import ScrollWrapper from './ScrollWrapper'
-import type { IntersectionOptions } from '../src'
+import { useInView, IntersectionOptions } from '../src/index'
+import ScrollWrapper from './ScrollWrapper/index'
 
 type Props = {
-  style?: Object,
-  children?: React.Node,
-  options?: IntersectionOptions,
+  style?: Object
+  children?: React.ReactNode
+  options?: IntersectionOptions
 }
 
 const HookComponent = ({ options, style, children, ...rest }: Props) => {
-  // $FlowFixMe
-  const ref = React.useRef()
+  const ref = React.useRef<HTMLDivElement>(null)
   const inView = useInView(ref, options)
   action('Inview')(inView)
 

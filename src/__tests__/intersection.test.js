@@ -1,6 +1,11 @@
 import { observe, unobserve, destroy } from '../intersection'
 
-global.IntersectionObserver = jest.fn(() => ({
+global.IntersectionObserver = jest.fn((cb, options) => ({
+  thresholds: Array.isArray(options.threshold)
+    ? options.threshold
+    : [options.threshold],
+  root: options.root,
+  rootMargin: options.rootMargin,
   observe: jest.fn(),
   unobserve: jest.fn(),
   disconnect: jest.fn(),
@@ -8,7 +13,7 @@ global.IntersectionObserver = jest.fn(() => ({
 
 afterEach(() => destroy())
 
-const el = { el: 'htmlElement' }
+const el = document.createElement('div')
 
 it('should observe', () => {
   const cb = jest.fn()
@@ -16,9 +21,9 @@ it('should observe', () => {
 
   expect(instance).toMatchObject({
     observerId: '0',
-    visible: false,
-    options: {
-      threshold: 0,
+    inView: false,
+    observer: {
+      thresholds: [0],
     },
   })
 })
@@ -35,9 +40,9 @@ it('should observe with options', () => {
 
   expect(instance).toMatchObject({
     observerId: '0',
-    visible: false,
-    options: {
-      threshold: 0,
+    inView: false,
+    observer: {
+      thresholds: [0],
     },
   })
 })
@@ -48,9 +53,9 @@ it('should observe with threshold', () => {
 
   expect(instance).toMatchObject({
     observerId: '1',
-    visible: false,
-    options: {
-      threshold: 1,
+    inView: false,
+    observer: {
+      thresholds: [1],
     },
   })
 })
@@ -61,34 +66,22 @@ it('should observe with Array threshold', () => {
 
   expect(instance).toMatchObject({
     observerId: '0.3,0.6',
-    visible: false,
-    options: {
-      threshold: [0.3, 0.6],
+    inView: false,
+    observer: {
+      thresholds: [0.3, 0.6],
     },
   })
 })
 
-it('should observe with rootId', () => {
+it('should observe with unique rootId', () => {
   const cb = jest.fn()
-  const instance = observe(el, cb, { threshold: 0, root: {} }, 'window')
+  const root = document.createElement('div')
+  const instance = observe(el, cb, { root })
 
   expect(instance).toMatchObject({
-    observerId: 'window_0',
-    visible: false,
-    options: {
-      root: {},
-    },
-  })
-})
-it('should observe without rootId', () => {
-  const cb = jest.fn()
-  const instance = observe(el, cb, { threshold: 0, root: {} })
-
-  expect(instance).toMatchObject({
-    visible: false,
-    options: {
-      root: {},
-    },
+    inView: false,
+    observerId: '1_0',
+    observer: expect.any(Object),
   })
 })
 
@@ -121,8 +114,13 @@ it('should trigger onChange with ratio 0', () => {
     },
   ])
 
-  expect(cb).toHaveBeenCalledWith(true, 0)
-  expect(instance.visible).toBe(true)
+  expect(cb).toHaveBeenCalledWith(
+    true,
+    expect.objectContaining({
+      intersectionRatio: 0,
+    }),
+  )
+  expect(instance.inView).toBe(true)
 })
 
 it('should trigger onChange with multiple thresholds ', () => {
@@ -139,8 +137,13 @@ it('should trigger onChange with multiple thresholds ', () => {
     },
   ])
 
-  expect(cb).toHaveBeenCalledWith(true, 0)
-  expect(instance.visible).toBe(true)
+  expect(cb).toHaveBeenCalledWith(
+    true,
+    expect.objectContaining({
+      intersectionRatio: 0,
+    }),
+  )
+  expect(instance.inView).toBe(true)
 })
 
 it('should trigger onChange with isIntersection', () => {
@@ -158,8 +161,13 @@ it('should trigger onChange with isIntersection', () => {
     },
   ])
 
-  expect(cb).toHaveBeenCalledWith(true, 0)
-  expect(instance.visible).toBe(true)
+  expect(cb).toHaveBeenCalledWith(
+    true,
+    expect.objectContaining({
+      intersectionRatio: 0,
+    }),
+  )
+  expect(instance.inView).toBe(true)
 })
 
 it('should ensure threshold is 0 if undefined', () => {
@@ -176,8 +184,13 @@ it('should ensure threshold is 0 if undefined', () => {
     },
   ])
 
-  expect(cb).toHaveBeenCalledWith(true, 0)
-  expect(instance.visible).toBe(true)
+  expect(cb).toHaveBeenCalledWith(
+    true,
+    expect.objectContaining({
+      intersectionRatio: 0,
+    }),
+  )
+  expect(instance.inView).toBe(true)
 })
 
 it('should trigger onChange with isIntersection false', () => {
@@ -195,8 +208,13 @@ it('should trigger onChange with isIntersection false', () => {
     },
   ])
 
-  expect(cb).toHaveBeenCalledWith(false, 0)
-  expect(instance.visible).toBe(false)
+  expect(cb).toHaveBeenCalledWith(
+    false,
+    expect.objectContaining({
+      intersectionRatio: 0,
+    }),
+  )
+  expect(instance.inView).toBe(false)
 })
 
 it('should trigger clear visible when going back to 0', () => {
@@ -212,7 +230,7 @@ it('should trigger clear visible when going back to 0', () => {
     },
   ])
 
-  expect(instance.visible).toBe(true)
+  expect(instance.inView).toBe(true)
   onChange([
     {
       target: el,
@@ -220,12 +238,13 @@ it('should trigger clear visible when going back to 0', () => {
     },
   ])
 
-  expect(instance.visible).toBe(false)
+  expect(instance.inView).toBe(false)
 })
 
 it('should trigger clear visible when going back to 0 with array threshold', () => {
   const cb = jest.fn()
-  const instance = observe(el, cb, { threshold: [0, 0.5] })
+  const threshold = [0, 0.5]
+  const instance = observe(el, cb, { threshold })
   const calls = global.IntersectionObserver.mock.calls
   const [onChange] = calls[calls.length - 1]
 
@@ -233,16 +252,17 @@ it('should trigger clear visible when going back to 0 with array threshold', () 
     {
       target: el,
       intersectionRatio: 0.1,
+      thresholds: threshold,
     },
   ])
-
-  expect(instance.visible).toBe(true)
+  expect(instance.inView).toBe(true)
   onChange([
     {
       target: el,
       intersectionRatio: 0,
+      thresholds: threshold,
     },
   ])
 
-  expect(instance.visible).toBe(false)
+  expect(instance.inView).toBe(false)
 })

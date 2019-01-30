@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "es5",
+    "lib": ["es6", "es7", "esnext", "dom"],
+    "jsx": "react",
+    "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "strict": true,
+    "strictFunctionTypes": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "pretty": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "declarationDir": "dist/typings"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["dist"]
+}

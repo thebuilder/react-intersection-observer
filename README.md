@@ -11,11 +11,11 @@
 [![Greenkeeper badge][greenkeeper-svg]][greenkeeper-url]
 [![styled with prettier][prettier-svg]][prettier-url]
 
-React component that triggers a function when the component enters or leaves the
-viewport. No complex configuration needed, just wrap your views and it handles
-the events.
+React component that uses the IntersectionObserver API to tell you when an
+element enters or leaves the viewport. No complex configuration needed, just
+wrap your views and it handles the events.
 
-> **Storybook demo:** https://thebuilder.github.io/react-intersection-observer/
+> **DOCS** https://react-intersection-observer.now.sh
 
 ## Installation
 
@@ -47,7 +47,8 @@ npm install react-intersection-observer --save
 
 The new Hooks feature, makes it even easier than before to monitor the `inView`
 state of your components. You can import the `useInView` hook, and pass it a ref
-to the DOM node you want to observe.
+to the DOM node you want to observe. It will then return `true` once the element
+enter the viewport.
 
 It also accepts an [options](#options) object, to control the Intersection
 Observer.
@@ -71,12 +72,17 @@ const Component = () => {
 }
 ```
 
-### Child as function
+If you need to know more details about the intersection, you can call the
+`useIntersectionObserver` hook instead. It takes the same input, but will return
+an object containing `inView` and `intersection`.
 
-To use the `Observer`, you pass it a function. It will be called whenever the
-state changes, with the new value of `inView`. In addition to the `inView` prop,
-children also receives a `ref` that should be set on the containing DOM element.
-This is the element that the IntersectionObserver will monitor.
+### Render props
+
+To use the `<InView>` component , you pass it a function. It will be called
+whenever the state changes, with the new value of `inView`. In addition to the
+`inView` prop, children also receives a `ref` that should be set on the
+containing DOM element. This is the element that the IntersectionObserver will
+monitor.
 
 ```jsx
 import { InView } from 'react-intersection-observer'
@@ -96,7 +102,7 @@ export default Component
 
 ### Plain children
 
-You can pass any element to the `<Observer />`, and it will handle creating the
+You can pass any element to the `<InView />`, and it will handle creating the
 wrapping DOM element. Add a handler to the `onChange` method, and control the
 state in your own component. It will pass any extra props to the HTML element,
 allowing you set the `className`, `style`, etc.
@@ -115,28 +121,27 @@ export default Component
 
 > ⚠️ When rendering a plain child, make sure you keep your HTML output semantic.
 > Change the `tag` to match the context, and add a `className` to style the
-> `<Observer />`.
+> `<InView />`.
 
 ## API
 
 ### Options
 
-| Name            | Type        | Default | Required | Description                                                                                                                                                                                                                      |
-| --------------- | ----------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **root**        | HTMLElement |         | false    | The HTMLElement that is used as the viewport for checking visibility of the target. Defaults to the browser viewport if not specified or if null.                                                                                |
-| **rootId**      | String      |         | false    | Unique identifier for the root element - This is used to identify the IntersectionObserver instance, so it can be reused. If you defined a root element, without adding an id, it will create a new instance for all components. |
-| **rootMargin**  | String      | '0px'   | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                                                                                               |
-| **threshold**   | Number      | 0       | false    | Number between 0 and 1 indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                                   |
-| **triggerOnce** | Bool        | false   | false    | Only trigger this method once                                                                                                                                                                                                    |
+| Name            | Type               | Default | Required | Description                                                                                                                                                    |
+| --------------- | ------------------ | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **root**        | Element            |         | false    | The Element that is used as the viewport for checking visibility of the target. Defaults to the browser viewport (`window`) if not specified or if null.       |
+| **rootMargin**  | String             | '0px'   | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                             |
+| **threshold**   | Number \| number[] | 0       | false    | Number between 0 and 1 indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. |
+| **triggerOnce** | Bool               | false   | false    | Only trigger this method once                                                                                                                                  |
 
 ### InView Props
 
 The **`<InView />`** component also accepts the following props:
 
-| Name         | Type                                                          | Default | Required | Description                                                                                                                                                                                                                                                                     |
-| ------------ | ------------------------------------------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **children** | ({inView, intersectionRatio, ref}) => React.Node / React.Node |         | true     | Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. Alternately pass a plain child, to have the `<Observer />` deal with the wrapping element. You also receive the last `intersectionRatio` |
-| **onChange** | (inView, intersectionRatio) => void                           |         | false    | Call this function whenever the in view state changes                                                                                                                                                                                                                           |
+| Name         | Type                                                          | Default | Required | Description                                                                                                                                                                                                                                                                                                                    |
+| ------------ | ------------------------------------------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **children** | `({inView, intersection, ref}) => React.Node` or `React.Node` |         | true     | Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. Alternately pass a plain child, to have the `<Observer />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `intersection, giving you more details. |
+| **onChange** | `(inView, intersection) => void`                              |         | false    | Call this function whenever the in view state changes                                                                                                                                                                                                                                                                          |
 
 ## Usage in other projects
 
@@ -179,28 +184,13 @@ the Polyfill only if needed. A basic implementation could look something like
 this:
 
 ```js
-loadPolyfills()
-  .then(() => /* Render React application now that your Polyfills are ready */)
-
 /**
-* Do feature detection, to figure out which polyfills needs to be imported.
-**/
-function loadPolyfills() {
-  const polyfills = []
-
-  if (!supportsIntersectionObserver()) {
-    polyfills.push(import('intersection-observer'))
+ * Do feature detection, to figure out which polyfills needs to be imported.
+ **/
+async function loadPolyfills() {
+  if (typeof window.IntersectionObserver === 'undefined') {
+    await import('intersection-observer')
   }
-
-  return Promise.all(polyfills)
-}
-
-function supportsIntersectionObserver() {
-  return (
-    'IntersectionObserver' in global &&
-    'IntersectionObserverEntry' in global &&
-    'intersectionRatio' in IntersectionObserverEntry.prototype
-  )
 }
 ```
 

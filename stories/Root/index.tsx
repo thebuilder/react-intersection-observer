@@ -1,7 +1,7 @@
-// @flow
 import * as React from 'react'
+import { CSSProperties } from 'react'
 
-const style = {
+const style: CSSProperties = {
   margin: '64px',
   backgroundColor: 'slategrey',
   overflowY: 'scroll',
@@ -13,14 +13,12 @@ const style = {
 }
 
 type Props = {
-  children: (node: HTMLElement) => React.Node,
-  style?: {
-    [key: string]: string | number,
-  },
+  children: (node: HTMLElement) => React.ReactNode
+  style?: CSSProperties
 }
 
 type State = {
-  node: ?HTMLElement,
+  node: HTMLElement | null
 }
 
 class RootComponent extends React.PureComponent<Props, State> {
@@ -28,7 +26,7 @@ class RootComponent extends React.PureComponent<Props, State> {
     node: null,
   }
 
-  handleNode = (node: ?HTMLElement) => {
+  handleNode = (node: HTMLElement | null) => {
     this.setState({
       node,
     })
@@ -37,6 +35,8 @@ class RootComponent extends React.PureComponent<Props, State> {
   render() {
     return (
       <div ref={this.handleNode} style={{ ...style, ...this.props.style }}>
+        {/*
+        // @ts-ignore */}
         {this.state.node ? this.props.children(this.state.node) : null}
       </div>
     )

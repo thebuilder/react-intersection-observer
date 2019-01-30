@@ -1,0 +1,66 @@
+---
+name: Introduction
+route: /
+order: 10
+---
+import LazyAnimation from './components/LazyAnimation'
+
+# Introduction
+
+`react-intersection-observer` enables you to monitor when elements in your
+application enters or leaves the viewport. No complex configuration needed, just
+wrap your views and it handles the events.
+
+> The
+> [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
+> provides a way to asynchronously observe changes in the intersection of a
+> target element with an ancestor element or with a top-level document's
+> viewport.
+
+
+## Installation
+
+Install using [Yarn](https://yarnpkg.com):
+
+```
+yarn add react-intersection-observer
+```
+
+or NPM:
+
+```
+npm install react-intersection-observer --save
+```
+
+> ⚠️ You also want to add the
+> [intersection-observer](https://www.npmjs.com/package/react-intersection-observer)
+> polyfill for full browser support. Check out adding the [polyfill](/polyfill)
+> for details about how you can include it.
+
+## Usage
+
+To use the `<InView>` component , you pass it a function. It will be called
+whenever the state changes, with the new value of `inView`. In addition to the
+`inView` prop, children also receives a `ref` that should be set on the
+containing DOM element. This is the element that the IntersectionObserver will
+monitor.
+
+```jsx
+import React from 'react'
+import { InView } from 'react-intersection-observer'
+
+const Component = () => (
+  <InView>
+    {({ inView, ref }) => (
+      <div ref={ref}>
+        <h2>{`I'm inside viewport: ${inView}.`}</h2>
+      </div>
+    )}
+  </InView>
+)
+
+export default Component
+```
+
+<LazyAnimation />
+

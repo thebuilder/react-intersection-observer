@@ -13,7 +13,7 @@ withOptions({
 /**
  * Use require.context to load dynamically: https://webpack.github.io/docs/context.html
  */
-const req = require.context('../stories', true, /story\.js$/)
+const req = require.context('../stories', true, /story\.tsx$/)
 
 function loadStories() {
   req.keys().forEach(req)
