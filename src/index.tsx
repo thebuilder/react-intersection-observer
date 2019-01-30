@@ -5,7 +5,7 @@ export { useInView, useIntersectionObserver } from './hooks'
 
 type RenderProps = {
   inView: boolean
-  intersection: IntersectionObserverEntry | undefined
+  entry: IntersectionObserverEntry | undefined
   ref: React.RefObject<any> | ((node?: Element | null) => void)
 }
 
