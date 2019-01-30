@@ -3,6 +3,7 @@ name: Introduction
 route: /
 order: 10
 ---
+import LazyAnimation from './components/LazyAnimation'
 
 # Introduction
 
@@ -15,6 +16,7 @@ wrap your views and it handles the events.
 > provides a way to asynchronously observe changes in the intersection of a
 > target element with an ancestor element or with a top-level document's
 > viewport.
+
 
 ## Installation
 
@@ -51,7 +53,7 @@ const Component = () => (
   <InView>
     {({ inView, ref }) => (
       <div ref={ref}>
-        <h2>{`Header inside viewport ${inView}.`}</h2>
+        <h2>{`I'm inside viewport: ${inView}.`}</h2>
       </div>
     )}
   </InView>
@@ -59,3 +61,6 @@ const Component = () => (
 
 export default Component
 ```
+
+<LazyAnimation />
+
