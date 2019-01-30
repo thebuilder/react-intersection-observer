@@ -11,11 +11,11 @@
 [![Greenkeeper badge][greenkeeper-svg]][greenkeeper-url]
 [![styled with prettier][prettier-svg]][prettier-url]
 
-React component that triggers a function when the component enters or leaves the
-viewport. No complex configuration needed, just wrap your views and it handles
-the events.
+React component that uses the IntersectionObserver API to tell you when an
+element enters or leaves the viewport. No complex configuration needed, just
+wrap your views and it handles the events.
 
-> **Storybook demo:** https://thebuilder.github.io/react-intersection-observer/
+> **DOCS** https://react-intersection-observer.now.sh
 
 ## Installation
 
