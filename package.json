@@ -150,7 +150,7 @@
     "prettier": "^1.16.2",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
-    "react-spring": "^7.2.10",
+    "react-spring": "^8.0.1",
     "react-test-renderer": "^16.8.0",
     "rollup": "^1.0.2",
     "rollup-plugin-babel": "^4.2.0",
