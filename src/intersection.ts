@@ -14,7 +14,7 @@ type Instance = {
 
 const INSTANCE_MAP: Map<Element, Instance> = new Map()
 const OBSERVER_MAP: Map<string, IntersectionObserver> = new Map()
-const ROOT_IDS: WeakMap<Element, string> = new WeakMap()
+const ROOT_IDS: Map<Element, string> = new Map()
 
 let consecutiveRootId = 0
 
@@ -95,20 +95,25 @@ export function unobserve(element: Element | null) {
 
   if (instance) {
     const { observerId, observer } = instance
+    const { root } = observer
 
     observer.unobserve(element)
 
     // Check if we are still observing any elements with the same threshold.
     let itemsLeft = false
+    // Check if we still have observers configured with the same root.
+    let rootObserved = false
     if (observerId) {
       INSTANCE_MAP.forEach((item, key) => {
-        if (item && item.observerId === observerId && key !== element) {
-          itemsLeft = true
+        if (item && key !== element) {
+          if (item.observerId === observerId) itemsLeft = true
+          if (item.observer.root === root) rootObserved = true
         }
       })
     }
 
     if (observer && !itemsLeft) {
+      if (!rootObserved && root) ROOT_IDS.delete(root)
       // No more elements to observe for threshold, disconnect observer
       observer.disconnect()
     }
@@ -128,6 +133,7 @@ export function destroy() {
 
   OBSERVER_MAP.clear()
   INSTANCE_MAP.clear()
+  ROOT_IDS.clear()
   consecutiveRootId = 0
 }
 
