@@ -41,9 +41,6 @@ npm install react-intersection-observer --save
 
 ### Hooks 🎣
 
-> ⚠️ Make sure you assign the `ref` to a valid DOM element when you create the
-> hook, and that you don't change the `ref` afterwards.
-
 #### `useInView`
 
 The new React Hooks, makes it easier then ever to monitor the `inView` state of
@@ -99,6 +96,9 @@ const Component = () => {
   )
 }
 ```
+
+> ⚠️ Make sure you assign the `ref` to a valid DOM element when you create the
+> hook, and that you don't change the `ref` afterwards.
 
 ### Render props
 
@@ -187,7 +187,28 @@ as they become visible. This module is also a great example of using
 is the API is used to determine if an element is inside the viewport or not.
 Browser support is pretty good, but Safari is still missing support.
 
-> [Can i use intersectionobserver?](https://caniuse.com/#feat=intersectionobserver)
+<a href="http://caniuse.com/#feat=intersectionobserver">
+  <picture>
+    <source
+      type="image/webp"
+      srcset="https://res.cloudinary.com/ireaderinokun/image/upload/v1549540370/caniuse-embed/intersectionobserver-2019-2-7.webp"
+    />
+    <source
+      type="image/png"
+      srcset="https://res.cloudinary.com/ireaderinokun/image/upload/v1549540370/caniuse-embed/intersectionobserver-2019-2-7.png"
+    />
+    <source
+      type="image/jpeg"
+      srcset="https://res.cloudinary.com/ireaderinokun/image/upload/v1549540370/caniuse-embed/intersectionobserver-2019-2-7.jpg"
+    />
+    <img
+      src="https://res.cloudinary.com/ireaderinokun/image/upload/v1549540370/caniuse-embed/intersectionobserver-2019-2-7.png"
+      alt="Data on support for the intersectionobserver feature across the major browsers from caniuse.com"
+    />
+  </picture>
+</a>
+
+
 
 ### Polyfill
 
