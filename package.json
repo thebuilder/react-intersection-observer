@@ -41,7 +41,6 @@
     "build:storybook": "build-storybook --output-dir example",
     "dev": "concurrently -k -r 'jest --watch' 'yarn run storybook'",
     "lint": "eslint . --ext js,ts,tsx",
-    "now-build": "build-storybook --output-dir example",
     "preversion": "yarn build",
     "pretty": "prettier '**/*.{js,ts,tsx,md,json,yml,html}' --write",
     "storybook": "start-storybook -p 9000",
