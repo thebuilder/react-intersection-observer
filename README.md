@@ -15,7 +15,7 @@ React component that uses the IntersectionObserver API to tell you when an
 element enters or leaves the viewport. No complex configuration needed, just
 wrap your views and it handles the events.
 
-> **Storybook Demo:**
+> **Storybook Demo:** >
 > [react-intersection-observer.now.sh](https://react-intersection-observer.now.sh)
 
 ## Installation
@@ -207,8 +207,6 @@ Browser support is pretty good, but Safari is still missing support.
     />
   </picture>
 </a>
-
-
 
 ### Polyfill
 
