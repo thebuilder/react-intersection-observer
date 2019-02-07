@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { IntersectionOptions } from './'
-import { observe, unobserve } from './intersection'
+import { observe, unobserve, ObserverInstance } from './intersection'
 
 export type HookResponse = {
   inView: boolean
@@ -12,25 +12,28 @@ export function useIntersectionObserver(
   options: IntersectionOptions = {},
 ): HookResponse {
   const [isInView, setInView] = React.useState<boolean>(false)
-  const [entry, setIntersectionEntry] = React.useState<
-    IntersectionObserverEntry | undefined
-  >(undefined)
+  const instance = React.useRef<ObserverInstance | undefined>(undefined)
+  const entry = React.useRef<IntersectionObserverEntry | undefined>(undefined)
 
   React.useEffect(
     () => {
       /* istanbul ignore else  */
       if (ref.current) {
-        observe(
+        instance.current = observe(
           ref.current,
           (inView, intersection) => {
+            entry.current = intersection
             setInView(inView)
-            setIntersectionEntry(intersection)
             if (inView && options.triggerOnce) {
               // If it should only trigger once, unobserve the element after it's inView
               unobserve(ref.current)
             }
           },
           options,
+        )
+      } else {
+        throw new Error(
+          '[react-intersection-observer]: The hook is missing a "ref" to monitor. Make sure you create a new ref with "useRef()" and assign it a DOM element.',
         )
       }
 
@@ -41,7 +44,7 @@ export function useIntersectionObserver(
     [options.threshold, options.root, options.rootMargin],
   )
 
-  return { inView: isInView, entry }
+  return { inView: isInView, entry: entry.current }
 }
 
 /**

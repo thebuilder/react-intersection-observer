@@ -15,7 +15,8 @@ React component that uses the IntersectionObserver API to tell you when an
 element enters or leaves the viewport. No complex configuration needed, just
 wrap your views and it handles the events.
 
-**Read the docs for more:** https://react-intersection-observer.now.sh
+> **Storybook Demo:** >
+> [react-intersection-observer.now.sh](https://react-intersection-observer.now.sh)
 
 ## Installation
 
@@ -40,21 +41,15 @@ npm install react-intersection-observer --save
 
 ### Hooks 🎣
 
-> 🚨 Hooks are a new feature proposal that lets you use state and other React
-> features without writing a class. They’re currently in React v16.7.0-alpha and
-> being discussed in an [open RFC](https://github.com/reactjs/rfcs/pull/68). If
-> you decide to use it in production, keep in mind that it may very well break.
+#### `useInView`
 
-The new Hooks feature, makes it even easier than before to monitor the `inView`
-state of your components. You can import the `useInView` hook, and pass it a ref
-to the DOM node you want to observe. It will then return `true` once the element
-enter the viewport.
-
-It also accepts an [options](#options) object, to control the Intersection
-Observer.
+The new React Hooks, makes it easier then ever to monitor the `inView` state of
+your components. You can import the `useInView` hook, and pass it a `ref` to the
+DOM node you want to observe, alongside some optional [options](#options). It
+will then return `true` once the element enter the viewport.
 
 ```jsx
-import { useRef } from 'react'
+import React, { useRef } from 'react'
 import { useInView } from 'react-intersection-observer'
 
 const Component = () => {
@@ -72,9 +67,38 @@ const Component = () => {
 }
 ```
 
-If you need to know more details about the intersection, you can call the
-`useIntersectionObserver` hook instead. It takes the same input, but will return
-an object containing `inView` and `intersection`.
+#### `useIntersectionObserver`
+
+If you need to know more details about the intersection, you can use the
+`useIntersectionObserver` hook. It takes the same input as `useInView`, but will
+return an object with `inView` and `intersection`. If `intersection` is defined,
+it contains the
+[IntersectionObserverEntry](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry),
+that triggered the observer.
+
+```jsx
+import React, { useRef } from 'react'
+import { useIntersectionObserver } from 'react-intersection-observer'
+
+const Component = () => {
+  const ref = useRef()
+  const { inView, intersection } = useIntersectionObserver(ref, {
+    threshold: 0,
+  })
+
+  return (
+    <div ref={ref}>
+      <h2>{`Header inside viewport ${inView}.`}</h2>
+      <pre>
+        <code>{JSON.stringify(intersection || {})}</code>
+      </pre>
+    </div>
+  )
+}
+```
+
+> ⚠️ Make sure you assign the `ref` to a valid DOM element when you create the
+> hook, and that you don't change the `ref` afterwards.
 
 ### Render props
 
@@ -127,6 +151,9 @@ export default Component
 
 ### Options
 
+Provide these as props on the **`<InView />`** component and as the options
+argument for the hooks.
+
 | Name            | Type               | Default | Required | Description                                                                                                                                                    |
 | --------------- | ------------------ | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **root**        | Element            |         | false    | The Element that is used as the viewport for checking visibility of the target. Defaults to the browser viewport (`window`) if not specified or if null.       |
@@ -138,10 +165,11 @@ export default Component
 
 The **`<InView />`** component also accepts the following props:
 
-| Name         | Type                                                   | Default | Required | Description                                                                                                                                                                                                                                                                                                              |
-| ------------ | ------------------------------------------------------ | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **children** | `({inView, entry, ref}) => React.Node` or `React.Node` |         | true     | Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. Alternately pass a plain child, to have the `<Observer />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `entry`, giving you more details. |
-| **onChange** | `(inView, entry) => void`                              |         | false    | Call this function whenever the in view state changes                                                                                                                                                                                                                                                                    |
+| Name         | Type                      | Default | Required | Description                                                                                                                                                                                                                                                                                                                    |
+| ------------ | ------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **as**       | `string`                  |         | false    | Render the wrapping element as this element. Defaults to `div`.                                                                                                                                                                                                                                                                |
+| **children** | `Function`, `ReactNode`   |         | true     | Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. Alternately pass a plain child, to have the `<Observer />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `intersection, giving you more details. |
+| **onChange** | `(inView, entry) => void` |         | false    | Call this function whenever the in view state changes                                                                                                                                                                                                                                                                          |
 
 ## Usage in other projects
 
@@ -159,7 +187,26 @@ as they become visible. This module is also a great example of using
 is the API is used to determine if an element is inside the viewport or not.
 Browser support is pretty good, but Safari is still missing support.
 
-> [Can i use intersectionobserver?](https://caniuse.com/#feat=intersectionobserver)
+<a href="http://caniuse.com/#feat=intersectionobserver">
+  <picture>
+    <source
+      type="image/webp"
+      srcset="https://res.cloudinary.com/ireaderinokun/image/upload/v1549540370/caniuse-embed/intersectionobserver-2019-2-7.webp"
+    />
+    <source
+      type="image/png"
+      srcset="https://res.cloudinary.com/ireaderinokun/image/upload/v1549540370/caniuse-embed/intersectionobserver-2019-2-7.png"
+    />
+    <source
+      type="image/jpeg"
+      srcset="https://res.cloudinary.com/ireaderinokun/image/upload/v1549540370/caniuse-embed/intersectionobserver-2019-2-7.jpg"
+    />
+    <img
+      src="https://res.cloudinary.com/ireaderinokun/image/upload/v1549540370/caniuse-embed/intersectionobserver-2019-2-7.png"
+      alt="Data on support for the intersectionobserver feature across the major browsers from caniuse.com"
+    />
+  </picture>
+</a>
 
 ### Polyfill
 

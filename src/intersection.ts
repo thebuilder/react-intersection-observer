@@ -5,14 +5,14 @@ type Callback = (
   intersection: IntersectionObserverEntry,
 ) => void
 
-type Instance = {
+export type ObserverInstance = {
   callback: Callback
   inView: boolean
   observerId: string
   observer: IntersectionObserver
 }
 
-const INSTANCE_MAP: Map<Element, Instance> = new Map()
+const INSTANCE_MAP: Map<Element, ObserverInstance> = new Map()
 const OBSERVER_MAP: Map<string, IntersectionObserver> = new Map()
 const ROOT_IDS: Map<Element, string> = new Map()
 
@@ -71,7 +71,7 @@ export function observe(
     if (observerId) OBSERVER_MAP.set(observerId, observerInstance)
   }
 
-  const instance: Instance = {
+  const instance: ObserverInstance = {
     callback,
     inView: false,
     observerId,
@@ -112,8 +112,8 @@ export function unobserve(element: Element | null) {
       })
     }
 
+    if (!rootObserved && root) ROOT_IDS.delete(root)
     if (observer && !itemsLeft) {
-      if (!rootObserved && root) ROOT_IDS.delete(root)
       // No more elements to observe for threshold, disconnect observer
       observer.disconnect()
     }
