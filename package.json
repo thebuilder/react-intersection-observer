@@ -40,10 +40,8 @@
     "build:lib": "rollup -c",
     "build:storybook": "build-storybook --output-dir example",
     "dev": "concurrently -k -r 'jest --watch' 'yarn run storybook'",
-    "docz:dev": "docz dev",
-    "docz:build": "docz build",
     "lint": "eslint . --ext js,ts,tsx",
-    "now-build": "docz build",
+    "now-build": "build-storybook --output-dir example",
     "preversion": "yarn build",
     "pretty": "prettier '**/*.{js,ts,tsx,md,json,yml,html}' --write",
     "storybook": "start-storybook -p 9000",
@@ -110,16 +108,13 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.1.0",
-    "@emotion/cache": "^10.0.0",
-    "@emotion/core": "^10.0.6",
-    "@emotion/styled-base": "^10.0.5",
     "@storybook/addon-actions": "^4.1.4",
     "@storybook/addon-options": "^4.1.4",
+    "@storybook/components": "^4.1.11",
     "@storybook/react": "^4.1.4",
     "@types/jest": "^24.0.0",
-    "@types/react": "^16.7.22",
+    "@types/react": "^16.8.2",
     "@types/storybook__addon-actions": "^3.4.1",
-    "@types/storybook__addon-links": "^3.3.3",
     "@types/storybook__react": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^1.1.1",
     "@typescript-eslint/parser": "^1.1.1",
@@ -129,8 +124,6 @@
     "babel-loader": "^8.0.5",
     "concurrently": "4.1.0",
     "coveralls": "^3.0.2",
-    "docz": "0.13.7",
-    "docz-theme-default": "0.13.7",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.8.0",
     "enzyme-to-json": "^3.3.5",
@@ -150,7 +143,6 @@
     "prettier": "^1.16.2",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",
-    "react-spring": "^7.2.10",
     "react-test-renderer": "^16.8.0",
     "rollup": "^1.0.2",
     "rollup-plugin-babel": "^4.2.0",
@@ -162,6 +154,6 @@
     "typescript-eslint-parser": "^22.0.0"
   },
   "resolutions": {
-    "@types/react": "16.7.22"
+    "@types/react": "16.8.2"
   }
 }

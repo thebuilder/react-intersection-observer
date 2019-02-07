@@ -6,7 +6,7 @@
     {
       "src": "package.json",
       "use": "@now/static-build",
-      "config": { "distDir": ".docz/dist" }
+      "config": { "distDir": "example" }
     }
   ],
   "routes": [

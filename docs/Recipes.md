@@ -1,12 +1,3 @@
----
-name: Recipes
-route: /recipes
----
-
-import { Playground } from 'docz'
-import LazyImage from './components/LazyImage'
-import LazyAnimation from './components/LazyAnimation'
-
 # Recipes
 
 The IntersectionObserver itself is just a simple but powerful tool. Here's a few
@@ -68,23 +59,10 @@ const LazyImage = ({ width, height, src, ...rest }) => {
 export default LazyImage
 ```
 
-<Playground>
-  <p>
-    The threshold has been set to <code>1</code> on this example, so it won't
-    load before it's fully inside the viewport.
-  </p>
-  <LazyImage
-    src="https://assets.imgix.net/unsplash/mountains.jpg?auto=format&w=900&usm=20"
-    alt="Mountainrange"
-    width={900}
-    height={506}
-  />
-</Playground>
-
 ## Trigger animations
 
 Triggering animations once they enter the viewport is also a perfect use case
-for an IntersectionObserver. 
+for an IntersectionObserver.
 
 - Set `triggerOnce`, to only trigger the animation the first time.
 - Use `threshold` to control when the animations triggers.
@@ -92,33 +70,21 @@ for an IntersectionObserver.
 ```jsx
 import React, { useRef } from 'react'
 import { useInView } from 'react-intersection-observer'
-import { Spring } from 'react-spring'
+import { useSpring, animated } from 'react-spring'
 
 const LazyAnimation = () => {
-  const ref = useRef(null)
+  const ref = useRef()
   const inView = useInView(ref, {
     threshold: 0.5,
   })
+  const props = useSpring({ opacity: inView ? 1 : 0 })
 
   return (
-    <Spring
-      reset={!inView}
-      to={{
-        opacity: inView ? 1 : 0,
-      }}
-    >
-      {props => (
-        <div ref={ref} style={props}>
-          👋
-        </div>
-      )}
-    </Spring>
+    <animated.div ref={ref} style={props}>
+      <span aria-label="Wave">👋</span>
+    <animated./div>
   )
 }
 
 export default LazyAnimation
 ```
-
-<Playground>
-  <LazyAnimation />
-</Playground>

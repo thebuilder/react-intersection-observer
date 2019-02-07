@@ -1,14 +1,18 @@
 import React from 'react'
-import { configure } from '@storybook/react'
+import { addDecorator, configure } from '@storybook/react'
 import { withOptions } from '@storybook/addon-options'
+import { themes } from '@storybook/components'
 import pck from '../package.json'
 import 'intersection-observer'
 import './base.css'
 
-withOptions({
-  name: pck.name,
-  url: pck.repository ? pck.repository.url : null,
-})
+addDecorator(
+  withOptions({
+    name: pck.name,
+    url: pck.repository ? pck.repository.url : null,
+    theme: themes.dark,
+  }),
+)
 
 /**
  * Use require.context to load dynamically: https://webpack.github.io/docs/context.html
