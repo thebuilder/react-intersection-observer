@@ -96,9 +96,6 @@ const Component = () => {
 }
 ```
 
-> ⚠️ Make sure you assign the `ref` to a valid DOM element when you create the
-> hook, and that you don't change the `ref` afterwards.
-
 ### Render props
 
 To use the `<InView>` component , you pass it a function. It will be called

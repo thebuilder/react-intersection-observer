@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { IntersectionOptions } from './'
-import { observe, unobserve, ObserverInstance } from './intersection'
+import { observe, unobserve } from './intersection'
 
 export type HookResponse = {
   inView: boolean
@@ -11,40 +11,51 @@ export function useIntersectionObserver(
   ref: React.RefObject<Element>,
   options: IntersectionOptions = {},
 ): HookResponse {
-  const [isInView, setInView] = React.useState<boolean>(false)
-  const instance = React.useRef<ObserverInstance | undefined>(undefined)
-  const entry = React.useRef<IntersectionObserverEntry | undefined>(undefined)
-
-  React.useEffect(
-    () => {
-      /* istanbul ignore else  */
-      if (ref.current) {
-        instance.current = observe(
-          ref.current,
-          (inView, intersection) => {
-            entry.current = intersection
-            setInView(inView)
-            if (inView && options.triggerOnce) {
-              // If it should only trigger once, unobserve the element after it's inView
-              unobserve(ref.current)
-            }
-          },
-          options,
-        )
-      } else {
-        throw new Error(
-          '[react-intersection-observer]: The hook is missing a "ref" to monitor. Make sure you create a new ref with "useRef()" and assign it a DOM element.',
-        )
-      }
-
-      return () => {
-        unobserve(ref.current)
-      }
-    },
-    [options.threshold, options.root, options.rootMargin],
+  const [currentRef, setCurrentRef] = React.useState<Element | null>(
+    ref.current,
   )
+  const [state, setState] = React.useState<HookResponse>({
+    inView: false,
+    entry: undefined,
+  })
+  React.useEffect(() => {
+    // Create a separate effect that always checks if the ref has changed.
+    // If it changes, the Observer will need to be recreated, so set a new ref state
+    // that the triggers an update of the next effect
+    if (ref.current !== currentRef) {
+      setCurrentRef(ref.current)
+    }
+  })
 
-  return { inView: isInView, entry: entry.current }
+  React.useEffect(() => {
+    if (currentRef) {
+      observe(
+        currentRef,
+        (inView, intersection) => {
+          setState({ inView, entry: intersection })
+
+          if (inView && options.triggerOnce) {
+            // If it should only trigger once, unobserve the element after it's inView
+            unobserve(currentRef)
+          }
+        },
+        options,
+      )
+    }
+
+    return () => {
+      unobserve(currentRef)
+    }
+  }, [
+    // Only create a new Observer instance if the ref or any of the options have been changed.
+    currentRef,
+    options.threshold,
+    options.root,
+    options.rootMargin,
+    options.triggerOnce,
+  ])
+
+  return state
 }
 
 /**
@@ -55,5 +66,7 @@ export function useInView(
   options: IntersectionOptions = {},
 ): boolean {
   const intersection = useIntersectionObserver(ref, options)
+  React.useDebugValue(intersection.inView)
+
   return intersection.inView
 }

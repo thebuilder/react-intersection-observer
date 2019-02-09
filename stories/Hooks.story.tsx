@@ -3,6 +3,7 @@ import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { useInView, IntersectionOptions } from '../src/index'
 import ScrollWrapper from './ScrollWrapper/index'
+import { CSSProperties } from 'react'
 
 type Props = {
   style?: Object
@@ -10,27 +11,46 @@ type Props = {
   options?: IntersectionOptions
 }
 
+const sharedStyle: CSSProperties = {
+  display: 'flex',
+  minHeight: '25vh',
+  flexDirection: 'column',
+  justifyContent: 'center',
+  alignItems: 'center',
+  textAlign: 'center',
+  background: 'lightcoral',
+  color: 'azure',
+}
+
+const LazyHookComponent = ({ options, style, children, ...rest }: Props) => {
+  const ref = React.useRef<HTMLDivElement>(null)
+  const inView = useInView(ref, options)
+  const [isLoading, setIsLoading] = React.useState(true)
+  action('Inview')(inView)
+
+  React.useEffect(() => {
+    setIsLoading(false)
+  }, [])
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
+
+  return (
+    <div ref={ref} style={{ ...sharedStyle, ...style }} {...rest}>
+      <h2>
+        {children || 'Header is inside the viewport'}: {inView.toString()}
+      </h2>
+    </div>
+  )
+}
 const HookComponent = ({ options, style, children, ...rest }: Props) => {
   const ref = React.useRef<HTMLDivElement>(null)
   const inView = useInView(ref, options)
   action('Inview')(inView)
 
   return (
-    <div
-      ref={ref}
-      style={{
-        display: 'flex',
-        minHeight: '25vh',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
-        background: 'lightcoral',
-        color: 'azure',
-        ...style,
-      }}
-      {...rest}
-    >
+    <div ref={ref} style={{ ...sharedStyle, ...style }} {...rest}>
       <h2>
         {children || 'Header is inside the viewport'}: {inView.toString()}
       </h2>
@@ -42,6 +62,11 @@ storiesOf('useInView hook', module)
   .add('Basic', () => (
     <ScrollWrapper>
       <HookComponent />
+    </ScrollWrapper>
+  ))
+  .add('Lazy Hook rendering', () => (
+    <ScrollWrapper>
+      <LazyHookComponent />
     </ScrollWrapper>
   ))
   .add('Start in view', () => <HookComponent />)
