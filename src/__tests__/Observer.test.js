@@ -1,169 +1,168 @@
 /* eslint-disable import/no-named-as-default-member */
 import React from 'react'
-import { mount } from 'enzyme'
+import { render } from 'react-testing-library'
+import { observe, unobserve } from '../intersection'
 import Observer from '../'
-import intersection from '../intersection'
 import invariant from 'invariant'
 
 jest.mock('../intersection')
 jest.mock('invariant')
 
 const plainChild = ({ ref }) => <div ref={ref} />
-afterEach(() => {})
+afterEach(() => {
+  observe.mockReset()
+  unobserve.mockReset()
+  invariant.mockReset()
+})
 
 it('Should render <Observer />', () => {
   const callback = jest.fn(plainChild)
-  mount(<Observer>{callback}</Observer>)
+  render(<Observer>{callback}</Observer>)
   expect(callback).toHaveBeenLastCalledWith(
     expect.objectContaining({ inView: false }),
   )
 })
 
 it('should render plain children', () => {
-  const wrapper = mount(<Observer>inner</Observer>)
-  expect(wrapper).toMatchSnapshot()
+  const { container, getByText } = render(<Observer>inner</Observer>)
+  getByText('inner')
+  const tagName = container.firstChild.tagName.toLowerCase()
+  expect(tagName).toBe('div')
 })
+
 it('should render with tag', () => {
-  const wrapper = mount(<Observer tag="span">inner</Observer>)
-  expect(wrapper).toMatchSnapshot()
+  const { container, getByText } = render(<Observer tag="span">inner</Observer>)
+  getByText('inner')
+  const tagName = container.firstChild.tagName.toLowerCase()
+  expect(tagName).toBe('span')
 })
+
 it('should render with className', () => {
-  const wrapper = mount(<Observer className="inner-class">inner</Observer>)
-  expect(wrapper).toMatchSnapshot()
+  const { container } = render(
+    <Observer className="inner-class">inner</Observer>,
+  )
+  expect(container.firstChild).toHaveClass('inner-class')
 })
 
 it('Should render <Observer /> inview', () => {
   const callback = jest.fn(plainChild)
-  const wrapper = mount(<Observer>{callback}</Observer>)
-  wrapper.setState({ inView: true })
+  observe.mockImplementation((el, callback, options) => {
+    callback(true, {})
+  })
+  render(<Observer>{callback}</Observer>)
   expect(callback).toHaveBeenLastCalledWith(
     expect.objectContaining({ inView: true }),
   )
 })
 
 it('Should not render <Observer /> render outside view', () => {
-  const wrapper = mount(
+  const { getByText } = render(
     <Observer>
       {({ inView, ref }) => <div ref={ref}>Inview: {inView.toString()}</div>}
     </Observer>,
   )
-  expect(wrapper).toMatchSnapshot()
+  getByText('Inview: false')
 })
 
 it('Should render <Observer /> render when in view', () => {
-  const wrapper = mount(
+  observe.mockImplementation((el, callback, options) => {
+    callback(true, {})
+  })
+  const { getByText } = render(
     <Observer>
       {({ inView, ref }) => <div ref={ref}>Inview: {inView.toString()}</div>}
     </Observer>,
   )
-  wrapper.setState({ inView: true })
 
-  expect(wrapper).toMatchSnapshot()
+  getByText('Inview: true')
 })
 
 it('Should unobserve old node', () => {
-  const wrapper = mount(
+  const { rerender, container } = render(
     <Observer>
-      {({ inView, ref }) => <div ref={ref}>Inview: {inView.toString()}</div>}
+      {({ inView, ref }) => (
+        <div key="1" ref={ref}>
+          Inview: {inView.toString()}
+        </div>
+      )}
     </Observer>,
   )
-  const instance = wrapper.instance()
-  jest.spyOn(instance, 'observeNode')
-  const node = wrapper.getDOMNode()
-  instance.handleNode(<div />)
-  expect(intersection.unobserve).toHaveBeenCalledWith(node)
-  expect(instance.observeNode).toHaveBeenCalled()
-  expect(intersection.observe).toHaveBeenCalled()
+  unobserve.mockReset()
+  observe.mockReset()
+  rerender(
+    <Observer>
+      {({ inView, ref }) => (
+        <div key="2" ref={ref}>
+          Inview: {inView.toString()}
+        </div>
+      )}
+    </Observer>,
+  )
+  expect(unobserve).toHaveBeenCalledWith(container.firstChild)
+  expect(observe).toHaveBeenCalled()
 })
 
-it('Should ensure node exists before observering', () => {
-  const wrapper = mount(<Observer>{plainChild}</Observer>)
-  const instance = wrapper.instance()
-  intersection.observe.mockReset()
-  instance.handleNode(null)
-  expect(intersection.observe).not.toHaveBeenCalled()
-})
-
-it('Should ensure node exists before unmounting', () => {
-  const wrapper = mount(<Observer>{plainChild}</Observer>)
-  const instance = wrapper.instance()
-  instance.handleNode(null)
-
-  intersection.unobserve.mockReset()
-  instance.componentWillUnmount()
-  expect(intersection.unobserve).not.toHaveBeenCalled()
-})
-
-it('Should update state onChange', () => {
-  const wrapper = mount(<Observer>{plainChild}</Observer>)
-  wrapper.instance().handleChange(true)
-  expect(wrapper.state().inView).toBe(true)
-  wrapper.instance().handleChange(false)
-  expect(wrapper.state().inView).toBe(false)
+it('Should ensure node exists before observing and unobserving', () => {
+  unobserve.mockReset()
+  const { unmount } = render(<Observer>{() => null}</Observer>)
+  expect(observe).not.toHaveBeenCalled()
+  unmount()
+  expect(unobserve).not.toHaveBeenCalled()
 })
 
 it('Should recreate observer when threshold change', () => {
-  const wrapper = mount(<Observer>{plainChild}</Observer>)
-  const instance = wrapper.instance()
-  jest.spyOn(instance, 'observeNode')
-
-  // Changing threshold should cause the instance to be observed once more
-  wrapper.setProps({ threshold: 0.5 })
-  expect(intersection.unobserve).toHaveBeenCalledWith(wrapper.getDOMNode())
-  expect(instance.observeNode).toHaveBeenCalled()
+  const { container, rerender } = render(<Observer>{plainChild}</Observer>)
+  observe.mockReset()
+  rerender(<Observer threshold={0.5}>{plainChild}</Observer>)
+  expect(unobserve).toHaveBeenCalledWith(container.firstChild)
+  expect(observe).toHaveBeenCalled()
 })
 
 it('Should recreate observer when root change', () => {
-  const wrapper = mount(<Observer>{plainChild}</Observer>)
-  const instance = wrapper.instance()
-  jest.spyOn(instance, 'observeNode')
-
-  // Changing threshold should cause the instance to be observed once more
-  wrapper.setProps({ root: {} })
-  expect(intersection.unobserve).toHaveBeenCalledWith(wrapper.getDOMNode())
-  expect(instance.observeNode).toHaveBeenCalled()
+  const { container, rerender } = render(<Observer>{plainChild}</Observer>)
+  observe.mockReset()
+  rerender(<Observer root={{}}>{plainChild}</Observer>)
+  expect(unobserve).toHaveBeenCalledWith(container.firstChild)
+  expect(observe).toHaveBeenCalled()
 })
 
 it('Should recreate observer when rootMargin change', () => {
-  const wrapper = mount(<Observer>{plainChild}</Observer>)
-  const instance = wrapper.instance()
-  jest.spyOn(instance, 'observeNode')
-
-  // Changing threshold should cause the instance to be observed once more
-  wrapper.setProps({ rootMargin: '10px' })
-  expect(intersection.unobserve).toHaveBeenCalledWith(wrapper.getDOMNode())
-  expect(instance.observeNode).toHaveBeenCalled()
+  const { container, rerender } = render(<Observer>{plainChild}</Observer>)
+  observe.mockReset()
+  rerender(<Observer rootMargin="10px">{plainChild}</Observer>)
+  expect(unobserve).toHaveBeenCalledWith(container.firstChild)
+  expect(observe).toHaveBeenCalled()
 })
 
 it('Should trigger onChange callback', () => {
+  let onObserve
+  observe.mockImplementation((el, callback, options) => (onObserve = callback))
   const onChange = jest.fn()
-  const wrapper = mount(<Observer onChange={onChange}>{plainChild}</Observer>)
-  wrapper.instance().handleChange(true, 1)
-  expect(onChange).toHaveBeenLastCalledWith(true, 1)
-  wrapper.instance().handleChange(false, 0)
-  expect(onChange).toHaveBeenLastCalledWith(false, 0)
+  render(<Observer onChange={onChange}>{plainChild}</Observer>)
+  if (onObserve) onObserve(true, {})
+  expect(onChange).toHaveBeenLastCalledWith(true, {})
+  if (onObserve) onObserve(false, {})
+  expect(onChange).toHaveBeenLastCalledWith(false, {})
 })
 
 it('Should unobserve when triggerOnce comes into view', () => {
-  const wrapper = mount(<Observer triggerOnce>{plainChild}</Observer>)
-  wrapper.setState({ inView: true })
-  const node = wrapper.getDOMNode()
-  expect(intersection.unobserve).toHaveBeenCalledWith(node)
+  observe.mockImplementation((el, callback) => {
+    if (callback) callback(true, {})
+  })
+  render(<Observer triggerOnce>{plainChild}</Observer>)
+  expect(unobserve).toHaveBeenCalled()
 })
 
 it('Should unobserve when unmounted', () => {
-  const wrapper = mount(<Observer>{plainChild}</Observer>)
-  const node = wrapper.getDOMNode()
-  wrapper.instance().componentWillUnmount()
-  expect(intersection.unobserve).toHaveBeenCalledWith(node)
+  const { container, unmount } = render(<Observer>{plainChild}</Observer>)
+  unmount()
+  expect(unobserve).toHaveBeenCalledWith(container)
 })
 
 it('Should throw error when not passing ref', () => {
-  invariant.mockReset()
-
-  mount(
+  render(
     <Observer>
-      {({ inView, ref }) => <div>Inview: {inView.toString()}</div>}
+      {({ inView }) => <div>Inview: {inView.toString()}</div>}
     </Observer>,
   )
   expect(invariant).toHaveBeenLastCalledWith(

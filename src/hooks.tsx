@@ -18,10 +18,11 @@ export function useIntersectionObserver(
     inView: false,
     entry: undefined,
   })
+
+  // Create a separate effect that always checks if the ref has changed.
+  // If it changes, the Observer will need to be recreated, so set a new ref state
+  // that the triggers an update of the next effect.
   React.useEffect(() => {
-    // Create a separate effect that always checks if the ref has changed.
-    // If it changes, the Observer will need to be recreated, so set a new ref state
-    // that the triggers an update of the next effect
     if (ref.current !== currentRef) {
       setCurrentRef(ref.current)
     }

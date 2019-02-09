@@ -7,6 +7,7 @@ type Callback = (
 
 export type ObserverInstance = {
   callback: Callback
+  element: Element
   inView: boolean
   observerId: string
   observer: IntersectionObserver
@@ -73,6 +74,7 @@ export function observe(
 
   const instance: ObserverInstance = {
     callback,
+    element,
     inView: false,
     observerId,
     observer: observerInstance,

@@ -1,12 +1,11 @@
 import React, { useRef } from 'react'
-import * as ReactDOM from 'react-dom'
+import { act } from 'react-dom/test-utils'
 import { useInView } from '../hooks'
-import { mount } from 'enzyme'
 import { observe, unobserve } from '../intersection'
+import { render } from 'react-testing-library'
 
 jest.mock('../intersection')
 
-const triggerHook = () => ReactDOM.render(null, document.createElement('div'))
 afterEach(() => {
   observe.mockReset()
 })
@@ -18,39 +17,33 @@ const HookComponent = ({ options }) => {
 }
 
 test('should create a hook', () => {
-  mount(<HookComponent />)
-  triggerHook()
+  render(<HookComponent />)
   expect(observe).toHaveBeenCalled()
 })
 
 test('should create a hook inView', () => {
-  const hook = mount(<HookComponent />)
   observe.mockImplementation((el, callback, options) => {
     if (callback) callback(true, {})
   })
-  triggerHook()
+  const { getByText } = render(<HookComponent />)
   expect(observe).toHaveBeenCalled()
-  expect(hook.text()).toBe('true')
+  getByText('true')
 })
 
-test('should respect trigger once', cb => {
-  mount(<HookComponent options={{ triggerOnce: true }} />)
+test('should respect trigger once', () => {
   observe.mockImplementation((el, callback) => {
     if (callback) callback(true, {})
   })
-  triggerHook()
+  render(<HookComponent options={{ triggerOnce: true }} />)
   expect(observe).toHaveBeenCalled()
-  setTimeout(() => {
-    // The next render phase should have triggered the unmount of the observer
-    triggerHook()
+
+  act(() => {
     expect(unobserve).toHaveBeenCalled()
-    cb()
   })
 })
 
 test('should unmount the hook', () => {
-  const instance = mount(<HookComponent />)
-  triggerHook()
-  instance.unmount()
+  const { unmount } = render(<HookComponent />)
+  unmount()
   expect(unobserve).toHaveBeenCalled()
 })
