@@ -32,6 +32,7 @@
     "*.snap",
     "dist/**",
     "lib/**",
+    "example/**",
     "webpack.config.js"
   ],
   "scripts": {
@@ -101,7 +102,6 @@
     "@babel/core": "^7.2.2",
     "@babel/plugin-proposal-class-properties": "^7.2.3",
     "@babel/plugin-transform-runtime": "^7.2.0",
-    "@babel/polyfill": "^7.2.5",
     "@babel/preset-env": "^7.2.3",
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
@@ -150,6 +150,7 @@
     "typescript-eslint-parser": "^22.0.0"
   },
   "resolutions": {
+    "ajv": "6.6.1",
     "@types/react": "16.8.2"
   }
 }
