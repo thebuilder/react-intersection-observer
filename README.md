@@ -11,11 +11,11 @@
 [![Greenkeeper badge][greenkeeper-svg]][greenkeeper-url]
 [![styled with prettier][prettier-svg]][prettier-url]
 
-React component that uses the IntersectionObserver API to tell you when an
-element enters or leaves the viewport. No complex configuration needed, just
-wrap your views and it handles the events.
+React implementation of the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) to tell you when an
+element enters or leaves the viewport. Contains both a [Hooks](#hooks), [render props](#render-props) and [plain children](#plain-children) implementation.
 
 > **Storybook Demo:** https://thebuilder.github.io/react-intersection-observer/
+
 
 ## Installation
 
