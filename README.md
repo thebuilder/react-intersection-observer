@@ -11,11 +11,13 @@
 [![Greenkeeper badge][greenkeeper-svg]][greenkeeper-url]
 [![styled with prettier][prettier-svg]][prettier-url]
 
-React implementation of the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) to tell you when an
-element enters or leaves the viewport. Contains both a [Hooks](#hooks), [render props](#render-props) and [plain children](#plain-children) implementation.
+React implementation of the
+[Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
+to tell you when an element enters or leaves the viewport. Contains both a
+[Hooks](#hooks), [render props](#render-props) and
+[plain children](#plain-children) implementation.
 
 > **Storybook Demo:** https://thebuilder.github.io/react-intersection-observer/
-
 
 ## Installation
 
@@ -107,7 +109,7 @@ allowing you set the `className`, `style`, etc.
 import { InView } from 'react-intersection-observer'
 
 const Component = () => (
-  <InView tag="div" onChange={inView => console.log('Inview:', inView)}>
+  <InView as="div" onChange={inView => console.log('Inview:', inView)}>
     <h2>Plain children are always rendered. Use onChange to monitor state.</h2>
   </InView>
 )
@@ -116,7 +118,7 @@ export default Component
 ```
 
 > ⚠️ When rendering a plain child, make sure you keep your HTML output semantic.
-> Change the `tag` to match the context, and add a `className` to style the
+> Change the `as` to match the context, and add a `className` to style the
 > `<InView />`.
 
 ## API
@@ -128,7 +130,7 @@ argument for the hooks.
 
 | Name            | Type               | Default | Required | Description                                                                                                                                                    |
 | --------------- | ------------------ | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **root**        | Element            |         | false    | The Element that is used as the viewport for checking visibility of the target. Defaults to the browser viewport (`window`) if not specified or if null.       |
+| **root**        | Element            | window  | false    | The Element that is used as the viewport for checking visibility of the target. Defaults to the browser viewport (`window`) if not specified or if null.       |
 | **rootMargin**  | string             | '0px'   | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                             |
 | **threshold**   | number \| number[] | 0       | false    | Number between 0 and 1 indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. |
 | **triggerOnce** | boolean            | false   | false    | Only trigger this method once                                                                                                                                  |
@@ -139,19 +141,18 @@ The **`<InView />`** component also accepts the following props:
 
 | Name         | Type                      | Default | Required | Description                                                                                                                                                                                                                                                                                                             |
 | ------------ | ------------------------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **as**       | `string`                  |         | false    | Render the wrapping element as this element. Defaults to `div`.                                                                                                                                                                                                                                                         |
+| **as**       | `string`                  | 'div'   | false    | Render the wrapping element as this element. Defaults to `div`.                                                                                                                                                                                                                                                         |
 | **children** | `Function`, `ReactNode`   |         | true     | Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. Alternately pass a plain child, to have the `<Observer />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `entry, giving you more details. |
 | **onChange** | `(inView, entry) => void` |         | false    | Call this function whenever the in view state changes                                                                                                                                                                                                                                                                   |
 
-## Usage in other projects
+## Built using `react-intersection-observer`
 
-### react-scroll-percentage
+### [Sticks 'n' Sushi](https://sticksnsushi.com/en)
 
-This module is used in
+The new brand site for **Sticks 'n' Sushi** is filled with scroll based
+animations. All of these are triggered by `react-intersection-observer`, with
 [react-scroll-percentage](https://github.com/thebuilder/react-scroll-percentage)
-to monitor the scroll position of elements in view, useful for animating items
-as they become visible. This module is also a great example of using
-`react-intersection-observer` as the basis for more complex needs.
+controlling the animations.
 
 ## Intersection Observer
 
