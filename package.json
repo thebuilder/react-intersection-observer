@@ -18,9 +18,14 @@
   "keywords": [
     "react",
     "component",
+    "hooks",
     "viewport",
     "intersection",
-    "inview"
+    "observer",
+    "lazy load",
+    "inview",
+    "useInView",
+    "useIntersectionObserver"
   ],
   "prettier": {
     "singleQuote": true,
