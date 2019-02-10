@@ -42,18 +42,24 @@ npm install react-intersection-observer --save
 
 #### `useInView`
 
+```js
+const [ref, inView, entry] = useInView(options)
+```
+
 The new React Hooks, makes it easier then ever to monitor the `inView` state of
-your components. You can import the `useInView` hook, and pass it a `ref` to the
-DOM node you want to observe, alongside some optional [options](#options). It
-will then return `true` once the element enter the viewport.
+your components. Call the `useInView` hook, with the (optional)
+[options](#options) you need. It will return an array containing a `ref`, the
+`inView` status and the current
+[`IntersectionObserverEntry`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry).
+Assign the `ref` to the DOM element you want to monitor, and the hook will
+report the status.
 
 ```jsx
 import React, { useRef } from 'react'
 import { useInView } from 'react-intersection-observer'
 
 const Component = () => {
-  const ref = useRef()
-  const inView = useInView(ref, {
+  const [ref, inView] = useInView({
     /* Optional options */
     threshold: 0,
   })
@@ -61,36 +67,6 @@ const Component = () => {
   return (
     <div ref={ref}>
       <h2>{`Header inside viewport ${inView}.`}</h2>
-    </div>
-  )
-}
-```
-
-#### `useIntersectionObserver`
-
-If you need to know more details about the intersection, you can use the
-`useIntersectionObserver` hook. It takes the same input as `useInView`, but will
-return an object with `inView` and `intersection`. If `intersection` is defined,
-it contains the
-[IntersectionObserverEntry](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry),
-that triggered the observer.
-
-```jsx
-import React, { useRef } from 'react'
-import { useIntersectionObserver } from 'react-intersection-observer'
-
-const Component = () => {
-  const ref = useRef()
-  const { inView, intersection } = useIntersectionObserver(ref, {
-    threshold: 0,
-  })
-
-  return (
-    <div ref={ref}>
-      <h2>{`Header inside viewport ${inView}.`}</h2>
-      <pre>
-        <code>{JSON.stringify(intersection || {})}</code>
-      </pre>
     </div>
   )
 }
@@ -161,11 +137,11 @@ argument for the hooks.
 
 The **`<InView />`** component also accepts the following props:
 
-| Name         | Type                      | Default | Required | Description                                                                                                                                                                                                                                                                                                                    |
-| ------------ | ------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **as**       | `string`                  |         | false    | Render the wrapping element as this element. Defaults to `div`.                                                                                                                                                                                                                                                                |
-| **children** | `Function`, `ReactNode`   |         | true     | Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. Alternately pass a plain child, to have the `<Observer />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `intersection, giving you more details. |
-| **onChange** | `(inView, entry) => void` |         | false    | Call this function whenever the in view state changes                                                                                                                                                                                                                                                                          |
+| Name         | Type                      | Default | Required | Description                                                                                                                                                                                                                                                                                                             |
+| ------------ | ------------------------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **as**       | `string`                  |         | false    | Render the wrapping element as this element. Defaults to `div`.                                                                                                                                                                                                                                                         |
+| **children** | `Function`, `ReactNode`   |         | true     | Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. Alternately pass a plain child, to have the `<Observer />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `entry, giving you more details. |
+| **onChange** | `(inView, entry) => void` |         | false    | Call this function whenever the in view state changes                                                                                                                                                                                                                                                                   |
 
 ## Usage in other projects
 

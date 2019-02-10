@@ -18,15 +18,14 @@ const sharedStyle: CSSProperties = {
   justifyContent: 'center',
   alignItems: 'center',
   textAlign: 'center',
-  background: 'lightcoral',
+  background: '#148bb4',
   color: 'azure',
 }
 
 const LazyHookComponent = ({ options, style, children, ...rest }: Props) => {
-  const ref = React.useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, options)
+  const [ref, inView, entry] = useInView(options)
   const [isLoading, setIsLoading] = React.useState(true)
-  action('Inview')(inView)
+  action('Inview')(inView, entry)
 
   React.useEffect(() => {
     setIsLoading(false)
@@ -45,9 +44,8 @@ const LazyHookComponent = ({ options, style, children, ...rest }: Props) => {
   )
 }
 const HookComponent = ({ options, style, children, ...rest }: Props) => {
-  const ref = React.useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, options)
-  action('Inview')(inView)
+  const [ref, inView, entry] = useInView(options)
+  action('Inview')(inView, entry)
 
   return (
     <div ref={ref} style={{ ...sharedStyle, ...style }} {...rest}>

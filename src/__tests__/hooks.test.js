@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { act } from 'react-dom/test-utils'
 import { useInView } from '../hooks'
 import { observe, unobserve } from '../intersection'
@@ -11,13 +11,28 @@ afterEach(() => {
 })
 
 const HookComponent = ({ options }) => {
-  const ref = useRef()
-  const inView = useInView(ref, options)
+  const [ref, inView] = useInView(options)
+  return <div ref={ref}>{inView.toString()}</div>
+}
+
+const LazyHookComponent = ({ options }) => {
+  const [isLoading, setIsLoading] = React.useState(true)
+
+  React.useEffect(() => {
+    setIsLoading(false)
+  }, [])
+  const [ref, inView] = useInView(options)
+  if (isLoading) return <div>Loading</div>
   return <div ref={ref}>{inView.toString()}</div>
 }
 
 test('should create a hook', () => {
   render(<HookComponent />)
+  expect(observe).toHaveBeenCalled()
+})
+
+test('should create a lazy hook', () => {
+  render(<LazyHookComponent />)
   expect(observe).toHaveBeenCalled()
 })
 

@@ -22,7 +22,7 @@ const Header = React.forwardRef<any, Props>((props: Props, ref) => (
       justifyContent: 'center',
       alignItems: 'center',
       textAlign: 'center',
-      background: 'lightcoral',
+      background: '#148bb4',
       color: 'azure',
       ...props.style,
     }}

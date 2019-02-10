@@ -1782,10 +1782,10 @@ ajv-keywords@^3.1.0:
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-3.3.0.tgz#cb6499da9b83177af8bc1732b2f0a1a1a3aacf8c"
   integrity sha512-CMzN9S62ZOO4sA/mJZIO4S++ZM7KFWzH3PPWkveLhy4OZ9i1/VatgwWMD46w/XbGCBy7Ye0gCk+Za6mmyfKK7g==
 
-ajv@6.6.1, ajv@^6.1.0, ajv@^6.5.3, ajv@^6.5.5, ajv@^6.6.1:
-  version "6.6.1"
-  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.6.1.tgz#6360f5ed0d80f232cc2b294c362d5dc2e538dd61"
-  integrity sha512-ZoJjft5B+EJBjUyu9C9Hc0OZyPZSSlOF+plzouTrg6UlA8f+e/n8NIgBFG/9tppJtpPWfthHakK7juJdNDODww==
+ajv@^6.1.0, ajv@^6.5.3, ajv@^6.5.5, ajv@^6.6.1:
+  version "6.9.1"
+  resolved "https://registry.yarnpkg.com/ajv/-/ajv-6.9.1.tgz#a4d3683d74abc5670e75f0b16520f70a20ea8dc1"
+  integrity sha512-XDN92U311aINL77ieWHmqCcNlwjoP5cHXDxIxbf2MaPYuCXOHS7gHH8jktxeK5omgd52XbSTX6a4Piwd1pQmzA==
   dependencies:
     fast-deep-equal "^2.0.1"
     fast-json-stable-stringify "^2.0.0"
@@ -5859,10 +5859,10 @@ jest-docblock@^24.0.0:
   dependencies:
     detect-newline "^2.1.0"
 
-jest-dom@^3.0.2:
-  version "3.0.2"
-  resolved "https://registry.yarnpkg.com/jest-dom/-/jest-dom-3.0.2.tgz#63094a95c721a5647dcaa7a87991c7a9ebf30608"
-  integrity sha512-jDnI83LWZgIrlJe7d21SBx2vzcUiuSTErjIMn8bq+Wm/LF/k6XS+6zmpMUaGlykqC05uyWHNeg4K+Qr3atuVEw==
+jest-dom@^3.1.0:
+  version "3.1.0"
+  resolved "https://registry.yarnpkg.com/jest-dom/-/jest-dom-3.1.0.tgz#a7b57d5152957def86a855614e56b6585becd97b"
+  integrity sha512-TGbg5gHF6TfIOlsoqK57EvHtiGCKAi87xWqqiNk+1S0+hteV6ThCjh/2BrKkMBODKDKR52yfUKM0lrVldi3Z2w==
   dependencies:
     chalk "^2.4.1"
     css "^2.2.3"
