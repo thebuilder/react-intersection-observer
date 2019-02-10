@@ -8,7 +8,8 @@ const style: CSSProperties = {
   flexDirection: 'column',
   alignItems: 'center',
   justifyContent: 'center',
-  backgroundColor: 'papayawhip',
+  backgroundColor: '#2d1176',
+  color: '#fff',
 }
 
 type Props = {

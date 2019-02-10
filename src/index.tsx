@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { observe, unobserve } from './intersection'
 import invariant from 'invariant'
-export { useInView, useIntersectionObserver } from './hooks'
+export { useInView } from './hooks'
 
 type RenderProps = {
   inView: boolean
