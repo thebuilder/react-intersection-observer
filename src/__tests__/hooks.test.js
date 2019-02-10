@@ -1,6 +1,6 @@
 import React from 'react'
 import { act } from 'react-dom/test-utils'
-import { useInView } from '../hooks'
+import { useInView } from '../useInView'
 import { observe, unobserve } from '../intersection'
 import { render } from 'react-testing-library'
 
