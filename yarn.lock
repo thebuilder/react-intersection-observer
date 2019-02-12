@@ -1448,10 +1448,10 @@
   resolved "https://registry.yarnpkg.com/@types/estree/-/estree-0.0.39.tgz#e177e699ee1b8c22d23174caaa7422644389509f"
   integrity sha512-EYNwp3bU+98cpU4lAWYYL7Zz+2gryWH1qbdDTidVd6hkiR6weksdbMadyXKXNPEkQFhXM+hVO9ZygomHXp+AIw==
 
-"@types/jest@^24.0.0":
-  version "24.0.0"
-  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-24.0.0.tgz#848492026c327b3548d92be0352a545c36a21e8a"
-  integrity sha512-kOafJnUTnMd7/OfEO/x3I47EHswNjn+dbz9qk3mtonr1RvKT+1FGVxnxAx08I9K8Tl7j9hpoJRE7OCf+t10fng==
+"@types/jest@^24.0.1":
+  version "24.0.1"
+  resolved "https://registry.yarnpkg.com/@types/jest/-/jest-24.0.1.tgz#8945411140e7cdfd5ea76380e5f5fa7bf17646ea"
+  integrity sha512-4KNToPz5SAVa0GZrYAL3Q43p5MY/QBmYclYAmqPeqAmbgQ4lXkgKK0mYtr9S+N2Az0JvFaYJECztHZuFGhG3zw==
 
 "@types/node@*":
   version "10.12.24"
@@ -3953,10 +3953,10 @@ escodegen@^1.9.1:
   optionalDependencies:
     source-map "~0.6.1"
 
-eslint-config-react-app@^3.0.6:
-  version "3.0.6"
-  resolved "https://registry.yarnpkg.com/eslint-config-react-app/-/eslint-config-react-app-3.0.6.tgz#addcae1359235941e95f3c96970b7ac8552e1130"
-  integrity sha512-VL5rA1EBZv7f9toc9x71or7nr4jRmwCH4V9JKB9DFVaTLOLI9+vjWLgQLjMu3xR9iUT80dty86RbCfNaKyrFFg==
+eslint-config-react-app@^3.0.7:
+  version "3.0.7"
+  resolved "https://registry.yarnpkg.com/eslint-config-react-app/-/eslint-config-react-app-3.0.7.tgz#d58c9216ff285e2b4de0eb8403c28b0600e45b3e"
+  integrity sha512-Mmmc9lIY/qvX6OEV09+ZLqVTz1aX8VVCrgCjBHXdmMGaC+pldD+87oj3BiJWXMSfcYs5iOo9gy0mGnQ8f/fMsQ==
   dependencies:
     confusing-browser-globals "^1.0.5"
 
@@ -5859,10 +5859,10 @@ jest-docblock@^24.0.0:
   dependencies:
     detect-newline "^2.1.0"
 
-jest-dom@^3.1.0:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/jest-dom/-/jest-dom-3.1.0.tgz#a7b57d5152957def86a855614e56b6585becd97b"
-  integrity sha512-TGbg5gHF6TfIOlsoqK57EvHtiGCKAi87xWqqiNk+1S0+hteV6ThCjh/2BrKkMBODKDKR52yfUKM0lrVldi3Z2w==
+jest-dom@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/jest-dom/-/jest-dom-3.1.1.tgz#5671014f6834471895cdde3fbf7e9f58cc3f2c95"
+  integrity sha512-7CnQHQsyfAa7lofrfvChgYIlIrIfr90UczutjA2AuBlNGOCzCCt/x9T/fHftg3P3IJlBQvBWT+TfZ+lsen/4+A==
   dependencies:
     chalk "^2.4.1"
     css "^2.2.3"
@@ -8210,10 +8210,10 @@ react-test-renderer@^16.8.0:
     react-is "^16.8.1"
     scheduler "^0.13.1"
 
-react-testing-library@^5.5.4:
-  version "5.5.4"
-  resolved "https://registry.yarnpkg.com/react-testing-library/-/react-testing-library-5.5.4.tgz#25321f78c41c7ec882a9e858f0e20d71a66a5338"
-  integrity sha512-uXt1iQMY2kU756KbjsNkWtn+uZy8ZSpCmd8bDJZXavZoczhCUndk1LdBCaR/07tHnbTqc8c0ziEMJiaGxU+Xpw==
+react-testing-library@^5.7.0:
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/react-testing-library/-/react-testing-library-5.7.0.tgz#88684033dd982654ef4ce8eab9c0a4ab547d2737"
+  integrity sha512-VKUmQlv/0/bFXCifRpgWBFWumxlmUo5o6FzG41//6tl2LfcJg/ccklGPYgQYLYJzbrIlq/TqsUAT133DwovDPA==
   dependencies:
     "@babel/runtime" "^7.3.1"
     dom-testing-library "^3.13.1"
