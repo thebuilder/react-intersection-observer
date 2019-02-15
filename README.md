@@ -21,8 +21,10 @@ to tell you when an element enters or leaves the viewport. Contains both a
 
 ## Features
 
-- 🎣 **Hooks or Component API** - With `useInView` it's easier than ever to monitor elements
-- ⚡️ **Optimzed performance** - Auto reuses Intersection Observers instances where possible
+- 🎣 **Hooks or Component API** - With `useInView` it's easier than ever to
+  monitor elements
+- ⚡️ **Optimized performance** - Auto reuses Intersection Observers instances
+  where possible
 - ⚙️ **Matches native API** - Intuitive to us
 - 🌳 **Tree-shakeable** - Only include the parts you use
 - 💥 **Tiny bundle** [~1.9 kB gzipped][bundlephobia-url]

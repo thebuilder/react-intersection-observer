@@ -96,8 +96,8 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime": "^7.2.0",
-    "invariant": "^2.2.4"
+    "@babel/runtime": "^7.0.0",
+    "invariant": "^2.0.0"
   },
   "peerDependencies": {
     "react": "^15.0.0 || ^16.0.0 || ^17.0.0"
@@ -153,8 +153,5 @@
     "rollup-plugin-uglify": "^6.0.2",
     "typescript": "^3.2.4",
     "typescript-eslint-parser": "^22.0.0"
-  },
-  "resolutions": {
-    "@types/react": "16.8.2"
   }
 }
