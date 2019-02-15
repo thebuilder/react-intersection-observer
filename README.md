@@ -17,7 +17,15 @@ to tell you when an element enters or leaves the viewport. Contains both a
 [Hooks](#hooks), [render props](#render-props) and
 [plain children](#plain-children) implementation.
 
-> **Storybook Demo:** https://thebuilder.github.io/react-intersection-observer/
+**Storybook Demo:** https://thebuilder.github.io/react-intersection-observer/
+
+## Features
+
+- 🎣 **Hooks or Component API** - With `useInView` it's easier than ever to monitor elements
+- ⚡️ **Optimzed performance** - Auto reuses Intersection Observers instances where possible
+- ⚙️ **Matches native API** - Intuitive to us
+- 🌳 **Tree-shakeable** - Only include the parts you use
+- 💥 **Tiny bundle** [~1.9 kB gzipped][bundlephobia-url]
 
 ## Installation
 
