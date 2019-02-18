@@ -6,7 +6,7 @@
   "module": "dist/react-intersection-observer.esm.js",
   "unpkg": "dist/react-intersection-observer.umd.min.js",
   "author": "Daniel Schmidt",
-  "typings": "dist/typings/index.d.ts",
+  "typings": "dist/index.d.ts",
   "files": [
     "dist/*"
   ],
