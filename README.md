@@ -25,7 +25,7 @@ to tell you when an element enters or leaves the viewport. Contains both a
   monitor elements
 - ⚡️ **Optimized performance** - Auto reuses Intersection Observers instances
   where possible
-- ⚙️ **Matches native API** - Intuitive to us
+- ⚙️ **Matches native API** - Intuitive to use
 - 🌳 **Tree-shakeable** - Only include the parts you use
 - 💥 **Tiny bundle** [~1.9 kB gzipped][bundlephobia-url]
 
