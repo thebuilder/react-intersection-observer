@@ -1483,7 +1483,7 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.1.tgz#48fd98c1561fe718b61733daed46ff115b496e18"
   integrity sha512-eqz8c/0kwNi/OEHQfvIuJVLTst3in0e7uTKeuY+WL/zfKn0xVujOTp42bS/vUUokhK5P2BppLd9JXMOMHcgbjA==
 
-"@types/react@*", "@types/react@^16.8.2":
+"@types/react@*", "@types/react@16.8.3":
   version "16.8.3"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.8.3.tgz#7b67956f682bea30a5a09b3242c0784ff196c848"
   integrity sha512-PjPocAxL9SNLjYMP4dfOShW/rj9FDBJGu3JFRt0zEYf77xfihB6fq8zfDpMrV6s82KnAi7F1OEe5OsQX25Ybdw==
@@ -8124,10 +8124,10 @@ react-test-renderer@^16.8.0:
     react-is "^16.8.2"
     scheduler "^0.13.2"
 
-react-testing-library@^5.7.0:
-  version "5.8.0"
-  resolved "https://registry.yarnpkg.com/react-testing-library/-/react-testing-library-5.8.0.tgz#b5163758b1ddfd2e15c3cd2790562a527a1bb0a5"
-  integrity sha512-cYOX8aUKea5ojFVXkhLbNEAq86nYqBlhKulJI/0v8JfwWyQm+kbyNKFfyci6b2qI4KUEvBYZKWx+zZWeYrYOOA==
+react-testing-library@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/react-testing-library/-/react-testing-library-6.0.0.tgz#81edfcfae8a795525f48685be9bf561df45bb35d"
+  integrity sha512-h0h+YLe4KWptK6HxOMnoNN4ngu3W8isrwDmHjPC5gxc+nOZOCurOvbKVYCvvuAw91jdO7VZSm/5KR7TxKnz0qA==
   dependencies:
     "@babel/runtime" "^7.3.1"
     dom-testing-library "^3.13.1"
