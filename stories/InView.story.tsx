@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import Observer from '../src/index'
+import InView from '../src/index'
 import ScrollWrapper from './ScrollWrapper/index'
 import RootComponent from './Root/index'
 import { CSSProperties } from 'react'
@@ -34,74 +34,74 @@ const Header = React.forwardRef<any, Props>((props: Props, ref) => (
 storiesOf('Intersection Observer', module)
   .add('Basic', () => (
     <ScrollWrapper>
-      <Observer onChange={action('Child Observer inview')}>
+      <InView onChange={action('Child Observer inview')}>
         {({ inView, ref }) => (
           <Header ref={ref}>Header inside viewport: {inView.toString()}</Header>
         )}
-      </Observer>
+      </InView>
     </ScrollWrapper>
   ))
   .add('Start in view', () => (
-    <Observer onChange={action('Child Observer inview')}>
+    <InView onChange={action('Child Observer inview')}>
       {({ inView, ref }) => (
         <Header ref={ref}>Header inside viewport: {inView.toString()}</Header>
       )}
-    </Observer>
+    </InView>
   ))
   .add('Plain children', () => (
     <ScrollWrapper>
-      <Observer onChange={action('Child Observer inview')}>
+      <InView onChange={action('Child Observer inview')}>
         <Header>Plain children</Header>
-      </Observer>
+      </InView>
     </ScrollWrapper>
   ))
   .add('Taller then viewport', () => (
     <ScrollWrapper>
-      <Observer onChange={action('Child Observer inview')}>
+      <InView onChange={action('Child Observer inview')}>
         {({ inView, ref }) => (
           <Header ref={ref} style={{ height: '150vh' }}>
             Header is inside the viewport: {inView.toString()}
           </Header>
         )}
-      </Observer>
+      </InView>
     </ScrollWrapper>
   ))
   .add('With threshold 100%', () => (
     <ScrollWrapper>
-      <Observer threshold={1} onChange={action('Child Observer inview')}>
+      <InView threshold={1} onChange={action('Child Observer inview')}>
         {({ inView, ref }) => (
           <Header ref={ref}>
             Header is fully inside the viewport: {inView.toString()}
           </Header>
         )}
-      </Observer>
+      </InView>
     </ScrollWrapper>
   ))
   .add('With threshold 50%', () => (
     <ScrollWrapper>
-      <Observer threshold={0.5} onChange={action('Child Observer inview')}>
+      <InView threshold={0.5} onChange={action('Child Observer inview')}>
         {({ inView, ref }) => (
           <Header ref={ref}>
             Header is 50% inside the viewport: {inView.toString()}
           </Header>
         )}
-      </Observer>
+      </InView>
     </ScrollWrapper>
   ))
   .add('Taller then viewport with threshold 100%', () => (
     <ScrollWrapper>
-      <Observer threshold={1}>
+      <InView threshold={1}>
         {({ inView, ref }) => (
           <Header ref={ref} style={{ height: '150vh' }}>
             Header is fully inside the viewport: {inView.toString()}
           </Header>
         )}
-      </Observer>
+      </InView>
     </ScrollWrapper>
   ))
   .add('With threshold array', () => (
     <ScrollWrapper>
-      <Observer
+      <InView
         threshold={[0, 0.25, 0.5, 0.75, 1]}
         onChange={action('Hit threshold trigger')}
       >
@@ -111,14 +111,14 @@ storiesOf('Intersection Observer', module)
             multiple times.
           </Header>
         )}
-      </Observer>
+      </InView>
     </ScrollWrapper>
   ))
   .add('With root', () => (
     <RootComponent>
       {node => (
         <ScrollWrapper>
-          <Observer
+          <InView
             threshold={0}
             root={node}
             rootMargin="64px"
@@ -129,7 +129,7 @@ storiesOf('Intersection Observer', module)
                 Header is inside the root viewport: {inView.toString()}
               </Header>
             )}
-          </Observer>
+          </InView>
         </ScrollWrapper>
       )}
     </RootComponent>
@@ -138,7 +138,7 @@ storiesOf('Intersection Observer', module)
     <RootComponent style={{ padding: 64 }}>
       {node => (
         <ScrollWrapper>
-          <Observer
+          <InView
             threshold={0}
             root={node}
             rootMargin="64px"
@@ -149,14 +149,14 @@ storiesOf('Intersection Observer', module)
                 Header is inside the root viewport: {inView.toString()}
               </Header>
             )}
-          </Observer>
+          </InView>
         </ScrollWrapper>
       )}
     </RootComponent>
   ))
   .add('Trigger once', () => (
     <ScrollWrapper>
-      <Observer
+      <InView
         threshold={1}
         triggerOnce
         onChange={action('Child Observer inview')}
@@ -166,24 +166,24 @@ storiesOf('Intersection Observer', module)
             Header was fully inside the viewport: {inView.toString()}
           </Header>
         )}
-      </Observer>
+      </InView>
     </ScrollWrapper>
   ))
   .add('Multiple observers', () => (
     <ScrollWrapper>
-      <Observer threshold={1} onChange={action('Child Observer inview')}>
+      <InView threshold={1} onChange={action('Child Observer inview')}>
         {({ inView, ref }) => (
           <Header ref={ref}>
             Header 1 is fully inside the viewport: {inView.toString()}
           </Header>
         )}
-      </Observer>
-      <Observer threshold={1} onChange={action('Child Observer inview')}>
+      </InView>
+      <InView threshold={1} onChange={action('Child Observer inview')}>
         {({ inView, ref }) => (
           <Header ref={ref}>
             Header 2 is fully inside the viewport: {inView.toString()}
           </Header>
         )}
-      </Observer>
+      </InView>
     </ScrollWrapper>
   ))
