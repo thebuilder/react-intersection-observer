@@ -17,23 +17,33 @@ export type IntersectionObserverProps = IntersectionOptions & {
    * contain an `inView` boolean and `ref` that should be
    * assigned to the element root.
    */
-  children?: React.ReactNode | ((fields: RenderProps) => React.ReactNode)
+  children: (fields: RenderProps) => React.ReactNode
+
+  /** Call this function whenever the in view state changes */
+  onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void
+}
+
+/**
+ * Types specific to the PlainChildren rendering of InView
+ * */
+export type PlainChildrenProps = IntersectionOptions & {
+  children: React.ReactNode
 
   /**
    * Render the wrapping element as this element.
    * @default `'div'`
    */
-  as?: string
+  as?: React.ReactType<any>
 
   /**
    * Element tag to use for the wrapping component
    * @deprecated Replace with the 'as' prop
    */
-  tag?: string
+  tag?: React.ReactType<any>
 
   /** Call this function whenever the in view state changes */
   onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void
-}
+} & React.HTMLProps<HTMLDivElement>
 
 export type HookResponse = [
   ((node?: Element | null) => void),

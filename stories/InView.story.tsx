@@ -50,7 +50,11 @@ storiesOf('Intersection Observer', module)
   ))
   .add('Plain children', () => (
     <ScrollWrapper>
-      <InView onChange={action('Child Observer inview')}>
+      <InView
+        onChange={action('Child Observer inview')}
+        className="custom-class"
+        as="div"
+      >
         <Header>Plain children</Header>
       </InView>
     </ScrollWrapper>

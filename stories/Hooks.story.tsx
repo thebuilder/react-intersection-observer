@@ -1,9 +1,10 @@
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { useInView, IntersectionOptions } from '../src/index'
+import { useInView } from '../src/index'
 import ScrollWrapper from './ScrollWrapper/index'
 import { CSSProperties } from 'react'
+import { IntersectionOptions } from '../src/typings/types'
 
 type Props = {
   style?: Object

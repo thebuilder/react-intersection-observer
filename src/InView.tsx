@@ -1,11 +1,17 @@
 import * as React from 'react'
 import invariant from 'invariant'
 import { observe, unobserve } from './intersection'
-import { IntersectionObserverProps } from './typings/types'
+import { IntersectionObserverProps, PlainChildrenProps } from './typings/types'
 
 type State = {
   inView: boolean
   entry?: IntersectionObserverEntry
+}
+
+function isPlainChildren(
+  props: IntersectionObserverProps | PlainChildrenProps,
+): props is PlainChildrenProps {
+  return typeof props.children !== 'function'
 }
 
 /**
@@ -17,7 +23,10 @@ type State = {
  )}
  </InView>
  */
-export class InView extends React.Component<IntersectionObserverProps, State> {
+export class InView extends React.Component<
+  IntersectionObserverProps | PlainChildrenProps,
+  State
+> {
   static displayName = 'InView'
   static defaultProps = {
     threshold: 0,
@@ -65,7 +74,7 @@ export class InView extends React.Component<IntersectionObserverProps, State> {
     }
   }
 
-  node: HTMLElement | null = null
+  node: Element | null = null
 
   observeNode() {
     if (!this.node) return
@@ -77,7 +86,7 @@ export class InView extends React.Component<IntersectionObserverProps, State> {
     })
   }
 
-  handleNode = (node?: HTMLElement) => {
+  handleNode = (node?: Element | null) => {
     if (this.node) unobserve(this.node)
     this.node = node ? node : null
     this.observeNode()
@@ -91,6 +100,11 @@ export class InView extends React.Component<IntersectionObserverProps, State> {
   }
 
   render() {
+    const { inView, entry } = this.state
+    if (!isPlainChildren(this.props)) {
+      return this.props.children({ inView, entry, ref: this.handleNode })
+    }
+
     const {
       children,
       as,
@@ -101,13 +115,6 @@ export class InView extends React.Component<IntersectionObserverProps, State> {
       rootMargin,
       ...props
     } = this.props
-
-    const { inView, entry } = this.state
-
-    if (typeof children === 'function') {
-      // @ts-ignore doesn't properly detect the function here...
-      return children({ inView, entry, ref: this.handleNode })
-    }
 
     return React.createElement(
       as || tag || 'div',
