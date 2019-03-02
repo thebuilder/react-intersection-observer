@@ -128,7 +128,7 @@
     "concurrently": "4.1.0",
     "coveralls": "^3.0.3",
     "error-overlay-webpack-plugin": "^0.1.6",
-    "eslint": "5.14.1",
+    "eslint": "5.15.0",
     "eslint-config-react-app": "^3.0.7",
     "eslint-plugin-flowtype": "^3.2.1",
     "eslint-plugin-import": "2.16.0",
