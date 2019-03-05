@@ -15,8 +15,8 @@
     "esModuleInterop": true,
     "downlevelIteration": true,
     "declaration": true,
-    "emitDeclarationOnly": true,
-    "declarationDir": "dist"
+    "skipLibCheck": true,
+    "outDir": "lib"
   },
   "include": ["src/**/*"],
   "exclude": ["dist"]

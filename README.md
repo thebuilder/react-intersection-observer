@@ -155,6 +155,50 @@ The **`<InView />`** component also accepts the following props:
 | **children** | `Function`, `ReactNode`   |         | true     | Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. Alternately pass a plain child, to have the `<Observer />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `entry, giving you more details. |
 | **onChange** | `(inView, entry) => void` |         | false    | Call this function whenever the in view state changes                                                                                                                                                                                                                                                                   |
 
+## Testing
+
+In order to write meaningful tests, the `IntersectionObserver` needs to be
+mocked - to make this easy, a test helper is included in the package. Use this
+to trigger when an element enters or leaves the viewport in your tests.
+
+### `mockIntersection(element:Element, isIntersection:boolean)`
+
+Call the `mockIntersection` method to trigger if an element is `inView` or not.
+
+### `intersectionMockInstance(element:Element): IntersectionObserver`
+
+Call the `intersectionMockInstance` method with an element, to get the (mocked)
+`IntersectionObserver` instance. You can use this to spy on the `observe` and
+`unobserve` methods.
+
+```js
+import React from 'react'
+import { act } from 'react-dom/test-utils'
+import { render } from 'react-testing-library'
+import { useInView } from 'react-intersection-observer'
+import {
+  intersectionMockInstance,
+  mockIntersection,
+} from 'react-intersection-observer/lib/test-helper'
+
+const HookComponent = ({ options }) => {
+  const [ref, inView] = useInView(options)
+  return (
+    <div data-testid="wrapper" ref={ref}>
+      {inView.toString()}
+    </div>
+  )
+}
+
+test('should create a hook inView', () => {
+  const { getByText, getByTestId } = render(<HookComponent />)
+  act(() => {
+    mockIntersection(getByTestId('wrapper'), true)
+  })
+  getByText('true')
+})
+```
+
 ## Built using `react-intersection-observer`
 
 ### [Sticks 'n' Sushi](https://sticksnsushi.com/en)
