@@ -111,7 +111,7 @@
     "@babel/preset-flow": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/preset-typescript": "^7.1.0",
-    "@storybook/addon-actions": "^4.1.13",
+    "@storybook/addon-actions": "^5.0.0",
     "@storybook/addon-options": "^4.1.13",
     "@storybook/components": "^4.1.13",
     "@storybook/react": "^4.1.13",
