@@ -117,7 +117,6 @@ export function unobserve(element: Element | null) {
       })
     }
 
-    /* istanbul ignore else  */
     if (!rootObserved && root) ROOT_IDS.delete(root)
     if (observer && !itemsLeft) {
       // No more elements to observe for threshold, disconnect observer
@@ -149,6 +148,7 @@ function onChange(changes: IntersectionObserverEntry[]) {
     const instance = INSTANCE_MAP.get(target)
 
     // Firefox can report a negative intersectionRatio when scrolling.
+    /* istanbul ignore else */
     if (instance && intersectionRatio >= 0) {
       const thresholds = instance.observer.thresholds
 
