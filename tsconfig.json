@@ -15,6 +15,7 @@
     "esModuleInterop": true,
     "downlevelIteration": true,
     "declaration": true,
+    "emitDeclarationOnly": true,
     "skipLibCheck": true,
     "outDir": "dist",
     "listEmittedFiles": true
