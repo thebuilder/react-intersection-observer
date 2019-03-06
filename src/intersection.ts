@@ -11,6 +11,7 @@ export type ObserverInstance = {
   inView: boolean
   observerId: string
   observer: IntersectionObserver
+  thresholds: number[]
 }
 
 const INSTANCE_MAP: Map<Element, ObserverInstance> = new Map()
@@ -78,6 +79,9 @@ export function observe(
     inView: false,
     observerId,
     observer: observerInstance,
+    // store thresholds in ObserverInstance because Chrome 51 does not add them to instance,
+    // see https://github.com/thebuilder/react-intersection-observer/issues/192
+    thresholds: getThresholds(observerInstance, options),
   }
 
   INSTANCE_MAP.set(element, instance)
@@ -150,7 +154,7 @@ function onChange(changes: IntersectionObserverEntry[]) {
     // Firefox can report a negative intersectionRatio when scrolling.
     /* istanbul ignore else */
     if (instance && intersectionRatio >= 0) {
-      const thresholds = instance.observer.thresholds
+      const thresholds = instance.observer.thresholds || instance.thresholds
 
       // If threshold is an array, check if any of them intersects. This just triggers the onChange event multiple times.
       let inView = thresholds.some(threshold => {
@@ -169,6 +173,25 @@ function onChange(changes: IntersectionObserverEntry[]) {
       instance.callback(inView, intersection)
     }
   })
+}
+
+/**
+ * Gets the thresholds for IntersectionObserver. First attempts to get them from the
+ * IntersectionObserver instance and then from the IntersectionObserverInit if undefined.
+ **/
+function getThresholds(
+  instance: IntersectionObserver,
+  options: IntersectionObserverInit,
+) {
+  if (instance.thresholds) {
+    return instance.thresholds
+  } else if (options.threshold) {
+    return Array.isArray(options.threshold)
+      ? options.threshold
+      : [options.threshold]
+  } else {
+    return [0]
+  }
 }
 
 export default {
