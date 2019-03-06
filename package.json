@@ -5,11 +5,12 @@
   "main": "dist/react-intersection-observer.cjs.js",
   "module": "dist/react-intersection-observer.esm.js",
   "unpkg": "dist/react-intersection-observer.umd.min.js",
-  "typings": "lib/index.d.ts",
+  "typings": "dist/index.d.ts",
   "author": "Daniel Schmidt",
   "files": [
     "dist/*",
-    "lib/*"
+    "test-utils.js",
+    "test-utils.d.ts"
   ],
   "repository": {
     "type": "git",
@@ -46,7 +47,7 @@
     "prebuild": "rm -rf dist lib",
     "build": "run-s build:*",
     "build:lib": "rollup -c",
-    "build:ts": "tsc",
+    "build:ts": "tsc && tsc -p tsconfig.test.json",
     "dev": "concurrently -k -r 'jest --watch' 'yarn run storybook'",
     "lint": "eslint . --ext js,ts,tsx",
     "preversion": "yarn build",
@@ -119,6 +120,7 @@
     "@storybook/react": "^5.0.0",
     "@types/jest": "^24.0.9",
     "@types/react": "^16.8.6",
+    "@types/react-dom": "^16.8.2",
     "@types/storybook__addon-actions": "^3.4.1",
     "@types/storybook__react": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^1.4.2",
@@ -154,5 +156,4 @@
     "rollup-plugin-uglify": "^6.0.2",
     "typescript": "^3.2.4"
   }
-
 }

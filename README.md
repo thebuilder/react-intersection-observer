@@ -158,43 +158,41 @@ The **`<InView />`** component also accepts the following props:
 ## Testing
 
 In order to write meaningful tests, the `IntersectionObserver` needs to be
-mocked - to make this easy, a test helper is included in the package. Use this
-to trigger when an element enters or leaves the viewport in your tests.
+mocked. If you are writing your tests in Jest, you can use the included
+`test-utils.js`. It mocks the `IntersectionObserver`, and includes a few methods
+to assist with faking the `inView` state.
 
-### `mockIntersection(element:Element, isIntersection:boolean)`
+### `test-utils.js`
 
-Call the `mockIntersection` method to trigger if an element is `inView` or not.
+Import the methods from `react-intersection-observer/test-utils`.
 
-### `intersectionMockInstance(element:Element): IntersectionObserver`
+**`mockAllIsIntersecting(isIntersecting:boolean)`**  
+Set the `isIntersecting` on all current IntersectionObserver instances.
 
+**`mockIsIntersecting(element:Element, isIntersecting:boolean)`**  
+Set the `isIntersecting` for the IntersectionObserver of a specific element.
+
+**`intersectionMockInstance(element:Element): IntersectionObserver`**  
 Call the `intersectionMockInstance` method with an element, to get the (mocked)
 `IntersectionObserver` instance. You can use this to spy on the `observe` and
 `unobserve` methods.
 
+### Test Example
+
 ```js
 import React from 'react'
-import { act } from 'react-dom/test-utils'
 import { render } from 'react-testing-library'
 import { useInView } from 'react-intersection-observer'
-import {
-  intersectionMockInstance,
-  mockIntersection,
-} from 'react-intersection-observer/lib/test-helper'
+import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils'
 
 const HookComponent = ({ options }) => {
   const [ref, inView] = useInView(options)
-  return (
-    <div data-testid="wrapper" ref={ref}>
-      {inView.toString()}
-    </div>
-  )
+  return <div ref={ref}>{inView.toString()}</div>
 }
 
 test('should create a hook inView', () => {
-  const { getByText, getByTestId } = render(<HookComponent />)
-  act(() => {
-    mockIntersection(getByTestId('wrapper'), true)
-  })
+  const { getByText } = render(<HookComponent />)
+  mockAllIsIntersecting(true)
   getByText('true')
 })
 ```

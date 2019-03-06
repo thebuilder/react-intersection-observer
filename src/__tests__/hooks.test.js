@@ -1,8 +1,7 @@
 import React from 'react'
-import { act } from 'react-dom/test-utils'
 import { render } from 'react-testing-library'
 import { useInView } from '../useInView'
-import { intersectionMockInstance, mockIntersection } from '../test-helper'
+import { intersectionMockInstance, mockAllIsIntersecting } from '../test-utils'
 
 const HookComponent = ({ options }) => {
   const [ref, inView] = useInView(options)
@@ -45,26 +44,18 @@ test('should create a lazy hook', () => {
 })
 
 test('should create a hook inView', () => {
-  const { getByText, getByTestId } = render(<HookComponent />)
-  const wrapper = getByTestId('wrapper')
-  act(() => {
-    mockIntersection(wrapper, true)
-  })
+  const { getByText } = render(<HookComponent />)
+  mockAllIsIntersecting(true)
 
   getByText('true')
 })
 
 test('should respect trigger once', () => {
-  const { getByText, getByTestId } = render(
+  const { getByText } = render(
     <HookComponent options={{ triggerOnce: true }} />,
   )
-  const wrapper = getByTestId('wrapper')
-  act(() => {
-    mockIntersection(wrapper, true)
-  })
-  act(() => {
-    mockIntersection(wrapper, false)
-  })
+  mockAllIsIntersecting(true)
+  mockAllIsIntersecting(false)
 
   getByText('true')
 })
