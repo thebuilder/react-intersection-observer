@@ -96,6 +96,7 @@
     ],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
+      "/src/test-utils-ts",
       "jest-setup.js"
     ]
   },
