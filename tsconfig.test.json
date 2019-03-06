@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "esnext",
-    "target": "es5",
+    "target": "es6",
     "lib": ["es6", "es7", "esnext", "dom"],
     "jsx": "react",
     "moduleResolution": "node",
@@ -14,12 +14,10 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "downlevelIteration": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
     "skipLibCheck": true,
-    "outDir": "dist",
+    "declaration": true,
+    "outDir": ".",
     "listEmittedFiles": true
   },
-  "include": ["src/**/*"],
-  "exclude": ["dist"]
+  "files": ["src/test-utils.ts"]
 }

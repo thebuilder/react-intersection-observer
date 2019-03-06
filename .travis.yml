@@ -6,7 +6,7 @@ script:
   - yarn lint
   - yarn test --coverage
   - yarn tsc
-  - yarn build:storybook
+  - yarn storybook:build
 after_success:
   - yarn coveralls
 deploy:

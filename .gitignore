@@ -16,3 +16,5 @@ npm-debug.log*
 .tern
 .tmp
 *.log
+test-utils.js
+test-utils.d.ts

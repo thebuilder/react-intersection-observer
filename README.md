@@ -155,6 +155,48 @@ The **`<InView />`** component also accepts the following props:
 | **children** | `Function`, `ReactNode`   |         | true     | Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. Alternately pass a plain child, to have the `<Observer />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `entry, giving you more details. |
 | **onChange** | `(inView, entry) => void` |         | false    | Call this function whenever the in view state changes                                                                                                                                                                                                                                                                   |
 
+## Testing
+
+In order to write meaningful tests, the `IntersectionObserver` needs to be
+mocked. If you are writing your tests in Jest, you can use the included
+`test-utils.js`. It mocks the `IntersectionObserver`, and includes a few methods
+to assist with faking the `inView` state.
+
+### `test-utils.js`
+
+Import the methods from `react-intersection-observer/test-utils`.
+
+**`mockAllIsIntersecting(isIntersecting:boolean)`**  
+Set the `isIntersecting` on all current IntersectionObserver instances.
+
+**`mockIsIntersecting(element:Element, isIntersecting:boolean)`**  
+Set the `isIntersecting` for the IntersectionObserver of a specific element.
+
+**`intersectionMockInstance(element:Element): IntersectionObserver`**  
+Call the `intersectionMockInstance` method with an element, to get the (mocked)
+`IntersectionObserver` instance. You can use this to spy on the `observe` and
+`unobserve` methods.
+
+### Test Example
+
+```js
+import React from 'react'
+import { render } from 'react-testing-library'
+import { useInView } from 'react-intersection-observer'
+import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils'
+
+const HookComponent = ({ options }) => {
+  const [ref, inView] = useInView(options)
+  return <div ref={ref}>{inView.toString()}</div>
+}
+
+test('should create a hook inView', () => {
+  const { getByText } = render(<HookComponent />)
+  mockAllIsIntersecting(true)
+  getByText('true')
+})
+```
+
 ## Built using `react-intersection-observer`
 
 ### [Sticks 'n' Sushi](https://sticksnsushi.com/en)

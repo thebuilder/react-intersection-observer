@@ -55,7 +55,7 @@ export function observe(
     "react-intersection-observer: Trying to observe %s, but it's already being observed by another instance.\nMake sure the `ref` is only used by a single <Observer /> instance.\n\n%s",
     element,
   )
-
+  /* istanbul ignore if */
   if (!element) return
   // Create a unique ID for this observer instance, based on the root, root margin and threshold.
   // An observer with the same options can be reused, so lets use this fact
@@ -105,10 +105,13 @@ export function unobserve(element: Element | null) {
     let itemsLeft = false
     // Check if we still have observers configured with the same root.
     let rootObserved = false
+    /* istanbul ignore else  */
     if (observerId) {
       INSTANCE_MAP.forEach((item, key) => {
         if (item && key !== element) {
+          /* istanbul ignore else  */
           if (item.observerId === observerId) itemsLeft = true
+          /* istanbul ignore else  */
           if (item.observer.root === root) rootObserved = true
         }
       })
@@ -145,6 +148,7 @@ function onChange(changes: IntersectionObserverEntry[]) {
     const instance = INSTANCE_MAP.get(target)
 
     // Firefox can report a negative intersectionRatio when scrolling.
+    /* istanbul ignore else */
     if (instance && intersectionRatio >= 0) {
       const thresholds = instance.observer.thresholds
 

@@ -1,18 +1,15 @@
 import React from 'react'
-import { act } from 'react-dom/test-utils'
-import { useInView } from '../useInView'
-import { observe, unobserve } from '../intersection'
 import { render } from 'react-testing-library'
-
-jest.mock('../intersection')
-
-afterEach(() => {
-  observe.mockReset()
-})
+import { useInView } from '../useInView'
+import { intersectionMockInstance, mockAllIsIntersecting } from '../test-utils'
 
 const HookComponent = ({ options }) => {
   const [ref, inView] = useInView(options)
-  return <div ref={ref}>{inView.toString()}</div>
+  return (
+    <div data-testid="wrapper" ref={ref}>
+      {inView.toString()}
+    </div>
+  )
 }
 
 const LazyHookComponent = ({ options }) => {
@@ -23,42 +20,50 @@ const LazyHookComponent = ({ options }) => {
   }, [])
   const [ref, inView] = useInView(options)
   if (isLoading) return <div>Loading</div>
-  return <div ref={ref}>{inView.toString()}</div>
+  return (
+    <div data-testid="wrapper" ref={ref}>
+      {inView.toString()}
+    </div>
+  )
 }
 
 test('should create a hook', () => {
-  render(<HookComponent />)
-  expect(observe).toHaveBeenCalled()
+  const { getByTestId } = render(<HookComponent />)
+  const wrapper = getByTestId('wrapper')
+  const instance = intersectionMockInstance(wrapper)
+
+  expect(instance.observe).toHaveBeenCalledWith(wrapper)
 })
 
 test('should create a lazy hook', () => {
-  render(<LazyHookComponent />)
-  expect(observe).toHaveBeenCalled()
+  const { getByTestId } = render(<LazyHookComponent />)
+  const wrapper = getByTestId('wrapper')
+  const instance = intersectionMockInstance(wrapper)
+
+  expect(instance.observe).toHaveBeenCalledWith(wrapper)
 })
 
 test('should create a hook inView', () => {
-  observe.mockImplementation((el, callback, options) => {
-    if (callback) callback(true, {})
-  })
   const { getByText } = render(<HookComponent />)
-  expect(observe).toHaveBeenCalled()
+  mockAllIsIntersecting(true)
+
   getByText('true')
 })
 
 test('should respect trigger once', () => {
-  observe.mockImplementation((el, callback) => {
-    if (callback) callback(true, {})
-  })
-  render(<HookComponent options={{ triggerOnce: true }} />)
-  expect(observe).toHaveBeenCalled()
+  const { getByText } = render(
+    <HookComponent options={{ triggerOnce: true }} />,
+  )
+  mockAllIsIntersecting(true)
+  mockAllIsIntersecting(false)
 
-  act(() => {
-    expect(unobserve).toHaveBeenCalled()
-  })
+  getByText('true')
 })
 
 test('should unmount the hook', () => {
-  const { unmount } = render(<HookComponent />)
+  const { unmount, getByTestId } = render(<HookComponent />)
+  const wrapper = getByTestId('wrapper')
+  const instance = intersectionMockInstance(wrapper)
   unmount()
-  expect(unobserve).toHaveBeenCalled()
+  expect(instance.unobserve).toHaveBeenCalledWith(wrapper)
 })
