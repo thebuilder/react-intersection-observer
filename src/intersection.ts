@@ -11,6 +11,7 @@ export type ObserverInstance = {
   inView: boolean
   observerId: string
   observer: IntersectionObserver
+  thresholds: number[]
 }
 
 const INSTANCE_MAP: Map<Element, ObserverInstance> = new Map()
@@ -78,6 +79,10 @@ export function observe(
     inView: false,
     observerId,
     observer: observerInstance,
+    // Make sure we have the thresholds value. It's undefined on a browser like Chrome 51.
+    thresholds:
+      observerInstance.thresholds ||
+      (Array.isArray(threshold) ? threshold : [threshold]),
   }
 
   INSTANCE_MAP.set(element, instance)
@@ -150,10 +155,8 @@ function onChange(changes: IntersectionObserverEntry[]) {
     // Firefox can report a negative intersectionRatio when scrolling.
     /* istanbul ignore else */
     if (instance && intersectionRatio >= 0) {
-      const thresholds = instance.observer.thresholds
-
       // If threshold is an array, check if any of them intersects. This just triggers the onChange event multiple times.
-      let inView = thresholds.some(threshold => {
+      let inView = instance.thresholds.some(threshold => {
         return instance.inView
           ? intersectionRatio > threshold
           : intersectionRatio >= threshold
