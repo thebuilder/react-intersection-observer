@@ -1,15 +1,5 @@
 import { observe, unobserve, destroy } from '../intersection'
-
-global.IntersectionObserver = jest.fn((cb, options) => ({
-  thresholds: Array.isArray(options.threshold)
-    ? options.threshold
-    : [options.threshold],
-  root: options.root,
-  rootMargin: options.rootMargin,
-  observe: jest.fn(),
-  unobserve: jest.fn(),
-  disconnect: jest.fn(),
-}))
+import '../test-utils'
 
 afterEach(() => destroy())
 
@@ -22,6 +12,7 @@ it('should observe', () => {
   expect(instance).toMatchObject({
     observerId: '0',
     inView: false,
+    thresholds: [0],
     observer: {
       thresholds: [0],
     },
@@ -41,6 +32,7 @@ it('should observe with options', () => {
   expect(instance).toMatchObject({
     observerId: '0',
     inView: false,
+    thresholds: [0],
     observer: {
       thresholds: [0],
     },
@@ -54,6 +46,7 @@ it('should observe with threshold', () => {
   expect(instance).toMatchObject({
     observerId: '1',
     inView: false,
+    thresholds: [1],
     observer: {
       thresholds: [1],
     },
@@ -67,6 +60,7 @@ it('should observe with Array threshold', () => {
   expect(instance).toMatchObject({
     observerId: '0.3,0.6',
     inView: false,
+    thresholds: [0.3, 0.6],
     observer: {
       thresholds: [0.3, 0.6],
     },

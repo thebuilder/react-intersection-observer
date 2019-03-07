@@ -28,7 +28,7 @@ beforeAll(() => {
 
 afterEach(() => {
   // @ts-ignore
-  global.IntersectionObserver.mockReset()
+  global.IntersectionObserver.mockClear()
   instanceMap.clear()
   observerMap.clear()
 })
