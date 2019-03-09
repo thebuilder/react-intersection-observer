@@ -192,6 +192,8 @@ const HookComponent = ({ options }) => {
 
 test('should create a hook inView', () => {
   const { getByText } = render(<HookComponent />)
+
+  // This causes all (existing) IntersectionObservers to be set as intersecting
   mockAllIsIntersecting(true)
   getByText('true')
 })
