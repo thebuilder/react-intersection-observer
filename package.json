@@ -1,6 +1,6 @@
 {
   "name": "react-intersection-observer",
-  "version": "8.20.2",
+  "version": "8.21.0",
   "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
   "main": "dist/react-intersection-observer.cjs.js",
   "module": "dist/react-intersection-observer.esm.js",
