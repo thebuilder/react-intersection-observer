@@ -16,23 +16,26 @@ export function useInView(options: IntersectionOptions = {}): HookResponse {
 
   React.useEffect(
     () => {
-      if (ref) {
-        observe(
-          ref,
-          (inView, intersection) => {
+      if (!ref) return
+      observe(
+        ref,
+        (inView, intersection) => {
+          // Only trigger a state update if inView has changed.
+          // This prevents an unnecessary extra state update during mount, when the element stats outside the viewport
+          if (inView !== state.inView || inView) {
             setState({ inView, entry: intersection })
 
             if (inView && options.triggerOnce) {
               // If it should only trigger once, unobserve the element after it's inView
               unobserve(ref)
             }
-          },
-          options,
-        )
-      }
+          }
+        },
+        options,
+      )
 
       return () => {
-        if (ref) unobserve(ref)
+        unobserve(ref)
       }
     },
     [

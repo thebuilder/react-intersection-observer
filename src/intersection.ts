@@ -112,16 +112,19 @@ export function unobserve(element: Element | null) {
     let rootObserved = false
     /* istanbul ignore else  */
     if (observerId) {
-      INSTANCE_MAP.forEach((item, key) => {
-        if (item && key !== element) {
-          /* istanbul ignore else  */
-          if (item.observerId === observerId) itemsLeft = true
-          /* istanbul ignore else  */
-          if (item.observer.root === root) rootObserved = true
+      for (let [key, item] of INSTANCE_MAP) {
+        if (key !== element) {
+          if (item.observerId === observerId) {
+            itemsLeft = true
+            rootObserved = true
+            break
+          }
+          if (item.observer.root === root) {
+            rootObserved = true
+          }
         }
-      })
+      }
     }
-
     if (!rootObserved && root) ROOT_IDS.delete(root)
     if (observer && !itemsLeft) {
       // No more elements to observe for threshold, disconnect observer

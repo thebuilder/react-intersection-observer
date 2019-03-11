@@ -93,8 +93,13 @@ export class InView extends React.Component<
   }
 
   handleChange = (inView: boolean, entry: IntersectionObserverEntry) => {
-    this.setState({ inView, entry })
+    // Only trigger a state update if inView has changed.
+    // This prevents an unnecessary extra state update during mount, when the element stats outside the viewport
+    if (inView !== this.state.inView || inView) {
+      this.setState({ inView, entry })
+    }
     if (this.props.onChange) {
+      // If the user is actively listening for onChange, always trigger it
       this.props.onChange(inView, entry)
     }
   }
