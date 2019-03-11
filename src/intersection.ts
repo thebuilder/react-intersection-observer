@@ -121,7 +121,6 @@ export function unobserve(element: Element | null) {
           }
           if (item.observer.root === root) {
             rootObserved = true
-            break
           }
         }
       }

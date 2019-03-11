@@ -78,6 +78,17 @@ it('should observe with unique rootId', () => {
     observer: expect.any(Object),
   })
 })
+it('should observe with rootMargin', () => {
+  const cb = jest.fn()
+  const root = document.createElement('div')
+  const instance = observe(el, cb, { root, rootMargin: '0px 0px 0px 0px' })
+
+  expect(instance).toMatchObject({
+    inView: false,
+    observerId: '1_0_0px 0px 0px 0px',
+    observer: expect.any(Object),
+  })
+})
 
 it('should unobserve', () => {
   observe(el, jest.fn())
@@ -92,6 +103,18 @@ it('should keep observer when unobserve with multiple elements', () => {
   observe(el, jest.fn())
   observe({ el: 'htmlElement2' }, jest.fn())
   unobserve(el)
+})
+
+it('should remove unused roots', () => {
+  const el2 = { el: 'htmlElement2' }
+  const el3 = { el: 'htmlElement3' }
+  const root = document.createElement('div')
+  observe(el, jest.fn(), { root, threshold: 0 })
+  observe(el2, jest.fn(), { root, threshold: 0.2 })
+  observe(el3, jest.fn(), { threshold: 0.4 })
+  unobserve(el)
+  unobserve(el2)
+  unobserve(el3)
 })
 
 it('should trigger onChange with ratio 0', () => {
@@ -259,4 +282,32 @@ it('should trigger clear visible when going back to 0 with array threshold', () 
   ])
 
   expect(instance.inView).toBe(false)
+})
+
+it('should use threshold if not included in IntersectionObserver instance', () => {
+  const cb = jest.fn()
+  IntersectionObserver.mockImplementationOnce(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+  }))
+
+  const instance = observe(el, cb, { threshold: 0 })
+  expect(instance).toMatchObject({
+    thresholds: [0],
+  })
+})
+
+it('should use array threshold if not included in IntersectionObserver instance', () => {
+  const cb = jest.fn()
+  IntersectionObserver.mockImplementationOnce(() => ({
+    observe: jest.fn(),
+    unobserve: jest.fn(),
+    disconnect: jest.fn(),
+  }))
+
+  const instance = observe(el, cb, { threshold: [0] })
+  expect(instance).toMatchObject({
+    thresholds: [0],
+  })
 })
