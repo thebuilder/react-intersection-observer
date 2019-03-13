@@ -50,6 +50,13 @@ test('should create a hook inView', () => {
   getByText('true')
 })
 
+test('should trigger a hook leaving view', () => {
+  const { getByText } = render(<HookComponent />)
+  mockAllIsIntersecting(true)
+  mockAllIsIntersecting(false)
+  getByText('false')
+})
+
 test('should respect trigger once', () => {
   const { getByText } = render(
     <HookComponent options={{ triggerOnce: true }} />,

@@ -55,10 +55,9 @@ export function mockIsIntersecting(element: Element, isIntersecting: boolean) {
       {
         isIntersecting,
         target: element,
-        intersectionRatio: isIntersecting ? 1 : -1,
+        intersectionRatio: isIntersecting ? 1 : 0,
       },
     ]
-
     if (act) act(() => cb(entry))
     else cb(entry)
   } else {

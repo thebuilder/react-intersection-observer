@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react'
 import { observe, unobserve } from './intersection'
 import { HookResponse, IntersectionOptions } from './typings/types'
