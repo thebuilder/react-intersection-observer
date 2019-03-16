@@ -157,7 +157,7 @@
     "rollup-plugin-commonjs": "^9.2.1",
     "rollup-plugin-node-resolve": "^4.0.1",
     "rollup-plugin-replace": "^2.1.0",
-    "rollup-plugin-uglify": "^6.0.2",
+    "rollup-plugin-terser": "^4.0.4",
     "typescript": "^3.2.4"
   }
 }
