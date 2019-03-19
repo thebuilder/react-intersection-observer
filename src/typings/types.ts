@@ -1,5 +1,7 @@
 import * as React from 'react'
 
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
+
 type RenderProps = {
   inView: boolean
   entry: IntersectionObserverEntry | undefined
@@ -33,17 +35,17 @@ export type PlainChildrenProps = IntersectionOptions & {
    * Render the wrapping element as this element.
    * @default `'div'`
    */
-  as?: React.ReactType<any>
+  as?: React.ElementType<any>
 
   /**
    * Element tag to use for the wrapping component
    * @deprecated Replace with the 'as' prop
    */
-  tag?: React.ReactType<any>
+  tag?: React.ElementType<any>
 
   /** Call this function whenever the in view state changes */
   onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void
-} & React.HTMLProps<HTMLDivElement>
+} & Omit<React.HTMLProps<HTMLElement>, 'onChange'>
 
 export type HookResponse = [
   ((node?: Element | null) => void),

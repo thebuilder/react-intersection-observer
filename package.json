@@ -48,7 +48,7 @@
     "prebuild": "rm -rf dist lib",
     "build": "run-s build:*",
     "build:lib": "rollup -c",
-    "build:ts": "tsc && tsc -p tsconfig.test.json",
+    "build:ts": "tsc -p tsconfig.build.json && tsc -p tsconfig.test.json",
     "dev": "concurrently -k -r 'jest --watch' 'yarn run storybook'",
     "lint": "eslint . --ext js,ts,tsx",
     "preversion": "yarn build",
