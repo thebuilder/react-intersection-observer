@@ -14,12 +14,9 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "downlevelIteration": true,
-    "declaration": true,
-    "emitDeclarationOnly": true,
     "skipLibCheck": true,
-    "outDir": "dist",
-    "listEmittedFiles": true
+    "listEmittedFiles": true,
+    "noEmit": true
   },
-  "include": ["src/**/*"],
   "exclude": ["dist"]
 }
