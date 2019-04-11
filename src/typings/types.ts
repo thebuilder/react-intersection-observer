@@ -2,18 +2,18 @@ import * as React from 'react'
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
-type RenderProps = {
+interface RenderProps {
   inView: boolean
   entry: IntersectionObserverEntry | undefined
   ref: React.RefObject<any> | ((node?: Element | null) => void)
 }
 
-export type IntersectionOptions = IntersectionObserverInit & {
+export interface IntersectionOptions extends IntersectionObserverInit {
   /** Only trigger the inView callback once */
   triggerOnce?: boolean
 }
 
-export type IntersectionObserverProps = IntersectionOptions & {
+export interface IntersectionObserverProps extends IntersectionOptions {
   /**
    * Children expects a function that receives an object
    * contain an `inView` boolean and `ref` that should be
@@ -35,13 +35,13 @@ export type PlainChildrenProps = IntersectionOptions & {
    * Render the wrapping element as this element.
    * @default `'div'`
    */
-  as?: React.ElementType<any>
+  as?: React.ReactType<any>
 
   /**
    * Element tag to use for the wrapping component
    * @deprecated Replace with the 'as' prop
    */
-  tag?: React.ElementType<any>
+  tag?: React.ReactType<any>
 
   /** Call this function whenever the in view state changes */
   onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void
