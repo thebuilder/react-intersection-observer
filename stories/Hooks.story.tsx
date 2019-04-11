@@ -5,6 +5,8 @@ import { useInView } from '../src/index'
 import ScrollWrapper from './ScrollWrapper/index'
 import { CSSProperties } from 'react'
 import { IntersectionOptions } from '../src/typings/types'
+import { withKnobs, number, boolean } from '@storybook/addon-knobs'
+import Status from './Status'
 
 type Props = {
   style?: Object
@@ -23,8 +25,27 @@ const sharedStyle: CSSProperties = {
   color: 'azure',
 }
 
+function getOptions(
+  options: IntersectionOptions = { threshold: 0, triggerOnce: false },
+) {
+  const { threshold, triggerOnce } = options
+  return {
+    ...options,
+    threshold:
+      options && Array.isArray(threshold)
+        ? threshold
+        : number('Threshold', (threshold as number) || 0, {
+            range: true,
+            min: 0,
+            max: 1,
+            step: 0.1,
+          }),
+    triggerOnce: boolean('Trigger once', triggerOnce || false),
+  }
+}
+
 const LazyHookComponent = ({ options, style, children, ...rest }: Props) => {
-  const [ref, inView, entry] = useInView(options)
+  const [ref, inView, entry] = useInView(getOptions(options))
   const [isLoading, setIsLoading] = React.useState(true)
   action('Inview')(inView, entry)
 
@@ -38,6 +59,7 @@ const LazyHookComponent = ({ options, style, children, ...rest }: Props) => {
 
   return (
     <div ref={ref} style={{ ...sharedStyle, ...style }} {...rest}>
+      <Status inView={inView} />
       <h2>
         {children || 'Header is inside the viewport'}: {inView.toString()}
       </h2>
@@ -45,11 +67,12 @@ const LazyHookComponent = ({ options, style, children, ...rest }: Props) => {
   )
 }
 const HookComponent = ({ options, style, children, ...rest }: Props) => {
-  const [ref, inView, entry] = useInView(options)
+  const [ref, inView, entry] = useInView(getOptions(options))
   action('Inview')(inView, entry)
 
   return (
     <div ref={ref} style={{ ...sharedStyle, ...style }} {...rest}>
+      <Status inView={inView} />
       <h2>
         {children || 'Header is inside the viewport'}: {inView.toString()}
       </h2>
@@ -58,6 +81,8 @@ const HookComponent = ({ options, style, children, ...rest }: Props) => {
 }
 
 storiesOf('useInView hook', module)
+  .addDecorator(withKnobs)
+
   .add('Basic', () => (
     <ScrollWrapper>
       <HookComponent />
