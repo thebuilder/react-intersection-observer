@@ -212,7 +212,10 @@ controlling the animations.
 
 [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
 is the API is used to determine if an element is inside the viewport or not.
-[Browser support is pretty good](http://caniuse.com/#feat=intersectionobserver) - With [Safari adding support in 12.1](https://webkit.org/blog/8718/new-webkit-features-in-safari-12-1/), all major browsers now support Intersection Observers nativly. 
+[Browser support is pretty good](http://caniuse.com/#feat=intersectionobserver) -
+With
+[Safari adding support in 12.1](https://webkit.org/blog/8718/new-webkit-features-in-safari-12-1/),
+all major browsers now support Intersection Observers nativly.
 
 ### Polyfill
 
