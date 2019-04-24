@@ -128,7 +128,7 @@
     "@types/react": "^16.8.6",
     "@types/react-dom": "^16.8.2",
     "@types/storybook__addon-actions": "^3.4.1",
-    "@types/storybook__addon-knobs": "^4.0.5",
+    "@types/storybook__addon-knobs": "^5.0.0",
     "@types/storybook__react": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^1.4.2",
     "@typescript-eslint/parser": "^1.4.2",
