@@ -4,8 +4,8 @@
     "module": "commonjs",
     "target": "es6",
     "declaration": true,
-    "emitDeclarationOnly": true,
-    "outDir": ".",
+    "emitDeclarationOnly": false,
+    "outDir": "dist",
     "noEmit": false
   },
   "files": ["src/test-utils.ts"]

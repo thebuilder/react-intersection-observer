@@ -1,7 +1,7 @@
 import * as React from 'react'
 import invariant from 'invariant'
 import { observe, unobserve } from './intersection'
-import { IntersectionObserverProps, PlainChildrenProps } from './typings/types'
+import { IntersectionObserverProps, PlainChildrenProps } from './index'
 
 type State = {
   inView: boolean
