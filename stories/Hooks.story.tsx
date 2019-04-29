@@ -1,10 +1,9 @@
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { useInView } from '../src/index'
+import { IntersectionOptions, useInView } from '../src/index'
 import ScrollWrapper from './ScrollWrapper/index'
 import { CSSProperties } from 'react'
-import { IntersectionOptions } from '../src/typings/types'
 import { withKnobs, number, boolean } from '@storybook/addon-knobs'
 import Status from './Status'
 

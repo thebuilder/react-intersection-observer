@@ -2,16 +2,12 @@
   "name": "react-intersection-observer",
   "version": "8.22.6",
   "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
-  "main": "dist/react-intersection-observer.cjs.js",
-  "module": "dist/react-intersection-observer.esm.js",
-  "unpkg": "dist/react-intersection-observer.umd.min.js",
-  "typings": "dist/index.d.ts",
+  "main": "react-intersection-observer.cjs.js",
+  "module": "react-intersection-observer.esm.js",
+  "unpkg": "react-intersection-observer.umd.min.js",
+  "typings": "index.d.ts",
   "author": "Daniel Schmidt",
-  "files": [
-    "dist/*",
-    "test-utils.js",
-    "test-utils.d.ts"
-  ],
+  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/thebuilder/react-intersection-observer.git"
@@ -49,6 +45,7 @@
     "build": "run-s build:*",
     "build:lib": "rollup -c",
     "build:ts": "tsc -p tsconfig.build.json && tsc -p tsconfig.test.json",
+    "build:copy": "copyfiles -f package.json README.md LICENSE dist && json -I -f dist/package.json -e \"this.private=false; this.devDependencies=undefined; this.optionalDependencies=undefined; this.scripts=undefined; this.husky=undefined; this.prettier=undefined; this.jest=undefined; this.eslintConfig=undefined; this.eslintIgnore=undefined; this.np=undefined;\"",
     "dev": "concurrently -k -r 'jest --watch' 'yarn run storybook'",
     "lint": "eslint . --ext js,ts,tsx",
     "preversion": "yarn build",
@@ -56,6 +53,9 @@
     "storybook": "start-storybook -p 9000",
     "storybook:build": "build-storybook --output-dir example",
     "test": "jest"
+  },
+  "np": {
+    "contents": "dist"
   },
   "husky": {
     "hooks": {
@@ -106,7 +106,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
-    "invariant": "^2.0.0"
+    "invariant": "^2.2.4"
   },
   "peerDependencies": {
     "react": "^15.0.0 || ^16.0.0 || ^17.0.0"
@@ -136,6 +136,7 @@
     "babel-jest": "^24.5.0",
     "babel-loader": "^8.0.5",
     "concurrently": "^4.1.0",
+    "copyfiles": "^2.1.0",
     "coveralls": "^3.0.3",
     "eslint": "^5.15.2",
     "eslint-config-react-app": "^4.0.0",
@@ -148,6 +149,7 @@
     "intersection-observer": "^0.6.0",
     "jest": "^24.5.0",
     "jest-dom": "^3.1.3",
+    "json": "^9.0.6",
     "lint-staged": "^8.1.5",
     "npm-run-all": "^4.1.5",
     "prettier": "^1.16.2",
