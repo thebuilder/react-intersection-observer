@@ -1,18 +1,5 @@
 import invariant from 'invariant'
-
-type Callback = (
-  inView: boolean,
-  intersection: IntersectionObserverEntry,
-) => void
-
-export type ObserverInstance = {
-  callback: Callback
-  element: Element
-  inView: boolean
-  observerId: string
-  observer: IntersectionObserver
-  thresholds: number[]
-}
+import { ObserverInstance, ObserverInstanceCallback } from './index'
 
 const INSTANCE_MAP: Map<Element, ObserverInstance> = new Map()
 const OBSERVER_MAP: Map<string, IntersectionObserver> = new Map()
@@ -43,7 +30,7 @@ function getRootId(root?: Element | null) {
  */
 export function observe(
   element: Element,
-  callback: Callback,
+  callback: ObserverInstanceCallback,
   options: IntersectionObserverInit = {},
 ) {
   // IntersectionObserver needs a threshold to trigger, so set it to 0 if it's not defined.

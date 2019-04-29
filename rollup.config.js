@@ -26,7 +26,7 @@ const getBabelOptions = ({ useESModules }) => ({
 export default [
   {
     input: './src/index.tsx',
-    output: { file: pkg.module, format: 'esm', exports: 'named' },
+    output: { file: 'dist/' + pkg.module, format: 'esm', exports: 'named' },
     external,
     plugins: [
       resolve({ extensions }),
@@ -35,7 +35,7 @@ export default [
   },
   {
     input: './src/index.tsx',
-    output: { file: pkg.main, format: 'cjs', exports: 'named' },
+    output: { file: 'dist/' + pkg.main, format: 'cjs', exports: 'named' },
     external,
     plugins: [
       resolve({ extensions }),
@@ -45,7 +45,7 @@ export default [
   {
     input: './src/index.tsx',
     output: {
-      file: pkg.unpkg,
+      file: 'dist/' + pkg.unpkg,
       format: 'umd',
       name: 'ReactIntersectionObserver',
       globals,
