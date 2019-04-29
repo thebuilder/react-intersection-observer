@@ -55,6 +55,7 @@
     "test": "jest"
   },
   "np": {
+    "yarn": false,
     "contents": "dist"
   },
   "husky": {
