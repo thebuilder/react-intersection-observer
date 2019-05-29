@@ -1,7 +1,7 @@
 # Recipes
 
-The IntersectionObserver itself is just a simple but powerful tool. Here's a few
-ideas for how you can use it.
+The `IntersectionObserver` itself is just a simple but powerful tool. Here's a
+few ideas for how you can use it.
 
 ## Lazy image load
 
@@ -26,12 +26,11 @@ build it according to your needs.
   viewport.
 
 ```jsx
-import React, { useRef } from 'react'
+import React from 'react'
 import { useInView } from 'react-intersection-observer'
 
 const LazyImage = ({ width, height, src, ...rest }) => {
-  const ref = useRef(null)
-  const inView = useInView(ref, {
+  const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 1,
   })
@@ -68,13 +67,12 @@ for an IntersectionObserver.
 - Use `threshold` to control when the animations triggers.
 
 ```jsx
-import React, { useRef } from 'react'
+import React from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useSpring, animated } from 'react-spring'
 
 const LazyAnimation = () => {
-  const ref = useRef()
-  const inView = useInView(ref, {
+  const [ref, inView] = useInView(ref, {
     threshold: 0.5,
   })
   const props = useSpring({ opacity: inView ? 1 : 0 })
@@ -83,6 +81,38 @@ const LazyAnimation = () => {
     <animated.div ref={ref} style={props}>
       <span aria-label="Wave">👋</span>
     <animated./div>
+  )
+}
+
+export default LazyAnimation
+```
+
+## Track impressions
+
+You can use `IntersectionObserver` to track when a user views your element, and
+fire an event on your tracking service.
+
+- Set `triggerOnce`, to only trigger the animation the first time.
+- Set `threshold`, to control how much of the element should visible before
+  firing the event.
+
+```jsx
+import React, { useEffect } from 'react'
+import { useInView } from 'react-intersection-observer'
+
+const TrackImpression = () => {
+  const [ref, inView] = useInView({triggerOnce: true, threshold: 0.2})
+  useEffect(() => {
+    if (inView) {
+      // Fire a tracking event to your tracking service of choice.
+      dataLayer.push('Section shown') // Here's a GTM dataLayer push
+    }
+  }, [inView])
+
+  return (
+    <div ref={ref}>
+      Exemplars sunt zeluss de bassus fuga. Credere velox ducunt ad audax amor.
+    <div>
   )
 }
 

@@ -71,7 +71,7 @@ import React, { useRef } from 'react'
 import { useInView } from 'react-intersection-observer'
 
 const Component = () => {
-  const [ref, inView] = useInView({
+  const [ref, inView, entry] = useInView({
     /* Optional options */
     threshold: 0,
   })
@@ -92,12 +92,16 @@ whenever the state changes, with the new value of `inView`. In addition to the
 containing DOM element. This is the element that the IntersectionObserver will
 monitor.
 
+If you need it, you will also receive the current
+[`IntersectionObserverEntry`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry).,
+giving you access to all the details about the current intersection state.
+
 ```jsx
 import { InView } from 'react-intersection-observer'
 
 const Component = () => (
   <InView>
-    {({ inView, ref }) => (
+    {({ inView, ref, entry }) => (
       <div ref={ref}>
         <h2>{`Header inside viewport ${inView}.`}</h2>
       </div>
@@ -112,14 +116,14 @@ export default Component
 
 You can pass any element to the `<InView />`, and it will handle creating the
 wrapping DOM element. Add a handler to the `onChange` method, and control the
-state in your own component. It will pass any extra props to the HTML element,
-allowing you set the `className`, `style`, etc.
+state in your own component. Any extra props you add the `<InView>` will be
+passed to the HTML element, allowing you set the `className`, `style`, etc.
 
 ```jsx
 import { InView } from 'react-intersection-observer'
 
 const Component = () => (
-  <InView as="div" onChange={inView => console.log('Inview:', inView)}>
+  <InView as="div" onChange={(inView, entry) => console.log('Inview:', inView)}>
     <h2>Plain children are always rendered. Use onChange to monitor state.</h2>
   </InView>
 )
@@ -129,7 +133,8 @@ export default Component
 
 > ⚠️ When rendering a plain child, make sure you keep your HTML output semantic.
 > Change the `as` to match the context, and add a `className` to style the
-> `<InView />`.
+> `<InView />`. The component does not support Ref Forwarding, so if you need a
+> `ref` to the HTML element, use the Render Props version instead.
 
 ## API
 
@@ -149,11 +154,21 @@ argument for the hooks.
 
 The **`<InView />`** component also accepts the following props:
 
-| Name         | Type                      | Default | Required | Description                                                                                                                                                                                                                                                                                                             |
-| ------------ | ------------------------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **as**       | `string`                  | 'div'   | false    | Render the wrapping element as this element. Defaults to `div`.                                                                                                                                                                                                                                                         |
-| **children** | `Function`, `ReactNode`   |         | true     | Children expects a function that receives an object contain an `inView` boolean and `ref` that should be assigned to the element root. Alternately pass a plain child, to have the `<Observer />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `entry, giving you more details. |
-| **onChange** | `(inView, entry) => void` |         | false    | Call this function whenever the in view state changes                                                                                                                                                                                                                                                                   |
+| Name         | Type                                                     | Default | Required | Description                                                                                                                                                                                                                                                                                                                   |
+| ------------ | -------------------------------------------------------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **as**       | `string`                                                 | 'div'   | false    | Render the wrapping element as this element. Defaults to `div`.                                                                                                                                                                                                                                                               |
+| **children** | `({ref, inView, entry}) => React.ReactNode`, `ReactNode` |         | true     | Children expects a function that receives an object containing the `inView` boolean and a `ref` that should be assigned to the element root. Alternatively pass a plain child, to have the `<InView />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `entry, giving you more details. |
+| **onChange** | `(inView, entry) => void`                                |         | false    | Call this function whenever the in view state changes. It will receive the `inView` boolean, alongside the current `IntersectionObserverEntry`.                                                                                                                                                                               |
+
+## Recipes
+
+The `IntersectionObserver` itself is just a simple but powerful tool. Here's a
+few ideas for how you can use it.
+
+- [Lazy image load](docs/Recipes.md#lazy-image-load)
+- [Trigger animations](docs/Recipes.md#trigger-animations)
+- [Track impressions](docs/Recipes.md#track-impressions) _(Google Analytics, Tag
+  Manager, etc)_
 
 ## Testing
 
@@ -215,7 +230,7 @@ is the API is used to determine if an element is inside the viewport or not.
 [Browser support is pretty good](http://caniuse.com/#feat=intersectionobserver) -
 With
 [Safari adding support in 12.1](https://webkit.org/blog/8718/new-webkit-features-in-safari-12-1/),
-all major browsers now support Intersection Observers nativly.
+all major browsers now support Intersection Observers natively.
 
 ### Polyfill
 
