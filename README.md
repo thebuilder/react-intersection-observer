@@ -86,15 +86,16 @@ const Component = () => {
 
 ### Render props
 
-To use the `<InView>` component , you pass it a function. It will be called
+To use the `<InView>` component, you pass it a function. It will be called
 whenever the state changes, with the new value of `inView`. In addition to the
 `inView` prop, children also receives a `ref` that should be set on the
 containing DOM element. This is the element that the IntersectionObserver will
 monitor.
 
-If you need it, you will also receive the current
-[`IntersectionObserverEntry`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry).,
-giving you access to all the details about the current intersection state.
+If you need it, you can also access the
+[`IntersectionObserverEntry`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry)
+on `entry`, giving you access to all the details about the current intersection
+state.
 
 ```jsx
 import { InView } from 'react-intersection-observer'
