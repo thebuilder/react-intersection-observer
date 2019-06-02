@@ -92,7 +92,7 @@ export default LazyAnimation
 You can use `IntersectionObserver` to track when a user views your element, and
 fire an event on your tracking service.
 
-- Set `triggerOnce`, to only trigger the animation the first time.
+- Set `triggerOnce`, to only trigger an event the first time the element enters the viewport.
 - Set `threshold`, to control how much of the element should visible before
   firing the event.
 
