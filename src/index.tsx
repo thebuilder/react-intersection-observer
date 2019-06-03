@@ -13,12 +13,12 @@ export type ObserverInstanceCallback = (
 ) => void
 
 export type ObserverInstance = {
-  callback: ObserverInstanceCallback
-  element: Element
   inView: boolean
-  observerId: string
-  observer: IntersectionObserver
-  thresholds: number[]
+  readonly callback: ObserverInstanceCallback
+  readonly element: Element
+  readonly observerId: string
+  readonly observer: IntersectionObserver
+  readonly thresholds: ReadonlyArray<number>
 }
 
 interface RenderProps {
