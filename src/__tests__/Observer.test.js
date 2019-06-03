@@ -1,6 +1,6 @@
 /* eslint-disable import/no-named-as-default-member */
 import React from 'react'
-import { render } from 'react-testing-library'
+import { render } from '@testing-library/react'
 import { observe, unobserve } from '../intersection'
 import Observer from '../'
 import invariant from 'invariant'
