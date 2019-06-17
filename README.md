@@ -117,7 +117,7 @@ export default Component
 
 You can pass any element to the `<InView />`, and it will handle creating the
 wrapping DOM element. Add a handler to the `onChange` method, and control the
-state in your own component. Any extra props you add the `<InView>` will be
+state in your own component. Any extra props you add to `<InView>` will be
 passed to the HTML element, allowing you set the `className`, `style`, etc.
 
 ```jsx
