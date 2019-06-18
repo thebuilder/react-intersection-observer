@@ -80,7 +80,7 @@ const LazyAnimation = () => {
   return (
     <animated.div ref={ref} style={props}>
       <span aria-label="Wave">👋</span>
-    <animated./div>
+    </animated.div>
   )
 }
 
@@ -112,7 +112,7 @@ const TrackImpression = () => {
   return (
     <div ref={ref}>
       Exemplars sunt zeluss de bassus fuga. Credere velox ducunt ad audax amor.
-    <div>
+    </div>
   )
 }
 
