@@ -99,6 +99,7 @@
       "@testing-library/react/cleanup-after-each",
       "jest-dom/extend-expect"
     ],
+    "modulePathIgnorePatterns": ["/dist/"],
     "coveragePathIgnorePatterns": [
       "/node_modules/",
       "/src/test-utils.ts",
@@ -140,7 +141,7 @@
     "babel-loader": "^8.0.5",
     "concurrently": "^4.1.0",
     "coveralls": "^3.0.3",
-    "eslint": "^6.0.0",
+    "eslint": "^5.16.0",
     "eslint-config-react-app": "^4.0.0",
     "eslint-plugin-flowtype": "^3.2.1",
     "eslint-plugin-import": "2.18.0",
