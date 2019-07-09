@@ -151,6 +151,17 @@ argument for the hooks.
 | **threshold**   | number \| number[] | 0       | false    | Number between 0 and 1 indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. |
 | **triggerOnce** | boolean            | false   | false    | Only trigger this method once                                                                                                                                  |
 
+> ⚠️ When passing an array to `threshold`, store the array in a constant to avoid
+> the component re-rendering too often. For example:
+
+```js
+const THRESHOLD = [0.25, 0.5, 0.75]; // Store multiple thresholds in a constant
+const MyComponent = () => {
+  const [ref, inView, entry] = useInView({threshold: THRESHOLD});
+  return <div ref={ref}>Triggered at intersection ratio {entry.intersectionRatio}</div>;
+}
+```
+
 ### InView Props
 
 The **`<InView />`** component also accepts the following props:
