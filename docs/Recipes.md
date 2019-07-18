@@ -32,7 +32,7 @@ import { useInView } from 'react-intersection-observer'
 const LazyImage = ({ width, height, src, ...rest }) => {
   const [ref, inView] = useInView({
     triggerOnce: true,
-    threshold: 0,
+    rootMargin: 200px 0px,
   })
 
   return (
@@ -95,6 +95,7 @@ fire an event on your tracking service.
 - Set `triggerOnce`, to only trigger an event the first time the element enters the viewport.
 - Set `threshold`, to control how much of the element should visible before
   firing the event.
+- Instead of `threshold`, you can use `rootMargin` to have a fixed amount be visible before triggering. Use a negative margin value,  like `-100px 0`, to have it go inwards. You can also use a percentage value, instead of pixels. 
 
 ```jsx
 import React, { useEffect } from 'react'
