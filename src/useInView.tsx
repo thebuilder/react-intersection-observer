@@ -3,19 +3,12 @@ import * as React from 'react'
 import { observe, unobserve } from './intersection'
 import { InViewHookResponse, IntersectionOptions } from './index'
 
-type State = {
-  inView: boolean
-  entry?: IntersectionObserverEntry
-}
-
 export function useInView(
   options: IntersectionOptions = {},
 ): InViewHookResponse {
   const ref = React.useRef<Element>()
-  const [state, setState] = React.useState<State>({
-    inView: false,
-    entry: undefined,
-  })
+  const entryRef = React.useRef<IntersectionObserverEntry>()
+  const [inView, setInView] = React.useState<boolean>(false)
 
   const setRef = React.useCallback(
     node => {
@@ -26,7 +19,8 @@ export function useInView(
         observe(
           node,
           (inView, intersection) => {
-            setState({ inView, entry: intersection })
+            setInView(inView)
+            entryRef.current = intersection
 
             if (inView && options.triggerOnce) {
               // If it should only trigger once, unobserve the element after it's inView
@@ -43,7 +37,7 @@ export function useInView(
     [options.threshold, options.root, options.rootMargin, options.triggerOnce],
   )
 
-  React.useDebugValue(state.inView)
+  React.useDebugValue(inView)
 
-  return [setRef, state.inView, state.entry]
+  return [setRef, inView, entryRef.current]
 }
