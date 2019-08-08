@@ -25,29 +25,44 @@ build it according to your needs.
 - Either hide the `<img />` with CSS, or skip rendering it until it's inside the
   viewport.
 
+> 🔥 The example has been expanded to include support for the new native
+> `loading` attribute on images. If it's supported, we can skip the `useInView`
+> hook and render the `<img>`.
+>
+> See https://web.dev/native-lazy-loading for details about using the `loading`
+> attribute.
+>
+> [@charlietango/use-native-lazy-loading](https://www.npmjs.com/package/@charlietango/use-native-lazy-loading)
+> is a small hook that detects support for `loading` as a side effect.
+
 ```jsx
 import React from 'react'
+import useNativeLazyLoading from '@charlietango/use-native-lazy-loading'
 import { useInView } from 'react-intersection-observer'
 
 const LazyImage = ({ width, height, src, ...rest }) => {
+  const supportsNativeLoading = useNativeLazyLoading()
   const [ref, inView] = useInView({
     triggerOnce: true,
-    threshold: 0,
+    margin: '200px 0px',
   })
 
   return (
     <div
-      ref={ref}
+      ref={supportsLazyLoading === false ? ref : undefined}
       style={{
         position: 'relative',
         paddingBottom: `${(height / width) * 100}%`,
         background: '#2a4b7a',
       }}
     >
-      {inView ? (
+      {inView || supportsNativeLoading ? (
         <img
           {...rest}
           src={src}
+          width={width}
+          height={height}
+          loading="lazy"
           style={{ position: 'absolute', width: '100%', height: '100%' }}
         />
       ) : null}
@@ -64,7 +79,8 @@ Triggering animations once they enter the viewport is also a perfect use case
 for an IntersectionObserver.
 
 - Set `triggerOnce`, to only trigger the animation the first time.
-- Use `threshold` to control when the animations triggers.
+- Use `margin` to offset the trigger points. It ensures that a fixed fixed
+  amount is visible, regardless of the element size.
 
 ```jsx
 import React from 'react'
@@ -73,7 +89,7 @@ import { useSpring, animated } from 'react-spring'
 
 const LazyAnimation = () => {
   const [ref, inView] = useInView(ref, {
-    threshold: 0.5,
+    margin: '-100px 0',
   })
   const props = useSpring({ opacity: inView ? 1 : 0 })
 
@@ -92,16 +108,17 @@ export default LazyAnimation
 You can use `IntersectionObserver` to track when a user views your element, and
 fire an event on your tracking service.
 
-- Set `triggerOnce`, to only trigger an event the first time the element enters the viewport.
-- Set `threshold`, to control how much of the element should visible before
-  firing the event.
+- Set `triggerOnce`, to only trigger an event the first time the element enters
+  the viewport.
+- Use `margin` to offset the trigger points. It ensures that a fixed fixed
+  amount is visible, regardless of the element size.
 
 ```jsx
 import React, { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
 
 const TrackImpression = () => {
-  const [ref, inView] = useInView({triggerOnce: true, threshold: 0.2})
+  const [ref, inView] = useInView({ triggerOnce: true, margin: '-100px 0' })
   useEffect(() => {
     if (inView) {
       // Fire a tracking event to your tracking service of choice.

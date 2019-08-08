@@ -119,3 +119,13 @@ storiesOf('useInView hook', module)
       </HookComponent>
     </ScrollWrapper>
   ))
+  .add('Multiple thresholds', () => (
+    <ScrollWrapper>
+      <HookComponent
+        options={{ threshold: [0, 0.2, 0.4, 0.6, 0.8, 1] }}
+        style={{ height: '150vh' }}
+      >
+        Header is fully inside the viewport
+      </HookComponent>
+    </ScrollWrapper>
+  ))
