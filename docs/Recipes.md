@@ -79,8 +79,11 @@ Triggering animations once they enter the viewport is also a perfect use case
 for an IntersectionObserver.
 
 - Set `triggerOnce`, to only trigger the animation the first time.
-- Use `margin` to offset the trigger points. It ensures that a fixed fixed
-  amount is visible, regardless of the element size.
+- Set `threshold`, to control how much of the element should visible before
+  firing the event.
+- Instead of `threshold`, you can use `rootMargin` to have a fixed amount be
+  visible before triggering. Use a negative margin value, like `-100px 0`, to
+  have it go inwards. You can also use a percentage value, instead of pixels.
 
 ```jsx
 import React from 'react'
@@ -89,7 +92,7 @@ import { useSpring, animated } from 'react-spring'
 
 const LazyAnimation = () => {
   const [ref, inView] = useInView(ref, {
-    margin: '-100px 0',
+    rootMargin: '-100px 0',
   })
   const props = useSpring({ opacity: inView ? 1 : 0 })
 
@@ -110,15 +113,18 @@ fire an event on your tracking service.
 
 - Set `triggerOnce`, to only trigger an event the first time the element enters
   the viewport.
-- Use `margin` to offset the trigger points. It ensures that a fixed fixed
-  amount is visible, regardless of the element size.
+- Set `threshold`, to control how much of the element should visible before
+  firing the event.
+- Instead of `threshold`, you can use `rootMargin` to have a fixed amount be
+  visible before triggering. Use a negative margin value, like `-100px 0`, to
+  have it go inwards. You can also use a percentage value, instead of pixels.
 
 ```jsx
 import React, { useEffect } from 'react'
 import { useInView } from 'react-intersection-observer'
 
 const TrackImpression = () => {
-  const [ref, inView] = useInView({ triggerOnce: true, margin: '-100px 0' })
+  const [ref, inView] = useInView({ triggerOnce: true, rootMargin: '-100px 0' })
   useEffect(() => {
     if (inView) {
       // Fire a tracking event to your tracking service of choice.
