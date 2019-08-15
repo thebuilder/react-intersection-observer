@@ -226,15 +226,6 @@ test('should create a hook inView', () => {
 })
 ```
 
-## Built using `react-intersection-observer`
-
-### [Sticks 'n' Sushi](https://sticksnsushi.com/en)
-
-The new brand site for **Sticks 'n' Sushi** is filled with scroll based
-animations. All of these are triggered by `react-intersection-observer`, with
-[react-scroll-percentage](https://github.com/thebuilder/react-scroll-percentage)
-controlling the animations.
-
 ## Intersection Observer
 
 [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
