@@ -73,6 +73,8 @@ const LazyImage = ({ width, height, src, ...rest }) => {
 export default LazyImage
 ```
 
+**See [Codesandbox](https://codesandbox.io/embed/lazy-image-load-mjsgc)**
+
 ## Trigger animations
 
 Triggering animations once they enter the viewport is also a perfect use case
