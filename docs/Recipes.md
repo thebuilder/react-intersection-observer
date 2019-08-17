@@ -56,7 +56,7 @@ const LazyImage = ({ width, height, src, ...rest }) => {
         background: '#2a4b7a',
       }}
     >
-      {inView || supportsNativeLoading ? (
+      {inView || supportsLazyLoading ? (
         <img
           {...rest}
           src={src}
