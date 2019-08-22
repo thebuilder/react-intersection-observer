@@ -88,6 +88,7 @@
       }
     },
     "rules": {
+      "@typescript-eslint/no-angle-bracket-type-assertion": 0,
       "no-unused-vars": 0,
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn"
@@ -109,7 +110,7 @@
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",
-    "invariant": "^2.2.4"
+    "invariant": "^2.0.0"
   },
   "peerDependencies": {
     "react": "^15.0.0 || ^16.0.0 || ^17.0.0"
@@ -128,28 +129,28 @@
     "@storybook/components": "^5.0.0",
     "@storybook/react": "^5.0.0",
     "@storybook/theming": "^5.0.11",
-    "@testing-library/jest-dom": "^4.0.0",
+    "@testing-library/jest-dom": "^4.1.0",
     "@testing-library/react": "^9.1.0",
-    "@types/jest": "^24.0.9",
+    "@types/jest": "^24.0.18",
     "@types/react": "^16.9.1",
-    "@types/react-dom": "^16.8.2",
+    "@types/react-dom": "^16.9.0",
     "@types/storybook__addon-actions": "^3.4.1",
     "@types/storybook__addon-knobs": "^5.0.2",
     "@types/storybook__react": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
-    "@typescript-eslint/parser": "^1.12.0",
+    "@typescript-eslint/parser": "^2.0.0",
     "babel-eslint": "10.0.2",
     "babel-jest": "^24.5.0",
     "babel-loader": "^8.0.5",
     "concurrently": "^4.1.0",
     "coveralls": "^3.0.5",
-    "eslint": "^6.1.0",
+    "eslint": "^6.2.1",
     "eslint-config-react-app": "^5.0.0",
     "eslint-plugin-flowtype": "^4.2.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.12.4",
-    "eslint-plugin-react-hooks": "^1.7.0",
+    "eslint-plugin-react-hooks": "^2.0.1",
     "husky": "^3.0.3",
     "intersection-observer": "^0.7.0",
     "jest": "^24.5.0",
@@ -159,7 +160,7 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-test-renderer": "^16.9.0",
-    "rollup": "^1.17.0",
+    "rollup": "^1.20.0",
     "rollup-plugin-babel": "^4.2.0",
     "rollup-plugin-commonjs": "^10.0.1",
     "rollup-plugin-node-resolve": "^5.2.0",
