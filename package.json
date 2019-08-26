@@ -139,7 +139,7 @@
     "@types/storybook__react": "^4.0.0",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
-    "babel-eslint": "10.0.2",
+    "babel-eslint": "10.0.3",
     "babel-jest": "^24.5.0",
     "babel-loader": "^8.0.5",
     "concurrently": "^4.1.0",
