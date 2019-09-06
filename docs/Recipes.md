@@ -93,7 +93,7 @@ import { useInView } from 'react-intersection-observer'
 import { useSpring, animated } from 'react-spring'
 
 const LazyAnimation = () => {
-  const [ref, inView] = useInView(ref, {
+  const [ref, inView] = useInView({
     rootMargin: '-100px 0',
   })
   const props = useSpring({ opacity: inView ? 1 : 0 })
