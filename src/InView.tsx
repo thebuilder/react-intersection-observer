@@ -118,6 +118,7 @@ export class InView extends React.Component<
       threshold,
       root,
       rootMargin,
+      onChange,
       ...props
     } = this.props
 
