@@ -1,6 +1,6 @@
 /* eslint-disable import/no-named-as-default-member */
 import React from 'react'
-import { render } from '@testing-library/react'
+import { fireEvent, render } from '@testing-library/react'
 import { observe, unobserve } from '../intersection'
 import Observer from '../'
 import invariant from 'invariant'
@@ -169,4 +169,16 @@ it('Should throw error when not passing ref', () => {
     null,
     'react-intersection-observer: No DOM node found. Make sure you forward "ref" to the root DOM element you want to observe.',
   )
+})
+
+it('plain children should not catch bubbling onChange event', () => {
+  const onChange = jest.fn()
+  const { getByRole } = render(
+    <Observer onChange={onChange}>
+      <input name="field" />
+    </Observer>,
+  )
+  const input = getByRole('textbox')
+  fireEvent.change(input, { target: { value: 'changed value' } })
+  expect(onChange).not.toHaveBeenCalled()
 })
