@@ -44,7 +44,7 @@ const LazyImage = ({ width, height, src, ...rest }) => {
   const supportsLazyLoading = useNativeLazyLoading()
   const [ref, inView] = useInView({
     triggerOnce: true,
-    margin: '200px 0px',
+    rootMargin: '200px 0px',
   })
 
   return (
