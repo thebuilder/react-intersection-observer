@@ -141,5 +141,5 @@ const TrackImpression = () => {
   )
 }
 
-export default LazyAnimation
+export default TrackImpression
 ```
