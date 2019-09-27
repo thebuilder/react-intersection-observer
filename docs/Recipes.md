@@ -81,10 +81,10 @@ Triggering animations once they enter the viewport is also a perfect use case
 for an IntersectionObserver.
 
 - Set `triggerOnce`, to only trigger the animation the first time.
-- Set `threshold`, to control how much of the element should visible before
+- Set `threshold`, to control how much of the element should be visible before
   firing the event.
 - Instead of `threshold`, you can use `rootMargin` to have a fixed amount be
-  visible before triggering. Use a negative margin value, like `-100px 0`, to
+  visible before triggering. Use a negative margin value, like `-100px 0px`, to
   have it go inwards. You can also use a percentage value, instead of pixels.
 
 ```jsx
@@ -94,7 +94,7 @@ import { useSpring, animated } from 'react-spring'
 
 const LazyAnimation = () => {
   const [ref, inView] = useInView({
-    rootMargin: '-100px 0',
+    rootMargin: '-100px 0px',
   })
   const props = useSpring({ opacity: inView ? 1 : 0 })
 
