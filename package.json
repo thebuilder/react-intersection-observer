@@ -142,7 +142,7 @@
     "babel-eslint": "^10.0.3",
     "babel-jest": "^24.5.0",
     "babel-loader": "^8.0.5",
-    "concurrently": "^4.1.0",
+    "concurrently": "^5.0.0",
     "coveralls": "^3.0.5",
     "eslint": "^6.2.1",
     "eslint-config-react-app": "^5.0.0",
