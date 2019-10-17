@@ -188,7 +188,7 @@ few ideas for how you can use it.
 
 You can wrap multiple `ref` assignments in a single `useCallback`:
 
-```
+```js
 const setRefs = useCallback(node => {
   // Ref's from useRef needs to have the node assigned to `current`
   ref.current = node
