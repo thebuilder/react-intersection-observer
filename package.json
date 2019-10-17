@@ -110,7 +110,7 @@
     ]
   },
   "dependencies": {
-    "invariant": "^2.0.0"
+    "tiny-invariant": "^1.0.6"
   },
   "peerDependencies": {
     "react": "^15.0.0 || ^16.0.0 || ^17.0.0"
@@ -165,7 +165,6 @@
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-replace": "^2.1.0",
     "rollup-plugin-terser": "^5.1.1",
-    "tiny-invariant": "^1.0.6",
     "typescript": "^3.5.3"
   }
 }
