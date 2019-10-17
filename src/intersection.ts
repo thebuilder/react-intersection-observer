@@ -1,4 +1,4 @@
-import invariant from 'invariant'
+import invariant from 'tiny-invariant'
 import { ObserverInstance, ObserverInstanceCallback } from './index'
 
 const INSTANCE_MAP: Map<Element, ObserverInstance> = new Map()
@@ -41,7 +41,6 @@ export function observe(
   invariant(
     !INSTANCE_MAP.has(element),
     "react-intersection-observer: Trying to observe %s, but it's already being observed by another instance.\nMake sure the `ref` is only used by a single <Observer /> instance.\n\n%s",
-    element,
   )
   /* istanbul ignore if */
   if (!element) return

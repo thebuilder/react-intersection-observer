@@ -3,10 +3,10 @@ import React from 'react'
 import { fireEvent, render } from '@testing-library/react'
 import { observe, unobserve } from '../intersection'
 import Observer from '../'
-import invariant from 'invariant'
+import invariant from 'tiny-invariant'
 
 jest.mock('../intersection')
-jest.mock('invariant')
+jest.mock('tiny-invariant')
 
 const plainChild = ({ ref }) => <div ref={ref} />
 afterEach(() => {

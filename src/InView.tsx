@@ -1,5 +1,5 @@
 import * as React from 'react'
-import invariant from 'invariant'
+import invariant from 'tiny-invariant'
 import { observe, unobserve } from './intersection'
 import { IntersectionObserverProps, PlainChildrenProps } from './index'
 
@@ -39,13 +39,10 @@ export class InView extends React.Component<
   }
 
   componentDidMount() {
-    /* istanbul ignore else  */
-    if (process.env.NODE_ENV !== 'production') {
-      invariant(
-        this.node,
-        `react-intersection-observer: No DOM node found. Make sure you forward "ref" to the root DOM element you want to observe.`,
-      )
-    }
+    invariant(
+      this.node,
+      `react-intersection-observer: No DOM node found. Make sure you forward "ref" to the root DOM element you want to observe.`,
+    )
   }
 
   componentDidUpdate(prevProps: IntersectionObserverProps, prevState: State) {

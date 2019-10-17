@@ -20,7 +20,7 @@ const getBabelOptions = ({ useESModules }) => ({
   extensions,
   include: ['src/**/*'],
   presets: ['@babel/preset-typescript'],
-  plugins: [['@babel/transform-runtime', { regenerator: false, useESModules }]],
+  plugins: [['babel-plugin-dev-expression']],
 })
 
 export default [
