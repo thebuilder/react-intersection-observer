@@ -27,7 +27,7 @@ to tell you when an element enters or leaves the viewport. Contains both a
   where possible
 - ⚙️ **Matches native API** - Intuitive to use
 - 🌳 **Tree-shakeable** - Only include the parts you use
-- 💥 **Tiny bundle** [~1.9 kB gzipped][bundlephobia-url]
+- 💥 **Tiny bundle** [~1.7 kB gzipped][bundlephobia-url]
 
 ## Installation
 
@@ -181,6 +181,21 @@ few ideas for how you can use it.
 - [Trigger animations](docs/Recipes.md#trigger-animations)
 - [Track impressions](docs/Recipes.md#track-impressions) _(Google Analytics, Tag
   Manager, etc)_
+  
+## FAQ
+
+### How can i assign multiple ref's to a component?
+
+You can wrap multiple `ref` assignments in a single `useCallback`:
+
+```
+const setRefs = useCallback(node => {
+  // Ref's from useRef needs to have the node assigned to `current`
+  ref.current = node
+  // Callback refs, like the one from `useInView`, is a function that takes the node as an argument
+  inViewRef(node)
+}, [inViewRef])
+```
 
 ## Testing
 
