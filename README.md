@@ -58,8 +58,8 @@ npm install react-intersection-observer --save
 const [ref, inView, entry] = useInView(options)
 ```
 
-The new React Hooks, makes it easier then ever to monitor the `inView` state of
-your components. Call the `useInView` hook, with the (optional)
+The new React Hooks make it easier then ever to monitor the `inView` state of
+your components. Call the `useInView` hook with the (optional)
 [options](#options) you need. It will return an array containing a `ref`, the
 `inView` status and the current
 [`IntersectionObserverEntry`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry).
