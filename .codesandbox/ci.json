@@ -1,5 +1,5 @@
 {
-  "sandboxes": ["react-intersection-observer"],
+  "sandboxes": ["react-intersection-observer-ud2vo"],
   "publishDirectory": {
     "react-intersection-observer": "dist"
   }
