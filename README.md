@@ -84,6 +84,8 @@ const Component = () => {
 }
 ```
 
+[![Edit react-intersection-observer](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/react-intersection-observer-ud2vo?fontsize=14&hidenavigation=1&theme=dark)
+
 ### Render props
 
 To use the `<InView>` component, you pass it a function. It will be called
