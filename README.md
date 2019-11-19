@@ -153,14 +153,18 @@ argument for the hooks.
 | **threshold**   | number \| number[] | 0       | false    | Number between 0 and 1 indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points. |
 | **triggerOnce** | boolean            | false   | false    | Only trigger this method once                                                                                                                                  |
 
-> ⚠️ When passing an array to `threshold`, store the array in a constant to avoid
-> the component re-rendering too often. For example:
+> ⚠️ When passing an array to `threshold`, store the array in a constant to
+> avoid the component re-rendering too often. For example:
 
 ```js
-const THRESHOLD = [0.25, 0.5, 0.75]; // Store multiple thresholds in a constant
+const THRESHOLD = [0.25, 0.5, 0.75] // Store multiple thresholds in a constant
 const MyComponent = () => {
-  const [ref, inView, entry] = useInView({threshold: THRESHOLD});
-  return <div ref={ref}>Triggered at intersection ratio {entry.intersectionRatio}</div>;
+  const [ref, inView, entry] = useInView({ threshold: THRESHOLD })
+  return (
+    <div ref={ref}>
+      Triggered at intersection ratio {entry.intersectionRatio}
+    </div>
+  )
 }
 ```
 
@@ -183,7 +187,7 @@ few ideas for how you can use it.
 - [Trigger animations](docs/Recipes.md#trigger-animations)
 - [Track impressions](docs/Recipes.md#track-impressions) _(Google Analytics, Tag
   Manager, etc)_
-  
+
 ## FAQ
 
 ### How can i assign multiple ref's to a component?
@@ -191,12 +195,15 @@ few ideas for how you can use it.
 You can wrap multiple `ref` assignments in a single `useCallback`:
 
 ```js
-const setRefs = useCallback(node => {
-  // Ref's from useRef needs to have the node assigned to `current`
-  ref.current = node
-  // Callback refs, like the one from `useInView`, is a function that takes the node as an argument
-  inViewRef(node)
-}, [inViewRef])
+const setRefs = useCallback(
+  node => {
+    // Ref's from useRef needs to have the node assigned to `current`
+    ref.current = node
+    // Callback refs, like the one from `useInView`, is a function that takes the node as an argument
+    inViewRef(node)
+  },
+  [inViewRef],
+)
 ```
 
 ## Testing

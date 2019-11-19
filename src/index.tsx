@@ -67,7 +67,7 @@ export type PlainChildrenProps = IntersectionOptions & {
 } & Omit<React.HTMLProps<HTMLElement>, 'onChange'>
 
 export type InViewHookResponse = [
-  ((node?: Element | null) => void),
+  (node?: Element | null) => void,
   boolean,
-  IntersectionObserverEntry | undefined
+  IntersectionObserverEntry | undefined,
 ]
