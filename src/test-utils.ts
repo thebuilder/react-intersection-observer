@@ -12,6 +12,7 @@ beforeAll(() => {
         : [options.threshold],
       root: options.root,
       rootMargin: options.rootMargin,
+      time: Date.now(),
       observe: jest.fn((element: Element) => {
         instanceMap.set(element, instance)
         observerMap.set(element, cb)
@@ -50,12 +51,17 @@ export function mockAllIsIntersecting(isIntersecting: boolean) {
  */
 export function mockIsIntersecting(element: Element, isIntersecting: boolean) {
   const cb = observerMap.get(element)
-  if (cb) {
+  const instance = instanceMap.get(element)
+  if (cb && instance) {
     const entry = [
       {
-        isIntersecting,
-        target: element,
+        boundingClientRect: element.getBoundingClientRect(),
         intersectionRatio: isIntersecting ? 1 : 0,
+        intersectionRect: isIntersecting ? element.getBoundingClientRect() : {},
+        isIntersecting,
+        rootBounds: instance.root ? instance.root.getBoundingClientRect() : {},
+        target: element,
+        time: Date.now() - instance.time,
       },
     ]
     if (act) act(() => cb(entry))
