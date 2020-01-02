@@ -40,7 +40,13 @@ export function useInView(
       // Store a reference to the node
       ref.current = node
     },
-    [options.threshold, options.root, options.rootMargin, options.triggerOnce],
+    [Array.isArray(options.threshold) 
+      ? options.threshold.toString() 
+      : options.threshold, 
+      options.root, 
+      options.rootMargin, 
+      options.triggerOnce
+    ],
   )
 
   React.useDebugValue(state.inView)
