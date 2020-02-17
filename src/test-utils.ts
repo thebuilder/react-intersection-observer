@@ -64,8 +64,8 @@ export function mockIsIntersecting(element: Element, isIntersecting: boolean) {
         time: Date.now() - instance.time,
       },
     ]
-    if (act) act(() => cb(entry))
-    else cb(entry)
+    if (act) act(() => cb(entry, instance))
+    else cb(entry, instance)
   } else {
     throw new Error(
       'No IntersectionObserver instance found for element. Is it still mounted in the DOM?',
