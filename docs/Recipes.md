@@ -49,7 +49,7 @@ const LazyImage = ({ width, height, src, ...rest }) => {
 
   return (
     <div
-      ref={supportsLazyLoading === false ? ref : undefined}
+      ref={!supportsLazyLoading ? ref : undefined}
       style={{
         position: 'relative',
         paddingBottom: `${(height / width) * 100}%`,
