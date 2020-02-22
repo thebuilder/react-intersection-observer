@@ -43,6 +43,12 @@ export function useInView(
     [options.threshold, options.root, options.rootMargin, options.triggerOnce],
   )
 
+  React.useLayoutEffect(() => {
+    if (!ref.current && state.inView) {
+      setState({ inView: false, entry: undefined })
+    }
+  })
+
   React.useDebugValue(state.inView)
 
   return [setRef, state.inView, state.entry]

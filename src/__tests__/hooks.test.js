@@ -27,6 +27,17 @@ const LazyHookComponent = ({ options }) => {
   )
 }
 
+const UnmountableRefComponent = ({ mount }) => {
+  const [ref, inView] = useInView()
+
+  return (
+    <>
+      {mount && <div ref={ref} />}
+      {inView.toString()}
+    </>
+  )
+}
+
 test('should create a hook', () => {
   const { getByTestId } = render(<HookComponent />)
   const wrapper = getByTestId('wrapper')
@@ -73,4 +84,15 @@ test('should unmount the hook', () => {
   const instance = intersectionMockInstance(wrapper)
   unmount()
   expect(instance.unobserve).toHaveBeenCalledWith(wrapper)
+})
+
+test('inView should be false when component is unmounted', () => {
+  const { rerender, getByText } = render(
+    <UnmountableRefComponent mount={true} />,
+  )
+  mockAllIsIntersecting(true)
+
+  getByText('true')
+  rerender(<UnmountableRefComponent mount={false} />)
+  getByText('false')
 })
