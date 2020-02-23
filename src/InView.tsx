@@ -84,7 +84,10 @@ export class InView extends React.Component<
   }
 
   handleNode = (node?: Element | null) => {
-    if (this.node) unobserve(this.node)
+    if (this.node) {
+      unobserve(this.node)
+      if (!node) this.setState({ inView: false, entry: undefined })
+    }
     this.node = node ? node : null
     this.observeNode()
   }

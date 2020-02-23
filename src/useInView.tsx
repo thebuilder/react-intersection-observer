@@ -8,19 +8,22 @@ type State = {
   entry?: IntersectionObserverEntry
 }
 
+const initialState: State = {
+  inView: false,
+  entry: undefined,
+}
+
 export function useInView(
   options: IntersectionOptions = {},
 ): InViewHookResponse {
   const ref = React.useRef<Element>()
-  const [state, setState] = React.useState<State>({
-    inView: false,
-    entry: undefined,
-  })
+  const [state, setState] = React.useState<State>(initialState)
 
   const setRef = React.useCallback(
     node => {
       if (ref.current) {
         unobserve(ref.current)
+        setState(initialState)
       }
       if (node) {
         observe(
@@ -42,8 +45,6 @@ export function useInView(
     },
     [options.threshold, options.root, options.rootMargin, options.triggerOnce],
   )
-
-  React.useDebugValue(state.inView)
 
   return [setRef, state.inView, state.entry]
 }

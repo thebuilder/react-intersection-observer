@@ -3,10 +3,10 @@ import { render } from '@testing-library/react'
 import { useInView } from '../useInView'
 import { intersectionMockInstance, mockAllIsIntersecting } from '../test-utils'
 
-const HookComponent = ({ options }) => {
+const HookComponent = ({ options, unmount }) => {
   const [ref, inView] = useInView(options)
   return (
-    <div data-testid="wrapper" ref={ref}>
+    <div data-testid="wrapper" ref={!unmount ? ref : undefined}>
       {inView.toString()}
     </div>
   )
@@ -73,4 +73,13 @@ test('should unmount the hook', () => {
   const instance = intersectionMockInstance(wrapper)
   unmount()
   expect(instance.unobserve).toHaveBeenCalledWith(wrapper)
+})
+
+test('inView should be false when component is unmounted', () => {
+  const { rerender, getByText } = render(<HookComponent />)
+  mockAllIsIntersecting(true)
+
+  getByText('true')
+  rerender(<HookComponent unmount />)
+  getByText('false')
 })
