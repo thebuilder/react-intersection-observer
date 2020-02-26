@@ -129,3 +129,8 @@ storiesOf('useInView hook', module)
       </HookComponent>
     </ScrollWrapper>
   ))
+  .add('Trigger once', () => (
+    <ScrollWrapper>
+      <HookComponent options={{ triggerOnce: true }} />
+    </ScrollWrapper>
+  ))

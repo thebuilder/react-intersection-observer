@@ -23,7 +23,12 @@ export function useInView(
     node => {
       if (ref.current) {
         unobserve(ref.current)
-        setState(initialState)
+
+        if (!options.triggerOnce) {
+          // Reset the state, unless the hook is set to only `triggerOnce`
+          // In that case, resetting the state would trigger another update.
+          setState(initialState)
+        }
       }
       if (node) {
         observe(
