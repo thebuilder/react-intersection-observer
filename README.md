@@ -8,7 +8,6 @@
 [![dev dependency status][dev-deps-svg]][dev-deps-url]
 [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
-[![Greenkeeper badge][greenkeeper-svg]][greenkeeper-url]
 [![styled with prettier][prettier-svg]][prettier-url]
 
 React implementation of the
@@ -314,8 +313,5 @@ async function loadPolyfills() {
 [downloads-image]: http://img.shields.io/npm/dm/react-intersection-observer.svg
 [downloads-url]:
   http://npm-stat.com/charts.html?package=react-intersection-observer
-[greenkeeper-svg]:
-  https://badges.greenkeeper.io/thebuilder/react-intersection-observer.svg
-[greenkeeper-url]: https://greenkeeper.io/
 [prettier-svg]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg
 [prettier-url]: https://github.com/prettier/prettier
