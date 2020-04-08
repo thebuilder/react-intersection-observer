@@ -2,8 +2,8 @@
 
 [![Version Badge][npm-version-svg]][package-url]
 [![GZipped size][npm-minzip-svg]][bundlephobia-url]
-[![Build Status][travis-svg]][travis-url]
-[![Coverage Statu][coveralls-svg]][coveralls-url]
+![Test](https://github.com/thebuilder/react-intersection-observer/workflows/Test/badge.svg)
+[![Coverage Status][coveralls-svg]][coveralls-url]
 [![dependency status][deps-svg]][deps-url]
 [![dev dependency status][dev-deps-svg]][dev-deps-url]
 [![License][license-image]][license-url]
@@ -16,7 +16,8 @@ to tell you when an element enters or leaves the viewport. Contains both a
 [Hooks](#hooks), [render props](#render-props) and
 [plain children](#plain-children) implementation.
 
-**Storybook Demo:** https://thebuilder.github.io/react-intersection-observer/
+**Storybook Demo:**
+[https://react-intersection-observer.now.sh/](https://react-intersection-observer.now.sh/)
 
 ## Features
 
@@ -296,8 +297,6 @@ async function loadPolyfills() {
 [npm-minzip-svg]: https://img.shields.io/bundlephobia/minzip/react.svg
 [bundlephobia-url]:
   https://bundlephobia.com/result?p=react-intersection-observer
-[travis-svg]: https://travis-ci.org/thebuilder/react-intersection-observer.svg
-[travis-url]: https://travis-ci.org/thebuilder/react-intersection-observer
 [coveralls-svg]:
   https://coveralls.io/repos/github/thebuilder/react-intersection-observer/badge.svg?branch=master
 [coveralls-url]:
