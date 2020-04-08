@@ -55,9 +55,25 @@
     "storybook:build": "build-storybook --output-dir example",
     "test": "jest"
   },
-  "np": {
-    "yarn": true,
-    "contents": "dist"
+  "release": {
+    "branches": [
+      "master",
+      {
+        "name": "beta",
+        "prerelease": true
+      }
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      [
+        "@semantic-release/npm",
+        {
+          "pkgRoot": "dist"
+        }
+      ],
+      "@semantic-release/github"
+    ]
   },
   "husky": {
     "hooks": {
