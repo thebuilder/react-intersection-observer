@@ -16,7 +16,7 @@ build it according to your needs.
   [root margin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/rootMargin)
   for top and bottom, so the Intersection Observer gets triggered before the
   image enters the viewport. This gives the image a chance to be loaded before
-  the user even sees it. Try and start with something like `200px 0px`, but
+  the user even sees it. Try to start with something like `200px 0px`, but
   experiment with it until you find the right value.
 - Set `triggerOnce`, so you don't keep monitoring for changes.
 - You should always create a wrapping element, that sets the correct aspect

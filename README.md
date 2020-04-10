@@ -190,7 +190,7 @@ few ideas for how you can use it.
 
 ## FAQ
 
-### How can i assign multiple ref's to a component?
+### How can I assign multiple refs to a component?
 
 You can wrap multiple `ref` assignments in a single `useCallback`:
 
