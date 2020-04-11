@@ -37,7 +37,7 @@ const Header = React.forwardRef<any, Props>((props: Props, ref) => (
   </div>
 ))
 
-storiesOf('Intersection Observer', module)
+storiesOf('InView Component', module)
   .add('Basic', () => (
     <ScrollWrapper>
       <InView onChange={action('Child Observer inview')}>
