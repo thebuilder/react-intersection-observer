@@ -1,27 +1,19 @@
-import * as React from 'react'
+/** @jsx jsx */
+import { jsx } from '@emotion/react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import { IntersectionOptions, useInView } from '../src/index'
-import ScrollWrapper from './ScrollWrapper/index'
-import { CSSProperties } from 'react'
+import { IntersectionOptions, useInView } from '../index'
+import ScrollWrapper from './ScrollWrapper'
 import { withKnobs, number, boolean } from '@storybook/addon-knobs'
 import Status from './Status'
+import { motion } from 'framer-motion'
+import React from 'react'
 
 type Props = {
-  style?: Object
+  className?: string
   children?: React.ReactNode
   options?: IntersectionOptions
-}
-
-const sharedStyle: CSSProperties = {
-  display: 'flex',
-  minHeight: '25vh',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  textAlign: 'center',
-  background: '#148bb4',
-  color: 'azure',
+  lazy?: boolean
 }
 
 function getOptions(
@@ -43,39 +35,50 @@ function getOptions(
   }
 }
 
-const LazyHookComponent = ({ options, style, children, ...rest }: Props) => {
+const HookComponent = ({
+  options,
+  className,
+  children,
+  lazy,
+  ...rest
+}: Props) => {
   const [ref, inView, entry] = useInView(getOptions(options))
-  const [isLoading, setIsLoading] = React.useState(true)
+  const [isLoading, setIsLoading] = React.useState(lazy)
   action('Inview')(inView, entry)
 
   React.useEffect(() => {
-    setIsLoading(false)
-  }, [])
+    if (isLoading) setIsLoading(false)
+  }, [isLoading, lazy])
 
   if (isLoading) {
     return <div>Loading...</div>
   }
 
   return (
-    <div ref={ref} style={{ ...sharedStyle, ...style }} {...rest}>
+    <React.Fragment>
       <Status inView={inView} />
-      <h2>
-        {children || 'Header is inside the viewport'}: {inView.toString()}
-      </h2>
-    </div>
-  )
-}
-const HookComponent = ({ options, style, children, ...rest }: Props) => {
-  const [ref, inView, entry] = useInView(getOptions(options))
-  action('Inview')(inView, entry)
-
-  return (
-    <div ref={ref} style={{ ...sharedStyle, ...style }} {...rest}>
-      <Status inView={inView} />
-      <h2>
-        {children || 'Header is inside the viewport'}: {inView.toString()}
-      </h2>
-    </div>
+      <motion.div
+        ref={ref}
+        animate={{ opacity: inView ? 1 : 0.5 }}
+        data-inview={inView}
+        className={className}
+        css={{
+          display: 'flex',
+          minHeight: '25vh',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          textAlign: 'center',
+          background: '#148bb4',
+          color: 'azure',
+        }}
+        {...rest}
+      >
+        <h2>
+          {children || 'Inside the viewport'}: {inView.toString()}
+        </h2>
+      </motion.div>
+    </React.Fragment>
   )
 }
 
@@ -89,13 +92,13 @@ storiesOf('useInView hook', module)
   ))
   .add('Lazy Hook rendering', () => (
     <ScrollWrapper>
-      <LazyHookComponent />
+      <HookComponent lazy />
     </ScrollWrapper>
   ))
   .add('Start in view', () => <HookComponent />)
   .add('Taller then viewport', () => (
     <ScrollWrapper>
-      <HookComponent style={{ height: '150vh' }} />
+      <HookComponent css={{ height: '150vh' }} />
     </ScrollWrapper>
   ))
   .add('With threshold 100%', () => (
@@ -114,7 +117,7 @@ storiesOf('useInView hook', module)
   ))
   .add('Taller then viewport with threshold 100%', () => (
     <ScrollWrapper>
-      <HookComponent options={{ threshold: 1 }} style={{ height: '150vh' }}>
+      <HookComponent options={{ threshold: 1 }} css={{ height: '150vh' }}>
         Header is fully inside the viewport
       </HookComponent>
     </ScrollWrapper>
@@ -123,7 +126,7 @@ storiesOf('useInView hook', module)
     <ScrollWrapper>
       <HookComponent
         options={{ threshold: [0, 0.2, 0.4, 0.6, 0.8, 1] }}
-        style={{ height: '150vh' }}
+        css={{ height: '150vh' }}
       >
         Header is fully inside the viewport
       </HookComponent>

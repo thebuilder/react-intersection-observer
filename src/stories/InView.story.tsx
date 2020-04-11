@@ -1,36 +1,39 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/react'
 import * as React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import InView from '../src/index'
-import ScrollWrapper from './ScrollWrapper/index'
-import RootComponent from './Root/index'
-import { CSSProperties } from 'react'
+import InView from '../index'
+import ScrollWrapper from './ScrollWrapper'
+import RootComponent from './Root'
 import Status from './Status'
+import { motion } from 'framer-motion'
 
 type Props = {
-  style?: CSSProperties
+  className?: string
   children?: React.ReactNode
   inView?: boolean
 }
 
 const Header = React.forwardRef<any, Props>((props: Props, ref) => (
-  <div
-    /* @ts-ignore */
-    ref={ref}
-    style={{
-      display: 'flex',
-      minHeight: '25vh',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      textAlign: 'center',
-      background: '#148bb4',
-      color: 'azure',
-      ...props.style,
-    }}
-  >
+  <div ref={ref} data-inview={props.inView}>
     {props.inView !== undefined ? <Status inView={props.inView} /> : null}
-    <h2>{props.children}</h2>
+    <motion.div
+      animate={{ opacity: props.inView ? 1 : 0.5 }}
+      className={props.className}
+      css={{
+        display: 'flex',
+        minHeight: '25vh',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        textAlign: 'center',
+        background: '#148bb4',
+        color: 'azure',
+      }}
+    >
+      <h2>{props.children}</h2>
+    </motion.div>
   </div>
 ))
 
@@ -81,7 +84,7 @@ storiesOf('Intersection Observer', module)
     <ScrollWrapper>
       <InView onChange={action('Child Observer inview')}>
         {({ inView, ref }) => (
-          <Header ref={ref} style={{ height: '150vh' }}>
+          <Header ref={ref} css={{ height: '150vh' }}>
             Header is inside the viewport: {inView.toString()}
           </Header>
         )}
@@ -114,7 +117,7 @@ storiesOf('Intersection Observer', module)
     <ScrollWrapper>
       <InView threshold={1}>
         {({ inView, ref }) => (
-          <Header ref={ref} inView={inView} style={{ height: '150vh' }}>
+          <Header ref={ref} inView={inView} css={{ height: '150vh' }}>
             Header is fully inside the viewport: {inView.toString()}
           </Header>
         )}

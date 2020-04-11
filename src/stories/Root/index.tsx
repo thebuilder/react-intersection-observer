@@ -1,20 +1,10 @@
+/** @jsx jsx */
+import { jsx } from '@emotion/react'
 import * as React from 'react'
-import { CSSProperties } from 'react'
-
-const style: CSSProperties = {
-  margin: '64px',
-  backgroundColor: 'slategrey',
-  overflowY: 'scroll',
-  position: 'absolute',
-  top: '0',
-  left: '0',
-  right: '0',
-  bottom: '0',
-}
 
 type Props = {
   children: (node: HTMLElement) => React.ReactNode
-  style?: CSSProperties
+  className?: string
 }
 
 type State = {
@@ -34,7 +24,20 @@ class RootComponent extends React.PureComponent<Props, State> {
 
   render() {
     return (
-      <div ref={this.handleNode} style={{ ...style, ...this.props.style }}>
+      <div
+        ref={this.handleNode}
+        className={this.props.className}
+        css={{
+          margin: '64px',
+          backgroundColor: 'slategrey',
+          overflowY: 'scroll',
+          position: 'absolute',
+          top: '0',
+          left: '0',
+          right: '0',
+          bottom: '0',
+        }}
+      >
         {/*
         // @ts-ignore */}
         {this.state.node ? this.props.children(this.state.node) : null}
