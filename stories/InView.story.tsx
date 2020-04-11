@@ -138,7 +138,7 @@ storiesOf('Intersection Observer', module)
   ))
   .add('With root', () => (
     <RootComponent>
-      {node => (
+      {(node) => (
         <ScrollWrapper>
           <InView
             threshold={0}
@@ -157,7 +157,7 @@ storiesOf('Intersection Observer', module)
   ))
   .add('With root and rootMargin', () => (
     <RootComponent>
-      {node => (
+      {(node) => (
         <ScrollWrapper>
           <InView
             threshold={0}
