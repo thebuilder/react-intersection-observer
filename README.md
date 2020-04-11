@@ -58,16 +58,15 @@ npm install react-intersection-observer --save
 const [ref, inView, entry] = useInView(options)
 ```
 
-The new React Hooks make it easier than ever to monitor the `inView` state of
-your components. Call the `useInView` hook with the (optional)
-[options](#options) you need. It will return an array containing a `ref`, the
-`inView` status and the current
+React Hooks make it easy to monitor the `inView` state of your components. Call
+the `useInView` hook with the (optional) [options](#options) you need. It will
+return an array containing a `ref`, the `inView` status and the current
 [`IntersectionObserverEntry`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry).
 Assign the `ref` to the DOM element you want to monitor, and the hook will
 report the status.
 
 ```jsx
-import React, { useRef } from 'react'
+import React from 'react'
 import { useInView } from 'react-intersection-observer'
 
 const Component = () => {
@@ -195,16 +194,43 @@ few ideas for how you can use it.
 You can wrap multiple `ref` assignments in a single `useCallback`:
 
 ```js
-const setRefs = useCallback(
-  node => {
-    // Ref's from useRef needs to have the node assigned to `current`
-    ref.current = node
-    // Callback refs, like the one from `useInView`, is a function that takes the node as an argument
-    inViewRef(node)
-  },
-  [inViewRef],
-)
+import React, { useRef } from 'react'
+import { useInView } from 'react-intersection-observer'
+
+function Component(props) {
+  const ref = useRef()
+  const [inViewRef, inView] = useInView()
+
+  // Use `useCallback` so we don't recreate the function on each render - Could result in infinite loop
+  const setRefs = useCallback(
+    node => {
+      // Ref's from useRef needs to have the node assigned to `current`
+      ref.current = node
+      // Callback refs, like the one from `useInView`, is a function that takes the node as an argument
+      inViewRef(node)
+    },
+    [inViewRef],
+  )
+
+  return <div ref={setRefs}>Shared ref is visible: {inView}</div>
+}
 ```
+
+### `rootMargin` isn't working as expected
+
+When using `rootMargin`, the margin gets added to the current `root` - If your
+application is running inside a `<iframe>`, or you have defined a custom `root`
+this will not be the current viewport.
+
+You can read more about this on these links:
+
+- [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#The_intersection_root_and_root_margin)
+- [w3c/IntersectionObserver: IntersectionObserver rootMargin ignored within iframe](https://github.com/w3c/IntersectionObserver/issues/283#issuecomment-507397917)
+  > If you want the root margin to apply to the iframe element's boundary, then
+  > you'll have to use an observer with an explicit root, which should be
+  > `document.scrollingElement` within the iframe. If you also need to compute
+  > intersection with the top-level viewport (the implicit root), that will
+  > require a second observer.
 
 ## Testing
 
@@ -253,11 +279,12 @@ test('should create a hook inView', () => {
 ## Intersection Observer
 
 [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
-is the API is used to determine if an element is inside the viewport or not.
-[Browser support is pretty good](http://caniuse.com/#feat=intersectionobserver) -
+is the API used to determine if an element is inside the viewport or not.
+[Browser support is really good](http://caniuse.com/#feat=intersectionobserver) -
 With
 [Safari adding support in 12.1](https://webkit.org/blog/8718/new-webkit-features-in-safari-12-1/),
-all major browsers now support Intersection Observers natively.
+all major browsers now support Intersection Observers natively. Add the
+polyfill, so it doesn't break on older versions of iOS and IE11.
 
 ### Polyfill
 
