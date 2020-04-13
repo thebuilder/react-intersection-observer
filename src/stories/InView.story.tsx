@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/react'
 import * as React from 'react'
-import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import InView from '../index'
 import ScrollWrapper from './ScrollWrapper'
@@ -37,177 +36,191 @@ const Header = React.forwardRef<any, Props>((props: Props, ref) => (
   </div>
 ))
 
-storiesOf('InView Component', module)
-  .add('Basic', () => (
-    <ScrollWrapper>
-      <InView onChange={action('Child Observer inview')}>
-        {({ inView, ref }) => (
-          <Header ref={ref} inView={inView}>
-            Header inside viewport: {inView.toString()}
-          </Header>
-        )}
-      </InView>
-    </ScrollWrapper>
-  ))
-  .add('With root margin', () => (
-    <ScrollWrapper>
-      <InView rootMargin="150px" onChange={action('Child Observer inview')}>
-        {({ inView, ref }) => (
-          <Header ref={ref} inView={inView}>
-            Header inside viewport: {inView.toString()}
-          </Header>
-        )}
-      </InView>
-    </ScrollWrapper>
-  ))
-  .add('Start in view', () => (
-    <InView onChange={action('Child Observer inview')}>
+export default {
+  title: 'InView Component',
+  component: InView,
+}
+
+export const basic = () => (
+  <ScrollWrapper>
+    <InView onChange={action('Child Observer inView')}>
       {({ inView, ref }) => (
         <Header ref={ref} inView={inView}>
           Header inside viewport: {inView.toString()}
         </Header>
       )}
     </InView>
-  ))
-  .add('Plain children', () => (
-    <ScrollWrapper>
-      <InView
-        onChange={action('Child Observer inview')}
-        className="custom-class"
-        as="div"
-      >
-        <Header>Plain children</Header>
-      </InView>
-    </ScrollWrapper>
-  ))
-  .add('Taller then viewport', () => (
-    <ScrollWrapper>
-      <InView onChange={action('Child Observer inview')}>
-        {({ inView, ref }) => (
-          <Header ref={ref} css={{ height: '150vh' }}>
-            Header is inside the viewport: {inView.toString()}
-          </Header>
-        )}
-      </InView>
-    </ScrollWrapper>
-  ))
-  .add('With threshold 100%', () => (
-    <ScrollWrapper>
-      <InView threshold={1} onChange={action('Child Observer inview')}>
-        {({ inView, ref }) => (
-          <Header ref={ref} inView={inView}>
-            Header is fully inside the viewport: {inView.toString()}
-          </Header>
-        )}
-      </InView>
-    </ScrollWrapper>
-  ))
-  .add('With threshold 50%', () => (
-    <ScrollWrapper>
-      <InView threshold={0.5} onChange={action('Child Observer inview')}>
-        {({ inView, ref }) => (
-          <Header ref={ref} inView={inView}>
-            Header is 50% inside the viewport: {inView.toString()}
-          </Header>
-        )}
-      </InView>
-    </ScrollWrapper>
-  ))
-  .add('Taller then viewport with threshold 100%', () => (
-    <ScrollWrapper>
-      <InView threshold={1}>
-        {({ inView, ref }) => (
-          <Header ref={ref} inView={inView} css={{ height: '150vh' }}>
-            Header is fully inside the viewport: {inView.toString()}
-          </Header>
-        )}
-      </InView>
-    </ScrollWrapper>
-  ))
-  .add('With threshold array', () => (
-    <ScrollWrapper>
-      <InView
-        threshold={[0, 0.25, 0.5, 0.75, 1]}
-        onChange={action('Hit threshold trigger')}
-      >
-        {({ inView, ref }) => (
-          <Header ref={ref} inView={inView}>
-            Header is inside threshold: {inView.toString()} - onChange triggers
-            multiple times.
-          </Header>
-        )}
-      </InView>
-    </ScrollWrapper>
-  ))
-  .add('With root', () => (
-    <RootComponent>
-      {(node) => (
-        <ScrollWrapper>
-          <InView
-            threshold={0}
-            root={node}
-            onChange={action('Child Observer inview')}
-          >
-            {({ inView, ref }) => (
-              <Header ref={ref} inView={inView}>
-                Header is inside the root viewport: {inView.toString()}
-              </Header>
-            )}
-          </InView>
-        </ScrollWrapper>
+  </ScrollWrapper>
+)
+
+export const withRootMargin = () => (
+  <ScrollWrapper>
+    <InView rootMargin="150px" onChange={action('Child Observer inView')}>
+      {({ inView, ref }) => (
+        <Header ref={ref} inView={inView}>
+          Header inside viewport: {inView.toString()}
+        </Header>
       )}
-    </RootComponent>
-  ))
-  .add('With root and rootMargin', () => (
-    <RootComponent>
-      {(node) => (
-        <ScrollWrapper>
-          <InView
-            threshold={0}
-            root={node}
-            rootMargin="100px"
-            onChange={action('Child Observer inview')}
-          >
-            {({ inView, ref }) => (
-              <Header ref={ref} inView={inView}>
-                Header is inside the root viewport: {inView.toString()}
-              </Header>
-            )}
-          </InView>
-        </ScrollWrapper>
+    </InView>
+  </ScrollWrapper>
+)
+
+export const startInView = () => (
+  <InView onChange={action('Child Observer inView')}>
+    {({ inView, ref }) => (
+      <Header ref={ref} inView={inView}>
+        Header inside viewport: {inView.toString()}
+      </Header>
+    )}
+  </InView>
+)
+
+export const plainChildren = () => (
+  <ScrollWrapper>
+    <InView
+      onChange={action('Child Observer inView')}
+      className="custom-class"
+      as="div"
+    >
+      <Header>Plain children</Header>
+    </InView>
+  </ScrollWrapper>
+)
+
+export const tallerThanViewport = () => (
+  <ScrollWrapper>
+    <InView onChange={action('Child Observer inView')}>
+      {({ inView, ref }) => (
+        <Header ref={ref} css={{ height: '150vh' }}>
+          Header is inside the viewport: {inView.toString()}
+        </Header>
       )}
-    </RootComponent>
-  ))
-  .add('Trigger once', () => (
-    <ScrollWrapper>
-      <InView
-        threshold={1}
-        triggerOnce
-        onChange={action('Child Observer inview')}
-      >
-        {({ inView, ref }) => (
-          <Header ref={ref} inView={inView}>
-            Header was fully inside the viewport: {inView.toString()}
-          </Header>
-        )}
-      </InView>
-    </ScrollWrapper>
-  ))
-  .add('Multiple observers', () => (
-    <ScrollWrapper>
-      <InView threshold={1} onChange={action('Child Observer inview')}>
-        {({ inView, ref }) => (
-          <Header ref={ref}>
-            Header 1 is fully inside the viewport: {inView.toString()}
-          </Header>
-        )}
-      </InView>
-      <InView threshold={1} onChange={action('Child Observer inview')}>
-        {({ inView, ref }) => (
-          <Header ref={ref}>
-            Header 2 is fully inside the viewport: {inView.toString()}
-          </Header>
-        )}
-      </InView>
-    </ScrollWrapper>
-  ))
+    </InView>
+  </ScrollWrapper>
+)
+
+export const withThreshold100percentage = () => (
+  <ScrollWrapper>
+    <InView threshold={1} onChange={action('Child Observer inView')}>
+      {({ inView, ref }) => (
+        <Header ref={ref} inView={inView}>
+          Header is fully inside the viewport: {inView.toString()}
+        </Header>
+      )}
+    </InView>
+  </ScrollWrapper>
+)
+export const withThreshold50percentage = () => (
+  <ScrollWrapper>
+    <InView threshold={0.5} onChange={action('Child Observer inView')}>
+      {({ inView, ref }) => (
+        <Header ref={ref} inView={inView}>
+          Header is 50% inside the viewport: {inView.toString()}
+        </Header>
+      )}
+    </InView>
+  </ScrollWrapper>
+)
+export const TallerThanViewportWithThreshold100percentage = () => (
+  <ScrollWrapper>
+    <InView threshold={1}>
+      {({ inView, ref }) => (
+        <Header ref={ref} inView={inView} css={{ height: '150vh' }}>
+          Header is fully inside the viewport: {inView.toString()}
+        </Header>
+      )}
+    </InView>
+  </ScrollWrapper>
+)
+
+export const withThresholdArray = () => (
+  <ScrollWrapper>
+    <InView
+      threshold={[0, 0.25, 0.5, 0.75, 1]}
+      onChange={action('Hit threshold trigger')}
+    >
+      {({ inView, ref }) => (
+        <Header ref={ref} inView={inView}>
+          Header is inside threshold: {inView.toString()} - onChange triggers
+          multiple times.
+        </Header>
+      )}
+    </InView>
+  </ScrollWrapper>
+)
+
+export const withRoot = () => (
+  <RootComponent>
+    {(node) => (
+      <ScrollWrapper>
+        <InView
+          threshold={0}
+          root={node}
+          onChange={action('Child Observer inView')}
+        >
+          {({ inView, ref }) => (
+            <Header ref={ref} inView={inView}>
+              Header is inside the root viewport: {inView.toString()}
+            </Header>
+          )}
+        </InView>
+      </ScrollWrapper>
+    )}
+  </RootComponent>
+)
+
+export const withRootAndRootMargin = () => (
+  <RootComponent>
+    {(node) => (
+      <ScrollWrapper>
+        <InView
+          threshold={0}
+          root={node}
+          rootMargin="100px"
+          onChange={action('Child Observer inView')}
+        >
+          {({ inView, ref }) => (
+            <Header ref={ref} inView={inView}>
+              Header is inside the root viewport: {inView.toString()}
+            </Header>
+          )}
+        </InView>
+      </ScrollWrapper>
+    )}
+  </RootComponent>
+)
+
+export const triggerOnce = () => (
+  <ScrollWrapper>
+    <InView
+      threshold={1}
+      triggerOnce
+      onChange={action('Child Observer inView')}
+    >
+      {({ inView, ref }) => (
+        <Header ref={ref} inView={inView}>
+          Header was fully inside the viewport: {inView.toString()}
+        </Header>
+      )}
+    </InView>
+  </ScrollWrapper>
+)
+
+export const multipleObservers = () => (
+  <ScrollWrapper>
+    <InView threshold={1} onChange={action('Child Observer inView')}>
+      {({ inView, ref }) => (
+        <Header ref={ref}>
+          Header 1 is fully inside the viewport: {inView.toString()}
+        </Header>
+      )}
+    </InView>
+    <InView threshold={1} onChange={action('Child Observer inView')}>
+      {({ inView, ref }) => (
+        <Header ref={ref}>
+          Header 2 is fully inside the viewport: {inView.toString()}
+        </Header>
+      )}
+    </InView>
+  </ScrollWrapper>
+)
