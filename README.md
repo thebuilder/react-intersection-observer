@@ -203,7 +203,7 @@ function Component(props) {
 
   // Use `useCallback` so we don't recreate the function on each render - Could result in infinite loop
   const setRefs = useCallback(
-    node => {
+    (node) => {
       // Ref's from useRef needs to have the node assigned to `current`
       ref.current = node
       // Callback refs, like the one from `useInView`, is a function that takes the node as an argument

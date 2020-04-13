@@ -7,5 +7,6 @@
     "noEmit": false
   },
   "include": ["src/**/*"],
+  "exclude": ["src/stories/**"],
   "files": ["src/test-utils.ts"]
 }

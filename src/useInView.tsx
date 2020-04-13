@@ -20,7 +20,7 @@ export function useInView(
   const [state, setState] = React.useState<State>(initialState)
 
   const setRef = React.useCallback(
-    node => {
+    (node) => {
       if (ref.current) {
         unobserve(ref.current)
 

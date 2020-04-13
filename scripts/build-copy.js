@@ -5,7 +5,7 @@ const rootDir = path.resolve(__dirname, '../')
 const distDir = path.resolve(__dirname, '../dist')
 
 const filesToCopy = ['package.json', 'README.md', 'LICENSE']
-filesToCopy.forEach(file => {
+filesToCopy.forEach((file) => {
   fs.copyFileSync(path.resolve(rootDir, file), path.resolve(distDir, file))
 })
 
@@ -23,7 +23,7 @@ const packageFieldsToRemove = [
   'np',
 ]
 
-packageFieldsToRemove.forEach(field => {
+packageFieldsToRemove.forEach((field) => {
   delete pck[field]
 })
 

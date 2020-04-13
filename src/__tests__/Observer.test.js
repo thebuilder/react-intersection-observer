@@ -173,12 +173,15 @@ it('Should throw error when not passing ref', () => {
 
 it('plain children should not catch bubbling onChange event', () => {
   const onChange = jest.fn()
-  const { getByRole } = render(
+  const { getByLabelText } = render(
     <Observer onChange={onChange}>
-      <input name="field" />
+      <label>
+        <input name="field" />
+        input
+      </label>
     </Observer>,
   )
-  const input = getByRole('textbox')
+  const input = getByLabelText('input')
   fireEvent.change(input, { target: { value: 'changed value' } })
   expect(onChange).not.toHaveBeenCalled()
 })

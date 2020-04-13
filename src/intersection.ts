@@ -125,7 +125,7 @@ export function unobserve(element: Element | null) {
  * Destroy all IntersectionObservers currently connected
  **/
 export function destroy() {
-  OBSERVER_MAP.forEach(observer => {
+  OBSERVER_MAP.forEach((observer) => {
     observer.disconnect()
   })
 
@@ -136,7 +136,7 @@ export function destroy() {
 }
 
 function onChange(changes: IntersectionObserverEntry[]) {
-  changes.forEach(intersection => {
+  changes.forEach((intersection) => {
     const { isIntersecting, intersectionRatio, target } = intersection
     const instance = INSTANCE_MAP.get(target)
 
@@ -144,7 +144,7 @@ function onChange(changes: IntersectionObserverEntry[]) {
     /* istanbul ignore else */
     if (instance && intersectionRatio >= 0) {
       // If threshold is an array, check if any of them intersects. This just triggers the onChange event multiple times.
-      let inView = instance.thresholds.some(threshold => {
+      let inView = instance.thresholds.some((threshold) => {
         return instance.inView
           ? intersectionRatio > threshold
           : intersectionRatio >= threshold

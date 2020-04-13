@@ -8,7 +8,7 @@ import { terser } from 'rollup-plugin-terser'
 import pkg from './package.json'
 
 const root = process.platform === 'win32' ? path.resolve('/') : '/'
-const external = id => !id.startsWith('.') && !id.startsWith(root)
+const external = (id) => !id.startsWith('.') && !id.startsWith(root)
 const extensions = ['.js', '.jsx', '.ts', '.tsx']
 const globals = {
   react: 'React',
