@@ -38,7 +38,6 @@ const Header = React.forwardRef<any, Props>((props: Props, ref) => (
 
 export default {
   title: 'InView Component',
-  component: InView,
 }
 
 export const basic = () => (

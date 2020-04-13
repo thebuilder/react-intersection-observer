@@ -142,7 +142,6 @@
     "@babel/preset-typescript": "^7.9.0",
     "@emotion/react": "^11.0.0-next.12",
     "@storybook/addon-actions": "^5.3.18",
-    "@storybook/addon-docs": "^5.3.18",
     "@storybook/addon-viewport": "^5.3.18",
     "@storybook/components": "^5.3.18",
     "@storybook/preset-create-react-app": "^2.1.1",
