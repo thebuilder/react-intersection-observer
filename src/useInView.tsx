@@ -2,6 +2,7 @@
 import * as React from 'react'
 import { observe, unobserve } from './intersection'
 import { InViewHookResponse, IntersectionOptions } from './index'
+import { useEffect } from 'react'
 
 type State = {
   inView: boolean
@@ -23,12 +24,6 @@ export function useInView(
     (node) => {
       if (ref.current) {
         unobserve(ref.current)
-
-        if (!node && !options.triggerOnce) {
-          // If we didn't get a new node, then reset the state (unless the hook is set to only `triggerOnce`)
-          // This ensures we correctly reflect the current state.
-          setState(initialState)
-        }
       }
 
       if (node) {
@@ -51,6 +46,14 @@ export function useInView(
     },
     [options.threshold, options.root, options.rootMargin, options.triggerOnce],
   )
+
+  useEffect(() => {
+    if (!ref.current && state !== initialState && !options.triggerOnce) {
+      // If we don't have a ref, then reset the state (unless the hook is set to only `triggerOnce`)
+      // This ensures we correctly reflect the current state.
+      setState(initialState)
+    }
+  })
 
   return [setRef, state.inView, state.entry]
 }
