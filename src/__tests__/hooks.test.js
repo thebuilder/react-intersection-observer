@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { render } from '@testing-library/react'
 import { useInView } from '../useInView'
 import { intersectionMockInstance, mockAllIsIntersecting } from '../test-utils'
@@ -82,4 +82,76 @@ test('inView should be false when component is unmounted', () => {
   getByText('true')
   rerender(<HookComponent unmount />)
   getByText('false')
+})
+
+const SwitchHookComponent = ({ options, toggle, unmount }) => {
+  const [ref, inView] = useInView(options)
+  return (
+    <>
+      <div
+        data-testid="item-1"
+        data-inview={!toggle && inView}
+        ref={!toggle && !unmount ? ref : undefined}
+      />
+      <div
+        data-testid="item-2"
+        data-inview={!!toggle && inView}
+        ref={toggle && !unmount ? ref : undefined}
+      />
+    </>
+  )
+}
+
+/**
+ * This is a test for the case where people move the ref around (please don't)
+ */
+test('should handle ref removed', () => {
+  const { rerender, getByTestId } = render(<SwitchHookComponent />)
+  mockAllIsIntersecting(true)
+
+  const item1 = getByTestId('item-1')
+  const item2 = getByTestId('item-2')
+
+  // Item1 should be inView
+  expect(item1.getAttribute('data-inview')).toBe('true')
+  expect(item2.getAttribute('data-inview')).toBe('false')
+
+  rerender(<SwitchHookComponent toggle />)
+  mockAllIsIntersecting(true)
+
+  // Item2 should be inView
+  expect(item1.getAttribute('data-inview')).toBe('false')
+  expect(item2.getAttribute('data-inview')).toBe('true')
+
+  rerender(<SwitchHookComponent unmount />)
+
+  // Nothing should be inView
+  expect(item1.getAttribute('data-inview')).toBe('false')
+  expect(item2.getAttribute('data-inview')).toBe('false')
+
+  // Add the ref back
+  rerender(<SwitchHookComponent />)
+  mockAllIsIntersecting(true)
+  expect(item1.getAttribute('data-inview')).toBe('true')
+  expect(item2.getAttribute('data-inview')).toBe('false')
+})
+
+const MergeRefsComponent = ({ options }) => {
+  const [inViewRef, inView] = useInView(options)
+  const setRef = useCallback(
+    (node) => {
+      inViewRef(node)
+    },
+    [inViewRef],
+  )
+
+  return <div data-testid="inview" data-inview={inView} ref={setRef} />
+}
+
+test('should handle ref merged', () => {
+  const { rerender, getByTestId } = render(<MergeRefsComponent />)
+  mockAllIsIntersecting(true)
+  rerender(<MergeRefsComponent />)
+
+  expect(getByTestId('inview').getAttribute('data-inview')).toBe('true')
 })
