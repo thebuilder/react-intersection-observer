@@ -41,7 +41,7 @@ export function useInView(
         )
       }
 
-      // Store a reference to the node
+      // Store a reference to the node, so we can unobserve it later
       ref.current = node
     },
     [options.threshold, options.root, options.rootMargin, options.triggerOnce],
@@ -50,7 +50,7 @@ export function useInView(
   useEffect(() => {
     if (!ref.current && state !== initialState && !options.triggerOnce) {
       // If we don't have a ref, then reset the state (unless the hook is set to only `triggerOnce`)
-      // This ensures we correctly reflect the current state.
+      // This ensures we correctly reflect the current state - If you aren't observing anything, then nothing is inView
       setState(initialState)
     }
   })
