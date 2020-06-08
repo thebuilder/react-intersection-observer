@@ -90,18 +90,17 @@ for an IntersectionObserver.
 ```jsx
 import React from 'react'
 import { useInView } from 'react-intersection-observer'
-import { useSpring, animated } from 'react-spring'
+import { motion } from 'framer-motion'
 
 const LazyAnimation = () => {
   const [ref, inView] = useInView({
     rootMargin: '-100px 0px',
   })
-  const props = useSpring({ opacity: inView ? 1 : 0 })
 
   return (
-    <animated.div ref={ref} style={props}>
+    <motion.div ref={ref} style={{ opacity: inView ? 1 : 0 }}>
       <span aria-label="Wave">👋</span>
-    </animated.div>
+    </motion.div>
   )
 }
 
