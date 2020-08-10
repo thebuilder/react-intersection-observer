@@ -18,11 +18,27 @@ export function useInView(
   options: IntersectionOptions = {},
 ): InViewHookResponse {
   const ref = React.useRef<Element>()
+  const previousOptions = React.useRef<IntersectionOptions>()
   const [state, setState] = React.useState<State>(initialState)
 
   const setRef = React.useCallback(
     (node) => {
       if (ref.current) {
+        const prevOptions = previousOptions.current
+        if (
+          ref.current === node &&
+          prevOptions &&
+          prevOptions.triggerOnce === options.triggerOnce &&
+          prevOptions.threshold === options.threshold &&
+          prevOptions.rootMargin === options.rootMargin &&
+          prevOptions.root === options.root
+        ) {
+          // Nothing changed - Most likely the component just tried to reassign the ref.
+          // We can safely return early
+          return
+        }
+
+        // Make sure we unobserve the current node, so we can create a new instance
         unobserve(ref.current)
       }
 
@@ -43,6 +59,7 @@ export function useInView(
 
       // Store a reference to the node, so we can unobserve it later
       ref.current = node
+      previousOptions.current = options
     },
     [options.threshold, options.root, options.rootMargin, options.triggerOnce],
   )
