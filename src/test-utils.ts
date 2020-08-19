@@ -5,7 +5,7 @@ const instanceMap = new Map()
 
 beforeAll(() => {
   // @ts-ignore
-  global.IntersectionObserver = jest.fn((cb, options) => {
+  global.IntersectionObserver = jest.fn((cb, options = {}) => {
     const instance = {
       thresholds: Array.isArray(options.threshold)
         ? options.threshold

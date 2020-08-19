@@ -140,13 +140,11 @@
     "@babel/preset-flow": "^7.9.0",
     "@babel/preset-react": "^7.9.4",
     "@babel/preset-typescript": "^7.9.0",
-    "@emotion/react": "^11.0.0-next.12",
-    "@storybook/addon-actions": "^5.3.18",
-    "@storybook/addon-viewport": "^5.3.18",
-    "@storybook/components": "^5.3.18",
-    "@storybook/preset-create-react-app": "^3.1.2",
-    "@storybook/react": "^5.3.18",
-    "@storybook/theming": "^5.3.18",
+    "@emotion/react": "11.0.0-next.12",
+    "@storybook/addon-actions": "^6.0.13",
+    "@storybook/addon-viewport": "^6.0.13",
+    "@storybook/react": "^6.0.13",
+    "@storybook/theming": "^6.0.13",
     "@testing-library/jest-dom": "^5.5.0",
     "@testing-library/react": "^10.0.2",
     "@types/jest": "^26.0.8",
@@ -174,10 +172,9 @@
     "lint-staged": "^10.1.3",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.4",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "^3.4.1",
-    "react-test-renderer": "^16.13.1",
+    "react": "^17.0.0-rc.0",
+    "react-dom": "^17.0.0-rc.0",
+    "react-test-renderer": "^17.0.0-rc.0",
     "rollup": "^2.6.0",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^10.0.1",
@@ -185,5 +182,9 @@
     "rollup-plugin-replace": "^2.1.0",
     "rollup-plugin-terser": "^5.3.0",
     "typescript": "^3.8.3"
+  },
+  "resolutions": {
+    "react": "17.0.0-rc.0",
+    "react-dom": "17.0.0-rc.0"
   }
 }
