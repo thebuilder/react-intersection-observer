@@ -74,7 +74,7 @@ export class InView extends React.Component<
   node: Element | null = null
 
   observeNode() {
-    if (!this.node) return
+    if (!this.node || this.props.skip) return
     const { threshold, root, rootMargin } = this.props
     observe(this.node, this.handleChange, {
       threshold,

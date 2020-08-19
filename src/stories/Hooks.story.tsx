@@ -124,3 +124,9 @@ export const triggerOnce = () => (
     <HookComponent options={{ triggerOnce: true }} />
   </ScrollWrapper>
 )
+
+export const skip = () => (
+  <ScrollWrapper>
+    <HookComponent options={{ skip: true }} />
+  </ScrollWrapper>
+)

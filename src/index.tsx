@@ -30,6 +30,8 @@ interface RenderProps {
 export interface IntersectionOptions extends IntersectionObserverInit {
   /** Only trigger the inView callback once */
   triggerOnce?: boolean
+  /** Skip assigning the observer to the `ref` */
+  skip?: boolean
 }
 
 export interface IntersectionObserverProps extends IntersectionOptions {
