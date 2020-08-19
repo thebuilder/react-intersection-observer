@@ -77,6 +77,12 @@ it('Should render <Observer /> render when in view', () => {
   getByText('Inview: true')
 })
 
+it('Should respect skip', () => {
+  render(<Observer skip>{plainChild}</Observer>)
+
+  expect(observe).not.toHaveBeenCalled()
+})
+
 it('Should unobserve old node', () => {
   const { rerender, container } = render(
     <Observer>

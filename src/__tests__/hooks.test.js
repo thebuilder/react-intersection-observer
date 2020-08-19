@@ -67,6 +67,27 @@ test('should respect trigger once', () => {
   getByText('true')
 })
 
+test('should respect skip', () => {
+  const { getByText, rerender } = render(
+    <HookComponent options={{ skip: true }} />,
+  )
+  mockAllIsIntersecting(false)
+  getByText('false')
+
+  rerender(<HookComponent options={{ skip: false }} />)
+  mockAllIsIntersecting(true)
+  getByText('true')
+})
+
+test('should not reset current state if changing skip', () => {
+  const { getByText, rerender } = render(
+    <HookComponent options={{ skip: false }} />,
+  )
+  mockAllIsIntersecting(true)
+  rerender(<HookComponent options={{ skip: true }} />)
+  getByText('true')
+})
+
 test('should unmount the hook', () => {
   const { unmount, getByTestId } = render(<HookComponent />)
   const wrapper = getByTestId('wrapper')
