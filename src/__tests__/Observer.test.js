@@ -83,6 +83,25 @@ it('Should respect skip', () => {
   expect(observe).not.toHaveBeenCalled()
 })
 
+it('Should not trigger onChange whenn skipping', () => {
+  observe.mockImplementation((el, callback, options) => {
+    callback(true, {})
+  })
+  const onChange = jest.fn()
+  const { rerender } = render(
+    <Observer onChange={onChange}>{plainChild}</Observer>,
+  )
+  expect(onChange).toHaveBeenCalledTimes(1)
+
+  rerender(
+    <Observer skip onChange={onChange}>
+      {plainChild}
+    </Observer>,
+  )
+  expect(onChange).toHaveBeenCalledTimes(1)
+  expect(unobserve).toHaveBeenCalled()
+})
+
 it('Should unobserve old node', () => {
   const { rerender, container } = render(
     <Observer>
