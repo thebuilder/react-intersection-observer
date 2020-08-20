@@ -50,7 +50,8 @@ export class InView extends React.Component<
     if (
       prevProps.rootMargin !== this.props.rootMargin ||
       prevProps.root !== this.props.root ||
-      prevProps.threshold !== this.props.threshold
+      prevProps.threshold !== this.props.threshold ||
+      prevProps.skip !== this.props.skip
     ) {
       unobserve(this.node)
       this.observeNode()
@@ -86,7 +87,7 @@ export class InView extends React.Component<
   handleNode = (node?: Element | null) => {
     if (this.node) {
       unobserve(this.node)
-      if (!node && !this.props.triggerOnce) {
+      if (!node && !this.props.triggerOnce && !this.props.skip) {
         this.setState({ inView: false, entry: undefined })
       }
     }
