@@ -13,7 +13,7 @@
 React implementation of the
 [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
 to tell you when an element enters or leaves the viewport. Contains both a
-[Hooks](#hooks), [render props](#render-props) and
+[Hooks](#hooks-), [render props](#render-props) and
 [plain children](#plain-children) implementation.
 
 **Storybook Demo:**
