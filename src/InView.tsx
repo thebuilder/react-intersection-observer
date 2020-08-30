@@ -1,7 +1,6 @@
 import * as React from 'react'
-import invariant from 'tiny-invariant'
-import { observe, unobserve } from './intersection'
 import { IntersectionObserverProps, PlainChildrenProps } from './index'
+import { newObserve } from './observers'
 
 type State = {
   inView: boolean
@@ -16,12 +15,6 @@ function isPlainChildren(
 
 /**
  * Monitors scroll, and triggers the children function with updated props
- *
- <InView>
- {({inView, ref}) => (
-   <h1 ref={ref}>{`${inView}`}</h1>
- )}
- </InView>
  */
 export class InView extends React.Component<
   IntersectionObserverProps | PlainChildrenProps,
@@ -38,13 +31,6 @@ export class InView extends React.Component<
     entry: undefined,
   }
 
-  componentDidMount() {
-    invariant(
-      this.node,
-      `react-intersection-observer: No DOM node found. Make sure you forward "ref" to the root DOM element you want to observe.`,
-    )
-  }
-
   componentDidUpdate(prevProps: IntersectionObserverProps, prevState: State) {
     // If a IntersectionObserver option changed, reinit the observer
     if (
@@ -53,13 +39,13 @@ export class InView extends React.Component<
       prevProps.threshold !== this.props.threshold ||
       prevProps.skip !== this.props.skip
     ) {
-      unobserve(this.node)
+      this.unobserve()
       this.observeNode()
     }
 
     if (prevState.inView !== this.state.inView) {
       if (this.state.inView && this.props.triggerOnce) {
-        unobserve(this.node)
+        this.unobserve()
         this.node = null
       }
     }
@@ -67,26 +53,34 @@ export class InView extends React.Component<
 
   componentWillUnmount() {
     if (this.node) {
-      unobserve(this.node)
+      this.unobserve()
       this.node = null
     }
   }
 
   node: Element | null = null
+  _unobserveCb: (() => void) | null = null
 
   observeNode() {
     if (!this.node || this.props.skip) return
     const { threshold, root, rootMargin } = this.props
-    observe(this.node, this.handleChange, {
+    this._unobserveCb = newObserve(this.node, this.handleChange, {
       threshold,
       root,
       rootMargin,
     })
   }
 
+  unobserve() {
+    if (this._unobserveCb) {
+      this._unobserveCb()
+      this._unobserveCb = null
+    }
+  }
+
   handleNode = (node?: Element | null) => {
     if (this.node) {
-      unobserve(this.node)
+      this.unobserve()
       if (!node && !this.props.triggerOnce && !this.props.skip) {
         this.setState({ inView: false, entry: undefined })
       }
@@ -95,7 +89,8 @@ export class InView extends React.Component<
     this.observeNode()
   }
 
-  handleChange = (inView: boolean, entry: IntersectionObserverEntry) => {
+  handleChange = (entry: IntersectionObserverEntry) => {
+    const inView = entry.isIntersecting || false
     // Only trigger a state update if inView has changed.
     // This prevents an unnecessary extra state update during mount, when the element stats outside the viewport
     if (inView !== this.state.inView || inView) {
@@ -122,6 +117,7 @@ export class InView extends React.Component<
       root,
       rootMargin,
       onChange,
+      skip,
       ...props
     } = this.props
 

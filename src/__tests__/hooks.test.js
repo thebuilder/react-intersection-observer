@@ -105,6 +105,10 @@ test('inView should be false when component is unmounted', () => {
   getByText('false')
 })
 
+test('should handle new options', () => {
+  render(<HookComponent options={{ isVisible: true, delay: 100 }} />)
+})
+
 const SwitchHookComponent = ({ options, toggle, unmount }) => {
   const [ref, inView] = useInView(options)
   return (

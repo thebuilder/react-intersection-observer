@@ -8,8 +8,7 @@ export default InView
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 
 export type ObserverInstanceCallback = (
-  inView: boolean,
-  intersection: IntersectionObserverEntry,
+  entry: IntersectionObserverEntry,
 ) => void
 
 export type ObserverInstance = {
