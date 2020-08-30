@@ -1,1 +1,1 @@
-declare module 'invariant'
+declare module 'invariant';

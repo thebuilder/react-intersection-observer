@@ -1,18 +1,18 @@
 /** @jsx jsx */
-import { jsx } from '@emotion/react'
-import * as React from 'react'
-import { action } from '@storybook/addon-actions'
-import InView from '../index'
-import ScrollWrapper from './ScrollWrapper'
-import RootComponent from './Root'
-import Status from './Status'
-import { motion } from 'framer-motion'
+import { jsx } from '@emotion/react';
+import * as React from 'react';
+import { action } from '@storybook/addon-actions';
+import { InView } from '../index';
+import ScrollWrapper from './ScrollWrapper';
+import RootComponent from './Root';
+import Status from './Status';
+import { motion } from 'framer-motion';
 
 type Props = {
-  className?: string
-  children?: React.ReactNode
-  inView?: boolean
-}
+  className?: string;
+  children?: React.ReactNode;
+  inView?: boolean;
+};
 
 const Header = React.forwardRef<any, Props>((props: Props, ref) => (
   <div ref={ref} data-inview={props.inView}>
@@ -34,11 +34,11 @@ const Header = React.forwardRef<any, Props>((props: Props, ref) => (
       <h2>{props.children}</h2>
     </motion.div>
   </div>
-))
+));
 
 export default {
   title: 'InView Component',
-}
+};
 
 export const basic = () => (
   <ScrollWrapper>
@@ -50,7 +50,7 @@ export const basic = () => (
       )}
     </InView>
   </ScrollWrapper>
-)
+);
 
 export const withRootMargin = () => (
   <ScrollWrapper>
@@ -62,7 +62,7 @@ export const withRootMargin = () => (
       )}
     </InView>
   </ScrollWrapper>
-)
+);
 
 export const startInView = () => (
   <InView onChange={action('Child Observer inView')}>
@@ -72,7 +72,7 @@ export const startInView = () => (
       </Header>
     )}
   </InView>
-)
+);
 
 export const plainChildren = () => (
   <ScrollWrapper>
@@ -84,7 +84,7 @@ export const plainChildren = () => (
       <Header>Plain children</Header>
     </InView>
   </ScrollWrapper>
-)
+);
 
 export const tallerThanViewport = () => (
   <ScrollWrapper>
@@ -96,7 +96,7 @@ export const tallerThanViewport = () => (
       )}
     </InView>
   </ScrollWrapper>
-)
+);
 
 export const withThreshold100percentage = () => (
   <ScrollWrapper>
@@ -108,7 +108,7 @@ export const withThreshold100percentage = () => (
       )}
     </InView>
   </ScrollWrapper>
-)
+);
 export const withThreshold50percentage = () => (
   <ScrollWrapper>
     <InView threshold={0.5} onChange={action('Child Observer inView')}>
@@ -119,7 +119,7 @@ export const withThreshold50percentage = () => (
       )}
     </InView>
   </ScrollWrapper>
-)
+);
 export const TallerThanViewportWithThreshold100percentage = () => (
   <ScrollWrapper>
     <InView threshold={1}>
@@ -130,7 +130,7 @@ export const TallerThanViewportWithThreshold100percentage = () => (
       )}
     </InView>
   </ScrollWrapper>
-)
+);
 
 export const withThresholdArray = () => (
   <ScrollWrapper>
@@ -146,7 +146,7 @@ export const withThresholdArray = () => (
       )}
     </InView>
   </ScrollWrapper>
-)
+);
 
 export const withRoot = () => (
   <RootComponent>
@@ -166,7 +166,7 @@ export const withRoot = () => (
       </ScrollWrapper>
     )}
   </RootComponent>
-)
+);
 
 export const withRootAndRootMargin = () => (
   <RootComponent>
@@ -187,7 +187,7 @@ export const withRootAndRootMargin = () => (
       </ScrollWrapper>
     )}
   </RootComponent>
-)
+);
 
 export const triggerOnce = () => (
   <ScrollWrapper>
@@ -203,7 +203,7 @@ export const triggerOnce = () => (
       )}
     </InView>
   </ScrollWrapper>
-)
+);
 
 export const multipleObservers = () => (
   <ScrollWrapper>
@@ -222,4 +222,4 @@ export const multipleObservers = () => (
       )}
     </InView>
   </ScrollWrapper>
-)
+);

@@ -1,8 +1,8 @@
-import React from 'react'
-import { addDecorator, addParameters } from '@storybook/react'
-import { create } from '@storybook/theming'
-import 'intersection-observer'
-import { Global } from '@emotion/react'
+import React from 'react';
+import { addDecorator, addParameters } from '@storybook/react';
+import { create } from '@storybook/theming';
+import 'intersection-observer';
+import { Global } from '@emotion/react';
 
 addParameters({
   options: {
@@ -14,7 +14,7 @@ addParameters({
     isFullscreen: false,
     panelPosition: 'bottom',
   },
-})
+});
 
 addDecorator((storyFn) => (
   <>
@@ -32,4 +32,4 @@ addDecorator((storyFn) => (
     />
     {storyFn()}
   </>
-))
+));

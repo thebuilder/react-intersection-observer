@@ -55,7 +55,7 @@ npm install react-intersection-observer --save
 #### `useInView`
 
 ```js
-const [ref, inView, entry] = useInView(options)
+const [ref, inView, entry] = useInView(options);
 ```
 
 React Hooks make it easy to monitor the `inView` state of your components. Call
@@ -66,21 +66,21 @@ Assign the `ref` to the DOM element you want to monitor, and the hook will
 report the status.
 
 ```jsx
-import React from 'react'
-import { useInView } from 'react-intersection-observer'
+import React from 'react';
+import { useInView } from 'react-intersection-observer';
 
 const Component = () => {
   const [ref, inView, entry] = useInView({
     /* Optional options */
     threshold: 0,
-  })
+  });
 
   return (
     <div ref={ref}>
       <h2>{`Header inside viewport ${inView}.`}</h2>
     </div>
-  )
-}
+  );
+};
 ```
 
 [![Edit react-intersection-observer](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/react-intersection-observer-ud2vo?fontsize=14&hidenavigation=1&theme=dark)
@@ -99,7 +99,7 @@ on `entry`, giving you access to all the details about the current intersection
 state.
 
 ```jsx
-import { InView } from 'react-intersection-observer'
+import { InView } from 'react-intersection-observer';
 
 const Component = () => (
   <InView>
@@ -109,9 +109,9 @@ const Component = () => (
       </div>
     )}
   </InView>
-)
+);
 
-export default Component
+export default Component;
 ```
 
 ### Plain children
@@ -122,15 +122,15 @@ state in your own component. Any extra props you add to `<InView>` will be
 passed to the HTML element, allowing you set the `className`, `style`, etc.
 
 ```jsx
-import { InView } from 'react-intersection-observer'
+import { InView } from 'react-intersection-observer';
 
 const Component = () => (
   <InView as="div" onChange={(inView, entry) => console.log('Inview:', inView)}>
     <h2>Plain children are always rendered. Use onChange to monitor state.</h2>
   </InView>
-)
+);
 
-export default Component
+export default Component;
 ```
 
 > ⚠️ When rendering a plain child, make sure you keep your HTML output semantic.
@@ -157,15 +157,15 @@ argument for the hooks.
 > avoid the component re-rendering too often. For example:
 
 ```js
-const THRESHOLD = [0.25, 0.5, 0.75] // Store multiple thresholds in a constant
+const THRESHOLD = [0.25, 0.5, 0.75]; // Store multiple thresholds in a constant
 const MyComponent = () => {
-  const [ref, inView, entry] = useInView({ threshold: THRESHOLD })
+  const [ref, inView, entry] = useInView({ threshold: THRESHOLD });
   return (
     <div ref={ref}>
       Triggered at intersection ratio {entry.intersectionRatio}
     </div>
-  )
-}
+  );
+};
 ```
 
 ### InView Props
@@ -195,25 +195,25 @@ few ideas for how you can use it.
 You can wrap multiple `ref` assignments in a single `useCallback`:
 
 ```js
-import React, { useRef } from 'react'
-import { useInView } from 'react-intersection-observer'
+import React, { useRef } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 function Component(props) {
-  const ref = useRef()
-  const [inViewRef, inView] = useInView()
+  const ref = useRef();
+  const [inViewRef, inView] = useInView();
 
   // Use `useCallback` so we don't recreate the function on each render - Could result in infinite loop
   const setRefs = useCallback(
     (node) => {
       // Ref's from useRef needs to have the node assigned to `current`
-      ref.current = node
+      ref.current = node;
       // Callback refs, like the one from `useInView`, is a function that takes the node as an argument
-      inViewRef(node)
+      inViewRef(node);
     },
     [inViewRef],
-  )
+  );
 
-  return <div ref={setRefs}>Shared ref is visible: {inView}</div>
+  return <div ref={setRefs}>Shared ref is visible: {inView}</div>;
 }
 ```
 
@@ -258,23 +258,23 @@ Call the `intersectionMockInstance` method with an element, to get the (mocked)
 ### Test Example
 
 ```js
-import React from 'react'
-import { render } from 'react-testing-library'
-import { useInView } from 'react-intersection-observer'
-import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils'
+import React from 'react';
+import { render } from 'react-testing-library';
+import { useInView } from 'react-intersection-observer';
+import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
 
 const HookComponent = ({ options }) => {
-  const [ref, inView] = useInView(options)
-  return <div ref={ref}>{inView.toString()}</div>
-}
+  const [ref, inView] = useInView(options);
+  return <div ref={ref}>{inView.toString()}</div>;
+};
 
 test('should create a hook inView', () => {
-  const { getByText } = render(<HookComponent />)
+  const { getByText } = render(<HookComponent />);
 
   // This causes all (existing) IntersectionObservers to be set as intersecting
-  mockAllIsIntersecting(true)
-  getByText('true')
-})
+  mockAllIsIntersecting(true);
+  getByText('true');
+});
 ```
 
 ## Intersection Observer
@@ -301,7 +301,7 @@ yarn add intersection-observer
 Then import it in your app:
 
 ```js
-import 'intersection-observer'
+import 'intersection-observer';
 ```
 
 If you are using Webpack (or similar) you could use
@@ -315,7 +315,7 @@ this:
  **/
 async function loadPolyfills() {
   if (typeof window.IntersectionObserver === 'undefined') {
-    await import('intersection-observer')
+    await import('intersection-observer');
   }
 }
 ```

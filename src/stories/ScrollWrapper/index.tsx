@@ -1,10 +1,10 @@
 /** @jsx jsx */
-import { jsx } from '@emotion/react'
-import React from 'react'
+import { jsx } from '@emotion/react';
+import React from 'react';
 
 type Props = {
-  children: React.ReactNode
-}
+  children: React.ReactNode;
+};
 
 /**
  * ScrollWrapper directs the user to scroll the page to reveal it's children.
@@ -43,7 +43,7 @@ function ScrollWrapper({ children, ...props }: Props) {
         <h1>⬆︎ Scroll up ⬆︎</h1>
       </section>
     </div>
-  )
+  );
 }
 
-export default ScrollWrapper
+export default ScrollWrapper;

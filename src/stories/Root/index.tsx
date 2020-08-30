@@ -1,26 +1,26 @@
 /** @jsx jsx */
-import { jsx } from '@emotion/react'
-import * as React from 'react'
+import { jsx } from '@emotion/react';
+import * as React from 'react';
 
 type Props = {
-  children: (node: HTMLElement) => React.ReactNode
-  className?: string
-}
+  children: (node: HTMLElement) => React.ReactNode;
+  className?: string;
+};
 
 type State = {
-  node: HTMLElement | null
-}
+  node: HTMLElement | null;
+};
 
 class RootComponent extends React.PureComponent<Props, State> {
   state = {
     node: null,
-  }
+  };
 
   handleNode = (node: HTMLElement | null) => {
     this.setState({
       node,
-    })
-  }
+    });
+  };
 
   render() {
     return (
@@ -42,8 +42,8 @@ class RootComponent extends React.PureComponent<Props, State> {
         // @ts-ignore */}
         {this.state.node ? this.props.children(this.state.node) : null}
       </div>
-    )
+    );
   }
 }
 
-export default RootComponent
+export default RootComponent;

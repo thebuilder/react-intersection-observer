@@ -1,18 +1,18 @@
 /** @jsx jsx */
-import { jsx } from '@emotion/react'
-import { action } from '@storybook/addon-actions'
-import { IntersectionOptions, useInView } from '../index'
-import ScrollWrapper from './ScrollWrapper'
-import Status from './Status'
-import { motion } from 'framer-motion'
-import React from 'react'
+import { jsx } from '@emotion/react';
+import { action } from '@storybook/addon-actions';
+import { IntersectionOptions, useInView } from '../index';
+import ScrollWrapper from './ScrollWrapper';
+import Status from './Status';
+import { motion } from 'framer-motion';
+import React from 'react';
 
 type Props = {
-  className?: string
-  children?: React.ReactNode
-  options?: IntersectionOptions
-  lazy?: boolean
-}
+  className?: string;
+  children?: React.ReactNode;
+  options?: IntersectionOptions;
+  lazy?: boolean;
+};
 
 const HookComponent = ({
   options,
@@ -21,16 +21,16 @@ const HookComponent = ({
   lazy,
   ...rest
 }: Props) => {
-  const [ref, inView, entry] = useInView(options)
-  const [isLoading, setIsLoading] = React.useState(lazy)
-  action('Inview')(inView, entry)
+  const [ref, inView, entry] = useInView(options);
+  const [isLoading, setIsLoading] = React.useState(lazy);
+  action('Inview')(inView, entry);
 
   React.useEffect(() => {
-    if (isLoading) setIsLoading(false)
-  }, [isLoading, lazy])
+    if (isLoading) setIsLoading(false);
+  }, [isLoading, lazy]);
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div>Loading...</div>;
   }
 
   return (
@@ -58,32 +58,32 @@ const HookComponent = ({
         </h2>
       </motion.div>
     </React.Fragment>
-  )
-}
+  );
+};
 
 export default {
   title: 'useInView hook',
-}
+};
 
 export const basic = () => (
   <ScrollWrapper>
     <HookComponent />
   </ScrollWrapper>
-)
+);
 
 export const lazyHookRendering = () => (
   <ScrollWrapper>
     <HookComponent lazy />
   </ScrollWrapper>
-)
+);
 
-export const startInView = () => <HookComponent />
+export const startInView = () => <HookComponent />;
 
 export const tallerThanViewport = () => (
   <ScrollWrapper>
     <HookComponent css={{ height: '150vh' }} />
   </ScrollWrapper>
-)
+);
 
 export const withThreshold100percentage = () => (
   <ScrollWrapper>
@@ -91,14 +91,14 @@ export const withThreshold100percentage = () => (
       Header is fully inside the viewport
     </HookComponent>
   </ScrollWrapper>
-)
+);
 export const withThreshold50percentage = () => (
   <ScrollWrapper>
     <HookComponent options={{ threshold: 0.5 }}>
       Header is fully inside the viewport
     </HookComponent>
   </ScrollWrapper>
-)
+);
 
 export const tallerThanViewportWithThreshold100percentage = () => (
   <ScrollWrapper>
@@ -106,7 +106,7 @@ export const tallerThanViewportWithThreshold100percentage = () => (
       Header is fully inside the viewport
     </HookComponent>
   </ScrollWrapper>
-)
+);
 
 export const multipleThresholds = () => (
   <ScrollWrapper>
@@ -117,16 +117,16 @@ export const multipleThresholds = () => (
       Header is fully inside the viewport
     </HookComponent>
   </ScrollWrapper>
-)
+);
 
 export const triggerOnce = () => (
   <ScrollWrapper>
     <HookComponent options={{ triggerOnce: true }} />
   </ScrollWrapper>
-)
+);
 
 export const skip = () => (
   <ScrollWrapper>
     <HookComponent options={{ skip: true }} />
   </ScrollWrapper>
-)
+);
