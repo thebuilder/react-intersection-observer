@@ -201,6 +201,9 @@ This is still a very new addition, so check
 support. If `trackVisibility` has been set, and the current browser doesn't
 support it, a fallback has been added to always report `isVisible` as `true`.
 
+It's not added to the TypeScript `lib.d.ts` file yet, so you will also have to
+extend the `IntersectionObserverEntry` with the `isVisible` boolean.
+
 ## Recipes
 
 The `IntersectionObserver` itself is just a simple but powerful tool. Here's a
