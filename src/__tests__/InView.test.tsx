@@ -31,24 +31,28 @@ it('should render plain children', () => {
 
 it('should render with tag', () => {
   const { container } = render(<InView tag="span">inner</InView>);
-  const tagName = container.firstChild.tagName.toLowerCase();
+  const tagName = container.children[0].tagName.toLowerCase();
   expect(tagName).toBe('span');
 });
 
 it('should render with className', () => {
   const { container } = render(<InView className="inner-class">inner</InView>);
-  expect(container.firstChild).toHaveClass('inner-class');
+  expect(container.children[0]).toHaveClass('inner-class');
 });
 
 it('Should respect skip', () => {
   const cb = jest.fn();
-  render(<InView skip onChange={cb}></InView>);
-  mockAllIsIntersecting();
+  render(
+    <InView skip onChange={cb}>
+      inner
+    </InView>,
+  );
+  mockAllIsIntersecting(true);
 
   expect(cb).not.toHaveBeenCalled();
 });
 it('Should unobserve old node', () => {
-  const { rerender, container } = render(
+  const { rerender } = render(
     <InView>
       {({ inView, ref }) => (
         <div key="1" ref={ref}>
@@ -77,7 +81,7 @@ it('Should ensure node exists before observing and unobserving', () => {
 it('Should recreate observer when threshold change', () => {
   const { container, rerender } = render(<InView>Inner</InView>);
   mockAllIsIntersecting(true);
-  const instance = intersectionMockInstance(container.firstChild);
+  const instance = intersectionMockInstance(container.children[0]);
   jest.spyOn(instance, 'unobserve');
 
   rerender(<InView threshold={0.5}>Inner</InView>);
@@ -87,17 +91,18 @@ it('Should recreate observer when threshold change', () => {
 it('Should recreate observer when root change', () => {
   const { container, rerender } = render(<InView>Inner</InView>);
   mockAllIsIntersecting(true);
-  const instance = intersectionMockInstance(container.firstChild);
+  const instance = intersectionMockInstance(container.children[0]);
   jest.spyOn(instance, 'unobserve');
 
-  rerender(<InView root={{}}>Inner</InView>);
+  const root = document.createElement('div');
+  rerender(<InView root={root}>Inner</InView>);
   expect(instance.unobserve).toHaveBeenCalled();
 });
 
 it('Should recreate observer when rootMargin change', () => {
   const { container, rerender } = render(<InView>Inner</InView>);
   mockAllIsIntersecting(true);
-  const instance = intersectionMockInstance(container.firstChild);
+  const instance = intersectionMockInstance(container.children[0]);
   jest.spyOn(instance, 'unobserve');
 
   rerender(<InView rootMargin="10px">Inner</InView>);
@@ -105,9 +110,9 @@ it('Should recreate observer when rootMargin change', () => {
 });
 
 it('Should unobserve when triggerOnce comes into view', () => {
-  const { container, rerender } = render(<InView triggerOnce>Inner</InView>);
+  const { container } = render(<InView triggerOnce>Inner</InView>);
   mockAllIsIntersecting(false);
-  const instance = intersectionMockInstance(container.firstChild);
+  const instance = intersectionMockInstance(container.children[0]);
   jest.spyOn(instance, 'unobserve');
   mockAllIsIntersecting(true);
 
@@ -116,7 +121,7 @@ it('Should unobserve when triggerOnce comes into view', () => {
 
 it('Should unobserve when unmounted', () => {
   const { container, unmount } = render(<InView triggerOnce>Inner</InView>);
-  const instance = intersectionMockInstance(container.firstChild);
+  const instance = intersectionMockInstance(container.children[0]);
   jest.spyOn(instance, 'unobserve');
 
   unmount();

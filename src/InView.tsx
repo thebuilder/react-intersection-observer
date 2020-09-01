@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IntersectionObserverProps, PlainChildrenProps } from './index';
-import { newObserve } from './observers';
+import { observe } from './observers';
 
 type State = {
   inView: boolean;
@@ -37,7 +37,9 @@ export class InView extends React.Component<
       prevProps.rootMargin !== this.props.rootMargin ||
       prevProps.root !== this.props.root ||
       prevProps.threshold !== this.props.threshold ||
-      prevProps.skip !== this.props.skip
+      prevProps.skip !== this.props.skip ||
+      prevProps.trackVisibility !== this.props.trackVisibility ||
+      prevProps.delay !== this.props.delay
     ) {
       this.unobserve();
       this.observeNode();
@@ -63,11 +65,16 @@ export class InView extends React.Component<
 
   observeNode() {
     if (!this.node || this.props.skip) return;
-    const { threshold, root, rootMargin } = this.props;
-    this._unobserveCb = newObserve(this.node, this.handleChange, {
+    const { threshold, root, rootMargin, trackVisibility, delay } = this.props;
+
+    this._unobserveCb = observe(this.node, this.handleChange, {
       threshold,
       root,
       rootMargin,
+      // @ts-ignore
+      trackVisibility,
+      // @ts-ignore
+      delay,
     });
   }
 
@@ -118,6 +125,8 @@ export class InView extends React.Component<
       rootMargin,
       onChange,
       skip,
+      trackVisibility,
+      delay,
       ...props
     } = this.props;
 

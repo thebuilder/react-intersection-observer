@@ -29,6 +29,10 @@ export interface IntersectionOptions extends IntersectionObserverInit {
   triggerOnce?: boolean;
   /** Skip assigning the observer to the `ref` */
   skip?: boolean;
+  /** IntersectionObserver v2 - Track the actual visibility of the element */
+  trackVisibility?: boolean;
+  /** IntersectionObserver v2 - Set a minimum delay between notifications */
+  delay?: number;
 }
 
 export interface IntersectionObserverProps extends IntersectionOptions {
@@ -65,8 +69,15 @@ export type PlainChildrenProps = IntersectionOptions & {
   onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void;
 } & Omit<React.HTMLProps<HTMLElement>, 'onChange'>;
 
+/**
+ * The Hook response supports both array and object destructing
+ */
 export type InViewHookResponse = [
   (node?: Element | null) => void,
   boolean,
   IntersectionObserverEntry | undefined,
-];
+] & {
+  ref: (node?: Element | null) => void;
+  inView: boolean;
+  entry?: IntersectionObserverEntry;
+};

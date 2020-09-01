@@ -5,7 +5,7 @@ import { IntersectionOptions, useInView } from '../index';
 import ScrollWrapper from './ScrollWrapper';
 import Status from './Status';
 import { motion } from 'framer-motion';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 type Props = {
   className?: string;
@@ -21,11 +21,11 @@ const HookComponent = ({
   lazy,
   ...rest
 }: Props) => {
-  const [ref, inView, entry] = useInView(options);
-  const [isLoading, setIsLoading] = React.useState(lazy);
+  const { ref, inView, entry } = useInView(options);
+  const [isLoading, setIsLoading] = useState(lazy);
   action('Inview')(inView, entry);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isLoading) setIsLoading(false);
   }, [isLoading, lazy]);
 
@@ -56,6 +56,12 @@ const HookComponent = ({
         <h2>
           {children || 'Inside the viewport'}: {inView.toString()}
         </h2>
+        {options?.trackVisibility && (
+          <h2>
+            {/* @ts-ignore */}
+            {'Fully visible'}: {entry?.isVisible.toString()}
+          </h2>
+        )}
       </motion.div>
     </React.Fragment>
   );
@@ -130,3 +136,49 @@ export const skip = () => (
     <HookComponent options={{ skip: true }} />
   </ScrollWrapper>
 );
+
+export const TrackVisibility = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  return (
+    <div ref={ref}>
+      <div
+        css={{
+          color: 'white',
+          padding: '1rem',
+          position: 'relative',
+          textAlign: 'center',
+          maxWidth: '80ch',
+          margin: '0 auto',
+        }}
+      >
+        <h2>Track Visibility</h2>
+        <p
+          css={{
+            lineHeight: 1.4,
+          }}
+        >
+          Use the new IntersectionObserver v2 to track if the object is visible.
+          Try dragging the box on top of it. If the feature is unsupported, it
+          will always return `isVisible`.
+        </p>
+        <motion.div
+          drag
+          dragElastic={0.2}
+          dragConstraints={ref}
+          css={{
+            display: 'inline-block',
+            background: '#8bc34a',
+            padding: '1rem',
+            borderRadius: 5,
+            cursor: 'move',
+            left: '50%',
+          }}
+        >
+          Drag me
+        </motion.div>
+      </div>
+      <HookComponent options={{ trackVisibility: true, delay: 100 }} />
+      <div css={{ height: '50vh' }} />
+    </div>
+  );
+};

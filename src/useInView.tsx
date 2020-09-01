@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { InViewHookResponse, IntersectionOptions } from './index';
 import { useEffect } from 'react';
-import { newObserve } from './observers';
+import { observe } from './observers';
 
 export function useInView(
   options: IntersectionOptions = {},
@@ -24,7 +24,7 @@ export function useInView(
       }
 
       if (node) {
-        unobserve.current = newObserve(
+        unobserve.current = observe(
           node,
           (entry) => {
             setIntersectionEntry(entry);
@@ -49,6 +49,8 @@ export function useInView(
       options.rootMargin,
       options.triggerOnce,
       options.skip,
+      options.trackVisibility,
+      options.delay,
     ],
   );
 
@@ -60,9 +62,16 @@ export function useInView(
     }
   });
 
-  return [
+  const result = [
     setRef,
     intersectionEntry ? intersectionEntry.isIntersecting : false,
     intersectionEntry,
-  ];
+  ] as InViewHookResponse;
+
+  // Support object destructuring, by adding the specific values.
+  result.ref = result[0];
+  result.inView = result[1];
+  result.entry = result[2];
+
+  return result;
 }

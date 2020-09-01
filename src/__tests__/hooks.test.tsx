@@ -2,8 +2,15 @@ import React, { useCallback } from 'react';
 import { render } from '@testing-library/react';
 import { useInView } from '../useInView';
 import { intersectionMockInstance, mockAllIsIntersecting } from '../test-utils';
+import { IntersectionOptions } from '../index';
 
-const HookComponent = ({ options, unmount }) => {
+const HookComponent = ({
+  options,
+  unmount,
+}: {
+  options?: IntersectionOptions;
+  unmount?: boolean;
+}) => {
   const [ref, inView] = useInView(options);
   return (
     <div data-testid="wrapper" ref={!unmount ? ref : undefined}>
@@ -12,7 +19,7 @@ const HookComponent = ({ options, unmount }) => {
   );
 };
 
-const LazyHookComponent = ({ options }) => {
+const LazyHookComponent = ({ options }: { options?: IntersectionOptions }) => {
   const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
@@ -106,10 +113,18 @@ test('inView should be false when component is unmounted', () => {
 });
 
 test('should handle new options', () => {
-  render(<HookComponent options={{ isVisible: true, delay: 100 }} />);
+  render(<HookComponent options={{ trackVisibility: true, delay: 100 }} />);
 });
 
-const SwitchHookComponent = ({ options, toggle, unmount }) => {
+const SwitchHookComponent = ({
+  options,
+  toggle,
+  unmount,
+}: {
+  options?: IntersectionOptions;
+  toggle?: boolean;
+  unmount?: boolean;
+}) => {
   const [ref, inView] = useInView(options);
   return (
     <>
@@ -124,6 +139,38 @@ const SwitchHookComponent = ({ options, toggle, unmount }) => {
         ref={toggle && !unmount ? ref : undefined}
       />
     </>
+  );
+};
+const MultipleHookComponent = ({
+  options,
+}: {
+  options?: IntersectionOptions;
+}) => {
+  const [ref1, inView1] = useInView(options);
+  const [ref2, inView2] = useInView(options);
+  const [ref3, inView3] = useInView();
+
+  const mergedRefs = useCallback(
+    (node) => {
+      ref1(node);
+      ref2(node);
+      ref3(node);
+    },
+    [ref1, ref2, ref3],
+  );
+
+  return (
+    <div ref={mergedRefs}>
+      <div data-testid="item-1" data-inview={inView1}>
+        {inView1}
+      </div>
+      <div data-testid="item-2" data-inview={inView2}>
+        {inView2}
+      </div>
+      <div data-testid="item-3" data-inview={inView3}>
+        {inView3}
+      </div>
+    </div>
   );
 };
 
@@ -161,7 +208,7 @@ test('should handle ref removed', () => {
   expect(item2.getAttribute('data-inview')).toBe('false');
 });
 
-const MergeRefsComponent = ({ options }) => {
+const MergeRefsComponent = ({ options }: { options?: IntersectionOptions }) => {
   const [inViewRef, inView] = useInView(options);
   const setRef = useCallback(
     (node) => {
@@ -179,4 +226,14 @@ test('should handle ref merged', () => {
   rerender(<MergeRefsComponent />);
 
   expect(getByTestId('inview').getAttribute('data-inview')).toBe('true');
+});
+
+test.skip('should handle multiple hooks', () => {
+  const { getByTestId } = render(
+    <MultipleHookComponent options={{ threshold: 0.1 }} />,
+  );
+  mockAllIsIntersecting(true);
+  expect(getByTestId('item-1').getAttribute('data-inview')).toBe('true');
+  expect(getByTestId('item-2').getAttribute('data-inview')).toBe('true');
+  expect(getByTestId('item-3').getAttribute('data-inview')).toBe('true');
 });

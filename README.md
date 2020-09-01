@@ -26,7 +26,7 @@ to tell you when an element enters or leaves the viewport. Contains both a
   where possible
 - ⚙️ **Matches native API** - Intuitive to use
 - 🌳 **Tree-shakeable** - Only include the parts you use
-- 💥 **Tiny bundle** [~1.7 kB gzipped][bundlephobia-url]
+- 💥 **Tiny bundle** [~1.5 kB gzipped][bundlephobia-url]
 
 ## Installation
 
@@ -42,11 +42,6 @@ or NPM:
 npm install react-intersection-observer --save
 ```
 
-> ⚠️ You also want to add the
-> [intersection-observer](https://www.npmjs.com/package/react-intersection-observer)
-> polyfill for full browser support. Check out adding the [polyfill](#polyfill)
-> for details about how you can include it.
-
 ## Usage
 
 ### Hooks 🎣
@@ -54,13 +49,17 @@ npm install react-intersection-observer --save
 #### `useInView`
 
 ```js
+// Use object destructing, so you don't need to remember the exact order
+const { ref, inView, entry } = useInView(options);
+
+// Or array destructing, making it easy to customize the field names
 const [ref, inView, entry] = useInView(options);
 ```
 
 React Hooks make it easy to monitor the `inView` state of your components. Call
 the `useInView` hook with the (optional) [options](#options) you need. It will
 return an array containing a `ref`, the `inView` status and the current
-[`IntersectionObserverEntry`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry).
+[`entry`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry).
 Assign the `ref` to the DOM element you want to monitor, and the hook will
 report the status.
 
@@ -69,7 +68,7 @@ import React from 'react';
 import { useInView } from 'react-intersection-observer';
 
 const Component = () => {
-  const [ref, inView, entry] = useInView({
+  const { ref, inView, entry } = useInView({
     /* Optional options */
     threshold: 0,
   });
@@ -141,21 +140,23 @@ export default Component;
 
 ### Options
 
-Provide these as props on the **`<InView />`** component and as the options
+Provide these as props on the **`<InView />`** component or as the options
 argument for the hooks.
 
-| Name            | Type               | Default  | Required | Description                                                                                                                                                                                                                                                                                 |
-| --------------- | ------------------ | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **root**        | Element            | document | false    | The IntersectionObserver interface's read-only root property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target. If the root is null, then the bounds of the actual document viewport are used. |
-| **rootMargin**  | string             | '0px'    | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                                                                                                                                                          |
-| **threshold**   | number \| number[] | 0        | false    | Number between 0 and 1 indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                                                                                              |
-| **skip**        | boolean            | false    | false    | Skip creating the IntersectionObserver. You can use this to enable and disable the observer as needed. If `skip` is set while `inView`, the current state will still be kept.                                                                                                               |
-| **triggerOnce** | boolean            | false    | false    | Only trigger this method once.                                                                                                                                                                                                                                                              |
+| Name                   | Type               | Default   | Required | Description                                                                                                                                                                                                                                                                                 |
+| ---------------------- | ------------------ | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **root**               | Element            | document  | false    | The IntersectionObserver interface's read-only root property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target. If the root is null, then the bounds of the actual document viewport are used. |
+| **rootMargin**         | string             | '0px'     | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                                                                                                                                                          |
+| **threshold**          | number \| number[] | 0         | false    | Number between 0 and 1 indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                                                                                              |
+| **trackVisibility** 🧪 | boolean            | false     | false    | A boolean indicating whether this IntersectionObserver will track changes in a target’s visibility.                                                                                                                                                                                         |
+| **delay** 🧪           | number             | undefined | false    | A number indicating the minimum delay in milliseconds between notifications from this observer for a given target. This must be set to at least `100` if `trackVisibility` is `true`.                                                                                                       |
+| **skip**               | boolean            | false     | false    | Skip creating the IntersectionObserver. You can use this to enable and disable the observer as needed. If `skip` is set while `inView`, the current state will still be kept.                                                                                                               |
+| **triggerOnce**        | boolean            | false     | false    | Only trigger the observer once.                                                                                                                                                                                                                                                             |
 
 > ⚠️ When passing an array to `threshold`, store the array in a constant to
 > avoid the component re-rendering too often. For example:
 
-```js
+```jsx
 const THRESHOLD = [0.25, 0.5, 0.75]; // Store multiple thresholds in a constant
 const MyComponent = () => {
   const [ref, inView, entry] = useInView({ threshold: THRESHOLD });
@@ -177,6 +178,29 @@ The **`<InView />`** component also accepts the following props:
 | **children** | `({ref, inView, entry}) => React.ReactNode`, `ReactNode` |         | true     | Children expects a function that receives an object containing the `inView` boolean and a `ref` that should be assigned to the element root. Alternatively pass a plain child, to have the `<InView />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `entry, giving you more details. |
 | **onChange** | `(inView, entry) => void`                                |         | false    | Call this function whenever the in view state changes. It will receive the `inView` boolean, alongside the current `IntersectionObserverEntry`.                                                                                                                                                                               |
 
+### IntersectionObserver v2 🧪
+
+The new
+[v2 implementation of IntersectionObserver](https://developers.google.com/web/updates/2019/02/intersectionobserver-v2)
+extends the original API, so you can track if the element is covered by another
+element or has filters applied to it. Useful for blocking clickjacking attempts
+or tracking ad exposure.
+
+To use it, you'll need to add the new `trackVisibility` and `delay` options.
+When you get the `entry` back, you can then monitor if `isVisible` is `true`.
+
+```jsx
+const TrackVisible = () => {
+  const { ref, entry } = useInView({ trackVisibility: true, delay: 100 });
+  return <div ref={ref}>{entry?.isVisible}</div>;
+};
+```
+
+This is still a very new addition, so check
+[caniuse](https://caniuse.com/#feat=intersectionobserver-v2) for current browser
+support. If `trackVisibility` has been set, and the current browser doesn't
+support it, a fallback has been added to always report `isVisible` as `true`.
+
 ## Recipes
 
 The `IntersectionObserver` itself is just a simple but powerful tool. Here's a
@@ -193,7 +217,7 @@ few ideas for how you can use it.
 
 You can wrap multiple `ref` assignments in a single `useCallback`:
 
-```js
+```jsx
 import React, { useRef } from 'react';
 import { useInView } from 'react-intersection-observer';
 

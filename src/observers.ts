@@ -37,8 +37,6 @@ export function optionsToId(options: IntersectionObserverInit) {
       let value = options[key];
       if (key === 'root') {
         value = getRootId(options.root);
-      } else if (typeof value === 'object') {
-        value = JSON.stringify(value);
       }
       return `${key}_${value}`;
     });
@@ -57,6 +55,12 @@ function createObserver(options: IntersectionObserverInit) {
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
+        // @ts-ignore
+        if (options.trackVisibility && typeof entry.isVisible === 'undefined') {
+          // The browser doesn't support Intersection Observer v2, falling back to v1 behavior.
+          // @ts-ignore
+          entry.isVisible = true;
+        }
         elements.get(entry.target)?.forEach((callback) => {
           callback(entry);
         });
@@ -75,7 +79,7 @@ function createObserver(options: IntersectionObserverInit) {
   return instance;
 }
 
-export function newObserve(
+export function observe(
   element: Element,
   callback: ObserverInstanceCallback,
   options: IntersectionObserverInit = {},
