@@ -141,38 +141,6 @@ const SwitchHookComponent = ({
     </>
   );
 };
-const MultipleHookComponent = ({
-  options,
-}: {
-  options?: IntersectionOptions;
-}) => {
-  const [ref1, inView1] = useInView(options);
-  const [ref2, inView2] = useInView(options);
-  const [ref3, inView3] = useInView();
-
-  const mergedRefs = useCallback(
-    (node) => {
-      ref1(node);
-      ref2(node);
-      ref3(node);
-    },
-    [ref1, ref2, ref3],
-  );
-
-  return (
-    <div ref={mergedRefs}>
-      <div data-testid="item-1" data-inview={inView1}>
-        {inView1}
-      </div>
-      <div data-testid="item-2" data-inview={inView2}>
-        {inView2}
-      </div>
-      <div data-testid="item-3" data-inview={inView3}>
-        {inView3}
-      </div>
-    </div>
-  );
-};
 
 /**
  * This is a test for the case where people move the ref around (please don't)
@@ -228,7 +196,40 @@ test('should handle ref merged', () => {
   expect(getByTestId('inview').getAttribute('data-inview')).toBe('true');
 });
 
-test.skip('should handle multiple hooks', () => {
+const MultipleHookComponent = ({
+  options,
+}: {
+  options?: IntersectionOptions;
+}) => {
+  const [ref1, inView1] = useInView(options);
+  const [ref2, inView2] = useInView(options);
+  const [ref3, inView3] = useInView();
+
+  const mergedRefs = useCallback(
+    (node) => {
+      ref1(node);
+      ref2(node);
+      ref3(node);
+    },
+    [ref1, ref2, ref3],
+  );
+
+  return (
+    <div ref={mergedRefs}>
+      <div data-testid="item-1" data-inview={inView1}>
+        {inView1}
+      </div>
+      <div data-testid="item-2" data-inview={inView2}>
+        {inView2}
+      </div>
+      <div data-testid="item-3" data-inview={inView3}>
+        {inView3}
+      </div>
+    </div>
+  );
+};
+
+test('should handle multiple hooks on the same element', () => {
   const { getByTestId } = render(
     <MultipleHookComponent options={{ threshold: 0.1 }} />,
   );

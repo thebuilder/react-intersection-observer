@@ -122,6 +122,7 @@ it('Should unobserve when triggerOnce comes into view', () => {
 it('Should unobserve when unmounted', () => {
   const { container, unmount } = render(<InView triggerOnce>Inner</InView>);
   const instance = intersectionMockInstance(container.children[0]);
+
   jest.spyOn(instance, 'unobserve');
 
   unmount();
