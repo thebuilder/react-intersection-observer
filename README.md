@@ -7,7 +7,6 @@
 [![dev dependency status][dev-deps-svg]][dev-deps-url]
 [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
-[![styled with prettier][prettier-svg]][prettier-url]
 
 React implementation of the
 [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
@@ -362,5 +361,3 @@ async function loadPolyfills() {
 [downloads-image]: http://img.shields.io/npm/dm/react-intersection-observer.svg
 [downloads-url]:
   http://npm-stat.com/charts.html?package=react-intersection-observer
-[prettier-svg]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg
-[prettier-url]: https://github.com/prettier/prettier
