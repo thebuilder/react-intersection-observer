@@ -1,52 +1,47 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import * as React from 'react'
-import { observe, unobserve } from './intersection'
-import { InViewHookResponse, IntersectionOptions } from './index'
-import { useEffect } from 'react'
-
-type State = {
-  inView: boolean
-  entry?: IntersectionObserverEntry
-}
-
-const initialState: State = {
-  inView: false,
-  entry: undefined,
-}
+import * as React from 'react';
+import { InViewHookResponse, IntersectionOptions } from './index';
+import { useEffect } from 'react';
+import { observe } from './observers';
 
 export function useInView(
   options: IntersectionOptions = {},
 ): InViewHookResponse {
-  const ref = React.useRef<Element>()
-  const [state, setState] = React.useState<State>(initialState)
+  const unobserve = React.useRef<Function>();
+  const [intersectionEntry, setIntersectionEntry] = React.useState<
+    IntersectionObserverEntry | undefined
+  >(undefined);
 
   const setRef = React.useCallback(
     (node) => {
-      if (ref.current) {
-        unobserve(ref.current)
+      if (unobserve.current !== undefined) {
+        unobserve.current();
+        unobserve.current = undefined;
       }
 
       if (options.skip) {
-        ref.current = undefined
-        return
+        return;
       }
 
       if (node) {
-        observe(
+        unobserve.current = observe(
           node,
-          (inView, intersection) => {
-            setState({ inView, entry: intersection })
+          (entry) => {
+            setIntersectionEntry(entry);
 
-            if (inView && options.triggerOnce) {
+            if (
+              entry.isIntersecting &&
+              options.triggerOnce &&
+              unobserve.current
+            ) {
               // If it should only trigger once, unobserve the element after it's inView
-              unobserve(node)
+              unobserve.current();
+              unobserve.current = undefined;
             }
           },
           options,
-        )
+        );
       }
-      // Store a reference to the node, so we can unobserve it later
-      ref.current = node
     },
     [
       options.threshold,
@@ -54,21 +49,29 @@ export function useInView(
       options.rootMargin,
       options.triggerOnce,
       options.skip,
+      options.trackVisibility,
+      options.delay,
     ],
-  )
+  );
 
   useEffect(() => {
-    if (
-      !ref.current &&
-      state !== initialState &&
-      !options.triggerOnce &&
-      !options.skip
-    ) {
+    if (!unobserve.current && !options.triggerOnce && !options.skip) {
       // If we don't have a ref, then reset the state (unless the hook is set to only `triggerOnce` or `skip`)
       // This ensures we correctly reflect the current state - If you aren't observing anything, then nothing is inView
-      setState(initialState)
+      setIntersectionEntry(undefined);
     }
-  })
+  });
 
-  return [setRef, state.inView, state.entry]
+  const result = [
+    setRef,
+    intersectionEntry ? intersectionEntry.isIntersecting : false,
+    intersectionEntry,
+  ] as InViewHookResponse;
+
+  // Support object destructuring, by adding the specific values.
+  result.ref = result[0];
+  result.inView = result[1];
+  result.entry = result[2];
+
+  return result;
 }

@@ -1,13 +1,13 @@
 /** @jsx jsx */
-import { jsx } from '@emotion/react'
+import { jsx } from '@emotion/react';
 
-type Props = { inView: boolean }
+type Props = { inView: boolean };
 
 const emojiIcon = {
   width: '1em',
   height: '1em',
   lineHeight: 1,
-}
+};
 
 function Status({ inView }: Props) {
   return (
@@ -35,7 +35,7 @@ function Status({ inView }: Props) {
         </span>
       )}
     </div>
-  )
+  );
 }
 
-export default Status
+export default Status;

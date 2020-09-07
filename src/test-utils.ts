@@ -1,47 +1,104 @@
-import { act } from 'react-dom/test-utils'
+import { act } from 'react-dom/test-utils';
 
-const observerMap = new Map()
-const instanceMap = new Map()
+type Item = {
+  callback: IntersectionObserverCallback;
+  elements: Set<Element>;
+  created: number;
+};
+
+const observers = new Map<IntersectionObserver, Item>();
 
 beforeAll(() => {
-  // @ts-ignore
+  /**
+   * Create a custom IntersectionObserver mock, allowing us to intercept the observe and unobserve calls.
+   * We keep track of the elements being observed, so when `mockAllIsIntersecting` is triggered it will
+   * know which elements to trigger the event on.
+   */
   global.IntersectionObserver = jest.fn((cb, options = {}) => {
-    const instance = {
+    const item = {
+      callback: cb,
+      elements: new Set<Element>(),
+      created: Date.now(),
+    };
+    const instance: IntersectionObserver = {
       thresholds: Array.isArray(options.threshold)
         ? options.threshold
-        : [options.threshold],
-      root: options.root,
-      rootMargin: options.rootMargin,
-      time: Date.now(),
+        : [options.threshold ?? 0],
+      root: options.root ?? null,
+      rootMargin: options.rootMargin ?? '',
       observe: jest.fn((element: Element) => {
-        instanceMap.set(element, instance)
-        observerMap.set(element, cb)
+        item.elements.add(element);
       }),
       unobserve: jest.fn((element: Element) => {
-        instanceMap.delete(element)
-        observerMap.delete(element)
+        item.elements.delete(element);
       }),
-      disconnect: jest.fn(),
-    }
-    return instance
-  })
-})
+      disconnect: jest.fn(() => {
+        observers.delete(instance);
+      }),
+      takeRecords: jest.fn(),
+    };
+
+    observers.set(instance, item);
+
+    return instance;
+  });
+});
 
 afterEach(() => {
   // @ts-ignore
-  global.IntersectionObserver.mockClear()
-  instanceMap.clear()
-  observerMap.clear()
-})
+  global.IntersectionObserver.mockClear();
+  observers.clear();
+});
+
+function triggerIntersection(
+  elements: Element[],
+  isIntersecting: boolean,
+  observer: IntersectionObserver,
+  item: Item,
+) {
+  const entries: IntersectionObserverEntry[] = [];
+  elements.forEach((element) => {
+    entries.push({
+      boundingClientRect: element.getBoundingClientRect(),
+      intersectionRatio: isIntersecting ? 1 : 0,
+      intersectionRect: isIntersecting
+        ? element.getBoundingClientRect()
+        : {
+            bottom: 0,
+            height: 0,
+            left: 0,
+            right: 0,
+            top: 0,
+            width: 0,
+            x: 0,
+            y: 0,
+            toJSON(): any {},
+          },
+      isIntersecting,
+      rootBounds: observer.root ? observer.root.getBoundingClientRect() : null,
+      target: element,
+      time: Date.now() - item.created,
+    });
+  });
+
+  // Trigger the IntersectionObserver callback with all the entries
+  if (act) act(() => item.callback(entries, observer));
+  else item.callback(entries, observer);
+}
 
 /**
  * Set the `isIntersecting` on all current IntersectionObserver instances
  * @param isIntersecting {boolean}
  */
 export function mockAllIsIntersecting(isIntersecting: boolean) {
-  observerMap.forEach((onChange, element) => {
-    mockIsIntersecting(element, isIntersecting)
-  })
+  for (let [observer, item] of observers) {
+    triggerIntersection(
+      Array.from(item.elements),
+      isIntersecting,
+      observer,
+      item,
+    );
+  }
 }
 
 /**
@@ -50,26 +107,15 @@ export function mockAllIsIntersecting(isIntersecting: boolean) {
  * @param isIntersecting {boolean}
  */
 export function mockIsIntersecting(element: Element, isIntersecting: boolean) {
-  const cb = observerMap.get(element)
-  const instance = instanceMap.get(element)
-  if (cb && instance) {
-    const entry = [
-      {
-        boundingClientRect: element.getBoundingClientRect(),
-        intersectionRatio: isIntersecting ? 1 : 0,
-        intersectionRect: isIntersecting ? element.getBoundingClientRect() : {},
-        isIntersecting,
-        rootBounds: instance.root ? instance.root.getBoundingClientRect() : {},
-        target: element,
-        time: Date.now() - instance.time,
-      },
-    ]
-    if (act) act(() => cb(entry, instance))
-    else cb(entry, instance)
-  } else {
+  const observer = intersectionMockInstance(element);
+  if (!observer) {
     throw new Error(
       'No IntersectionObserver instance found for element. Is it still mounted in the DOM?',
-    )
+    );
+  }
+  const item = observers.get(observer);
+  if (item) {
+    triggerIntersection([element], isIntersecting, observer, item);
   }
 }
 
@@ -83,5 +129,13 @@ export function mockIsIntersecting(element: Element, isIntersecting: boolean) {
 export function intersectionMockInstance(
   element: Element,
 ): IntersectionObserver {
-  return instanceMap.get(element)
+  for (let [observer, item] of observers) {
+    if (item.elements.has(element)) {
+      return observer;
+    }
+  }
+
+  throw new Error(
+    'Failed to find IntersectionObserver for element. Is it being observer?',
+  );
 }

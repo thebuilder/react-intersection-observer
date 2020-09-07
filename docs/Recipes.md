@@ -36,16 +36,16 @@ build it according to your needs.
 > is a small hook that detects support for `loading` as a side effect.
 
 ```jsx
-import React from 'react'
-import useNativeLazyLoading from '@charlietango/use-native-lazy-loading'
-import { useInView } from 'react-intersection-observer'
+import React from 'react';
+import useNativeLazyLoading from '@charlietango/use-native-lazy-loading';
+import { useInView } from 'react-intersection-observer';
 
 const LazyImage = ({ width, height, src, ...rest }) => {
-  const supportsLazyLoading = useNativeLazyLoading()
+  const supportsLazyLoading = useNativeLazyLoading();
   const [ref, inView] = useInView({
     triggerOnce: true,
     rootMargin: '200px 0px',
-  })
+  });
 
   return (
     <div
@@ -67,10 +67,10 @@ const LazyImage = ({ width, height, src, ...rest }) => {
         />
       ) : null}
     </div>
-  )
-}
+  );
+};
 
-export default LazyImage
+export default LazyImage;
 ```
 
 **See [Codesandbox](https://codesandbox.io/embed/lazy-image-load-mjsgc)**
@@ -88,23 +88,23 @@ for an IntersectionObserver.
   have it go inwards. You can also use a percentage value, instead of pixels.
 
 ```jsx
-import React from 'react'
-import { useInView } from 'react-intersection-observer'
-import { motion } from 'framer-motion'
+import React from 'react';
+import { useInView } from 'react-intersection-observer';
+import { motion } from 'framer-motion';
 
 const LazyAnimation = () => {
   const [ref, inView] = useInView({
     rootMargin: '-100px 0px',
-  })
+  });
 
   return (
     <motion.div ref={ref} style={{ opacity: inView ? 1 : 0 }}>
       <span aria-label="Wave">👋</span>
     </motion.div>
-  )
-}
+  );
+};
 
-export default LazyAnimation
+export default LazyAnimation;
 ```
 
 ## Track impressions
@@ -121,24 +121,27 @@ fire an event on your tracking service.
   have it go inwards. You can also use a percentage value, instead of pixels.
 
 ```jsx
-import React, { useEffect } from 'react'
-import { useInView } from 'react-intersection-observer'
+import React, { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 const TrackImpression = () => {
-  const [ref, inView] = useInView({ triggerOnce: true, rootMargin: '-100px 0' })
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    rootMargin: '-100px 0',
+  });
   useEffect(() => {
     if (inView) {
       // Fire a tracking event to your tracking service of choice.
-      dataLayer.push('Section shown') // Here's a GTM dataLayer push
+      dataLayer.push('Section shown'); // Here's a GTM dataLayer push
     }
-  }, [inView])
+  }, [inView]);
 
   return (
     <div ref={ref}>
       Exemplars sunt zeluss de bassus fuga. Credere velox ducunt ad audax amor.
     </div>
-  )
-}
+  );
+};
 
-export default TrackImpression
+export default TrackImpression;
 ```
