@@ -55,14 +55,25 @@ function createObserver(options: IntersectionObserverInit) {
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        // @ts-ignore
+        // While it would be nice if you could just look at isIntersecting to determine if the component is inside the viewport, browsers can't agree on how to use it.
+        // -Firefox ignores `threshold` when considering `isIntersecting`, so it will never be false again if `threshold` is > 0
+        const inView = observer.thresholds.some((threshold) => {
+          return !entry.isIntersecting
+            ? // The intersectionRatio should be more than the threshold to be considered inside the viewport
+              entry.intersectionRatio > threshold
+            : // If we're not intersecting, make sure we accept `intersectionRatio` 0 as not inside the viewport
+              entry.intersectionRatio >= threshold;
+        });
+
+        // @ts-ignore support IntersectionObserver v2
         if (options.trackVisibility && typeof entry.isVisible === 'undefined') {
           // The browser doesn't support Intersection Observer v2, falling back to v1 behavior.
           // @ts-ignore
-          entry.isVisible = true;
+          entry.isVisible = inView;
         }
+
         elements.get(entry.target)?.forEach((callback) => {
-          callback(entry);
+          callback(inView && entry.isIntersecting, entry);
         });
       });
     }, options);
