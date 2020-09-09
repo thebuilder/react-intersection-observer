@@ -3,14 +3,21 @@ import * as React from 'react';
 import { InViewHookResponse, IntersectionOptions } from './index';
 import { useEffect } from 'react';
 import { observe } from './observers';
+type State = {
+  inView: boolean;
+  entry?: IntersectionObserverEntry;
+};
+
+const initialState: State = {
+  inView: false,
+  entry: undefined,
+};
 
 export function useInView(
   options: IntersectionOptions = {},
 ): InViewHookResponse {
   const unobserve = React.useRef<Function>();
-  const [intersectionEntry, setIntersectionEntry] = React.useState<
-    IntersectionObserverEntry | undefined
-  >(undefined);
+  const [state, setState] = React.useState<State>(initialState);
 
   const setRef = React.useCallback(
     (node) => {
@@ -26,8 +33,8 @@ export function useInView(
       if (node) {
         unobserve.current = observe(
           node,
-          (entry) => {
-            setIntersectionEntry(entry);
+          (inView, entry) => {
+            setState({ inView, entry });
 
             if (
               entry.isIntersecting &&
@@ -58,15 +65,11 @@ export function useInView(
     if (!unobserve.current && !options.triggerOnce && !options.skip) {
       // If we don't have a ref, then reset the state (unless the hook is set to only `triggerOnce` or `skip`)
       // This ensures we correctly reflect the current state - If you aren't observing anything, then nothing is inView
-      setIntersectionEntry(undefined);
+      setState(initialState);
     }
   });
 
-  const result = [
-    setRef,
-    intersectionEntry ? intersectionEntry.isIntersecting : false,
-    intersectionEntry,
-  ] as InViewHookResponse;
+  const result = [setRef, state.inView, state.entry] as InViewHookResponse;
 
   // Support object destructuring, by adding the specific values.
   result.ref = result[0];

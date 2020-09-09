@@ -96,8 +96,7 @@ export class InView extends React.Component<
     this.observeNode();
   };
 
-  handleChange = (entry: IntersectionObserverEntry) => {
-    const inView = entry.isIntersecting || false;
+  handleChange = (inView: boolean, entry: IntersectionObserverEntry) => {
     // Only trigger a state update if inView has changed.
     // This prevents an unnecessary extra state update during mount, when the element stats outside the viewport
     if (inView !== this.state.inView || inView) {
