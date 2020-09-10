@@ -31,17 +31,14 @@ function getRootId(root?: Element | null) {
  * @param options
  */
 export function optionsToId(options: IntersectionObserverInit) {
-  const values = Object.keys(options)
+  return Object.keys(options)
     .sort()
     .map((key) => {
-      let value = options[key];
-      if (key === 'root') {
-        value = getRootId(options.root);
-      }
-      return `${key}_${value}`;
-    });
-
-  return values.join('|');
+      return `${key}_${
+        key === 'root' ? getRootId(options.root) : options[key]
+      }`;
+    })
+    .join('|');
 }
 
 function createObserver(options: IntersectionObserverInit) {
@@ -57,13 +54,11 @@ function createObserver(options: IntersectionObserverInit) {
       entries.forEach((entry) => {
         // While it would be nice if you could just look at isIntersecting to determine if the component is inside the viewport, browsers can't agree on how to use it.
         // -Firefox ignores `threshold` when considering `isIntersecting`, so it will never be false again if `threshold` is > 0
-        const inView = observer.thresholds.some((threshold) => {
-          return !entry.isIntersecting
-            ? // The intersectionRatio should be more than the threshold to be considered inside the viewport
-              entry.intersectionRatio > threshold
-            : // If we're not intersecting, make sure we accept `intersectionRatio` 0 as not inside the viewport
-              entry.intersectionRatio >= threshold;
-        });
+        const inView =
+          entry.isIntersecting &&
+          observer.thresholds.some(
+            (threshold) => entry.intersectionRatio > threshold,
+          );
 
         // @ts-ignore support IntersectionObserver v2
         if (options.trackVisibility && typeof entry.isVisible === 'undefined') {
@@ -73,7 +68,7 @@ function createObserver(options: IntersectionObserverInit) {
         }
 
         elements.get(entry.target)?.forEach((callback) => {
-          callback(inView && entry.isIntersecting, entry);
+          callback(inView, entry);
         });
       });
     }, options);
