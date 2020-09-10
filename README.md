@@ -25,7 +25,7 @@ to tell you when an element enters or leaves the viewport. Contains both a
   where possible
 - ⚙️ **Matches native API** - Intuitive to use
 - 🌳 **Tree-shakeable** - Only include the parts you use
-- 💥 **Tiny bundle** [~1.5 kB gzipped][bundlephobia-url]
+- 💥 **Tiny bundle** [~1.6 kB gzipped][bundlephobia-url]
 
 ## Installation
 
