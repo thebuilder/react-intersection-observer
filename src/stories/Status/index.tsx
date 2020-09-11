@@ -14,6 +14,7 @@ function Status({ inView }: Props) {
     <div
       css={{
         position: 'fixed',
+        zIndex: 1,
         top: 0,
         right: 0,
         width: 32,

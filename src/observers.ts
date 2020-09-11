@@ -57,7 +57,7 @@ function createObserver(options: IntersectionObserverInit) {
         const inView =
           entry.isIntersecting &&
           observer.thresholds.some(
-            (threshold) => entry.intersectionRatio > threshold,
+            (threshold) => entry.intersectionRatio >= threshold,
           );
 
         // @ts-ignore support IntersectionObserver v2
