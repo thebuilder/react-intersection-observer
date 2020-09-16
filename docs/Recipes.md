@@ -117,7 +117,7 @@ fire an event on your tracking service.
 - Set `threshold`, to control how much of the element should visible before
   firing the event.
 - Instead of `threshold`, you can use `rootMargin` to have a fixed amount be
-  visible before triggering. Use a negative margin value, like `-100px 0`, to
+  visible before triggering. Use a negative margin value, like `-100px 0px`, to
   have it go inwards. You can also use a percentage value, instead of pixels.
 
 ```jsx
