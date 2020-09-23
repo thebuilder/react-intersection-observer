@@ -44,20 +44,11 @@ export class InView extends React.Component<
       this.unobserve();
       this.observeNode();
     }
-
-    if (prevState.inView !== this.state.inView) {
-      if (this.state.inView && this.props.triggerOnce) {
-        this.unobserve();
-        this.node = null;
-      }
-    }
   }
 
   componentWillUnmount() {
-    if (this.node) {
-      this.unobserve();
-      this.node = null;
-    }
+    this.unobserve();
+    this.node = null;
   }
 
   node: Element | null = null;
@@ -87,8 +78,11 @@ export class InView extends React.Component<
 
   handleNode = (node?: Element | null) => {
     if (this.node) {
+      // Clear the old observer, before we start observing a new element
       this.unobserve();
+
       if (!node && !this.props.triggerOnce && !this.props.skip) {
+        // Reset the state if we get a new node, and we aren't ignoring updates
         this.setState({ inView: false, entry: undefined });
       }
     }
@@ -97,9 +91,13 @@ export class InView extends React.Component<
   };
 
   handleChange = (inView: boolean, entry: IntersectionObserverEntry) => {
-    // Only trigger a state update if inView has changed.
-    // This prevents an unnecessary extra state update during mount, when the element stats outside the viewport
-    if (inView !== this.state.inView || inView) {
+    if (inView && this.props.triggerOnce) {
+      // If `triggerOnce` is true, we should stop observing the element.
+      this.unobserve();
+    }
+    if (!isPlainChildren(this.props)) {
+      // Store the current State, so we can pass it to the children in the next render update
+      // There's no reason to update the state for plain children, since it's not used in the rendering.
       this.setState({ inView, entry });
     }
     if (this.props.onChange) {
@@ -109,8 +107,8 @@ export class InView extends React.Component<
   };
 
   render() {
-    const { inView, entry } = this.state;
     if (!isPlainChildren(this.props)) {
+      const { inView, entry } = this.state;
       return this.props.children({ inView, entry, ref: this.handleNode });
     }
 
