@@ -1,23 +1,27 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import * as React from 'react';
 import { InViewHookResponse, IntersectionOptions } from './index';
 import { useEffect } from 'react';
 import { observe } from './observers';
+
 type State = {
   inView: boolean;
   entry?: IntersectionObserverEntry;
 };
 
-const initialState: State = {
-  inView: false,
-  entry: undefined,
-};
-
-export function useInView(
-  options: IntersectionOptions = {},
-): InViewHookResponse {
+export function useInView({
+  threshold,
+  delay,
+  trackVisibility,
+  rootMargin,
+  root,
+  triggerOnce,
+  skip,
+  initialInView,
+}: IntersectionOptions = {}): InViewHookResponse {
   const unobserve = React.useRef<Function>();
-  const [state, setState] = React.useState<State>(initialState);
+  const [state, setState] = React.useState<State>({
+    inView: !!initialInView,
+  });
 
   const setRef = React.useCallback(
     (node) => {
@@ -26,9 +30,8 @@ export function useInView(
         unobserve.current = undefined;
       }
 
-      if (options.skip) {
-        return;
-      }
+      // Skip creating the observer
+      if (skip) return;
 
       if (node) {
         unobserve.current = observe(
@@ -36,36 +39,35 @@ export function useInView(
           (inView, entry) => {
             setState({ inView, entry });
 
-            if (
-              entry.isIntersecting &&
-              options.triggerOnce &&
-              unobserve.current
-            ) {
+            if (entry.isIntersecting && triggerOnce && unobserve.current) {
               // If it should only trigger once, unobserve the element after it's inView
               unobserve.current();
               unobserve.current = undefined;
             }
           },
-          options,
+          {
+            root,
+            rootMargin,
+            threshold,
+            // @ts-ignore
+            trackVisibility,
+            // @ts-ignore
+            delay,
+          },
         );
       }
     },
-    [
-      options.threshold,
-      options.root,
-      options.rootMargin,
-      options.triggerOnce,
-      options.skip,
-      options.trackVisibility,
-      options.delay,
-    ],
+    [threshold, root, rootMargin, triggerOnce, skip, trackVisibility, delay],
   );
 
+  /* eslint-disable-next-line */
   useEffect(() => {
-    if (!unobserve.current && !options.triggerOnce && !options.skip) {
+    if (!unobserve.current && state.entry && !triggerOnce && !skip) {
       // If we don't have a ref, then reset the state (unless the hook is set to only `triggerOnce` or `skip`)
       // This ensures we correctly reflect the current state - If you aren't observing anything, then nothing is inView
-      setState(initialState);
+      setState({
+        inView: !!initialInView,
+      });
     }
   });
 

@@ -83,7 +83,9 @@ export const lazyHookRendering = () => (
   </ScrollWrapper>
 );
 
-export const startInView = () => <HookComponent />;
+export const startInView = () => (
+  <HookComponent options={{ initialInView: true }} />
+);
 
 export const tallerThanViewport = () => (
   <ScrollWrapper>

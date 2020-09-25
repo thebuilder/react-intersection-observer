@@ -31,6 +31,7 @@ export interface IntersectionOptions extends IntersectionObserverInit {
   triggerOnce?: boolean;
   /** Skip assigning the observer to the `ref` */
   skip?: boolean;
+  initialInView?: boolean;
   /** IntersectionObserver v2 - Track the actual visibility of the element */
   trackVisibility?: boolean;
   /** IntersectionObserver v2 - Set a minimum delay between notifications */

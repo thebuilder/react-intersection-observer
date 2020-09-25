@@ -11,34 +11,35 @@ const ObserverMap = new Map<
 
 const RootIds: Map<Element, string> = new Map();
 
-let consecutiveRootId = 0;
+let rootId = 0;
 
 /**
  * Generate a unique ID for the root element
  * @param root
  */
 function getRootId(root?: Element | null) {
-  if (!root) return '';
+  if (!root) return '0';
   if (RootIds.has(root)) return RootIds.get(root);
-  consecutiveRootId += 1;
-  RootIds.set(root, consecutiveRootId.toString());
+  rootId += 1;
+  RootIds.set(root, rootId.toString());
   return RootIds.get(root);
 }
 
 /**
  * Convert the options to a string Id, based on the values.
- * Ensures we can reuse the same observer for, when observer elements with the same options.
+ * Ensures we can reuse the same observer when observing elements with the same options.
  * @param options
  */
 export function optionsToId(options: IntersectionObserverInit) {
   return Object.keys(options)
+    .filter(Boolean)
     .sort()
     .map((key) => {
       return `${key}_${
         key === 'root' ? getRootId(options.root) : options[key]
       }`;
     })
-    .join('|');
+    .toString();
 }
 
 function createObserver(options: IntersectionObserverInit) {
