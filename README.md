@@ -80,7 +80,7 @@ const Component = () => {
 };
 ```
 
-[![Edit react-intersection-observer](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/react-intersection-observer-ud2vo?fontsize=14&hidenavigation=1&theme=dark)
+[![Edit useInView](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/useinview-ud2vo?fontsize=14&hidenavigation=1&theme=dark)
 
 ### Render props
 
@@ -111,6 +111,8 @@ const Component = () => (
 export default Component;
 ```
 
+[![Edit InView render props](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/inview-render-props-hvhcb?fontsize=14&hidenavigation=1&theme=dark)
+
 ### Plain children
 
 You can pass any element to the `<InView />`, and it will handle creating the
@@ -129,6 +131,8 @@ const Component = () => (
 
 export default Component;
 ```
+
+[![Edit InView plain children](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/inview-plain-children-vv51y?fontsize=14&hidenavigation=1&theme=dark)
 
 > ⚠️ When rendering a plain child, make sure you keep your HTML output semantic.
 > Change the `as` to match the context, and add a `className` to style the
