@@ -51,6 +51,17 @@ it('Should respect skip', () => {
 
   expect(cb).not.toHaveBeenCalled();
 });
+
+it('Should handle initialInView', () => {
+  const cb = jest.fn();
+  render(
+    <InView initialInView onChange={cb}>
+      {({ inView }) => `InView: ${inView}`}
+    </InView>,
+  );
+  screen.getByText('InView: true');
+});
+
 it('Should unobserve old node', () => {
   const { rerender } = render(
     <InView>

@@ -57,6 +57,15 @@ test('should create a hook inView', () => {
   getByText('true');
 });
 
+test('should create a hook with initialInView', () => {
+  const { getByText } = render(
+    <HookComponent options={{ initialInView: true }} />,
+  );
+  getByText('true');
+  mockAllIsIntersecting(false);
+  getByText('false');
+});
+
 test('should trigger a hook leaving view', () => {
   const { getByText } = render(<HookComponent />);
   mockAllIsIntersecting(true);

@@ -24,14 +24,18 @@ export class InView extends React.Component<
   static defaultProps = {
     threshold: 0,
     triggerOnce: false,
+    initialInView: false,
   };
 
-  state: State = {
-    inView: false,
-    entry: undefined,
-  };
+  constructor(props: IntersectionObserverProps | PlainChildrenProps) {
+    super(props);
+    this.state = {
+      inView: !!props.initialInView,
+      entry: undefined,
+    };
+  }
 
-  componentDidUpdate(prevProps: IntersectionObserverProps, prevState: State) {
+  componentDidUpdate(prevProps: IntersectionObserverProps) {
     // If a IntersectionObserver option changed, reinit the observer
     if (
       prevProps.rootMargin !== this.props.rootMargin ||
@@ -83,7 +87,7 @@ export class InView extends React.Component<
 
       if (!node && !this.props.triggerOnce && !this.props.skip) {
         // Reset the state if we get a new node, and we aren't ignoring updates
-        this.setState({ inView: false, entry: undefined });
+        this.setState({ inView: !!this.props.initialInView, entry: undefined });
       }
     }
     this.node = node ? node : null;
@@ -124,6 +128,7 @@ export class InView extends React.Component<
       skip,
       trackVisibility,
       delay,
+      initialInView,
       ...props
     } = this.props;
 
