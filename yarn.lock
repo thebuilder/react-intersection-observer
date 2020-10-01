@@ -1098,15 +1098,15 @@
     "@emotion/weak-memoize" "0.2.5"
 
 "@emotion/cache@^11.0.0-next.16":
-  version "11.0.0-next.16"
-  resolved "https://registry.yarnpkg.com/@emotion/cache/-/cache-11.0.0-next.16.tgz#2dee90b952c955e52d22bc17dec185525925c286"
-  integrity sha512-lO+SqbmQqFa5RVt6KBI/m9OFUeO98AMHvimAqshemVI2EwG/FADlH6tzUiutHnQlHTwSEgcvpkN4od4FOWBsTA==
+  version "11.0.0-next.18"
+  resolved "https://registry.yarnpkg.com/@emotion/cache/-/cache-11.0.0-next.18.tgz#fc7ab4b311da1a423a8a5026b16cbb48af6840e4"
+  integrity sha512-HljTqySiDqA0w6UzRiXbgC8X9MbM1uogaXkOpQWVGIsbT3HWthfRBdJP8CTXj1G2zWKZ+yjVe/W+79IyFz2O8A==
   dependencies:
     "@emotion/memoize" "^0.7.4"
     "@emotion/sheet" "1.0.0-next.4"
     "@emotion/utils" "1.0.0-next.1"
     "@emotion/weak-memoize" "0.2.5"
-    stylis "^4.0.2"
+    stylis "^4.0.3"
 
 "@emotion/core@^10.0.20":
   version "10.0.35"
@@ -11750,10 +11750,10 @@ stylehacks@^4.0.0:
     postcss "^7.0.0"
     postcss-selector-parser "^3.0.0"
 
-stylis@^4.0.2:
-  version "4.0.2"
-  resolved "https://registry.yarnpkg.com/stylis/-/stylis-4.0.2.tgz#84247b15c20688604b7a77db02b7fc071a127194"
-  integrity sha512-2RR3o86K1CSrJjigElyNC9dSR7KyINLP68gauaBQn6j2zfJ/7gb0nD6FGXSCsklVM0V6fsoYA8qEXhhZGjkdww==
+stylis@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/stylis/-/stylis-4.0.3.tgz#0d714765f3f694a685550f0c45411ebf90a9bded"
+  integrity sha512-iAxdFyR9cHKp4H5M2dJlDnvcb/3TvPprzlKjvYVbH7Sh+y8hjY/mUu/ssdcvVz6Z4lKI3vsoS0jAkMYmX7ozfA==
 
 supports-color@^2.0.0:
   version "2.0.0"
