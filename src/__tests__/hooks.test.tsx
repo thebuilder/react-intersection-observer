@@ -42,6 +42,16 @@ test('should create a hook', () => {
   expect(instance.observe).toHaveBeenCalledWith(wrapper);
 });
 
+test('should create a hook with array threshold', () => {
+  const { getByTestId } = render(
+    <HookComponent options={{ threshold: [0.1, 1] }} />,
+  );
+  const wrapper = getByTestId('wrapper');
+  const instance = intersectionMockInstance(wrapper);
+
+  expect(instance.observe).toHaveBeenCalledWith(wrapper);
+});
+
 test('should create a lazy hook', () => {
   const { getByTestId } = render(<LazyHookComponent />);
   const wrapper = getByTestId('wrapper');

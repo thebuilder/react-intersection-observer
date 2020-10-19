@@ -57,7 +57,19 @@ export function useInView({
         );
       }
     },
-    [threshold, root, rootMargin, triggerOnce, skip, trackVisibility, delay],
+    // We break the rule here, because we aren't including the actual `threshold` variable
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      // If the threshold is an array, convert it to a string so it won't change between renders.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      Array.isArray(threshold) ? threshold.toString() : threshold,
+      root,
+      rootMargin,
+      triggerOnce,
+      skip,
+      trackVisibility,
+      delay,
+    ],
   );
 
   /* eslint-disable-next-line */
