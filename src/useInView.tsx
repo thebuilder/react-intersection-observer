@@ -57,6 +57,8 @@ export function useInView({
         );
       }
     },
+    // We break the rule here, because we aren't including the actual `threshold` variable
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       // If the threshold is an array, convert it to a string so it won't change between renders.
       // eslint-disable-next-line react-hooks/exhaustive-deps
