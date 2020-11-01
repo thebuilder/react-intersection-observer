@@ -8,7 +8,7 @@ type Item = {
 
 const observers = new Map<IntersectionObserver, Item>();
 
-beforeAll(() => {
+beforeEach(() => {
   /**
    * Create a custom IntersectionObserver mock, allowing us to intercept the observe and unobserve calls.
    * We keep track of the elements being observed, so when `mockAllIsIntersecting` is triggered it will
