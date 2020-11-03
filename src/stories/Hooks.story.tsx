@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/react';
 import { action } from '@storybook/addon-actions';
+import { Meta } from '@storybook/react';
 import { IntersectionOptions, useInView } from '../index';
 import ScrollWrapper from './ScrollWrapper';
 import Status from './Status';
@@ -13,6 +14,12 @@ type Props = {
   options?: IntersectionOptions;
   lazy?: boolean;
 };
+
+const story: Meta = {
+  title: 'useInView hook',
+};
+
+export default story;
 
 const HookComponent = ({
   options,
@@ -65,10 +72,6 @@ const HookComponent = ({
       </motion.div>
     </React.Fragment>
   );
-};
-
-export default {
-  title: 'useInView hook',
 };
 
 export const basic = () => (
@@ -142,7 +145,7 @@ export const skip = () => (
 export const TrackVisibility = () => {
   const ref = useRef<HTMLDivElement>(null);
   return (
-    <div ref={ref}>
+    <div ref={ref} css={{ margin: '0 1rem' }}>
       <div
         css={{
           color: 'white',

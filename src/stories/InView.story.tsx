@@ -2,6 +2,7 @@
 import { jsx } from '@emotion/react';
 import * as React from 'react';
 import { action } from '@storybook/addon-actions';
+import { Meta } from '@storybook/react';
 import { InView } from '../index';
 import ScrollWrapper from './ScrollWrapper';
 import RootComponent from './Root';
@@ -13,6 +14,12 @@ type Props = {
   children?: React.ReactNode;
   inView?: boolean;
 };
+
+const story: Meta = {
+  title: 'InView Component',
+};
+
+export default story;
 
 const Header = React.forwardRef<any, Props>((props: Props, ref) => (
   <div ref={ref} data-inview={props.inView}>
@@ -35,10 +42,6 @@ const Header = React.forwardRef<any, Props>((props: Props, ref) => (
     </motion.div>
   </div>
 ));
-
-export default {
-  title: 'InView Component',
-};
 
 export const basic = () => (
   <ScrollWrapper>
