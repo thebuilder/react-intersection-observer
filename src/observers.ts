@@ -32,8 +32,8 @@ function getRootId(root?: Element | null) {
  */
 export function optionsToId(options: IntersectionObserverInit) {
   return Object.keys(options)
-    .filter(Boolean)
     .sort()
+    .filter((key) => options[key] !== undefined)
     .map((key) => {
       return `${key}_${
         key === 'root' ? getRootId(options.root) : options[key]
