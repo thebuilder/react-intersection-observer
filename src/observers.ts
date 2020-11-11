@@ -57,7 +57,7 @@ function createObserver(options: IntersectionObserverInit) {
         // -Firefox ignores `threshold` when considering `isIntersecting`, so it will never be false again if `threshold` is > 0
         const inView =
           entry.isIntersecting &&
-          observer.thresholds.some(
+          (observer.thresholds ?? [0]).some(
             (threshold) => entry.intersectionRatio >= threshold,
           );
 
