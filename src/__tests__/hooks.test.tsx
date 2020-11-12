@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { useInView } from '../useInView';
 import { intersectionMockInstance, mockAllIsIntersecting } from '../test-utils';
 import { IntersectionOptions } from '../index';
@@ -256,4 +256,26 @@ test('should handle multiple hooks on the same element', () => {
   expect(getByTestId('item-1').getAttribute('data-inview')).toBe('true');
   expect(getByTestId('item-2').getAttribute('data-inview')).toBe('true');
   expect(getByTestId('item-3').getAttribute('data-inview')).toBe('true');
+});
+
+test('should handle thresholds missing on observer instance', () => {
+  render(<HookComponent options={{ threshold: [0.1, 1] }} />);
+  const wrapper = screen.getByTestId('wrapper');
+  const instance = intersectionMockInstance(wrapper);
+  // @ts-ignore
+  instance.thresholds = undefined;
+  mockAllIsIntersecting(true);
+
+  screen.getByText('true');
+});
+
+test('should handle thresholds missing on observer instance with no threshold set', () => {
+  render(<HookComponent />);
+  const wrapper = screen.getByTestId('wrapper');
+  const instance = intersectionMockInstance(wrapper);
+  // @ts-ignore
+  instance.thresholds = undefined;
+  mockAllIsIntersecting(true);
+
+  screen.getByText('true');
 });
