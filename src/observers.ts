@@ -50,6 +50,7 @@ function createObserver(options: IntersectionObserverInit) {
   if (!instance) {
     // Create a map of elements this observer is going to observe. Each element has a list of callbacks that should be triggered, once it comes into view.
     const elements = new Map<Element, Array<ObserverInstanceCallback>>();
+    let thresholds: number[] | readonly number[];
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
@@ -57,9 +58,7 @@ function createObserver(options: IntersectionObserverInit) {
         // -Firefox ignores `threshold` when considering `isIntersecting`, so it will never be false again if `threshold` is > 0
         const inView =
           entry.isIntersecting &&
-          (observer.thresholds ?? [0]).some(
-            (threshold) => entry.intersectionRatio >= threshold,
-          );
+          thresholds.some((threshold) => entry.intersectionRatio >= threshold);
 
         // @ts-ignore support IntersectionObserver v2
         if (options.trackVisibility && typeof entry.isVisible === 'undefined') {
@@ -73,6 +72,13 @@ function createObserver(options: IntersectionObserverInit) {
         });
       });
     }, options);
+
+    // Ensure we have a valid thresholds array. If not, use the threshold from the options
+    thresholds =
+      observer.thresholds ||
+      (Array.isArray(options.threshold)
+        ? options.threshold
+        : [options.threshold || 0]);
 
     instance = {
       id,
