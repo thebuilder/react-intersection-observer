@@ -52,15 +52,28 @@ afterEach(() => {
 
 function triggerIntersection(
   elements: Element[],
-  isIntersecting: boolean,
+  trigger: boolean | number,
   observer: IntersectionObserver,
   item: Item,
 ) {
   const entries: IntersectionObserverEntry[] = [];
+
+  const isIntersecting =
+    typeof trigger === 'number'
+      ? observer.thresholds.some((threshold) => trigger >= threshold)
+      : trigger;
+
+  const ratio =
+    typeof trigger === 'number'
+      ? observer.thresholds.find((threshold) => trigger >= threshold) ?? 0
+      : trigger
+      ? 1
+      : 0;
+
   elements.forEach((element) => {
     entries.push({
       boundingClientRect: element.getBoundingClientRect(),
-      intersectionRatio: isIntersecting ? 1 : 0,
+      intersectionRatio: ratio,
       intersectionRect: isIntersecting
         ? element.getBoundingClientRect()
         : {
@@ -88,9 +101,9 @@ function triggerIntersection(
 
 /**
  * Set the `isIntersecting` on all current IntersectionObserver instances
- * @param isIntersecting {boolean}
+ * @param isIntersecting {boolean | number}
  */
-export function mockAllIsIntersecting(isIntersecting: boolean) {
+export function mockAllIsIntersecting(isIntersecting: boolean | number) {
   for (let [observer, item] of observers) {
     triggerIntersection(
       Array.from(item.elements),
@@ -103,10 +116,14 @@ export function mockAllIsIntersecting(isIntersecting: boolean) {
 
 /**
  * Set the `isIntersecting` for the IntersectionObserver of a specific element.
+ *
  * @param element {Element}
- * @param isIntersecting {boolean}
+ * @param isIntersecting {boolean | number}
  */
-export function mockIsIntersecting(element: Element, isIntersecting: boolean) {
+export function mockIsIntersecting(
+  element: Element,
+  isIntersecting: boolean | number,
+) {
   const observer = intersectionMockInstance(element);
   if (!observer) {
     throw new Error(

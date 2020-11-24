@@ -67,6 +67,16 @@ test('should create a hook inView', () => {
   getByText('true');
 });
 
+test('should mock thresholds', () => {
+  render(<HookComponent options={{ threshold: [0.5, 1] }} />);
+  mockAllIsIntersecting(0.2);
+  screen.getByText('false');
+  mockAllIsIntersecting(0.5);
+  screen.getByText('true');
+  mockAllIsIntersecting(1);
+  screen.getByText('true');
+});
+
 test('should create a hook with initialInView', () => {
   const { getByText } = render(
     <HookComponent options={{ initialInView: true }} />,
