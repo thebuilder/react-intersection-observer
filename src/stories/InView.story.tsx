@@ -1,47 +1,48 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/react';
 import * as React from 'react';
+import { CSSProperties } from 'react';
 import { action } from '@storybook/addon-actions';
 import { Meta } from '@storybook/react';
 import { InView } from '../index';
 import ScrollWrapper from './ScrollWrapper';
 import RootComponent from './Root';
 import Status from './Status';
-import { motion } from 'framer-motion';
 
 type Props = {
   className?: string;
   children?: React.ReactNode;
   inView?: boolean;
+  style?: CSSProperties;
 };
 
 const story: Meta = {
   title: 'InView Component',
+  component: InView,
 };
 
 export default story;
 
-const Header = React.forwardRef<any, Props>((props: Props, ref) => (
-  <div ref={ref} data-inview={props.inView}>
-    {props.inView !== undefined ? <Status inView={props.inView} /> : null}
-    <motion.div
-      animate={{ opacity: props.inView ? 1 : 0.5 }}
-      className={props.className}
-      css={{
-        display: 'flex',
-        minHeight: '25vh',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        textAlign: 'center',
-        background: '#148bb4',
-        color: 'azure',
-      }}
-    >
-      <h2>{props.children}</h2>
-    </motion.div>
-  </div>
-));
+const Header = React.forwardRef<any, Props>(
+  ({ inView, children, className, style, ...rest }: Props, ref) => (
+    <>
+      {inView !== undefined ? <Status inView={inView} /> : null}
+      <div
+        ref={ref}
+        data-inview={inView}
+        className={[
+          'flex text-center text-blue-100 items-center flex-col justify-center py-24 bg-blue-700 transition-opacity duration-500 delay-200',
+          inView !== false ? 'opacity-100' : 'opacity-50',
+          className,
+        ]
+          .filter(Boolean)
+          .join(' ')}
+        style={style}
+        {...rest}
+      >
+        <h2 className="font-sans text-4xl">{children}</h2>
+      </div>
+    </>
+  ),
+);
 
 export const basic = () => (
   <ScrollWrapper>
@@ -93,7 +94,7 @@ export const tallerThanViewport = () => (
   <ScrollWrapper>
     <InView onChange={action('Child Observer inView')}>
       {({ inView, ref }) => (
-        <Header ref={ref} css={{ height: '150vh' }}>
+        <Header ref={ref} inView={inView} style={{ height: '150vh' }}>
           Header is inside the viewport: {inView.toString()}
         </Header>
       )}
@@ -127,7 +128,7 @@ export const TallerThanViewportWithThreshold100percentage = () => (
   <ScrollWrapper>
     <InView threshold={1}>
       {({ inView, ref }) => (
-        <Header ref={ref} inView={inView} css={{ height: '150vh' }}>
+        <Header ref={ref} inView={inView} style={{ height: '150vh' }}>
           Header is fully inside the viewport: {inView.toString()}
         </Header>
       )}

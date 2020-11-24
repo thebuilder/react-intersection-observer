@@ -1,8 +1,8 @@
 import React from 'react';
-import { addDecorator, addParameters } from '@storybook/react';
+import { addParameters } from '@storybook/react';
 import { create } from '@storybook/theming';
 import 'intersection-observer';
-import { Global } from '@emotion/react';
+import './styles.css';
 
 addParameters({
   options: {
@@ -15,21 +15,3 @@ addParameters({
     panelPosition: 'bottom',
   },
 });
-
-addDecorator((storyFn) => (
-  <>
-    <Global
-      styles={{
-        'html, body': {
-          fontFamily:
-            "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif",
-          padding: 0,
-          margin: 0,
-          color: '#0c0c0c',
-          fontSize: '16px',
-        },
-      }}
-    />
-    {storyFn()}
-  </>
-));

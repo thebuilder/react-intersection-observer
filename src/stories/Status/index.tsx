@@ -1,37 +1,20 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/react';
+import React from 'react';
 
 type Props = { inView: boolean };
 
-const emojiIcon = {
-  width: '1em',
-  height: '1em',
-  lineHeight: 1,
-};
-
 function Status({ inView }: Props) {
   return (
-    <div
-      css={{
-        position: 'fixed',
-        zIndex: 1,
-        top: 0,
-        right: 0,
-        width: 32,
-        height: 32,
-        background: 'rgba(255, 255, 255, 0.6)',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: '0 0 0 10px',
-      }}
-    >
+    <div className="fixed z-10 p-2 top-0 right-0 flex justify-center items-center rounded-bl-lg bg-opacity-60 bg-white">
       {inView ? (
-        <span role="img" aria-label="In view" css={emojiIcon}>
+        <span role="img" aria-label="In view" className="w-4 h-4 leading-none">
           ✅
         </span>
       ) : (
-        <span role="img" aria-label="Outside the viewport" css={emojiIcon}>
+        <span
+          role="img"
+          aria-label="Outside the viewport"
+          className="w-4 h-4 leading-none"
+        >
           ❌
         </span>
       )}

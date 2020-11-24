@@ -1,10 +1,7 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/react';
 import * as React from 'react';
 
 type Props = {
   children: (node: HTMLElement) => React.ReactNode;
-  className?: string;
 };
 
 type State = {
@@ -26,17 +23,7 @@ class RootComponent extends React.PureComponent<Props, State> {
     return (
       <div
         ref={this.handleNode}
-        className={this.props.className}
-        css={{
-          margin: '64px',
-          backgroundColor: 'slategrey',
-          overflowY: 'scroll',
-          position: 'absolute',
-          top: '0',
-          left: '0',
-          right: '0',
-          bottom: '0',
-        }}
+        className="absolute inset-16 overflow-y-scroll bg-gray-600"
       >
         {/*
         // @ts-ignore */}

@@ -1,5 +1,3 @@
-/** @jsx jsx */
-import { jsx } from '@emotion/react';
 import React from 'react';
 
 type Props = {
@@ -14,33 +12,17 @@ function ScrollWrapper({ children, ...props }: Props) {
   return (
     <div {...props}>
       <section
-        css={{
-          height: '101vh',
-          textAlign: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#2d1176',
-          color: '#fff',
-        }}
+        className="flex items-center justify-center text-white text-center bg-indigo-800"
+        style={{ height: '101vh' }}
       >
-        <h1>⬇ Scroll Down ⬇</h1>
+        <p className="font-sans text-4xl">⬇ Scroll Down ⬇</p>
       </section>
       {children}
       <section
-        css={{
-          height: '101vh',
-          textAlign: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: '#2d1176',
-          color: '#fff',
-        }}
+        className="flex items-center justify-center text-white text-center bg-indigo-800"
+        style={{ height: '101vh' }}
       >
-        <h1>⬆︎ Scroll up ⬆︎</h1>
+        <p className="font-sans text-4xl">⬆︎ Scroll up ⬆︎</p>
       </section>
     </div>
   );
