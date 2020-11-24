@@ -155,7 +155,7 @@ argument for the hooks.
 | **delay** 🧪           | number             | undefined | false    | A number indicating the minimum delay in milliseconds between notifications from this observer for a given target. This must be set to at least `100` if `trackVisibility` is `true`.                                                                                                       |
 | **skip**               | boolean            | false     | false    | Skip creating the IntersectionObserver. You can use this to enable and disable the observer as needed. If `skip` is set while `inView`, the current state will still be kept.                                                                                                               |
 | **triggerOnce**        | boolean            | false     | false    | Only trigger the observer once.                                                                                                                                                                                                                                                             |
-| **initialInView**      | boolean            | false     | false    | Set the initial value of the `inView` boolean. This can be used if you expect the element to be in the viewport to start with, and you want to trigger something when it leaves.                                                                                                        |
+| **initialInView**      | boolean            | false     | false    | Set the initial value of the `inView` boolean. This can be used if you expect the element to be in the viewport to start with, and you want to trigger something when it leaves.                                                                                                            |
 
 > ⚠️ When passing an array to `threshold`, store the array in a constant to
 > avoid the component re-rendering too often. For example:
@@ -268,17 +268,18 @@ You can read more about this on these links:
 In order to write meaningful tests, the `IntersectionObserver` needs to be
 mocked. If you are writing your tests in Jest, you can use the included
 `test-utils.js`. It mocks the `IntersectionObserver`, and includes a few methods
-to assist with faking the `inView` state.
+to assist with faking the `inView` state. When setting the `isIntersecting`
+value you can pass either a `boolean` value or a threshold between `0` and `1`.
 
 ### `test-utils.js`
 
 Import the methods from `react-intersection-observer/test-utils`.
 
-**`mockAllIsIntersecting(isIntersecting:boolean)`**  
-Set the `isIntersecting` on all current IntersectionObserver instances.
+**`mockAllIsIntersecting(isIntersecting:boolean | number)`**  
+Set `isIntersecting` on all current IntersectionObserver instances.
 
-**`mockIsIntersecting(element:Element, isIntersecting:boolean)`**  
-Set the `isIntersecting` for the IntersectionObserver of a specific element.
+**`mockIsIntersecting(element:Element, isIntersecting:boolean | number)`**  
+Set `isIntersecting` for the IntersectionObserver of a specific element.
 
 **`intersectionMockInstance(element:Element): IntersectionObserver`**  
 Call the `intersectionMockInstance` method with an element, to get the (mocked)
@@ -289,7 +290,7 @@ Call the `intersectionMockInstance` method with an element, to get the (mocked)
 
 ```js
 import React from 'react';
-import { render } from 'react-testing-library';
+import { screen, render } from 'react-testing-library';
 import { useInView } from 'react-intersection-observer';
 import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
 
@@ -299,11 +300,22 @@ const HookComponent = ({ options }) => {
 };
 
 test('should create a hook inView', () => {
-  const { getByText } = render(<HookComponent />);
+  render(<HookComponent />);
 
   // This causes all (existing) IntersectionObservers to be set as intersecting
   mockAllIsIntersecting(true);
-  getByText('true');
+  screen.getByText('true');
+});
+
+test('should create a hook inView with threshold', () => {
+  render(<HookComponent options={{ threshold: 0.3 }} />);
+
+  mockAllIsIntersecting(0.1);
+  screen.getByText('false');
+
+  // Once the threshold has been passed, it will trigger inView.
+  mockAllIsIntersecting(0.3);
+  screen.getByText('true');
 });
 ```
 
