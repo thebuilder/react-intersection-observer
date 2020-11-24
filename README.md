@@ -3,8 +3,6 @@
 [![Version Badge][npm-version-svg]][package-url]
 [![GZipped size][npm-minzip-svg]][bundlephobia-url]
 ![Test](https://github.com/thebuilder/react-intersection-observer/workflows/Test/badge.svg)
-[![dependency status][deps-svg]][deps-url]
-[![dev dependency status][dev-deps-svg]][dev-deps-url]
 [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
 
@@ -355,12 +353,6 @@ async function loadPolyfills() {
 [npm-minzip-svg]: https://img.shields.io/bundlephobia/minzip/react.svg
 [bundlephobia-url]:
   https://bundlephobia.com/result?p=react-intersection-observer
-[deps-svg]: https://david-dm.org/thebuilder/react-intersection-observer.svg
-[deps-url]: https://david-dm.org/thebuilder/react-intersection-observer
-[dev-deps-svg]:
-  https://david-dm.org/thebuilder/react-intersection-observer/dev-status.svg
-[dev-deps-url]:
-  https://david-dm.org/thebuilder/react-intersection-observer#info=devDependencies
 [license-image]: http://img.shields.io/npm/l/react-intersection-observer.svg
 [license-url]: LICENSE
 [downloads-image]: http://img.shields.io/npm/dm/react-intersection-observer.svg
