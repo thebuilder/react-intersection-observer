@@ -13,17 +13,18 @@ to tell you when an element enters or leaves the viewport. Contains both a
 [plain children](#plain-children) implementation.
 
 **Storybook Demo:**
-[https://react-intersection-observer.now.sh/](https://react-intersection-observer.now.sh/)
+[https://react-intersection-observer.vercel.app](https://react-intersection-observer.vercel.app)
 
 ## Features
 
 - 🎣 **Hooks or Component API** - With `useInView` it's easier than ever to
   monitor elements
-- ⚡️ **Optimized performance** - Auto reuses Intersection Observer instances
+- ⚡️ **Optimized performance** - Reuses Intersection Observer instances
   where possible
 - ⚙️ **Matches native API** - Intuitive to use
+- 🧪 **Ready to test** - Mocks the Intersection Observer for easy testing with [Jest](https://jestjs.io/)
 - 🌳 **Tree-shakeable** - Only include the parts you use
-- 💥 **Tiny bundle** [~1.6 kB gzipped][bundlephobia-url]
+- 💥 **Tiny bundle** [~1.7 kB gzipped][bundlephobia-url]
 
 ## Installation
 
