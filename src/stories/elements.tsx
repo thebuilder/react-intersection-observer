@@ -1,23 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { IntersectionOptions } from '../index';
+import { AnimatePresence, motion } from 'framer-motion';
+import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 
 type ScrollProps = {
   children: React.ReactNode;
   indicators?: 'all' | 'top' | 'bottom' | 'none';
 };
-
-export function useValidateOptions(options: IntersectionOptions) {
-  try {
-    new IntersectionObserver(() => {}, options);
-  } catch (e) {
-    return e.message.replace(
-      "Failed to construct 'IntersectionObserver': ",
-      '',
-    );
-  }
-
-  return undefined;
-}
 
 export function ErrorMessage({ children }: { children?: React.ReactNode }) {
   return (
@@ -97,38 +84,45 @@ export const InViewBlock = React.forwardRef<
 ));
 
 export function InViewIcon({ inView }: { inView: boolean }) {
-  return inView ? (
-    <div className="bg-green-600 border-green-400 rounded-full border-4 h-20 mb-8 p-2 w-20">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
+  return (
+    <AnimatePresence exitBeforeEnter>
+      <motion.div
+        key={inView ? 'inview' : 'outside'}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0 }}
+        className={[
+          'rounded-full border-4 h-20 mb-8 p-2 w-20',
+          inView
+            ? 'bg-green-600 border-green-400'
+            : 'bg-yellow-600 border-yellow-400',
+        ].join(' ')}
       >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M5 13l4 4L19 7"
-        />
-      </svg>
-    </div>
-  ) : (
-    <div className="bg-yellow-600 border-yellow-400 rounded-full border-4 h-20 mb-8 p-2 w-20">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M6 18L18 6M6 6l12 12"
-        />
-      </svg>
-    </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          {inView ? (
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M5 13l4 4L19 7"
+            />
+          ) : (
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          )}
+        </svg>
+      </motion.div>
+      )
+    </AnimatePresence>
   );
 }
 
@@ -202,26 +196,34 @@ export function ThresholdMarker({
   const values = Array.isArray(threshold) ? threshold : [threshold];
   return (
     <>
-      {values.map((value) => (
-        <div
-          key={value}
-          className="border-orange-600 border-dashed border-b-4 border-t-4 left-0 -mx-2 pointer-events-none absolute w-8"
-          style={{
-            top: `${(value > 0.5 ? 1 - value : value) * 100}%`,
-            bottom: `${(value > 0.5 ? 1 - value : value) * 100}%`,
-          }}
-        />
-      ))}
-      {values.map((value) => (
-        <div
-          key={'right' + value}
-          className="border-orange-600 border-dashed border-b-4 border-t-4 right-0 -mx-2 pointer-events-none absolute w-8"
-          style={{
-            top: `${(value > 0.5 ? 1 - value : value) * 100}%`,
-            bottom: `${(value > 0.5 ? 1 - value : value) * 100}%`,
-          }}
-        />
-      ))}
+      {values.map((value) => {
+        const style: CSSProperties = {
+          top: `${(value > 0.5 ? 1 - value : value) * 100}%`,
+          bottom: `${(value > 0.5 ? 1 - value : value) * 100}%`,
+        };
+
+        return (
+          <div className="pointer-events-none" key={value}>
+            <div
+              className="bg-red-900 left-0 -mx-3 absolute w-1"
+              style={style}
+            />
+            <div
+              className="bg-red-900 right-0 -mx-3 absolute w-1"
+              style={style}
+            />
+            <div
+              className="border-red-800 border-solid border-b-4 border-t-4 left-0 -mx-4 absolute w-3"
+              style={style}
+            />
+            <div
+              key={'right' + value}
+              className="border-red-800 border-solid border-b-4 border-t-4 right-0 -mx-4 absolute w-3"
+              style={style}
+            />
+          </div>
+        );
+      })}
     </>
   );
 }
@@ -257,9 +259,9 @@ export function EntryDetails({
   ];
 
   return (
-    <details className="px-4 w-full">
-      <summary className="cursor-pointer">
-        Show{' '}
+    <details className="px-2 w-full md:px-4">
+      <summary className="cursor-pointer hover:opacity-100 opacity-50">
+        Toggle{' '}
         <code className="bg-gray-700 bg-opacity-50 px-2 py-1">
           IntersectionObserverEntry
         </code>{' '}

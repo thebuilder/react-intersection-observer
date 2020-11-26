@@ -6,3 +6,18 @@ export function getRoot(options: IntersectionOptions) {
   }
   return options.root;
 }
+
+export function useValidateOptions(options: IntersectionOptions) {
+  const finalOptions = { root: getRoot(options), ...options };
+  let error = undefined;
+  try {
+    new IntersectionObserver(() => {}, finalOptions);
+  } catch (e) {
+    error = e.message.replace(
+      "Failed to construct 'IntersectionObserver': ",
+      '',
+    );
+  }
+
+  return { options: finalOptions, error };
+}

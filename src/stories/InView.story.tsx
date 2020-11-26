@@ -11,11 +11,10 @@ import {
   Status,
   ScrollWrapper,
   ThresholdMarker,
-  useValidateOptions,
   ErrorMessage,
   RootMargin,
 } from './elements';
-import { getRoot } from './story-utils';
+import { useValidateOptions } from './story-utils';
 
 type Props = IntersectionOptions & {
   style?: CSSProperties;
@@ -55,14 +54,13 @@ const story: Meta = {
 
 export default story;
 
-const Template: Story<Props> = ({ style, className, ...options }) => {
-  const mergedOptions = { root: getRoot(options), ...options };
-  const errorMessage = useValidateOptions(mergedOptions);
-  if (errorMessage) return <ErrorMessage>{errorMessage}</ErrorMessage>;
+const Template: Story<Props> = ({ style, className, ...rest }) => {
+  const { options, error } = useValidateOptions(rest);
+  if (error) return <ErrorMessage>{error}</ErrorMessage>;
 
   return (
     <ScrollWrapper indicators={options.initialInView ? 'bottom' : 'all'}>
-      <InView onChange={action('InView')} {...mergedOptions}>
+      <InView onChange={action('InView')} {...options}>
         {({ ref, inView, entry }) => (
           <>
             <Status inView={inView} />

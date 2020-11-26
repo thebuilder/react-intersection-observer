@@ -10,7 +10,6 @@ import {
   Status,
   ScrollWrapper,
   ThresholdMarker,
-  useValidateOptions,
   RootMargin,
   ErrorMessage,
 } from './elements';
@@ -23,7 +22,7 @@ import {
   Subtitle,
   Title,
 } from '@storybook/addon-docs/blocks';
-import { getRoot } from './story-utils';
+import { useValidateOptions } from './story-utils';
 
 type Props = IntersectionOptions & {
   style?: CSSProperties;
@@ -91,10 +90,9 @@ const story: Meta = {
 
 export default story;
 
-const Template: Story<Props> = ({ style, className, lazy, ...options }) => {
-  const mergedOptions = { root: getRoot(options), ...options };
-  const errorMessage = useValidateOptions(mergedOptions);
-  const { ref, inView, entry } = useInView(!errorMessage ? mergedOptions : {});
+const Template: Story<Props> = ({ style, className, lazy, ...rest }) => {
+  const { options, error } = useValidateOptions(rest);
+  const { ref, inView, entry } = useInView(!error ? options : {});
   const [isLoading, setIsLoading] = useState(lazy);
   action('Inview')(inView, entry);
 
@@ -102,8 +100,8 @@ const Template: Story<Props> = ({ style, className, lazy, ...options }) => {
     if (isLoading) setIsLoading(false);
   }, [isLoading, lazy]);
 
-  if (errorMessage) {
-    return <ErrorMessage>{errorMessage}</ErrorMessage>;
+  if (error) {
+    return <ErrorMessage>{error}</ErrorMessage>;
   }
 
   if (isLoading) {
@@ -145,10 +143,12 @@ export const TallerThanViewport = Template.bind({});
 TallerThanViewport.args = {
   style: { minHeight: '150vh' },
 };
+
 export const WithThreshold100percentage = Template.bind({});
 WithThreshold100percentage.args = {
   threshold: 1,
 };
+
 export const WithThreshold50percentage = Template.bind({});
 WithThreshold50percentage.args = {
   threshold: 0.5,
@@ -175,13 +175,18 @@ Skip.args = {
   skip: true,
 };
 
-const VisibilityTemplate: Story<IntersectionOptions> = (options) => {
+const VisibilityTemplate: Story<IntersectionOptions> = (args) => {
+  const { options, error } = useValidateOptions(args);
   const ref = useRef<HTMLDivElement>(null);
   const { entry, inView, ref: inViewRef } = useInView(options);
 
+  if (error) {
+    return <ErrorMessage>{error}</ErrorMessage>;
+  }
+
   return (
-    <div ref={ref} className="my-4">
-      <div className="max-w-prose bg-gray-800 rounded-md mx-auto my-8 p-4 relative text-center text-white">
+    <div ref={ref} className="container mx-auto my-4">
+      <div className="bg-gray-800 rounded-md mx-auto my-8 max-w-3xl p-4 relative text-center text-white">
         <h2 className="text-2xl font-bold">Track Visibility</h2>
         <p className="leading-normal my-4">
           Use the new IntersectionObserver v2 to track if the object is visible.
