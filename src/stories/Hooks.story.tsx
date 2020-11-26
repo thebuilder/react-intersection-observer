@@ -32,7 +32,7 @@ type Props = IntersectionOptions & {
 
 const story: Meta = {
   title: 'useInView Hook',
-  subcomponents: { InView },
+  component: InView,
   parameters: {
     docs: {
       page: () => (
@@ -58,6 +58,31 @@ const story: Meta = {
         min: 0,
         max: 1,
         step: 0.05,
+      },
+    },
+    root: {
+      table: {
+        disable: true,
+      },
+    },
+    children: {
+      table: {
+        disable: true,
+      },
+    },
+    tag: {
+      table: {
+        disable: true,
+      },
+    },
+    as: {
+      table: {
+        disable: true,
+      },
+    },
+    onChange: {
+      table: {
+        disable: true,
       },
     },
   },
