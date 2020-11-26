@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-.sb-show-main {
-  padding: 0 !important;
+/*.sb-show-main {*/
+/*  padding: 0 !important;*/
+/*}*/
+
+.sbdocs .sbdocs-hidden {
+  @apply hidden;
 }

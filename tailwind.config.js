@@ -1,11 +1,20 @@
 module.exports = {
   purge: ['src/**/*.tsx'],
-  darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {},
   },
   variants: {
     extend: {},
+    backgroundColor: [
+      'responsive',
+      'hover',
+      'focus',
+      'group-hover',
+      'odd',
+      'even',
+    ],
+    opacity: ['responsive', 'hover', 'focus', 'group-hover'],
+    display: ['responsive', 'hover', 'focus', 'group-hover'],
   },
   plugins: [],
 };

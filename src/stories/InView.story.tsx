@@ -1,228 +1,185 @@
 import * as React from 'react';
 import { CSSProperties } from 'react';
 import { action } from '@storybook/addon-actions';
-import { Meta } from '@storybook/react';
-import { InView } from '../index';
-import ScrollWrapper from './ScrollWrapper';
-import RootComponent from './Root';
-import Status from './Status';
+import { Meta, Story } from '@storybook/react';
+import { IntersectionOptions, InView } from '../index';
+import {
+  EntryDetails,
+  InViewBlock,
+  InViewIcon,
+  RootComponent,
+  Status,
+  ScrollWrapper,
+  ThresholdMarker,
+} from './elements';
 
-type Props = {
-  className?: string;
-  children?: React.ReactNode;
-  inView?: boolean;
+type Props = IntersectionOptions & {
   style?: CSSProperties;
+  className?: string;
 };
 
 const story: Meta = {
   title: 'InView Component',
   component: InView,
+  argTypes: {
+    rootMargin: { control: { type: 'text' } },
+    threshold: {
+      control: {
+        type: 'range',
+        min: 0,
+        max: 1,
+        step: 0.05,
+      },
+    },
+    children: {
+      table: {
+        disable: true,
+      },
+    },
+    tag: {
+      table: {
+        disable: true,
+      },
+    },
+  },
 };
 
 export default story;
 
-const Header = React.forwardRef<any, Props>(
-  ({ inView, children, className, style, ...rest }: Props, ref) => (
-    <>
-      {inView !== undefined ? <Status inView={inView} /> : null}
-      <div
-        ref={ref}
-        data-inview={inView}
-        className={[
-          'flex text-center text-blue-100 items-center flex-col justify-center py-24 bg-blue-700 transition-opacity duration-500 delay-200',
-          inView !== false ? 'opacity-100' : 'opacity-50',
-          className,
-        ]
-          .filter(Boolean)
-          .join(' ')}
-        style={style}
-        {...rest}
-      >
-        <h2 className="font-sans text-4xl">{children}</h2>
-      </div>
-    </>
-  ),
-);
+const Template: Story<Props> = ({ style, className, ...options }) => {
+  return (
+    <ScrollWrapper indicators={options.initialInView ? 'bottom' : 'all'}>
+      <InView onChange={action('Child Observer inView')} {...options}>
+        {({ ref, inView, entry }) => (
+          <>
+            <Status inView={inView} />
+            <InViewBlock ref={ref} inView={inView} style={style}>
+              <InViewIcon inView={inView} />
+              <EntryDetails inView={inView} entry={entry} />
+            </InViewBlock>
+            <ThresholdMarker threshold={options.threshold} />
+          </>
+        )}
+      </InView>
+    </ScrollWrapper>
+  );
+};
 
-export const basic = () => (
-  <ScrollWrapper>
-    <InView onChange={action('Child Observer inView')}>
-      {({ inView, ref }) => (
-        <Header ref={ref} inView={inView}>
-          Header inside viewport: {inView.toString()}
-        </Header>
-      )}
-    </InView>
-  </ScrollWrapper>
-);
+const RootTemplate: Story<Props> = (props) => {
+  return (
+    <RootComponent>
+      {(node) => <Template {...props} root={node} />}
+    </RootComponent>
+  );
+};
 
-export const withRootMargin = () => (
-  <ScrollWrapper>
-    <InView rootMargin="150px" onChange={action('Child Observer inView')}>
-      {({ inView, ref }) => (
-        <Header ref={ref} inView={inView}>
-          Header inside viewport: {inView.toString()}
-        </Header>
-      )}
-    </InView>
-  </ScrollWrapper>
-);
+export const Basic = Template.bind({});
+Basic.args = {
+  rootMargin: '0px',
+  threshold: 0,
+};
 
-export const startInView = () => (
-  <InView onChange={action('Child Observer inView')}>
-    {({ inView, ref }) => (
-      <Header ref={ref} inView={inView}>
-        Header inside viewport: {inView.toString()}
-      </Header>
-    )}
-  </InView>
-);
+export const WithRootMargin = Template.bind({});
+WithRootMargin.args = {
+  rootMargin: '150px',
+  threshold: 0,
+};
 
-export const plainChildren = () => (
-  <ScrollWrapper>
-    <InView
-      onChange={action('Child Observer inView')}
-      className="custom-class"
-      as="div"
-    >
-      <Header>Plain children</Header>
-    </InView>
-  </ScrollWrapper>
-);
+export const StartInView = Template.bind({});
+StartInView.args = {
+  rootMargin: '0px',
+  threshold: 0,
+  initialInView: true,
+};
 
-export const tallerThanViewport = () => (
-  <ScrollWrapper>
-    <InView onChange={action('Child Observer inView')}>
-      {({ inView, ref }) => (
-        <Header ref={ref} inView={inView} style={{ height: '150vh' }}>
-          Header is inside the viewport: {inView.toString()}
-        </Header>
-      )}
-    </InView>
-  </ScrollWrapper>
-);
+export const TallerThanViewport = Template.bind({});
+TallerThanViewport.args = {
+  rootMargin: '0px',
+  threshold: 0,
+  style: { minHeight: '150vh' },
+};
 
-export const withThreshold100percentage = () => (
-  <ScrollWrapper>
-    <InView threshold={1} onChange={action('Child Observer inView')}>
-      {({ inView, ref }) => (
-        <Header ref={ref} inView={inView}>
-          Header is fully inside the viewport: {inView.toString()}
-        </Header>
-      )}
-    </InView>
-  </ScrollWrapper>
-);
-export const withThreshold50percentage = () => (
-  <ScrollWrapper>
-    <InView threshold={0.5} onChange={action('Child Observer inView')}>
-      {({ inView, ref }) => (
-        <Header ref={ref} inView={inView}>
-          Header is 50% inside the viewport: {inView.toString()}
-        </Header>
-      )}
-    </InView>
-  </ScrollWrapper>
-);
-export const TallerThanViewportWithThreshold100percentage = () => (
-  <ScrollWrapper>
-    <InView threshold={1}>
-      {({ inView, ref }) => (
-        <Header ref={ref} inView={inView} style={{ height: '150vh' }}>
-          Header is fully inside the viewport: {inView.toString()}
-        </Header>
-      )}
-    </InView>
-  </ScrollWrapper>
-);
+export const WithThreshold100percentage = Template.bind({});
+WithThreshold100percentage.args = {
+  rootMargin: '0px',
+  threshold: 1,
+};
 
-export const withThresholdArray = () => (
-  <ScrollWrapper>
-    <InView
-      threshold={[0, 0.25, 0.5, 0.75, 1]}
-      onChange={action('Hit threshold trigger')}
-    >
-      {({ inView, ref }) => (
-        <Header ref={ref} inView={inView}>
-          Header is inside threshold: {inView.toString()} - onChange triggers
-          multiple times.
-        </Header>
-      )}
-    </InView>
-  </ScrollWrapper>
-);
+export const WithThreshold50percentage = Template.bind({});
+WithThreshold50percentage.args = {
+  rootMargin: '0px',
+  threshold: 0.5,
+};
 
-export const withRoot = () => (
-  <RootComponent>
-    {(node) => (
-      <ScrollWrapper>
-        <InView
-          threshold={0}
-          root={node}
-          onChange={action('Child Observer inView')}
-        >
-          {({ inView, ref }) => (
-            <Header ref={ref} inView={inView}>
-              Header is inside the root viewport: {inView.toString()}
-            </Header>
-          )}
-        </InView>
-      </ScrollWrapper>
-    )}
-  </RootComponent>
-);
+export const TallerThanViewportWithThreshold100percentage = Template.bind({});
+TallerThanViewportWithThreshold100percentage.args = {
+  rootMargin: '0px',
+  threshold: 1,
+  style: { minHeight: '150vh' },
+};
 
-export const withRootAndRootMargin = () => (
-  <RootComponent>
-    {(node) => (
-      <ScrollWrapper>
-        <InView
-          threshold={0}
-          root={node}
-          rootMargin="100px"
-          onChange={action('Child Observer inView')}
-        >
-          {({ inView, ref }) => (
-            <Header ref={ref} inView={inView}>
-              Header is inside the root viewport: {inView.toString()}
-            </Header>
-          )}
-        </InView>
-      </ScrollWrapper>
-    )}
-  </RootComponent>
-);
+export const MultipleThresholds = Template.bind({});
+MultipleThresholds.args = {
+  rootMargin: '0px',
+  threshold: [0, 0.25, 0.5, 0.75, 1],
+};
 
-export const triggerOnce = () => (
-  <ScrollWrapper>
-    <InView
-      threshold={1}
-      triggerOnce
-      onChange={action('Child Observer inView')}
-    >
-      {({ inView, ref }) => (
-        <Header ref={ref} inView={inView}>
-          Header was fully inside the viewport: {inView.toString()}
-        </Header>
-      )}
-    </InView>
-  </ScrollWrapper>
-);
+export const TriggerOnce = Template.bind({});
+TriggerOnce.args = {
+  rootMargin: '0px',
+  threshold: 0,
+  triggerOnce: true,
+};
+
+export const Skip = Template.bind({});
+Skip.args = {
+  rootMargin: '0px',
+  threshold: 1,
+  skip: true,
+};
+
+export const WithRoot = RootTemplate.bind({});
+WithRoot.args = {
+  rootMargin: '0px',
+  threshold: 0,
+};
+
+export const WithRootAndRootMargin = RootTemplate.bind({});
+WithRootAndRootMargin.args = {
+  rootMargin: '150px',
+  threshold: 0,
+};
 
 export const multipleObservers = () => (
   <ScrollWrapper>
-    <InView threshold={1} onChange={action('Child Observer inView')}>
-      {({ inView, ref }) => (
-        <Header ref={ref}>
-          Header 1 is fully inside the viewport: {inView.toString()}
-        </Header>
+    <InView threshold={0.25}>
+      {({ ref, inView, entry }) => (
+        <>
+          <InViewBlock ref={ref} inView={inView}>
+            <InViewIcon inView={inView} />
+            <EntryDetails inView={inView} entry={entry} />
+          </InViewBlock>
+        </>
       )}
     </InView>
-    <InView threshold={1} onChange={action('Child Observer inView')}>
-      {({ inView, ref }) => (
-        <Header ref={ref}>
-          Header 2 is fully inside the viewport: {inView.toString()}
-        </Header>
+    <InView threshold={0.25}>
+      {({ ref, inView, entry }) => (
+        <>
+          <InViewBlock ref={ref} inView={inView}>
+            <InViewIcon inView={inView} />
+            <EntryDetails inView={inView} entry={entry} />
+          </InViewBlock>
+        </>
+      )}
+    </InView>
+    <InView threshold={0.25}>
+      {({ ref, inView, entry }) => (
+        <>
+          <InViewBlock ref={ref} inView={inView}>
+            <InViewIcon inView={inView} />
+            <EntryDetails inView={inView} entry={entry} />
+          </InViewBlock>
+        </>
       )}
     </InView>
   </ScrollWrapper>

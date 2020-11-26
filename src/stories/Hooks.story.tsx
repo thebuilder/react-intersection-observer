@@ -1,17 +1,21 @@
 import { action } from '@storybook/addon-actions';
-import { Meta } from '@storybook/react';
+import { Meta, Story } from '@storybook/react';
 import { IntersectionOptions, useInView } from '../index';
-import ScrollWrapper from './ScrollWrapper';
-import Status from './Status';
 import { motion } from 'framer-motion';
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
+import {
+  EntryDetails,
+  InViewBlock,
+  InViewIcon,
+  Status,
+  ScrollWrapper,
+  ThresholdMarker,
+} from './elements';
 
-type Props = {
-  className?: string;
-  children?: React.ReactNode;
-  options?: IntersectionOptions;
-  lazy?: boolean;
+type Props = IntersectionOptions & {
   style?: CSSProperties;
+  className?: string;
+  lazy?: boolean;
 };
 
 const story: Meta = {
@@ -20,13 +24,7 @@ const story: Meta = {
 
 export default story;
 
-const HookComponent = ({
-  options,
-  className,
-  children,
-  lazy,
-  ...rest
-}: Props) => {
+const Template: Story<Props> = ({ style, className, lazy, ...options }) => {
   const { ref, inView, entry } = useInView(options);
   const [isLoading, setIsLoading] = useState(lazy);
   action('Inview')(inView, entry);
@@ -40,109 +38,73 @@ const HookComponent = ({
   }
 
   return (
-    <React.Fragment>
+    <ScrollWrapper indicators={options.initialInView ? 'bottom' : 'all'}>
       <Status inView={inView} />
-      <div
-        ref={ref}
-        data-inview={inView}
-        className={[
-          'flex text-center text-blue-100 items-center flex-col justify-center py-24 bg-blue-700 transition-opacity duration-500 delay-200',
-          inView ? 'opacity-100' : 'opacity-50',
-          className,
-        ]
-          .filter(Boolean)
-          .join(' ')}
-        {...rest}
-      >
-        <h2 className="font-sans text-4xl">
-          {children || 'Inside the viewport'}: {inView.toString()}
-        </h2>
-        {options?.trackVisibility && (
-          <h2>
-            {/* @ts-ignore */}
-            {'Fully visible'}: {entry?.isVisible.toString()}
-          </h2>
-        )}
-      </div>
-    </React.Fragment>
+      <InViewBlock ref={ref} inView={inView} style={style}>
+        <InViewIcon inView={inView} />
+        <EntryDetails inView={inView} entry={entry} />
+      </InViewBlock>
+      <ThresholdMarker threshold={options.threshold} />
+    </ScrollWrapper>
   );
 };
 
-export const basic = () => (
-  <ScrollWrapper>
-    <HookComponent />
-  </ScrollWrapper>
-);
+export const Basic = Template.bind({});
+Basic.args = {};
 
-export const lazyHookRendering = () => (
-  <ScrollWrapper>
-    <HookComponent lazy />
-  </ScrollWrapper>
-);
+export const LazyHookRendering = Template.bind({});
+LazyHookRendering.args = {
+  lazy: true,
+};
 
-export const startInView = () => (
-  <HookComponent options={{ initialInView: true }} />
-);
+export const StartInView = Template.bind({});
+StartInView.args = {
+  initialInView: true,
+};
 
-export const tallerThanViewport = () => (
-  <ScrollWrapper>
-    <HookComponent style={{ height: '150vh' }} />
-  </ScrollWrapper>
-);
+export const TallerThanViewport = Template.bind({});
+TallerThanViewport.args = {
+  style: { minHeight: '150vh' },
+};
+export const WithThreshold100percentage = Template.bind({});
+WithThreshold100percentage.args = {
+  threshold: 1,
+};
+export const WithThreshold50percentage = Template.bind({});
+WithThreshold50percentage.args = {
+  threshold: 0.5,
+};
 
-export const withThreshold100percentage = () => (
-  <ScrollWrapper>
-    <HookComponent options={{ threshold: 1 }}>
-      Header is fully inside the viewport
-    </HookComponent>
-  </ScrollWrapper>
-);
-export const withThreshold50percentage = () => (
-  <ScrollWrapper>
-    <HookComponent options={{ threshold: 0.5 }}>
-      Header is fully inside the viewport
-    </HookComponent>
-  </ScrollWrapper>
-);
+export const TallerThanViewportWithThreshold100percentage = Template.bind({});
+TallerThanViewportWithThreshold100percentage.args = {
+  threshold: 1,
+  style: { minHeight: '150vh' },
+};
 
-export const tallerThanViewportWithThreshold100percentage = () => (
-  <ScrollWrapper>
-    <HookComponent options={{ threshold: 1 }} style={{ height: '150vh' }}>
-      Header is fully inside the viewport
-    </HookComponent>
-  </ScrollWrapper>
-);
+export const MultipleThresholds = Template.bind({});
+MultipleThresholds.args = {
+  threshold: [0, 0.2, 0.4, 0.6, 0.8, 1],
+};
 
-export const multipleThresholds = () => (
-  <ScrollWrapper>
-    <HookComponent
-      options={{ threshold: [0, 0.2, 0.4, 0.6, 0.8, 1] }}
-      style={{ height: '150vh' }}
-    >
-      Header is fully inside the viewport
-    </HookComponent>
-  </ScrollWrapper>
-);
+export const TriggerOnce = Template.bind({});
+TriggerOnce.args = {
+  triggerOnce: true,
+};
 
-export const triggerOnce = () => (
-  <ScrollWrapper>
-    <HookComponent options={{ triggerOnce: true }} />
-  </ScrollWrapper>
-);
+export const Skip = Template.bind({});
+Skip.args = {
+  skip: true,
+};
 
-export const skip = () => (
-  <ScrollWrapper>
-    <HookComponent options={{ skip: true }} />
-  </ScrollWrapper>
-);
-
-export const TrackVisibility = () => {
+const VisibilityTemplate: Story<IntersectionOptions> = (options) => {
   const ref = useRef<HTMLDivElement>(null);
+  const { entry, inView, ref: inViewRef } = useInView(options);
+
   return (
     <div ref={ref} className="my-4">
-      <div className="text-center p-4 relative max-w-prose mx-auto my-0 text-white">
-        <h2 className="font-bold text-2xl">Track Visibility</h2>
-        <p className="my-4 leading-normal">
+      <div className="max-w-prose bg-gray-800 rounded-md mx-auto my-8 p-4 relative text-center text-white">
+        <h2 className="text-2xl font-bold">Track Visibility</h2>
+        <p className="leading-normal my-4">
           Use the new IntersectionObserver v2 to track if the object is visible.
           Try dragging the box on top of it. If the feature is unsupported, it
           will always return `isVisible`.
@@ -151,13 +113,22 @@ export const TrackVisibility = () => {
           drag
           dragElastic={0.2}
           dragConstraints={ref}
-          className="px-4 py-2 left-1/2 cursor-move inline-block bg-green-500 rounded-md "
+          className="left-1/2 bg-green-500 rounded-md cursor-move inline-block font-bold px-4 py-2"
         >
           Drag me
         </motion.div>
       </div>
-      <HookComponent options={{ trackVisibility: true, delay: 100 }} />
-      <div style={{ height: '50vh' }} />
+      <InViewBlock ref={inViewRef} inView={inView} className="my-4">
+        {/* @ts-ignore */}
+        <InViewIcon inView={entry?.isVisible} />
+        <EntryDetails inView={inView} entry={entry} />
+      </InViewBlock>
     </div>
   );
+};
+
+export const TrackVisibility = VisibilityTemplate.bind({});
+TrackVisibility.args = {
+  trackVisibility: true,
+  delay: 100,
 };

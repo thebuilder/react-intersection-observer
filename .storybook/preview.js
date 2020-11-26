@@ -1,17 +1,17 @@
-import React from 'react';
-import { addParameters } from '@storybook/react';
-import { create } from '@storybook/theming';
 import 'intersection-observer';
 import './styles.css';
+import { themes } from '@storybook/theming';
+import { themeOptions } from './theme';
 
-addParameters({
-  options: {
-    theme: create({
-      base: 'dark',
-      brandTitle: 'react-intersection-observer',
-      brandUrl: 'https://github.com/thebuilder/react-intersection-observer',
-    }),
-    isFullscreen: false,
-    panelPosition: 'bottom',
+export const parameters = {
+  darkMode: {
+    current: 'dark',
+    // Override the default dark theme
+    dark: { ...themes.dark, ...themeOptions },
+    // Override the default light theme
+    light: { ...themes.normal, ...themeOptions },
   },
-});
+  docs: {
+    theme: themes.dark,
+  },
+};
