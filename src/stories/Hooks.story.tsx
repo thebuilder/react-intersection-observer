@@ -1,6 +1,6 @@
 import { action } from '@storybook/addon-actions';
 import { Meta, Story } from '@storybook/react';
-import { IntersectionOptions, useInView } from '../index';
+import { IntersectionOptions, InView, useInView } from '../index';
 import { motion } from 'framer-motion';
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import {
@@ -10,7 +10,19 @@ import {
   Status,
   ScrollWrapper,
   ThresholdMarker,
+  useValidateOptions,
+  RootMargin,
+  ErrorMessage,
 } from './elements';
+import {
+  ArgsTable,
+  Description,
+  Primary,
+  PRIMARY_STORY,
+  Stories,
+  Subtitle,
+  Title,
+} from '@storybook/addon-docs/blocks';
 
 type Props = IntersectionOptions & {
   style?: CSSProperties;
@@ -20,18 +32,59 @@ type Props = IntersectionOptions & {
 
 const story: Meta = {
   title: 'useInView Hook',
+  subcomponents: { InView },
+  parameters: {
+    docs: {
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+          <Primary />
+          <ArgsTable
+            story={PRIMARY_STORY}
+            exclude={['children', 'tag', 'as', 'onChange']}
+          />
+          <Stories />
+        </>
+      ),
+    },
+  },
+  argTypes: {
+    rootMargin: { control: { type: 'text' } },
+    threshold: {
+      control: {
+        type: 'range',
+        min: 0,
+        max: 1,
+        step: 0.05,
+      },
+    },
+  },
 };
 
 export default story;
 
 const Template: Story<Props> = ({ style, className, lazy, ...options }) => {
-  const { ref, inView, entry } = useInView(options);
+  const errorMessage = useValidateOptions(options);
+  const { ref, inView, entry } = useInView(
+    !errorMessage
+      ? {
+          root: (document as unknown) as Element,
+          ...options,
+        }
+      : {},
+  );
   const [isLoading, setIsLoading] = useState(lazy);
   action('Inview')(inView, entry);
 
   useEffect(() => {
     if (isLoading) setIsLoading(false);
   }, [isLoading, lazy]);
+
+  if (errorMessage) {
+    return <ErrorMessage>{errorMessage}</ErrorMessage>;
+  }
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -45,6 +98,7 @@ const Template: Story<Props> = ({ style, className, lazy, ...options }) => {
         <EntryDetails inView={inView} entry={entry} />
       </InViewBlock>
       <ThresholdMarker threshold={options.threshold} />
+      <RootMargin rootMargin={options.rootMargin} />
     </ScrollWrapper>
   );
 };
@@ -60,6 +114,11 @@ LazyHookRendering.args = {
 export const StartInView = Template.bind({});
 StartInView.args = {
   initialInView: true,
+};
+
+export const WithRootMargin = Template.bind({});
+WithRootMargin.args = {
+  rootMargin: '25px 0px',
 };
 
 export const TallerThanViewport = Template.bind({});

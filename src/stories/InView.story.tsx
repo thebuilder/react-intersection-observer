@@ -11,6 +11,9 @@ import {
   Status,
   ScrollWrapper,
   ThresholdMarker,
+  useValidateOptions,
+  ErrorMessage,
+  RootMargin,
 } from './elements';
 
 type Props = IntersectionOptions & {
@@ -31,6 +34,11 @@ const story: Meta = {
         step: 0.05,
       },
     },
+    root: {
+      table: {
+        disable: true,
+      },
+    },
     children: {
       table: {
         disable: true,
@@ -47,9 +55,16 @@ const story: Meta = {
 export default story;
 
 const Template: Story<Props> = ({ style, className, ...options }) => {
+  const errorMessage = useValidateOptions(options);
+  if (errorMessage) return <ErrorMessage>{errorMessage}</ErrorMessage>;
+
   return (
     <ScrollWrapper indicators={options.initialInView ? 'bottom' : 'all'}>
-      <InView onChange={action('Child Observer inView')} {...options}>
+      <InView
+        onChange={action('Child Observer inView')}
+        root={(document as unknown) as Element}
+        {...options}
+      >
         {({ ref, inView, entry }) => (
           <>
             <Status inView={inView} />
@@ -58,6 +73,7 @@ const Template: Story<Props> = ({ style, className, ...options }) => {
               <EntryDetails inView={inView} entry={entry} />
             </InViewBlock>
             <ThresholdMarker threshold={options.threshold} />
+            <RootMargin rootMargin={options.rootMargin} />
           </>
         )}
       </InView>
@@ -75,78 +91,68 @@ const RootTemplate: Story<Props> = (props) => {
 
 export const Basic = Template.bind({});
 Basic.args = {
-  rootMargin: '0px',
   threshold: 0,
 };
 
 export const WithRootMargin = Template.bind({});
 WithRootMargin.args = {
-  rootMargin: '150px',
+  rootMargin: '25px 0px',
   threshold: 0,
 };
 
 export const StartInView = Template.bind({});
 StartInView.args = {
-  rootMargin: '0px',
   threshold: 0,
   initialInView: true,
 };
 
 export const TallerThanViewport = Template.bind({});
 TallerThanViewport.args = {
-  rootMargin: '0px',
   threshold: 0,
   style: { minHeight: '150vh' },
 };
 
 export const WithThreshold100percentage = Template.bind({});
 WithThreshold100percentage.args = {
-  rootMargin: '0px',
   threshold: 1,
 };
 
 export const WithThreshold50percentage = Template.bind({});
 WithThreshold50percentage.args = {
-  rootMargin: '0px',
   threshold: 0.5,
 };
 
 export const TallerThanViewportWithThreshold100percentage = Template.bind({});
 TallerThanViewportWithThreshold100percentage.args = {
-  rootMargin: '0px',
   threshold: 1,
   style: { minHeight: '150vh' },
 };
 
 export const MultipleThresholds = Template.bind({});
 MultipleThresholds.args = {
-  rootMargin: '0px',
   threshold: [0, 0.25, 0.5, 0.75, 1],
 };
 
 export const TriggerOnce = Template.bind({});
 TriggerOnce.args = {
-  rootMargin: '0px',
   threshold: 0,
   triggerOnce: true,
 };
 
 export const Skip = Template.bind({});
 Skip.args = {
-  rootMargin: '0px',
   threshold: 1,
   skip: true,
 };
 
 export const WithRoot = RootTemplate.bind({});
 WithRoot.args = {
-  rootMargin: '0px',
   threshold: 0,
 };
 
 export const WithRootAndRootMargin = RootTemplate.bind({});
 WithRootAndRootMargin.args = {
-  rootMargin: '150px',
+  rootMargin: '25px 0px',
   threshold: 0,
 };
 

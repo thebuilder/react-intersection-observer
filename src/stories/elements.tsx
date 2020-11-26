@@ -1,9 +1,34 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { IntersectionOptions } from '../index';
 
 type ScrollProps = {
   children: React.ReactNode;
   indicators?: 'all' | 'top' | 'bottom' | 'none';
 };
+
+export function useValidateOptions(options: IntersectionOptions) {
+  try {
+    new IntersectionObserver(() => {}, options);
+  } catch (e) {
+    return e.message.replace(
+      "Failed to construct 'IntersectionObserver': ",
+      '',
+    );
+  }
+
+  return undefined;
+}
+
+export function ErrorMessage({ children }: { children?: React.ReactNode }) {
+  return (
+    <div className="mx-auto my-8 max-w-4xl text-gray-900">
+      <div className="bg-red-500 border-red-700 rounded-md border-2 px-8 py-4">
+        <h2 className="text-xl font-bold">Invalid options</h2>
+        {children}
+      </div>
+    </div>
+  );
+}
 
 /**
  * ScrollWrapper directs the user to scroll the page to reveal it's children.
@@ -66,7 +91,7 @@ export const InViewBlock = React.forwardRef<
   <div
     ref={ref}
     data-inview={inView}
-    className="items-center bg-gradient-to-b border-purple-300 rounded-md border-4 flex flex-col from-purple-700 to-purple-500 justify-center my-8 p-8 text-blue-100 delay-100 duration-500 transition-opacity"
+    className="items-center bg-gradient-to-b border-purple-300 rounded-md border-4 flex flex-col from-purple-700 to-purple-500 justify-center my-16 p-8 text-blue-100 delay-100 duration-500 transition-opacity"
     {...rest}
   />
 ));
@@ -153,6 +178,22 @@ export function Status({ inView }: { inView: boolean }) {
   );
 }
 
+export function RootMargin({ rootMargin }: { rootMargin?: string }) {
+  if (!rootMargin) return null;
+  // Invert the root margin, so it correctly renders the outline
+  const invertedRootMargin = rootMargin
+    .split(' ')
+    .map((val) => (val.charAt(0) === '-' ? val.substr(1) : '-' + val))
+    .join(' ');
+
+  return (
+    <div
+      className="border-orange-600 border-dashed border-b-4 border-t-4 pointer-events-none absolute"
+      style={{ inset: invertedRootMargin }}
+    />
+  );
+}
+
 export function ThresholdMarker({
   threshold = 0,
 }: {
@@ -164,7 +205,7 @@ export function ThresholdMarker({
       {values.map((value) => (
         <div
           key={value}
-          className="border-dashed border-b border-t left-0 -mx-2 opacity-75 pointer-events-none absolute w-8"
+          className="border-orange-600 border-dashed border-b-4 border-t-4 left-0 -mx-2 pointer-events-none absolute w-8"
           style={{
             top: `${(value > 0.5 ? 1 - value : value) * 100}%`,
             bottom: `${(value > 0.5 ? 1 - value : value) * 100}%`,
@@ -174,7 +215,7 @@ export function ThresholdMarker({
       {values.map((value) => (
         <div
           key={'right' + value}
-          className="border-dashed border-b border-t right-0 -mx-2 opacity-75 pointer-events-none absolute w-8"
+          className="border-orange-600 border-dashed border-b-4 border-t-4 right-0 -mx-2 pointer-events-none absolute w-8"
           style={{
             top: `${(value > 0.5 ? 1 - value : value) * 100}%`,
             bottom: `${(value > 0.5 ? 1 - value : value) * 100}%`,
@@ -195,8 +236,11 @@ export function EntryDetails({
   const keyValues = [
     { key: 'inView', value: inView.toString() },
     { key: 'isIntersecting', value: entry?.isIntersecting.toString() },
-    // @ts-ignore
-    { key: 'isVisible', value: entry?.isVisible.toString() ?? 'Not supported' },
+    {
+      key: 'isVisible',
+      // @ts-ignore
+      value: entry?.isVisible?.toString() ?? 'Not supported',
+    },
     { key: 'intersectionRatio', value: entry?.intersectionRatio },
     {
       key: 'intersectionRect',
