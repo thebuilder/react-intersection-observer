@@ -256,10 +256,7 @@ You can read more about this on these links:
 - [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#The_intersection_root_and_root_margin)
 - [w3c/IntersectionObserver: IntersectionObserver rootMargin ignored within iframe](https://github.com/w3c/IntersectionObserver/issues/283#issuecomment-507397917)
 - [w3c/IntersectionObserver: Cannot track intersection with an iframe's viewport](https://github.com/w3c/IntersectionObserver/issues/372)
-
-**TLDR:** The `IntersectionObserver` spec has been updated to accept `document`
-as the `root`. This will correctly use the `<iframe>` root, allowing it to work
-inside Storybook and similar.
+- [w3c/Support iframe viewport tracking](https://github.com/w3c/IntersectionObserver/pull/465)
 
 ## Testing
 

@@ -23,6 +23,7 @@ import {
   Subtitle,
   Title,
 } from '@storybook/addon-docs/blocks';
+import { getRoot } from './story-utils';
 
 type Props = IntersectionOptions & {
   style?: CSSProperties;
@@ -91,15 +92,9 @@ const story: Meta = {
 export default story;
 
 const Template: Story<Props> = ({ style, className, lazy, ...options }) => {
-  const errorMessage = useValidateOptions(options);
-  const { ref, inView, entry } = useInView(
-    !errorMessage
-      ? {
-          root: (document as unknown) as Element,
-          ...options,
-        }
-      : {},
-  );
+  const mergedOptions = { root: getRoot(options), ...options };
+  const errorMessage = useValidateOptions(mergedOptions);
+  const { ref, inView, entry } = useInView(!errorMessage ? mergedOptions : {});
   const [isLoading, setIsLoading] = useState(lazy);
   action('Inview')(inView, entry);
 

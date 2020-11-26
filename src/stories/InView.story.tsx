@@ -15,6 +15,7 @@ import {
   ErrorMessage,
   RootMargin,
 } from './elements';
+import { getRoot } from './story-utils';
 
 type Props = IntersectionOptions & {
   style?: CSSProperties;
@@ -55,16 +56,13 @@ const story: Meta = {
 export default story;
 
 const Template: Story<Props> = ({ style, className, ...options }) => {
-  const errorMessage = useValidateOptions(options);
+  const mergedOptions = { root: getRoot(options), ...options };
+  const errorMessage = useValidateOptions(mergedOptions);
   if (errorMessage) return <ErrorMessage>{errorMessage}</ErrorMessage>;
 
   return (
     <ScrollWrapper indicators={options.initialInView ? 'bottom' : 'all'}>
-      <InView
-        onChange={action('Child Observer inView')}
-        root={(document as unknown) as Element}
-        {...options}
-      >
+      <InView onChange={action('InView')} {...mergedOptions}>
         {({ ref, inView, entry }) => (
           <>
             <Status inView={inView} />
