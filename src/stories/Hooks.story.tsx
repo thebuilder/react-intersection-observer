@@ -113,7 +113,7 @@ const Template: Story<Props> = ({ style, className, lazy, ...rest }) => {
       <Status inView={inView} />
       <InViewBlock ref={ref} inView={inView} style={style}>
         <InViewIcon inView={inView} />
-        <EntryDetails inView={inView} entry={entry} />
+        <EntryDetails options={options} />
       </InViewBlock>
       <ThresholdMarker threshold={options.threshold} />
       <RootMargin rootMargin={options.rootMargin} />
@@ -205,7 +205,7 @@ const VisibilityTemplate: Story<IntersectionOptions> = (args) => {
       <InViewBlock ref={inViewRef} inView={inView} className="my-4">
         {/* @ts-ignore */}
         <InViewIcon inView={entry?.isVisible} />
-        <EntryDetails inView={inView} entry={entry} />
+        <EntryDetails options={options} />
       </InViewBlock>
     </div>
   );

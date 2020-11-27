@@ -8,7 +8,8 @@ export function getRoot(options: IntersectionOptions) {
 }
 
 export function useValidateOptions(options: IntersectionOptions) {
-  const finalOptions = { root: getRoot(options), ...options };
+  const finalOptions = { root: getRoot(options), ...options, as: undefined };
+
   let error = undefined;
   try {
     new IntersectionObserver(() => {}, finalOptions);

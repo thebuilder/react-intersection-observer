@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
-import React, { CSSProperties, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { IntersectionOptions } from '../index';
 
 type ScrollProps = {
   children: React.ReactNode;
@@ -78,7 +79,7 @@ export const InViewBlock = React.forwardRef<
   <div
     ref={ref}
     data-inview={inView}
-    className="items-center bg-gradient-to-b border-purple-300 rounded-md border-4 flex flex-col from-purple-700 to-purple-500 justify-center my-16 p-8 text-blue-100 delay-100 duration-500 transition-opacity"
+    className="items-center bg-gradient-to-b border-purple-300 rounded-md border-4 flex flex-col from-purple-700 to-purple-500 justify-center my-16 p-8 text-blue-100"
     {...rest}
   />
 ));
@@ -92,7 +93,7 @@ export function InViewIcon({ inView }: { inView: boolean }) {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0 }}
         className={[
-          'rounded-full border-4 h-20 mb-8 p-2 w-20',
+          'rounded-full border-4 h-20 p-2 w-20',
           inView
             ? 'bg-green-600 border-green-400'
             : 'bg-yellow-600 border-yellow-400',
@@ -197,29 +198,35 @@ export function ThresholdMarker({
   return (
     <>
       {values.map((value) => {
-        const style: CSSProperties = {
-          top: `${(value > 0.5 ? 1 - value : value) * 100}%`,
-          bottom: `${(value > 0.5 ? 1 - value : value) * 100}%`,
-        };
-
         return (
           <div className="pointer-events-none" key={value}>
             <div
-              className="bg-red-900 left-0 -mx-3 absolute w-1"
-              style={style}
+              className="bg-green-600 left-0 -mx-3 absolute w-2"
+              style={{
+                top: 0,
+                bottom: `${value * 100}%`,
+              }}
             />
             <div
-              className="bg-red-900 right-0 -mx-3 absolute w-1"
-              style={style}
+              className="bg-red-600 left-0 -mx-3 absolute w-2"
+              style={{
+                top: `${(1 - value) * 100}%`,
+                bottom: 0,
+              }}
             />
             <div
-              className="border-red-800 border-solid border-b-4 border-t-4 left-0 -mx-4 absolute w-3"
-              style={style}
+              className="bg-green-600 right-0 -mx-3 absolute w-2"
+              style={{
+                bottom: 0,
+                top: `${value * 100}%`,
+              }}
             />
             <div
-              key={'right' + value}
-              className="border-red-800 border-solid border-b-4 border-t-4 right-0 -mx-4 absolute w-3"
-              style={style}
+              className="bg-red-600 right-0 -mx-3 absolute w-2"
+              style={{
+                bottom: `${(1 - value) * 100}%`,
+                top: 0,
+              }}
             />
           </div>
         );
@@ -228,59 +235,19 @@ export function ThresholdMarker({
   );
 }
 
-export function EntryDetails({
-  inView,
-  entry,
-}: {
-  inView: boolean;
-  entry?: IntersectionObserverEntry;
-}) {
-  const keyValues = [
-    { key: 'inView', value: inView.toString() },
-    { key: 'isIntersecting', value: entry?.isIntersecting.toString() },
-    {
-      key: 'isVisible',
-      // @ts-ignore
-      value: entry?.isVisible?.toString() ?? 'Not supported',
-    },
-    { key: 'intersectionRatio', value: entry?.intersectionRatio },
-    {
-      key: 'intersectionRect',
-      value: <pre>{JSON.stringify(entry?.intersectionRect, null, 2)}</pre>,
-    },
-    {
-      key: 'boundingClientRect',
-      value: <pre>{JSON.stringify(entry?.boundingClientRect, null, 2)}</pre>,
-    },
-    {
-      key: 'rootBounds',
-      value: <pre>{JSON.stringify(entry?.rootBounds, null, 2)}</pre>,
-    },
-  ];
+export function EntryDetails({ options }: { options?: IntersectionOptions }) {
+  if (!options || !Object.keys(options).length) return null;
+  const value = JSON.stringify(
+    { ...options, root: options.root ? 'Element' : undefined },
+    null,
+    2,
+  );
+  if (value === '{}') return null;
 
   return (
-    <details className="px-2 w-full md:px-4">
-      <summary className="cursor-pointer hover:opacity-100 opacity-50">
-        Toggle{' '}
-        <code className="bg-gray-700 bg-opacity-50 px-2 py-1">
-          IntersectionObserverEntry
-        </code>{' '}
-        details
-      </summary>
-      <dl className="mt-2">
-        {keyValues.map(({ key, value }) => (
-          <div
-            key={key}
-            className="bg-gray-100 even:bg-white px-2 py-3 sm:grid sm:gap-4 sm:grid-cols-3 sm:px-6"
-          >
-            <dt className="text-sm font-medium text-gray-500">{key}</dt>
-            <dd className="font-mono text-sm mt-1 text-gray-900 sm:col-span-2 sm:mt-0">
-              {value ?? '-'}
-            </dd>
-          </div>
-        ))}
-      </dl>
-    </details>
+    <pre className="bg-gray-900 bg-opacity-50 mt-8 overflow-x-scroll p-2 text-purple-100 w-full">
+      <code>{value}</code>
+    </pre>
   );
 }
 

@@ -66,7 +66,7 @@ const Template: Story<Props> = ({ style, className, ...rest }) => {
             <Status inView={inView} />
             <InViewBlock ref={ref} inView={inView} style={style}>
               <InViewIcon inView={inView} />
-              <EntryDetails inView={inView} entry={entry} />
+              <EntryDetails options={options} />
             </InViewBlock>
             <ThresholdMarker threshold={options.threshold} />
             <RootMargin rootMargin={options.rootMargin} />
@@ -159,7 +159,6 @@ export const multipleObservers = () => (
         <>
           <InViewBlock ref={ref} inView={inView}>
             <InViewIcon inView={inView} />
-            <EntryDetails inView={inView} entry={entry} />
           </InViewBlock>
         </>
       )}
@@ -169,7 +168,6 @@ export const multipleObservers = () => (
         <>
           <InViewBlock ref={ref} inView={inView}>
             <InViewIcon inView={inView} />
-            <EntryDetails inView={inView} entry={entry} />
           </InViewBlock>
         </>
       )}
@@ -179,7 +177,6 @@ export const multipleObservers = () => (
         <>
           <InViewBlock ref={ref} inView={inView}>
             <InViewIcon inView={inView} />
-            <EntryDetails inView={inView} entry={entry} />
           </InViewBlock>
         </>
       )}
