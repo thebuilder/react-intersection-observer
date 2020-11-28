@@ -2,7 +2,7 @@
 
 [![Version Badge][npm-version-svg]][package-url]
 [![GZipped size][npm-minzip-svg]][bundlephobia-url]
-![Test](https://github.com/thebuilder/react-intersection-observer/workflows/Test/badge.svg)
+[![Test][test-image]][test-url]
 [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
 
@@ -356,3 +356,5 @@ async function loadPolyfills() {
 [downloads-image]: http://img.shields.io/npm/dm/react-intersection-observer.svg
 [downloads-url]:
   http://npm-stat.com/charts.html?package=react-intersection-observer
+[test-image]: https://github.com/thebuilder/react-intersection-observer/workflows/Test/badge.svg 
+[test-url]: https://github.com/thebuilder/react-intersection-observer/actions?query=workflow%3ATest
