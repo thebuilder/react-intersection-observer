@@ -156,21 +156,6 @@ argument for the hooks.
 | **triggerOnce**        | boolean            | false     | false    | Only trigger the observer once.                                                                                                                                                                                                                                                             |
 | **initialInView**      | boolean            | false     | false    | Set the initial value of the `inView` boolean. This can be used if you expect the element to be in the viewport to start with, and you want to trigger something when it leaves.                                                                                                            |
 
-> ⚠️ When passing an array to `threshold`, store the array in a constant to
-> avoid the component re-rendering too often. For example:
-
-```jsx
-const THRESHOLD = [0.25, 0.5, 0.75]; // Store multiple thresholds in a constant
-const MyComponent = () => {
-  const [ref, inView, entry] = useInView({ threshold: THRESHOLD });
-  return (
-    <div ref={ref}>
-      Triggered at intersection ratio {entry.intersectionRatio}
-    </div>
-  );
-};
-```
-
 ### InView Props
 
 The **`<InView />`** component also accepts the following props:
