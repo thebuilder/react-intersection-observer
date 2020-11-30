@@ -86,6 +86,9 @@ const story: Meta = {
       },
     },
   },
+  args: {
+    threshold: 0,
+  },
 };
 
 export default story;

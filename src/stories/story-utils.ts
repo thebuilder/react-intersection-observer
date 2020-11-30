@@ -8,7 +8,10 @@ export function getRoot(options: IntersectionOptions) {
 }
 
 export function useValidateOptions(options: IntersectionOptions) {
-  const finalOptions = { root: getRoot(options), ...options, as: undefined };
+  const finalOptions = { root: getRoot(options), ...options };
+  // @ts-ignore
+  delete finalOptions.as;
+  if (!finalOptions.root) delete finalOptions.root;
 
   let error = undefined;
   try {
