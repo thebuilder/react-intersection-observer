@@ -92,12 +92,11 @@ export function InViewIcon({ inView }: { inView: boolean }) {
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0 }}
-        className={[
-          'rounded-full border-4 h-20 p-2 w-20',
+        className={`rounded-full border-4 h-20 p-2 w-20 ${
           inView
             ? 'bg-green-600 border-green-400'
-            : 'bg-yellow-600 border-yellow-400',
-        ].join(' ')}
+            : 'bg-yellow-600 border-yellow-400'
+        }`}
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

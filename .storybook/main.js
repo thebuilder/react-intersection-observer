@@ -4,9 +4,9 @@ module.exports = {
     '../src/stories/**/*.@(story|stories).@(ts|tsx|js|jsx)',
   ],
   addons: [
+    '@storybook/addon-docs',
     '@storybook/addon-controls',
     '@storybook/addon-actions',
-    '@storybook/addon-docs',
     '@storybook/addon-viewport',
     'storybook-dark-mode/register',
   ],
