@@ -1,6 +1,11 @@
 {
-  "sandboxes": ["useinview-ud2vo", "inview-render-props-hvhcb", "inview-plain-children-vv51y"],
+  "sandboxes": [
+    "useinview-ud2vo",
+    "inview-render-props-hvhcb",
+    "inview-plain-children-vv51y"
+  ],
   "publishDirectory": {
     "react-intersection-observer": "dist"
-  }
+  },
+  "node": "14"
 }

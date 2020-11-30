@@ -1,35 +1,21 @@
-import React from 'react';
-import { addDecorator, addParameters } from '@storybook/react';
-import { create } from '@storybook/theming';
 import 'intersection-observer';
-import { Global } from '@emotion/react';
+import 'tailwindcss/tailwind.css';
+import './styles.css';
+import { themes } from '@storybook/theming';
+import { themeOptions } from './theme';
 
-addParameters({
-  options: {
-    theme: create({
-      base: 'dark',
-      brandTitle: 'react-intersection-observer',
-      brandUrl: 'https://github.com/thebuilder/react-intersection-observer',
-    }),
-    isFullscreen: false,
-    panelPosition: 'bottom',
+export const parameters = {
+  darkMode: {
+    current: 'dark',
+    // Override the default dark theme
+    dark: { ...themes.dark, ...themeOptions },
+    // Override the default light theme
+    light: { ...themes.normal, ...themeOptions },
   },
-});
-
-addDecorator((storyFn) => (
-  <>
-    <Global
-      styles={{
-        'html, body': {
-          fontFamily:
-            "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif",
-          padding: 0,
-          margin: 0,
-          color: '#0c0c0c',
-          fontSize: '16px',
-        },
-      }}
-    />
-    {storyFn()}
-  </>
-));
+  docs: {
+    theme: themes.dark,
+  },
+  controls: {
+    expanded: true,
+  },
+};

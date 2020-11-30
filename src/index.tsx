@@ -27,6 +27,12 @@ interface RenderProps {
 }
 
 export interface IntersectionOptions extends IntersectionObserverInit {
+  /** The IntersectionObserver interface's read-only `root` property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target. If the `root` is null, then the bounds of the actual document viewport are used.*/
+  root?: Element | null;
+  /** Margin around the root. Can have values similar to the CSS margin property, e.g. `10px 20px 30px 40px` (top, right, bottom, left). */
+  rootMargin?: string;
+  /** Number between `0` and `1` indicating the percentage that should be visible before triggering. Can also be an `array` of numbers, to create multiple trigger points. */
+  threshold?: number | number[];
   /** Only trigger the inView callback once */
   triggerOnce?: boolean;
   /** Skip assigning the observer to the `ref` */
