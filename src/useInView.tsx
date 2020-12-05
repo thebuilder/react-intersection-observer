@@ -43,6 +43,7 @@ export function useInView({
   triggerOnce,
   skip,
   initialInView,
+  child,
 }: IntersectionOptions = {}): InViewHookResponse {
   const unobserve = React.useRef<Function>();
   const [state, setState] = React.useState<State>({
@@ -57,10 +58,14 @@ export function useInView({
 
       // Skip creating the observer
       if (skip) return;
-
+      let targetNode = node;
+      if (child && node) {
+        const { childNodes } = node;
+        targetNode = childNodes[0];
+      }
       if (node) {
         unobserve.current = observe(
-          node,
+          targetNode,
           (inView, entry) => {
             setState({ inView, entry });
 

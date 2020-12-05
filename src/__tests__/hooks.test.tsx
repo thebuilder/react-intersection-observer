@@ -289,3 +289,27 @@ test('should handle thresholds missing on observer instance with no threshold se
 
   screen.getByText('true');
 });
+
+const NestHookComponent = ({
+  options,
+  unmount,
+}: {
+  options?: IntersectionOptions;
+  unmount?: boolean;
+}) => {
+  const [ref, inView] = useInView(options);
+  return (
+    <div ref={!unmount ? ref : undefined}>
+      <div data-testid="wrapper">{inView.toString()}</div>
+    </div>
+  );
+};
+
+test('should handle child option', () => {
+  const { getByTestId } = render(
+    <NestHookComponent options={{ child: true }} />,
+  );
+  const wrapper = getByTestId('wrapper');
+  const instance = intersectionMockInstance(wrapper);
+  expect(instance.observe).toHaveBeenCalledWith(wrapper);
+});

@@ -42,6 +42,8 @@ export interface IntersectionOptions extends IntersectionObserverInit {
   trackVisibility?: boolean;
   /** IntersectionObserver v2 - Set a minimum delay between notifications */
   delay?: number;
+  /** Whether is child element node visible */
+  child?: boolean;
 }
 
 export interface IntersectionObserverProps extends IntersectionOptions {
