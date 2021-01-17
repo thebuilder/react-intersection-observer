@@ -10,7 +10,7 @@ type ScrollProps = {
 export function ErrorMessage({ children }: { children?: React.ReactNode }) {
   return (
     <div className="mx-auto my-8 max-w-4xl text-gray-900">
-      <div className="bg-red-500 border-red-700 rounded-md border-2 px-8 py-4">
+      <div className="px-8 py-4 bg-red-500 border-2 border-red-700 rounded-md">
         <h2 className="text-xl font-bold">Invalid options</h2>
         {children}
       </div>
@@ -30,10 +30,10 @@ export function ScrollWrapper({
   return (
     <div className="container mx-auto" {...props}>
       {indicators === 'top' || indicators === 'all' ? (
-        <section className="sbdocs-hidden items-center bg-gradient-to-b border-indigo-300 rounded-lg border-4 flex flex-col from-blue-700 to-blue-500 h-screen justify-center text-center text-white">
-          <h1 className="text-3xl font-bold my-4">Scroll down</h1>
+        <section className="sbdocs-hidden flex flex-col items-center justify-center h-screen text-center text-white bg-gradient-to-b border-4 border-indigo-300 rounded-lg from-blue-700 to-blue-500">
+          <h1 className="my-4 text-3xl font-bold">Scroll down</h1>
           <svg
-            className="animate-bounce h-12 w-12"
+            className="w-12 h-12 animate-bounce"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -50,11 +50,11 @@ export function ScrollWrapper({
       <section className="relative">{children}</section>
       {indicators === 'bottom' || indicators === 'all' ? (
         <section
-          className="sbdocs-hidden items-center bg-gradient-to-t border-indigo-300 rounded-lg border-4 flex from-blue-700 to-blue-500 h-screen justify-center text-white"
+          className="sbdocs-hidden flex items-center justify-center h-screen text-white bg-gradient-to-t border-4 border-indigo-300 rounded-lg from-blue-700 to-blue-500"
           style={{ height: '101vh' }}
         >
           <svg
-            className="h-12 w-12"
+            className="w-12 h-12"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -79,7 +79,7 @@ export const InViewBlock = React.forwardRef<
   <div
     ref={ref}
     data-inview={inView}
-    className="items-center bg-gradient-to-b border-purple-300 rounded-md border-4 flex flex-col from-purple-700 to-purple-500 justify-center my-16 p-8 text-blue-100"
+    className="flex flex-col items-center justify-center my-16 p-8 text-blue-100 bg-gradient-to-b border-4 border-purple-300 rounded-md from-purple-700 to-purple-500"
     {...rest}
   />
 ));
@@ -134,10 +134,10 @@ export function Status({ inView }: { inView: boolean }) {
         inView ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900',
       ].join(' ')}
     >
-      <code className="group-hover:block hidden font-mono ml-2 mr-1">
+      <code className="group-hover:block hidden ml-2 mr-1 font-mono">
         InView: {inView.toString()}
       </code>
-      <span className="group-hover:hidden h-6 w-6">
+      <span className="group-hover:hidden w-6 h-6">
         {inView ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -182,7 +182,7 @@ export function RootMargin({ rootMargin }: { rootMargin?: string }) {
 
   return (
     <div
-      className="border-orange-600 border-dashed border-b-4 border-t-4 pointer-events-none absolute"
+      className="border-orange-600 absolute border-b-4 border-t-4 border-dashed pointer-events-none"
       style={{ inset: invertedRootMargin }}
     />
   );
@@ -200,28 +200,28 @@ export function ThresholdMarker({
         return (
           <div className="pointer-events-none" key={value}>
             <div
-              className="bg-green-600 left-0 -mx-3 absolute w-2"
+              className="absolute left-0 -mx-3 w-2 bg-green-600"
               style={{
                 top: 0,
                 bottom: `${value * 100}%`,
               }}
             />
             <div
-              className="bg-red-600 left-0 -mx-3 absolute w-2"
+              className="absolute left-0 -mx-3 w-2 bg-red-600"
               style={{
                 top: `${(1 - value) * 100}%`,
                 bottom: 0,
               }}
             />
             <div
-              className="bg-green-600 right-0 -mx-3 absolute w-2"
+              className="absolute right-0 -mx-3 w-2 bg-green-600"
               style={{
                 bottom: 0,
                 top: `${value * 100}%`,
               }}
             />
             <div
-              className="bg-red-600 right-0 -mx-3 absolute w-2"
+              className="absolute right-0 -mx-3 w-2 bg-red-600"
               style={{
                 bottom: `${(1 - value) * 100}%`,
                 top: 0,
@@ -244,7 +244,7 @@ export function EntryDetails({ options }: { options?: IntersectionOptions }) {
   if (value === '{}') return null;
 
   return (
-    <pre className="bg-gray-900 bg-opacity-50 mt-8 overflow-x-scroll p-2 text-purple-100 w-full">
+    <pre className="mt-8 p-2 w-full text-purple-100 bg-gray-900 bg-opacity-50 overflow-x-scroll">
       <code>{value}</code>
     </pre>
   );
@@ -262,8 +262,8 @@ export function RootComponent(props: RootProps) {
   }, []);
 
   return (
-    <div className="bg-gray-500 bg-opacity-25 h-screen relative">
-      <div ref={node} className="inset-0 mx-8 my-24 overflow-y-scroll absolute">
+    <div className="relative h-screen bg-gray-500 bg-opacity-25">
+      <div ref={node} className="absolute inset-0 mx-8 my-24 overflow-y-scroll">
         {node.current ? props.children(node.current) : null}
       </div>
     </div>
