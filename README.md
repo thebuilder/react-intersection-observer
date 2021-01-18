@@ -2,8 +2,7 @@
 
 [![Version Badge][npm-version-svg]][package-url]
 [![GZipped size][npm-minzip-svg]][bundlephobia-url]
-[![Test][test-image]][test-url]
-[![License][license-image]][license-url]
+[![Test][test-image]][test-url] [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
 
 React implementation of the
@@ -19,10 +18,11 @@ to tell you when an element enters or leaves the viewport. Contains both a
 
 - 🎣 **Hooks or Component API** - With `useInView` it's easier than ever to
   monitor elements
-- ⚡️ **Optimized performance** - Reuses Intersection Observer instances
-  where possible
+- ⚡️ **Optimized performance** - Reuses Intersection Observer instances where
+  possible
 - ⚙️ **Matches native API** - Intuitive to use
-- 🧪 **Ready to test** - Mocks the Intersection Observer for easy testing with [Jest](https://jestjs.io/)
+- 🧪 **Ready to test** - Mocks the Intersection Observer for easy testing with
+  [Jest](https://jestjs.io/)
 - 🌳 **Tree-shakeable** - Only include the parts you use
 - 💥 **Tiny bundle** [~1.7 kB gzipped][bundlephobia-url]
 
@@ -145,16 +145,16 @@ export default Component;
 Provide these as props on the **`<InView />`** component or as the options
 argument for the hooks.
 
-| Name                   | Type               | Default   | Required | Description                                                                                                                                                                                                                                                                                 |
-| ---------------------- | ------------------ | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **root**               | Element            | document  | false    | The IntersectionObserver interface's read-only root property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target. If the root is null, then the bounds of the actual document viewport are used. |
-| **rootMargin**         | string             | '0px'     | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                                                                                                                                                          |
-| **threshold**          | number \| number[] | 0         | false    | Number between 0 and 1 indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                                                                                              |
-| **trackVisibility** 🧪 | boolean            | false     | false    | A boolean indicating whether this IntersectionObserver will track changes in a target’s visibility.                                                                                                                                                                                         |
-| **delay** 🧪           | number             | undefined | false    | A number indicating the minimum delay in milliseconds between notifications from this observer for a given target. This must be set to at least `100` if `trackVisibility` is `true`.                                                                                                       |
-| **skip**               | boolean            | false     | false    | Skip creating the IntersectionObserver. You can use this to enable and disable the observer as needed. If `skip` is set while `inView`, the current state will still be kept.                                                                                                               |
-| **triggerOnce**        | boolean            | false     | false    | Only trigger the observer once.                                                                                                                                                                                                                                                             |
-| **initialInView**      | boolean            | false     | false    | Set the initial value of the `inView` boolean. This can be used if you expect the element to be in the viewport to start with, and you want to trigger something when it leaves.                                                                                                            |
+| Name                   | Type                   | Default   | Required | Description                                                                                                                                                                                                                                                                                   |
+| ---------------------- | ---------------------- | --------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **root**               | `Element`              | document  | false    | The IntersectionObserver interface's read-only root property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target. If the root is `null`, then the bounds of the actual document viewport are used. |
+| **rootMargin**         | `string`               | '0px'     | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                                                                                                                                                            |
+| **threshold**          | `number` \| `number[]` | 0         | false    | Number between 0 and 1 indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                                                                                                |
+| **trackVisibility** 🧪 | `boolean`              | false     | false    | A boolean indicating whether this IntersectionObserver will track changes in a target’s visibility.                                                                                                                                                                                           |
+| **delay** 🧪           | `number`               | undefined | false    | A number indicating the minimum delay in milliseconds between notifications from this observer for a given target. This must be set to at least `100` if `trackVisibility` is `true`.                                                                                                         |
+| **skip**               | `boolean`              | false     | false    | Skip creating the IntersectionObserver. You can use this to enable and disable the observer as needed. If `skip` is set while `inView`, the current state will still be kept.                                                                                                                 |
+| **triggerOnce**        | `boolean`              | false     | false    | Only trigger the observer once.                                                                                                                                                                                                                                                               |
+| **initialInView**      | `boolean`              | false     | false    | Set the initial value of the `inView` boolean. This can be used if you expect the element to be in the viewport to start with, and you want to trigger something when it leaves.                                                                                                              |
 
 ### InView Props
 
@@ -345,7 +345,8 @@ async function loadPolyfills() {
 
 [package-url]: https://npmjs.org/package/react-intersection-observer
 [npm-version-svg]: https://img.shields.io/npm/v/react-intersection-observer.svg
-[npm-minzip-svg]: https://img.shields.io/bundlephobia/minzip/react-intersection-observer.svg
+[npm-minzip-svg]:
+  https://img.shields.io/bundlephobia/minzip/react-intersection-observer.svg
 [bundlephobia-url]:
   https://bundlephobia.com/result?p=react-intersection-observer
 [license-image]: http://img.shields.io/npm/l/react-intersection-observer.svg
@@ -353,5 +354,7 @@ async function loadPolyfills() {
 [downloads-image]: http://img.shields.io/npm/dm/react-intersection-observer.svg
 [downloads-url]:
   http://npm-stat.com/charts.html?package=react-intersection-observer
-[test-image]: https://github.com/thebuilder/react-intersection-observer/workflows/Test/badge.svg 
-[test-url]: https://github.com/thebuilder/react-intersection-observer/actions?query=workflow%3ATest
+[test-image]:
+  https://github.com/thebuilder/react-intersection-observer/workflows/Test/badge.svg
+[test-url]:
+  https://github.com/thebuilder/react-intersection-observer/actions?query=workflow%3ATest

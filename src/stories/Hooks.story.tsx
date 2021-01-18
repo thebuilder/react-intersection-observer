@@ -189,9 +189,9 @@ const VisibilityTemplate: Story<IntersectionOptions> = (args) => {
 
   return (
     <div ref={ref} className="container mx-auto my-4">
-      <div className="bg-gray-800 rounded-md mx-auto my-8 max-w-3xl p-4 relative text-center text-white">
+      <div className="relative mx-auto my-8 p-4 max-w-3xl text-center text-white bg-gray-800 rounded-md">
         <h2 className="text-2xl font-bold">Track Visibility</h2>
-        <p className="leading-normal my-4">
+        <p className="my-4 leading-normal">
           Use the new IntersectionObserver v2 to track if the object is visible.
           Try dragging the box on top of it. If the feature is unsupported, it
           will always return `isVisible`.
@@ -200,7 +200,7 @@ const VisibilityTemplate: Story<IntersectionOptions> = (args) => {
           drag
           dragElastic={0.2}
           dragConstraints={ref}
-          className="left-1/2 bg-green-500 rounded-md cursor-move inline-block font-bold px-4 py-2"
+          className="left-1/2 inline-block px-4 py-2 font-bold bg-green-500 rounded-md cursor-move"
         >
           Drag me
         </motion.div>
