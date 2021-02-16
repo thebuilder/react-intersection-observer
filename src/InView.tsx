@@ -83,14 +83,17 @@ export class InView extends React.Component<
 
   componentDidUpdate(prevProps: IntersectionObserverProps) {
     // If a IntersectionObserver option changed, reinit the observer
-    if (
+    const reinitByObserverOptions =
       prevProps.rootMargin !== this.props.rootMargin ||
       prevProps.root !== this.props.root ||
       prevProps.threshold !== this.props.threshold ||
       prevProps.skip !== this.props.skip ||
       prevProps.trackVisibility !== this.props.trackVisibility ||
-      prevProps.delay !== this.props.delay
-    ) {
+      prevProps.delay !== this.props.delay;
+
+    const reinitByTrackBy = prevProps.trackBy !== this.props.trackBy;
+
+    if (reinitByObserverOptions || reinitByTrackBy) {
       this.unobserve();
       this.observeNode();
     }
@@ -175,6 +178,7 @@ export class InView extends React.Component<
       trackVisibility,
       delay,
       initialInView,
+      trackBy,
       ...props
     } = this.props;
 

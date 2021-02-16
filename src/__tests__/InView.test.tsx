@@ -120,6 +120,16 @@ it('Should recreate observer when rootMargin change', () => {
   expect(instance.unobserve).toHaveBeenCalled();
 });
 
+it('Should recreate observer when trackBy change', () => {
+  const { container, rerender } = render(<InView>Inner</InView>);
+  mockAllIsIntersecting(true);
+  const instance = intersectionMockInstance(container.children[0]);
+  jest.spyOn(instance, 'unobserve');
+
+  rerender(<InView trackBy="newValue">Inner</InView>);
+  expect(instance.unobserve).toHaveBeenCalled();
+});
+
 it('Should unobserve when triggerOnce comes into view', () => {
   const { container } = render(<InView triggerOnce>Inner</InView>);
   mockAllIsIntersecting(false);

@@ -52,6 +52,9 @@ export interface IntersectionObserverProps extends IntersectionOptions {
    */
   children: (fields: RenderProps) => React.ReactNode;
 
+  /** Resubscribe to IntersectionObserver if this property has been changed */
+  trackBy?: boolean | number | string;
+
   /** Call this function whenever the in view state changes */
   onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void;
 }
@@ -73,6 +76,9 @@ export type PlainChildrenProps = IntersectionOptions & {
    * @deprecated Replace with the 'as' prop
    */
   tag?: React.ReactType<any>;
+
+  /** Resubscribe to IntersectionObserver if this property has been changed */
+  trackBy?: boolean | number | string;
 
   /** Call this function whenever the in view state changes */
   onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void;
