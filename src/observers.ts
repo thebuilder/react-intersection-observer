@@ -9,7 +9,7 @@ const ObserverMap = new Map<
   }
 >();
 
-const RootIds: Map<Element, string> = new Map();
+const RootIds: WeakMap<Element, string> = new WeakMap();
 
 let rootId = 0;
 
