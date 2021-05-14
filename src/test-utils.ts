@@ -88,7 +88,10 @@ function triggerIntersection(
             toJSON(): any {},
           },
       isIntersecting,
-      rootBounds: observer.root ? observer.root.getBoundingClientRect() : null,
+      rootBounds:
+        observer.root instanceof Element
+          ? observer.root?.getBoundingClientRect()
+          : null,
       target: element,
       time: Date.now() - item.created,
     });
