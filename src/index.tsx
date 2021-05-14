@@ -2,6 +2,8 @@ import * as React from 'react';
 import { InView } from './InView';
 export { InView } from './InView';
 export { useInView } from './useInView';
+export { observe } from './observe';
+
 export default InView;
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;

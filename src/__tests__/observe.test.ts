@@ -1,4 +1,23 @@
-import { optionsToId } from '../observers';
+import { mockIsIntersecting, intersectionMockInstance } from '../test-utils';
+import { optionsToId } from '../observe';
+import { observe } from '../';
+
+test('should be able to use observe', () => {
+  const element = document.createElement('div');
+  const cb = jest.fn();
+  const unmount = observe(element, cb, { threshold: 0.1 });
+
+  mockIsIntersecting(element, true);
+  expect(cb).toHaveBeenCalled();
+
+  // should be unmounted after unmount
+  unmount();
+  expect(() =>
+    intersectionMockInstance(element),
+  ).toThrowErrorMatchingInlineSnapshot(
+    `"Failed to find IntersectionObserver for element. Is it being observer?"`,
+  );
+});
 
 test('should convert options to id', () => {
   expect(

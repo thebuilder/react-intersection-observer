@@ -92,6 +92,12 @@ function createObserver(options: IntersectionObserverInit) {
   return instance;
 }
 
+/**
+ * @param element - DOM Element to observe
+ * @param callback - Callback function to trigger when intersection status changes
+ * @param options - Intersection Observer options
+ * @return Function - Cleanup function that should be triggered to unregister the observer
+ */
 export function observe(
   element: Element,
   callback: ObserverInstanceCallback,
