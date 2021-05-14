@@ -18,7 +18,6 @@ module.exports = {
   },
   babel: async (options) => ({
     ...options,
-    plugins: ['@babel/helper-builder-react-jsx'],
   }),
   webpackFinal: async (config) => {
     config.module.rules.push({
