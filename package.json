@@ -177,7 +177,6 @@
     "postcss": "^7.0.35",
     "prettier": "^2.2.0",
     "prettier-plugin-pkg": "^0.8.0",
-    "prettier-plugin-tailwind": "^2.2.8",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-test-renderer": "^17.0.1",

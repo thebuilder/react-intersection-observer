@@ -192,27 +192,6 @@ support it, a fallback has been added to always report `isVisible` as `true`.
 It's not added to the TypeScript `lib.d.ts` file yet, so you will also have to
 extend the `IntersectionObserverEntry` with the `isVisible` boolean.
 
-### Custom observe _(advanced use cases)_
-
-You can access the low level [`observe`](src/observers.ts) method, that
-`react-intersection-observer` uses internally to create and destroy
-IntersectionObserver instances. This allows you to handle more advanced use
-cases, where you need full control over when and how observers are created.
-
-```ts
-import { observe } from 'react-intersection-observer';
-const destroy = observe(element, callback, options);
-```
-
-| Name         | Type                       | Required | Description                                               |
-| ------------ | -------------------------- | -------- | --------------------------------------------------------- |
-| **element**  | `Element`                  | true     | DOM element to observe                                    |
-| **callback** | `ObserverInstanceCallback` | true     | The callback function that IntersectionObserver will call |
-| **options**  | `IntersectionObserverInit` | false    | The options for the IntersectionObserver                  |
-
-The `observe` method returns a function you must call in order to destroy the
-observer again.
-
 ## Recipes
 
 The `IntersectionObserver` itself is just a simple but powerful tool. Here's a
@@ -363,6 +342,31 @@ async function loadPolyfills() {
   }
 }
 ```
+
+## Low level API
+
+You can access the [`observe`](src/observe.ts) method, that
+`react-intersection-observer` uses internally to create and destroy
+IntersectionObserver instances. This allows you to handle more advanced use
+cases, where you need full control over when and how observers are created.
+
+```js
+import { observe } from 'react-intersection-observer';
+const destroy = observe(element, callback, options);
+```
+
+| Name         | Type                       | Required | Description                                               |
+| ------------ | -------------------------- | -------- | --------------------------------------------------------- |
+| **element**  | `Element`                  | true     | DOM element to observe                                    |
+| **callback** | `ObserverInstanceCallback` | true     | The callback function that IntersectionObserver will call |
+| **options**  | `IntersectionObserverInit` | false    | The options for the IntersectionObserver                  |
+
+The `observe` method returns an `unobserve` function, that you must call in
+order to destroy the observer again.
+
+> ⚠️ You most likely won't need this, but it can be useful if you need to handle
+> IntersectionObservers outside React, or need full control over how instances
+> are created.
 
 [package-url]: https://npmjs.org/package/react-intersection-observer
 [npm-version-svg]: https://img.shields.io/npm/v/react-intersection-observer.svg
