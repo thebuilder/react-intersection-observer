@@ -192,6 +192,27 @@ support it, a fallback has been added to always report `isVisible` as `true`.
 It's not added to the TypeScript `lib.d.ts` file yet, so you will also have to
 extend the `IntersectionObserverEntry` with the `isVisible` boolean.
 
+### Custom observe _(advanced use cases)_
+
+You can access the low level [`observe`](src/observers.ts) method, that
+`react-intersection-observer` uses internally to create and destroy
+IntersectionObserver instances. This allows you to handle more advanced use
+cases, where you need full control over when and how observers are created.
+
+```ts
+import { observe } from 'react-intersection-observer';
+const destroy = observe(element, callback, options);
+```
+
+| Name         | Type                       | Required | Description                                               |
+| ------------ | -------------------------- | -------- | --------------------------------------------------------- |
+| **element**  | `Element`                  | true     | DOM element to observe                                    |
+| **callback** | `ObserverInstanceCallback` | true     | The callback function that IntersectionObserver will call |
+| **options**  | `IntersectionObserverInit` | false    | The options for the IntersectionObserver                  |
+
+The `observe` method returns a function you must call in order to destroy the
+observer again.
+
 ## Recipes
 
 The `IntersectionObserver` itself is just a simple but powerful tool. Here's a
