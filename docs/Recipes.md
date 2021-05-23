@@ -42,14 +42,15 @@ import { useInView } from 'react-intersection-observer';
 
 const LazyImage = ({ width, height, src, ...rest }) => {
   const supportsLazyLoading = useNativeLazyLoading();
-  const [ref, inView] = useInView({
+  const { ref, inView } = useInView({
     triggerOnce: true,
     rootMargin: '200px 0px',
+    skip: supportsLazyLoading !== false,
   });
 
   return (
     <div
-      ref={!supportsLazyLoading ? ref : undefined}
+      ref={ref}
       style={{
         position: 'relative',
         paddingBottom: `${(height / width) * 100}%`,
