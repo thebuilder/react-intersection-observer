@@ -9,15 +9,14 @@ const ObserverMap = new Map<
   }
 >();
 
-const RootIds: WeakMap<Element, string> = new WeakMap();
-
+const RootIds: WeakMap<Element | Document, string> = new WeakMap();
 let rootId = 0;
 
 /**
  * Generate a unique ID for the root element
  * @param root
  */
-function getRootId(root?: Element | null) {
+function getRootId(root: IntersectionObserverInit['root']) {
   if (!root) return '0';
   if (RootIds.has(root)) return RootIds.get(root);
   rootId += 1;

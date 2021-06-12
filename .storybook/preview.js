@@ -1,6 +1,5 @@
 import 'intersection-observer';
 import 'tailwindcss/tailwind.css';
-import './styles.css';
 import { themes } from '@storybook/theming';
 import { themeOptions } from './theme';
 
