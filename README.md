@@ -271,7 +271,7 @@ Call the `intersectionMockInstance` method with an element, to get the (mocked)
 
 ```js
 import React from 'react';
-import { screen, render } from 'react-testing-library';
+import { screen, render } from '@testing-library/react';
 import { useInView } from 'react-intersection-observer';
 import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
 
