@@ -62,7 +62,7 @@ export interface IntersectionObserverProps extends IntersectionOptions {
  * Types specific to the PlainChildren rendering of InView
  * */
 export type PlainChildrenProps = IntersectionOptions & {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 
   /**
    * Render the wrapping element as this element.
