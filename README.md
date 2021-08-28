@@ -54,7 +54,7 @@ const { ref, inView, entry } = useInView(options);
 const [ref, inView, entry] = useInView(options);
 ```
 
-React Hooks make it easy to monitor the `inView` state of your components. Call
+The `useInView` hook makes it easy to monitor the `inView` state of your components. Call
 the `useInView` hook with the (optional) [options](#options) you need. It will
 return an array containing a `ref`, the `inView` status and the current
 [`entry`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry).
