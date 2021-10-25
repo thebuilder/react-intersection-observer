@@ -63,12 +63,19 @@ function triggerIntersection(
       ? observer.thresholds.some((threshold) => trigger >= threshold)
       : trigger;
 
-  const ratio =
-    typeof trigger === 'number'
-      ? observer.thresholds.find((threshold) => trigger >= threshold) ?? 0
-      : trigger
-      ? 1
-      : 0;
+  let ratio: number;
+
+  if (typeof trigger === 'number') {
+    const intersectedThresholds = observer.thresholds.filter(
+      (threshold) => trigger >= threshold,
+    );
+    ratio =
+      intersectedThresholds.length > 0
+        ? intersectedThresholds[intersectedThresholds.length - 1]
+        : 0;
+  } else {
+    ratio = trigger ? 1 : 0;
+  }
 
   elements.forEach((element) => {
     entries.push({
