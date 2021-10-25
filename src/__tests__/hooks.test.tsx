@@ -1,7 +1,11 @@
 import React, { useCallback } from 'react';
 import { render, screen } from '@testing-library/react';
 import { useInView } from '../useInView';
-import { intersectionMockInstance, mockAllIsIntersecting } from '../test-utils';
+import {
+  intersectionMockInstance,
+  mockAllIsIntersecting,
+  mockIsIntersecting,
+} from '../test-utils';
 import { IntersectionOptions } from '../index';
 
 const HookComponent = ({
@@ -288,4 +292,29 @@ test('should handle thresholds missing on observer instance with no threshold se
   mockAllIsIntersecting(true);
 
   screen.getByText('true');
+});
+
+const HookComponentWithEntry = ({
+  options,
+  unmount,
+}: {
+  options?: IntersectionOptions;
+  unmount?: boolean;
+}) => {
+  const { ref, entry } = useInView(options);
+  return (
+    <div data-testid="wrapper" ref={!unmount ? ref : undefined}>
+      {entry && Object.entries(entry).map(([key, value]) => `${key}: ${value}`)}
+    </div>
+  );
+};
+
+test('should set intersection ratio as the largest threshold smaller than trigger', () => {
+  render(
+    <HookComponentWithEntry options={{ threshold: [0, 0.25, 0.5, 0.75, 1] }} />,
+  );
+  const wrapper = screen.getByTestId('wrapper');
+
+  mockIsIntersecting(wrapper, 0.5);
+  expect(screen.getByText(/intersectionRatio: 0.5/g)).toBeInTheDocument();
 });
