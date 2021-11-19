@@ -2,7 +2,7 @@ import { IntersectionOptions } from '../index';
 
 export function getRoot(options: IntersectionOptions) {
   if (options.rootMargin && !options.root && window.self !== window.top) {
-    return (document as unknown) as Element;
+    return document as unknown as Element;
   }
   return options.root;
 }
@@ -17,10 +17,12 @@ export function useValidateOptions(options: IntersectionOptions) {
   try {
     new IntersectionObserver(() => {}, finalOptions);
   } catch (e) {
-    error = e.message.replace(
-      "Failed to construct 'IntersectionObserver': ",
-      '',
-    );
+    if (e instanceof Error) {
+      error = e.message.replace(
+        "Failed to construct 'IntersectionObserver': ",
+        '',
+      );
+    }
   }
 
   return { options: finalOptions, error };
