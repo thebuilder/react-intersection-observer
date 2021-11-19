@@ -1,6 +1,6 @@
 import { ObserverInstanceCallback } from './index';
 
-const ObserverMap = new Map<
+export const ObserverMap = new Map<
   string,
   {
     id: string;
