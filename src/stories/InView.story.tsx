@@ -128,6 +128,11 @@ export const MultipleThresholds = Template.bind({});
 MultipleThresholds.args = {
   threshold: [0, 0.25, 0.5, 0.75, 1],
 };
+MultipleThresholds.argTypes = {
+  threshold: {
+    control: { type: 'array' },
+  },
+};
 
 export const TriggerOnce = Template.bind({});
 TriggerOnce.args = {
