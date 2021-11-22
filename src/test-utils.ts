@@ -47,7 +47,7 @@ beforeEach(() => {
 
 afterEach(() => {
   // @ts-ignore
-  global.IntersectionObserver.mockClear();
+  if (global.IntersectionObserver) global.IntersectionObserver.mockClear();
   observers.clear();
   ObserverMap.clear();
 });
