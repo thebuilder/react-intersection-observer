@@ -42,9 +42,7 @@ npm install react-intersection-observer --save
 
 ## Usage
 
-### Hooks 🎣
-
-#### `useInView`
+### `useInView` hook
 
 ```js
 // Use object destructing, so you don't need to remember the exact order
@@ -142,15 +140,14 @@ export default Component;
 
 ### Options
 
-Provide these as props on the **`<InView />`** component or as the options
-argument for the hooks.
+Provide these as the options argument in the `useInView` hook or as props on the **`<InView />`** component.
 
 | Name                   | Type                   | Default   | Required | Description                                                                                                                                                                                                                                                                                   |
 | ---------------------- | ---------------------- | --------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **root**               | `Element`              | document  | false    | The IntersectionObserver interface's read-only root property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target. If the root is `null`, then the bounds of the actual document viewport are used. |
 | **rootMargin**         | `string`               | '0px'     | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                                                                                                                                                            |
-| **threshold**          | `number` \| `number[]` | 0         | false    | Number between 0 and 1 indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                                                                                                |
-| **trackVisibility** 🧪 | `boolean`              | false     | false    | A boolean indicating whether this IntersectionObserver will track changes in a target’s visibility.                                                                                                                                                                                           |
+| **threshold**          | `number` \| `number[]` | 0         | false    | Number between `0` and `1` indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                                                                                                |
+| **trackVisibility** 🧪 | `boolean`              | false     | false    | A boolean indicating whether this IntersectionObserver will track visibility changes on the target.                                                                                                                                                                                           |
 | **delay** 🧪           | `number`               | undefined | false    | A number indicating the minimum delay in milliseconds between notifications from this observer for a given target. This must be set to at least `100` if `trackVisibility` is `true`.                                                                                                         |
 | **skip**               | `boolean`              | false     | false    | Skip creating the IntersectionObserver. You can use this to enable and disable the observer as needed. If `skip` is set while `inView`, the current state will still be kept.                                                                                                                 |
 | **triggerOnce**        | `boolean`              | false     | false    | Only trigger the observer once.                                                                                                                                                                                                                                                               |
