@@ -1,6 +1,6 @@
 import { ObserverInstanceCallback } from './index';
 
-export const ObserverMap = new Map<
+export const _observerMap = new Map<
   string,
   {
     id: string;
@@ -44,7 +44,7 @@ export function optionsToId(options: IntersectionObserverInit) {
 function createObserver(options: IntersectionObserverInit) {
   // Create a unique ID for this observer instance, based on the root, root margin and threshold.
   let id = optionsToId(options);
-  let instance = ObserverMap.get(id);
+  let instance = _observerMap.get(id);
 
   if (!instance) {
     // Create a map of elements this observer is going to observe. Each element has a list of callbacks that should be triggered, once it comes into view.
@@ -85,7 +85,7 @@ function createObserver(options: IntersectionObserverInit) {
       elements,
     };
 
-    ObserverMap.set(id, instance);
+    _observerMap.set(id, instance);
   }
 
   return instance;
@@ -128,7 +128,7 @@ export function observe(
     if (elements.size === 0) {
       // No more elements are being observer by this instance, so destroy it
       observer.disconnect();
-      ObserverMap.delete(id);
+      _observerMap.delete(id);
     }
   };
 }
