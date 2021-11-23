@@ -2,7 +2,7 @@ import * as React from 'react';
 import { InView } from './InView';
 export { InView } from './InView';
 export { useInView } from './useInView';
-export { observe } from './observe';
+export { observe, _observerMap } from './observe';
 
 export default InView;
 
@@ -12,15 +12,6 @@ export type ObserverInstanceCallback = (
   inView: boolean,
   entry: IntersectionObserverEntry,
 ) => void;
-
-export type ObserverInstance = {
-  inView: boolean;
-  readonly callback: ObserverInstanceCallback;
-  readonly element: Element;
-  readonly observerId: string;
-  readonly observer: IntersectionObserver;
-  readonly thresholds: ReadonlyArray<number>;
-};
 
 interface RenderProps {
   inView: boolean;

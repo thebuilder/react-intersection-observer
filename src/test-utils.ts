@@ -1,5 +1,5 @@
 import { act } from 'react-dom/test-utils';
-import { ObserverMap } from './observe';
+import { _observerMap } from './index';
 
 type Item = {
   callback: IntersectionObserverCallback;
@@ -49,7 +49,7 @@ afterEach(() => {
   // @ts-ignore
   global.IntersectionObserver.mockClear();
   observers.clear();
-  ObserverMap.clear();
+  _observerMap.clear();
 });
 
 function triggerIntersection(
