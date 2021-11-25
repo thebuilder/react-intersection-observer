@@ -2,7 +2,7 @@ import * as React from 'react';
 import { InView } from './InView';
 export { InView } from './InView';
 export { useInView } from './useInView';
-export { observe, defaultFallbackInView, _observerMap } from './observe';
+export { observe, defaultFallbackInView } from './observe';
 
 export default InView;
 
