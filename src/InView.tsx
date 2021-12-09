@@ -106,17 +106,29 @@ export class InView extends React.Component<
 
   observeNode() {
     if (!this.node || this.props.skip) return;
-    const { threshold, root, rootMargin, trackVisibility, delay } = this.props;
-
-    this._unobserveCb = observe(this.node, this.handleChange, {
+    const {
       threshold,
       root,
       rootMargin,
-      // @ts-ignore
       trackVisibility,
-      // @ts-ignore
       delay,
-    });
+      fallbackInView,
+    } = this.props;
+
+    this._unobserveCb = observe(
+      this.node,
+      this.handleChange,
+      {
+        threshold,
+        root,
+        rootMargin,
+        // @ts-ignore
+        trackVisibility,
+        // @ts-ignore
+        delay,
+      },
+      fallbackInView,
+    );
   }
 
   unobserve() {
@@ -136,6 +148,7 @@ export class InView extends React.Component<
         this.setState({ inView: !!this.props.initialInView, entry: undefined });
       }
     }
+
     this.node = node ? node : null;
     this.observeNode();
   };
@@ -175,6 +188,7 @@ export class InView extends React.Component<
       trackVisibility,
       delay,
       initialInView,
+      fallbackInView,
       ...props
     } = this.props;
 

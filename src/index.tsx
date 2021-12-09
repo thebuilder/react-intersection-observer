@@ -2,7 +2,7 @@ import * as React from 'react';
 import { InView } from './InView';
 export { InView } from './InView';
 export { useInView } from './useInView';
-export { observe } from './observe';
+export { observe, defaultFallbackInView } from './observe';
 
 export default InView;
 
@@ -30,7 +30,10 @@ export interface IntersectionOptions extends IntersectionObserverInit {
   triggerOnce?: boolean;
   /** Skip assigning the observer to the `ref` */
   skip?: boolean;
+  /** Set the initial value of the `inView` boolean. This can be used if you expect the element to be in the viewport to start with, and you want to trigger something when it leaves. */
   initialInView?: boolean;
+  /** Fallback to this inView state if the IntersectionObserver is unsupported, and a polyfill wasn't loaded */
+  fallbackInView?: boolean;
   /** IntersectionObserver v2 - Track the actual visibility of the element */
   trackVisibility?: boolean;
   /** IntersectionObserver v2 - Set a minimum delay between notifications */

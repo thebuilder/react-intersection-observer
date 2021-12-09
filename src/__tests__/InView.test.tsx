@@ -2,6 +2,7 @@ import React from 'react';
 import { screen, fireEvent, render } from '@testing-library/react';
 import { intersectionMockInstance, mockAllIsIntersecting } from '../test-utils';
 import { InView } from '../InView';
+import { defaultFallbackInView } from '../observe';
 
 it('Should render <InView /> intersecting', () => {
   const callback = jest.fn();
@@ -154,4 +155,67 @@ it('plain children should not catch bubbling onChange event', () => {
   const input = getByLabelText('input');
   fireEvent.change(input, { target: { value: 'changed value' } });
   expect(onChange).not.toHaveBeenCalled();
+});
+
+it('should render with fallback', () => {
+  const cb = jest.fn();
+  // @ts-ignore
+  window.IntersectionObserver = undefined;
+  render(
+    <InView fallbackInView={true} onChange={cb}>
+      Inner
+    </InView>,
+  );
+  expect(cb).toHaveBeenLastCalledWith(
+    true,
+    expect.objectContaining({ isIntersecting: true }),
+  );
+
+  render(
+    <InView fallbackInView={false} onChange={cb}>
+      Inner
+    </InView>,
+  );
+  expect(cb).toHaveBeenLastCalledWith(
+    false,
+    expect.objectContaining({ isIntersecting: false }),
+  );
+
+  expect(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+    render(<InView onChange={cb}>Inner</InView>);
+    // @ts-ignore
+    console.error.mockRestore();
+  }).toThrowErrorMatchingInlineSnapshot(
+    `"IntersectionObserver is not a constructor"`,
+  );
+});
+
+it('should render with global fallback', () => {
+  const cb = jest.fn();
+  // @ts-ignore
+  window.IntersectionObserver = undefined;
+  defaultFallbackInView(true);
+  render(<InView onChange={cb}>Inner</InView>);
+  expect(cb).toHaveBeenLastCalledWith(
+    true,
+    expect.objectContaining({ isIntersecting: true }),
+  );
+
+  defaultFallbackInView(false);
+  render(<InView onChange={cb}>Inner</InView>);
+  expect(cb).toHaveBeenLastCalledWith(
+    false,
+    expect.objectContaining({ isIntersecting: false }),
+  );
+
+  defaultFallbackInView(undefined);
+  expect(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+    render(<InView onChange={cb}>Inner</InView>);
+    // @ts-ignore
+    console.error.mockRestore();
+  }).toThrowErrorMatchingInlineSnapshot(
+    `"IntersectionObserver is not a constructor"`,
+  );
 });

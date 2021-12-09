@@ -43,6 +43,7 @@ export function useInView({
   triggerOnce,
   skip,
   initialInView,
+  fallbackInView,
 }: IntersectionOptions = {}): InViewHookResponse {
   const unobserve = React.useRef<Function>();
   const [state, setState] = React.useState<State>({
@@ -79,6 +80,7 @@ export function useInView({
             // @ts-ignore
             delay,
           },
+          fallbackInView,
         );
       }
     },
@@ -93,6 +95,7 @@ export function useInView({
       triggerOnce,
       skip,
       trackVisibility,
+      fallbackInView,
       delay,
     ],
   );

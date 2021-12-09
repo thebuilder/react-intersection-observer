@@ -6,7 +6,7 @@ import {
   mockAllIsIntersecting,
   mockIsIntersecting,
 } from '../test-utils';
-import { IntersectionOptions } from '../index';
+import { IntersectionOptions, defaultFallbackInView } from '../index';
 
 const HookComponent = ({
   options,
@@ -317,4 +317,47 @@ test('should set intersection ratio as the largest threshold smaller than trigge
 
   mockIsIntersecting(wrapper, 0.5);
   expect(screen.getByText(/intersectionRatio: 0.5/g)).toBeInTheDocument();
+});
+
+test('should handle fallback if unsupported', () => {
+  // @ts-ignore
+  window.IntersectionObserver = undefined;
+  const { rerender } = render(
+    <HookComponent options={{ fallbackInView: true }} />,
+  );
+  screen.getByText('true');
+
+  rerender(<HookComponent options={{ fallbackInView: false }} />);
+  screen.getByText('false');
+
+  expect(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+    rerender(<HookComponent options={{ fallbackInView: undefined }} />);
+    // @ts-ignore
+    console.error.mockRestore();
+  }).toThrowErrorMatchingInlineSnapshot(
+    `"IntersectionObserver is not a constructor"`,
+  );
+});
+
+test('should handle defaultFallbackInView if unsupported', () => {
+  // @ts-ignore
+  window.IntersectionObserver = undefined;
+  defaultFallbackInView(true);
+  const { rerender } = render(<HookComponent key="true" />);
+  screen.getByText('true');
+
+  defaultFallbackInView(false);
+  rerender(<HookComponent key="false" />);
+  screen.getByText('false');
+
+  defaultFallbackInView(undefined);
+  expect(() => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+    rerender(<HookComponent key="undefined" />);
+    // @ts-ignore
+    console.error.mockRestore();
+  }).toThrowErrorMatchingInlineSnapshot(
+    `"IntersectionObserver is not a constructor"`,
+  );
 });
