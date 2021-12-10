@@ -254,7 +254,15 @@ value you can pass either a `boolean` value or a threshold between `0` and `1`.
 
 ### `test-utils.js`
 
-Import the methods from `react-intersection-observer/test-utils`.
+You can use these test utilities globally or per-test or both.
+
+#### Global
+
+In your Jest config, add `'react-intersection-observer/test-utils'` to the array value for the `setupFilesAfterEnv` key.
+
+#### Per File
+
+Import methods from `react-intersection-observer/test-utils`.
 
 **`mockAllIsIntersecting(isIntersecting:boolean | number)`**  
 Set `isIntersecting` on all current IntersectionObserver instances.
