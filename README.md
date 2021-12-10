@@ -260,6 +260,16 @@ You can use these test utilities globally or per-test or both.
 
 In your Jest config, add `'react-intersection-observer/test-utils'` to the array value for the `setupFilesAfterEnv` key.
 
+Like so:
+
+```js
+module.exports = {
+ // other config lines
+ setupFilesAfterEnv: ['react-intersection-observer/test-utils'],
+ // other config lines
+};
+```
+
 #### Per File
 
 Import methods from `react-intersection-observer/test-utils`.
