@@ -271,7 +271,19 @@ Call the `intersectionMockInstance` method with an element, to get the (mocked)
 `IntersectionObserver` instance. You can use this to spy on the `observe` and
 `unobserve` methods.
 
-#### Always Mock Intersection Observer
+#### Global Intersection Observer Behavior
+
+##### Use Fallback
+
+You can create a [Jest setup file](https://jestjs.io/docs/configuration#setupfiles-array) that leverages the [unsupported fallback](https://github.com/thebuilder/react-intersection-observer#unsupported-fallback) to that tests encountering Intersection Observer all behave the same way, like so:
+
+```js
+import { defaultFallbackInView } from 'react-intersection-observer';
+
+defaultFallbackInView(true); // or 'false' - whichever consistent behavior makes the most sense for your use case.
+```
+
+##### Mock Everywhere
 
 In your Jest config, add `'react-intersection-observer/test-utils'` to the array value for the [`setupFilesAfterEnv`](https://jestjs.io/docs/configuration#setupfilesafterenv-array) option.
 
