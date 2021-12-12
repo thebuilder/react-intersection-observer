@@ -254,25 +254,11 @@ value you can pass either a `boolean` value or a threshold between `0` and `1`.
 
 ### `test-utils.js`
 
-You can use these test utilities globally or per-test or both.
+You can use these test utilities as imports in individual files OR you can globally mock Intersection Observer for all Jest tests. If you use a library or an application with a lot of Intersection Observer usage, you may wish to globally mock it; however, the official recommendation is to be purposeful about your mocking and do so on a per-usage basis.
 
-#### Global
+#### Indvidual Methods
 
-In your Jest config, add `'react-intersection-observer/test-utils'` to the array value for the `setupFilesAfterEnv` key.
-
-Like so:
-
-```js
-module.exports = {
- // other config lines
- setupFilesAfterEnv: ['react-intersection-observer/test-utils'],
- // other config lines
-};
-```
-
-#### Per File
-
-Import methods from `react-intersection-observer/test-utils`.
+Import these from `react-intersection-observer/test-utils`.
 
 **`mockAllIsIntersecting(isIntersecting:boolean | number)`**  
 Set `isIntersecting` on all current IntersectionObserver instances.
@@ -284,6 +270,20 @@ Set `isIntersecting` for the IntersectionObserver of a specific element.
 Call the `intersectionMockInstance` method with an element, to get the (mocked)
 `IntersectionObserver` instance. You can use this to spy on the `observe` and
 `unobserve` methods.
+
+#### Always Mock Intersection Observer
+
+In your Jest config, add `'react-intersection-observer/test-utils'` to the array value for the [`setupFilesAfterEnv`](https://jestjs.io/docs/configuration#setupfilesafterenv-array) option.
+
+Like so:
+
+```js
+module.exports = {
+ // other config lines
+ setupFilesAfterEnv: ['react-intersection-observer/test-utils'],
+ // other config lines
+};
+```
 
 ### Test Example
 
