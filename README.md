@@ -287,7 +287,6 @@ defaultFallbackInView(true); // or 'false' - whichever consistent behavior makes
 
 In your Jest config, add `'react-intersection-observer/test-utils'` to the array value for the [`setupFilesAfterEnv`](https://jestjs.io/docs/configuration#setupfilesafterenv-array) option.
 
-Like so:
 
 ```js
 module.exports = {
