@@ -275,7 +275,7 @@ Call the `intersectionMockInstance` method with an element, to get the (mocked)
 
 ##### Use Fallback
 
-You can create a [Jest setup file](https://jestjs.io/docs/configuration#setupfiles-array) that leverages the [unsupported fallback](https://github.com/thebuilder/react-intersection-observer#unsupported-fallback) to that tests encountering Intersection Observer all behave the same way, like so:
+You can create a [Jest setup file](https://jestjs.io/docs/configuration#setupfiles-array) that leverages the [unsupported fallback](https://github.com/thebuilder/react-intersection-observer#unsupported-fallback) option. In this case, you only mock the IntersectionObserver in test files were you actively import `react-intersection-observer/test-utils`:
 
 ```js
 import { defaultFallbackInView } from 'react-intersection-observer';
