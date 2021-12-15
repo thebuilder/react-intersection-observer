@@ -163,6 +163,6 @@ export function intersectionMockInstance(
   }
 
   throw new Error(
-    'Failed to find IntersectionObserver for element. Is it being observer?',
+    'Failed to find IntersectionObserver for element. Is it being observed?',
   );
 }
