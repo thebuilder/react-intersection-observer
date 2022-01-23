@@ -209,7 +209,7 @@ few ideas for how you can use it.
 You can wrap multiple `ref` assignments in a single `useCallback`:
 
 ```jsx
-import React, { useRef } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { useInView } from 'react-intersection-observer';
 
 function Component(props) {
