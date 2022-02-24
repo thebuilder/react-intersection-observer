@@ -112,15 +112,27 @@ const Template: Story<Props> = ({ style, className, lazy, ...rest }) => {
   }
 
   return (
-    <ScrollWrapper indicators={options.initialInView ? 'bottom' : 'all'}>
-      <Status inView={inView} />
-      <InViewBlock ref={ref} inView={inView} style={style}>
-        <InViewIcon inView={inView} />
-        <EntryDetails options={options} />
-      </InViewBlock>
-      <ThresholdMarker threshold={options.threshold} />
-      <RootMargin rootMargin={options.rootMargin} />
-    </ScrollWrapper>
+    <>
+      <div
+        style={{
+          height: 150,
+          width: '100%',
+          backgroundColor: 'red',
+          zIndex: '1000',
+          position: 'sticky',
+          top: 0,
+        }}
+      ></div>
+      <ScrollWrapper indicators={options.initialInView ? 'bottom' : 'all'}>
+        <Status inView={inView} />
+        <InViewBlock ref={ref} inView={inView} style={style}>
+          <InViewIcon inView={inView} />
+          <EntryDetails options={options} />
+        </InViewBlock>
+        <ThresholdMarker threshold={options.threshold} />
+        <RootMargin rootMargin={options.rootMargin} />
+      </ScrollWrapper>
+    </>
   );
 };
 
@@ -139,7 +151,9 @@ StartInView.args = {
 
 export const WithRootMargin = Template.bind({});
 WithRootMargin.args = {
-  rootMargin: '25px 0px',
+  rootMargin: '-150px 0px 0px 0px',
+  threshold: 0.5,
+  // initialInView: true,
 };
 
 export const TallerThanViewport = Template.bind({});
