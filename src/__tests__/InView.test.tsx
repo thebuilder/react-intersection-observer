@@ -30,8 +30,8 @@ it('should render plain children', () => {
   screen.getByText('inner');
 });
 
-it('should render with tag', () => {
-  const { container } = render(<InView tag="span">inner</InView>);
+it('should render as element', () => {
+  const { container } = render(<InView as="span">inner</InView>);
   const tagName = container.children[0].tagName.toLowerCase();
   expect(tagName).toBe('span');
 });

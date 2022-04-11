@@ -50,7 +50,7 @@ export function useInView({
     inView: !!initialInView,
   });
   const setRef = React.useCallback(
-    (node) => {
+    (node: Element | null) => {
       if (unobserve.current !== undefined) {
         unobserve.current();
         unobserve.current = undefined;

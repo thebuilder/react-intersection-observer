@@ -11,30 +11,16 @@ module.exports = {
     '@storybook/addon-controls',
     '@storybook/addon-actions',
     '@storybook/addon-viewport',
-    'storybook-dark-mode/register',
+    {
+      name: '@storybook/addon-postcss',
+      options: {
+        postcssLoaderOptions: {
+          implementation: require('postcss'),
+        },
+      },
+    },
   ],
   core: {
     builder: 'webpack5',
-  },
-  babel: async (options) => ({
-    ...options,
-  }),
-  webpackFinal: async (config) => {
-    config.module.rules.push({
-      test: /\.css$/,
-      use: [
-        {
-          loader: 'postcss-loader',
-          options: {
-            postcssOptions: {
-              ...postcssConfig,
-            },
-          },
-        },
-      ],
-      include: path.resolve(__dirname, '../'),
-    });
-
-    return config;
   },
 };
