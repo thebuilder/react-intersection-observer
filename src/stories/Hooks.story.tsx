@@ -43,7 +43,7 @@ const story: Meta = {
           <Primary />
           <ArgsTable
             story={PRIMARY_STORY}
-            exclude={['children', 'tag', 'as', 'onChange']}
+            exclude={['children', 'as', 'onChange']}
           />
           <Stories />
         </>
@@ -66,11 +66,6 @@ const story: Meta = {
       },
     },
     children: {
-      table: {
-        disable: true,
-      },
-    },
-    tag: {
       table: {
         disable: true,
       },
