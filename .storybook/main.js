@@ -1,6 +1,3 @@
-const path = require('path');
-const postcssConfig = require('../postcss.config');
-
 module.exports = {
   stories: [
     '../src/stories/**/*.@(story|stories).mdx',
