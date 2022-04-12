@@ -145,7 +145,12 @@ test('inView should be false when component is unmounted', () => {
   getByText('false');
 });
 
-test('should handle new options', () => {
+test('should handle trackVisibility', () => {
+  render(<HookComponent options={{ trackVisibility: true, delay: 100 }} />);
+  mockAllIsIntersecting(true);
+});
+
+test('should handle trackVisibility when unsupported', () => {
   render(<HookComponent options={{ trackVisibility: true, delay: 100 }} />);
 });
 
@@ -212,7 +217,7 @@ test('should handle ref removed', () => {
 const MergeRefsComponent = ({ options }: { options?: IntersectionOptions }) => {
   const [inViewRef, inView] = useInView(options);
   const setRef = useCallback(
-    (node) => {
+    (node: Element | null) => {
       inViewRef(node);
     },
     [inViewRef],
@@ -239,7 +244,7 @@ const MultipleHookComponent = ({
   const [ref3, inView3] = useInView();
 
   const mergedRefs = useCallback(
-    (node) => {
+    (node: Element | null) => {
       ref1(node);
       ref2(node);
       ref3(node);
@@ -316,7 +321,7 @@ test('should set intersection ratio as the largest threshold smaller than trigge
   const wrapper = screen.getByTestId('wrapper');
 
   mockIsIntersecting(wrapper, 0.5);
-  expect(screen.getByText(/intersectionRatio: 0.5/g)).toBeInTheDocument();
+  expect(screen.getByText(/intersectionRatio: 0.5/)).toBeInTheDocument();
 });
 
 test('should handle fallback if unsupported', () => {

@@ -178,7 +178,6 @@ export class InView extends React.Component<
     const {
       children,
       as,
-      tag,
       triggerOnce,
       threshold,
       root,
@@ -193,7 +192,7 @@ export class InView extends React.Component<
     } = this.props;
 
     return React.createElement(
-      as || tag || 'div',
+      as || 'div',
       { ref: this.handleNode, ...props },
       children,
     );

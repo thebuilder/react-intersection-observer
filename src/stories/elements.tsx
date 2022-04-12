@@ -10,7 +10,7 @@ type ScrollProps = {
 export function ErrorMessage({ children }: { children?: React.ReactNode }) {
   return (
     <div className="mx-auto my-8 max-w-4xl text-gray-900">
-      <div className="px-8 py-4 bg-red-500 border-2 border-red-700 rounded-md">
+      <div className="rounded-md border-2 border-red-700 bg-red-500 px-8 py-4">
         <h2 className="text-xl font-bold">Invalid options</h2>
         {children}
       </div>
@@ -30,10 +30,10 @@ export function ScrollWrapper({
   return (
     <div className="container mx-auto" {...props}>
       {indicators === 'top' || indicators === 'all' ? (
-        <section className="sbdocs-hidden flex flex-col items-center justify-center h-screen text-center text-white bg-gradient-to-b border-4 border-indigo-300 rounded-lg from-blue-700 to-blue-500">
+        <section className="sbdocs-hidden flex h-screen flex-col items-center justify-center rounded-lg border-4 border-indigo-300 bg-gradient-to-b from-blue-700 to-blue-500 text-center text-white">
           <h1 className="my-4 text-3xl font-bold">Scroll down</h1>
           <svg
-            className="w-12 h-12 animate-bounce"
+            className="h-12 w-12 animate-bounce"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -50,11 +50,11 @@ export function ScrollWrapper({
       <section className="relative">{children}</section>
       {indicators === 'bottom' || indicators === 'all' ? (
         <section
-          className="sbdocs-hidden flex items-center justify-center h-screen text-white bg-gradient-to-t border-4 border-indigo-300 rounded-lg from-blue-700 to-blue-500"
+          className="sbdocs-hidden flex h-screen items-center justify-center rounded-lg border-4 border-indigo-300 bg-gradient-to-t from-blue-700 to-blue-500 text-white"
           style={{ height: '101vh' }}
         >
           <svg
-            className="w-12 h-12"
+            className="h-12 w-12"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -79,23 +79,25 @@ export const InViewBlock = React.forwardRef<
   <div
     ref={ref}
     data-inview={inView}
-    className="flex flex-col items-center justify-center my-16 p-8 text-blue-100 bg-gradient-to-b border-4 border-purple-300 rounded-md from-purple-700 to-purple-500"
+    className="my-16 flex flex-col items-center justify-center rounded-md border-4 border-purple-300 bg-gradient-to-b from-purple-700 to-purple-500 p-8 text-blue-100"
     {...rest}
   />
 ));
 
 export function InViewIcon({ inView }: { inView: boolean }) {
   return (
+    // @ts-ignore AnimatePresence doesn't work with React 18 type definitions
+    // https://github.com/framer/motion/issues/1509
     <AnimatePresence exitBeforeEnter>
       <motion.div
         key={inView ? 'inview' : 'outside'}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0 }}
-        className={`rounded-full border-4 h-20 p-2 w-20 ${
+        className={`h-20 w-20 rounded-full border-4 p-2 ${
           inView
-            ? 'bg-green-600 border-green-400'
-            : 'bg-yellow-600 border-yellow-400'
+            ? 'border-green-400 bg-green-600'
+            : 'border-yellow-400 bg-yellow-600'
         }`}
       >
         <svg
@@ -130,14 +132,14 @@ export function Status({ inView }: { inView: boolean }) {
   return (
     <div
       className={[
-        'sbdocs-hidden group items-center bg-white rounded-lg shadow-md flex right-0 top-0 justify-center m-1 p-1 fixed z-10',
+        'sbdocs-hidden group fixed right-0 top-0 z-10 m-1 flex items-center justify-center rounded-lg bg-white p-1 shadow-md',
         inView ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900',
       ].join(' ')}
     >
-      <code className="group-hover:block hidden ml-2 mr-1 font-mono">
+      <code className="ml-2 mr-1 hidden font-mono group-hover:block">
         InView: {inView.toString()}
       </code>
-      <span className="group-hover:hidden w-6 h-6">
+      <span className="h-6 w-6 group-hover:hidden">
         {inView ? (
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -182,7 +184,7 @@ export function RootMargin({ rootMargin }: { rootMargin?: string }) {
 
   return (
     <div
-      className="border-orange-600 absolute border-b-4 border-t-4 border-dashed pointer-events-none"
+      className="pointer-events-none absolute border-b-4 border-t-4 border-dashed border-orange-600"
       style={{ inset: invertedRootMargin }}
     />
   );
@@ -244,7 +246,7 @@ export function EntryDetails({ options }: { options?: IntersectionOptions }) {
   if (value === '{}') return null;
 
   return (
-    <pre className="mt-8 p-2 w-full text-purple-100 bg-gray-900 bg-opacity-50 overflow-x-scroll">
+    <pre className="mt-8 w-full overflow-x-scroll bg-gray-900 bg-opacity-50 p-2 text-purple-100">
       <code>{value}</code>
     </pre>
   );

@@ -16,6 +16,7 @@ const packageFieldsToRemove = [
   'lint-staged',
   'scripts',
   'husky',
+  'simple-git-hooks',
   'prettier',
   'jest',
   'eslintConfig',

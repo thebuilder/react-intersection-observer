@@ -43,7 +43,7 @@ const story: Meta = {
           <Primary />
           <ArgsTable
             story={PRIMARY_STORY}
-            exclude={['children', 'tag', 'as', 'onChange']}
+            exclude={['children', 'as', 'onChange']}
           />
           <Stories />
         </>
@@ -66,11 +66,6 @@ const story: Meta = {
       },
     },
     children: {
-      table: {
-        disable: true,
-      },
-    },
-    tag: {
       table: {
         disable: true,
       },
@@ -194,7 +189,7 @@ const VisibilityTemplate: Story<IntersectionOptions> = (args) => {
 
   return (
     <div ref={ref} className="container mx-auto my-4">
-      <div className="relative mx-auto my-8 p-4 max-w-3xl text-center text-white bg-gray-800 rounded-md">
+      <div className="relative mx-auto my-8 max-w-3xl rounded-md bg-gray-800 p-4 text-center text-white">
         <h2 className="text-2xl font-bold">Track Visibility</h2>
         <p className="my-4 leading-normal">
           Use the new IntersectionObserver v2 to track if the object is visible.
@@ -205,7 +200,7 @@ const VisibilityTemplate: Story<IntersectionOptions> = (args) => {
           drag
           dragElastic={0.2}
           dragConstraints={ref}
-          className="left-1/2 inline-block px-4 py-2 font-bold bg-green-500 rounded-md cursor-move"
+          className="left-1/2 inline-block cursor-move rounded-md bg-green-500 px-4 py-2 font-bold"
         >
           Drag me
         </motion.div>

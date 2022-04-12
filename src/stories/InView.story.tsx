@@ -44,11 +44,6 @@ const story: Meta = {
         disable: true,
       },
     },
-    tag: {
-      table: {
-        disable: true,
-      },
-    },
   },
 };
 

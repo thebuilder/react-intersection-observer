@@ -62,13 +62,7 @@ export type PlainChildrenProps = IntersectionOptions & {
    * Render the wrapping element as this element.
    * @default `'div'`
    */
-  as?: React.ReactType<any>;
-
-  /**
-   * Element tag to use for the wrapping component
-   * @deprecated Replace with the 'as' prop
-   */
-  tag?: React.ReactType<any>;
+  as?: React.ElementType;
 
   /** Call this function whenever the in view state changes */
   onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void;
