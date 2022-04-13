@@ -86,8 +86,6 @@ export const InViewBlock = React.forwardRef<
 
 export function InViewIcon({ inView }: { inView: boolean }) {
   return (
-    // @ts-ignore AnimatePresence doesn't work with React 18 type definitions
-    // https://github.com/framer/motion/issues/1509
     <AnimatePresence exitBeforeEnter>
       <motion.div
         key={inView ? 'inview' : 'outside'}
