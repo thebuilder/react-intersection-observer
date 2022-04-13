@@ -4,6 +4,7 @@
 [![GZipped size][npm-minzip-svg]][bundlephobia-url]
 [![Test][test-image]][test-url] [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
+[![Rate this package](https://badges.openbase.com/js/rating/react-intersection-observer.svg?token=hP+7xZ3BKOSqUmVvL7dQItbeTjK7qBC4z5zPTSd3naU=)](https://openbase.com/js/react-intersection-observer?utm_source=embedded&amp;utm_medium=badge&amp;utm_campaign=rate-badge)
 
 React implementation of the
 [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
