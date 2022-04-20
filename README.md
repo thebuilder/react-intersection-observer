@@ -17,11 +17,12 @@ to tell you when an element enters or leaves the viewport. Contains both a
 
 ## Features
 
-- 🎣 **Hooks or Component API** - With `useInView` it's easier than ever to
+- 🪝 **Hooks or Component API** - With `useInView` it's easier than ever to
   monitor elements
 - ⚡️ **Optimized performance** - Reuses Intersection Observer instances where
   possible
 - ⚙️ **Matches native API** - Intuitive to use
+- 🛠 **Written in TypeScript** - It'll fit right into your existing TypeScript project
 - 🧪 **Ready to test** - Mocks the Intersection Observer for easy testing with
   [Jest](https://jestjs.io/)
 - 🌳 **Tree-shakeable** - Only include the parts you use
