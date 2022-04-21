@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
-import type { IntersectionOptions } from '../index';
+import type { IntersectionOptions } from '../types';
 
 type ScrollProps = {
   children: React.ReactNode;

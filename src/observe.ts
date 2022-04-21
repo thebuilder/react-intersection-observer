@@ -1,4 +1,4 @@
-import type { ObserverInstanceCallback } from './index';
+import type { ObserverInstanceCallback } from './types';
 
 const observerMap = new Map<
   string,

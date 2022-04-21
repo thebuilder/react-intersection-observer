@@ -2,7 +2,7 @@ import * as React from 'react';
 import { CSSProperties } from 'react';
 import { action } from '@storybook/addon-actions';
 import { Meta, Story } from '@storybook/react';
-import { IntersectionOptions, InView } from '../index';
+import { InView } from '../index';
 import {
   EntryDetails,
   InViewBlock,
@@ -15,6 +15,7 @@ import {
   RootMargin,
 } from './elements';
 import { useValidateOptions } from './story-utils';
+import { IntersectionOptions } from '../types';
 
 type Props = IntersectionOptions & {
   style?: CSSProperties;

@@ -1,4 +1,4 @@
-import type { IntersectionOptions } from '../index';
+import { IntersectionOptions } from '../types';
 
 export function getRoot(options: IntersectionOptions) {
   if (options.rootMargin && !options.root && window.self !== window.top) {
