@@ -26,7 +26,7 @@ to tell you when an element enters or leaves the viewport. Contains both a
 - 🧪 **Ready to test** - Mocks the Intersection Observer for easy testing with
   [Jest](https://jestjs.io/)
 - 🌳 **Tree-shakeable** - Only include the parts you use
-- 💥 **Tiny bundle** [~1.8 kB gzipped][bundlephobia-url]
+- 💥 **Tiny bundle** - Around __~1.15kB__ for `useInView` and __~1.6kB__ for `<InView>`
 
 ## Installation
 
