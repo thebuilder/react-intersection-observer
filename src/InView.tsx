@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IntersectionObserverProps, PlainChildrenProps } from './index';
+import type { IntersectionObserverProps, PlainChildrenProps } from './index';
 import { observe } from './observe';
 
 type State = {
