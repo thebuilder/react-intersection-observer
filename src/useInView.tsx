@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { InViewHookResponse, IntersectionOptions } from './index';
-import { useEffect } from 'react';
+import type { InViewHookResponse, IntersectionOptions } from './index';
 import { observe } from './observe';
 
 type State = {
@@ -101,7 +100,7 @@ export function useInView({
   );
 
   /* eslint-disable-next-line */
-  useEffect(() => {
+  React.useEffect(() => {
     if (!unobserve.current && state.entry && !triggerOnce && !skip) {
       // If we don't have a ref, then reset the state (unless the hook is set to only `triggerOnce` or `skip`)
       // This ensures we correctly reflect the current state - If you aren't observing anything, then nothing is inView

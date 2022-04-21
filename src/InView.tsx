@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IntersectionObserverProps, PlainChildrenProps } from './index';
+import type { IntersectionObserverProps, PlainChildrenProps } from './index';
 import { observe } from './observe';
 
 type State = {
@@ -66,13 +66,6 @@ export class InView extends React.Component<
   IntersectionObserverProps | PlainChildrenProps,
   State
 > {
-  static displayName = 'InView';
-  static defaultProps = {
-    threshold: 0,
-    triggerOnce: false,
-    initialInView: false,
-  };
-
   constructor(props: IntersectionObserverProps | PlainChildrenProps) {
     super(props);
     this.state = {
