@@ -1,6 +1,6 @@
 import { action } from '@storybook/addon-actions';
 import { Meta, Story } from '@storybook/react';
-import { InView, useInView } from '../index';
+import { IntersectionOptions, InView, useInView } from '../index';
 import { motion } from 'framer-motion';
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import {
@@ -23,7 +23,6 @@ import {
   Title,
 } from '@storybook/addon-docs/blocks';
 import { useValidateOptions } from './story-utils';
-import { IntersectionOptions } from '../types';
 
 type Props = IntersectionOptions & {
   style?: CSSProperties;

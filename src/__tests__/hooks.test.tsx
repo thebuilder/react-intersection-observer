@@ -6,8 +6,7 @@ import {
   mockAllIsIntersecting,
   mockIsIntersecting,
 } from '../test-utils';
-import { defaultFallbackInView } from '../index';
-import { IntersectionOptions } from '../types';
+import { IntersectionOptions, defaultFallbackInView } from '../index';
 
 const HookComponent = ({
   options,

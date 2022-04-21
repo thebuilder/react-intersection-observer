@@ -1,6 +1,6 @@
 import * as React from 'react';
+import type { IntersectionObserverProps, PlainChildrenProps } from './index';
 import { observe } from './observe';
-import type { IntersectionObserverProps, PlainChildrenProps } from './types';
 
 type State = {
   inView: boolean;

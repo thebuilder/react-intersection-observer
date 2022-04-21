@@ -1,6 +1,6 @@
 import * as React from 'react';
+import type { InViewHookResponse, IntersectionOptions } from './index';
 import { observe } from './observe';
-import type { IntersectionOptions, InViewHookResponse } from './types';
 
 type State = {
   inView: boolean;
