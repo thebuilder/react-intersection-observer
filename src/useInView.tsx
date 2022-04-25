@@ -43,11 +43,16 @@ export function useInView({
   skip,
   initialInView,
   fallbackInView,
+  onChange,
 }: IntersectionOptions = {}): InViewHookResponse {
   const unobserve = React.useRef<Function>();
+  const callback = React.useRef<IntersectionOptions['onChange']>();
   const [state, setState] = React.useState<State>({
     inView: !!initialInView,
   });
+  // Store the onChange callback in a `ref`, so we can access the latest instance inside the `useCallback`.
+  callback.current = onChange;
+
   const setRef = React.useCallback(
     (node: Element | null) => {
       if (unobserve.current !== undefined) {
@@ -63,6 +68,7 @@ export function useInView({
           node,
           (inView, entry) => {
             setState({ inView, entry });
+            if (callback.current) callback.current(inView, entry);
 
             if (entry.isIntersecting && triggerOnce && unobserve.current) {
               // If it should only trigger once, unobserve the element after it's inView

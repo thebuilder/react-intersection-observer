@@ -107,6 +107,23 @@ test('should respect trigger once', () => {
   getByText('true');
 });
 
+test('should trigger onChange', () => {
+  const onChange = jest.fn();
+  render(<HookComponent options={{ onChange }} />);
+
+  mockAllIsIntersecting(true);
+  expect(onChange).toHaveBeenLastCalledWith(
+    true,
+    expect.objectContaining({ intersectionRatio: 1, isIntersecting: true }),
+  );
+
+  mockAllIsIntersecting(false);
+  expect(onChange).toHaveBeenLastCalledWith(
+    false,
+    expect.objectContaining({ intersectionRatio: 0, isIntersecting: false }),
+  );
+});
+
 test('should respect skip', () => {
   const { getByText, rerender } = render(
     <HookComponent options={{ skip: true }} />,

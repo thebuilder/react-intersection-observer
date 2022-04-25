@@ -35,6 +35,8 @@ export interface IntersectionOptions extends IntersectionObserverInit {
   trackVisibility?: boolean;
   /** IntersectionObserver v2 - Set a minimum delay between notifications */
   delay?: number;
+  /** Call this function whenever the in view state changes */
+  onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void;
 }
 
 export interface IntersectionObserverProps extends IntersectionOptions {
@@ -44,9 +46,6 @@ export interface IntersectionObserverProps extends IntersectionOptions {
    * assigned to the element root.
    */
   children: (fields: RenderProps) => React.ReactNode;
-
-  /** Call this function whenever the in view state changes */
-  onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void;
 }
 
 /**
