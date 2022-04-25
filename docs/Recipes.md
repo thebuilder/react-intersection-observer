@@ -91,18 +91,20 @@ for an IntersectionObserver.
 ```jsx
 import React from 'react';
 import { useInView } from 'react-intersection-observer';
-import { motion } from 'framer-motion';
 
 const LazyAnimation = () => {
-  const [ref, inView] = useInView({
+  const { ref, inView } = useInView({
     triggerOnce: true,
     rootMargin: '-100px 0px',
   });
 
   return (
-    <motion.div ref={ref} style={{ opacity: inView ? 1 : 0 }}>
+    <div
+      ref={ref}
+      className={`transition-opacity ${inView ? 'opacity-1' : 'opacity-0'}`}
+    >
       <span aria-label="Wave">👋</span>
-    </motion.div>
+    </div>
   );
 };
 
@@ -121,22 +123,23 @@ fire an event on your tracking service.
 - Instead of `threshold`, you can use `rootMargin` to have a fixed amount be
   visible before triggering. Use a negative margin value, like `-100px 0px`, to
   have it go inwards. You can also use a percentage value, instead of pixels.
+- You can use the `onChange` callback to trigger the tracking.
 
 ```jsx
-import React, { useEffect } from 'react';
+import * as React from 'react';
 import { useInView } from 'react-intersection-observer';
 
 const TrackImpression = () => {
-  const [ref, inView] = useInView({
+  const { ref } = useInView({
     triggerOnce: true,
     rootMargin: '-100px 0',
+    onChange: (inView) => {
+      if (inView) {
+        // Fire a tracking event to your tracking service of choice.
+        dataLayer.push('Section shown'); // Here's a GTM dataLayer push
+      }
+    },
   });
-  useEffect(() => {
-    if (inView) {
-      // Fire a tracking event to your tracking service of choice.
-      dataLayer.push('Section shown'); // Here's a GTM dataLayer push
-    }
-  }, [inView]);
 
   return (
     <div ref={ref}>

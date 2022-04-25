@@ -92,7 +92,7 @@ const Template: Story<Props> = ({ style, className, lazy, ...rest }) => {
   const { options, error } = useValidateOptions(rest);
   const { ref, inView, entry } = useInView(!error ? options : {});
   const [isLoading, setIsLoading] = useState(lazy);
-  action('Inview')(inView, entry);
+  action('InView')(inView, entry);
 
   useEffect(() => {
     if (isLoading) setIsLoading(false);

@@ -2,8 +2,7 @@
 
 [![Version Badge][npm-version-svg]][package-url]
 [![GZipped size][npm-minzip-svg]][bundlephobia-url]
-[![Test][test-image]][test-url] 
-[![License][license-image]][license-url]
+[![Test][test-image]][test-url] [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
 
 React implementation of the
@@ -22,11 +21,13 @@ to tell you when an element enters or leaves the viewport. Contains both a
 - ⚡️ **Optimized performance** - Reuses Intersection Observer instances where
   possible
 - ⚙️ **Matches native API** - Intuitive to use
-- 🛠 **Written in TypeScript** - It'll fit right into your existing TypeScript project
+- 🛠 **Written in TypeScript** - It'll fit right into your existing TypeScript
+  project
 - 🧪 **Ready to test** - Mocks the Intersection Observer for easy testing with
   [Jest](https://jestjs.io/)
 - 🌳 **Tree-shakeable** - Only include the parts you use
-- 💥 **Tiny bundle** - Around __~1.15kB__ for `useInView` and __~1.6kB__ for `<InView>`
+- 💥 **Tiny bundle** - Around **~1.15kB** for `useInView` and **~1.6kB** for
+  `<InView>`
 
 ## Installation
 
@@ -146,27 +147,27 @@ export default Component;
 Provide these as the options argument in the `useInView` hook or as props on the
 **`<InView />`** component.
 
-| Name                   | Type                   | Default   | Required | Description                                                                                                                                                                                                                                                                                     |
-| ---------------------- | ---------------------- | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **root**               | `Element`              | document  | false    | The IntersectionObserver interface's read-only root property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target. If the root is `null`, then the bounds of the actual document viewport are used.   |
-| **rootMargin**         | `string`               | '0px'     | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                                                                                                                                                              |
-| **threshold**          | `number` \| `number[]` | 0         | false    | Number between `0` and `1` indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                                                                                              |
-| **trackVisibility** 🧪 | `boolean`              | false     | false    | A boolean indicating whether this IntersectionObserver will track visibility changes on the target.                                                                                                                                                                                             |
-| **delay** 🧪           | `number`               | undefined | false    | A number indicating the minimum delay in milliseconds between notifications from this observer for a given target. This must be set to at least `100` if `trackVisibility` is `true`.                                                                                                           |
-| **skip**               | `boolean`              | false     | false    | Skip creating the IntersectionObserver. You can use this to enable and disable the observer as needed. If `skip` is set while `inView`, the current state will still be kept.                                                                                                                   |
-| **triggerOnce**        | `boolean`              | false     | false    | Only trigger the observer once.                                                                                                                                                                                                                                                                 |
-| **initialInView**      | `boolean`              | false     | false    | Set the initial value of the `inView` boolean. This can be used if you expect the element to be in the viewport to start with, and you want to trigger something when it leaves.                                                                                                                |
-| **fallbackInView**     | `boolean`              | undefined | false    | If the `IntersectionObserver` API isn't available in the client, the default behavior is to throw an Error. You can set a specific fallback behavior, and the `inView` value will be set to this instead of failing. To set a global default, you can set it with the `defaultFallbackInView()` |
+| Name                   | Type                      | Default   | Required | Description                                                                                                                                                                                                                                                                                     |
+| ---------------------- | ------------------------- | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **root**               | `Element`                 | document  | false    | The IntersectionObserver interface's read-only root property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target. If the root is `null`, then the bounds of the actual document viewport are used.   |
+| **rootMargin**         | `string`                  | '0px'     | false    | Margin around the root. Can have values similar to the CSS margin property, e.g. "10px 20px 30px 40px" (top, right, bottom, left).                                                                                                                                                              |
+| **threshold**          | `number` or `number[]`    | 0         | false    | Number between `0` and `1` indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                                                                                              |
+| **onChange**           | `(inView, entry) => void` | undefined | false    | Call this function whenever the in view state changes. It will receive the `inView` boolean, alongside the current `IntersectionObserverEntry`.                                                                                                                                                 |
+| **trackVisibility** 🧪 | `boolean`                 | false     | false    | A boolean indicating whether this IntersectionObserver will track visibility changes on the target.                                                                                                                                                                                             |
+| **delay** 🧪           | `number`                  | undefined | false    | A number indicating the minimum delay in milliseconds between notifications from this observer for a given target. This must be set to at least `100` if `trackVisibility` is `true`.                                                                                                           |
+| **skip**               | `boolean`                 | false     | false    | Skip creating the IntersectionObserver. You can use this to enable and disable the observer as needed. If `skip` is set while `inView`, the current state will still be kept.                                                                                                                   |
+| **triggerOnce**        | `boolean`                 | false     | false    | Only trigger the observer once.                                                                                                                                                                                                                                                                 |
+| **initialInView**      | `boolean`                 | false     | false    | Set the initial value of the `inView` boolean. This can be used if you expect the element to be in the viewport to start with, and you want to trigger something when it leaves.                                                                                                                |
+| **fallbackInView**     | `boolean`                 | undefined | false    | If the `IntersectionObserver` API isn't available in the client, the default behavior is to throw an Error. You can set a specific fallback behavior, and the `inView` value will be set to this instead of failing. To set a global default, you can set it with the `defaultFallbackInView()` |
 
 ### InView Props
 
 The **`<InView />`** component also accepts the following props:
 
-| Name         | Type                                                     | Default | Required | Description                                                                                                                                                                                                                                                                                                                   |
-| ------------ | -------------------------------------------------------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **as**       | `string`                                                 | 'div'   | false    | Render the wrapping element as this element. Defaults to `div`.                                                                                                                                                                                                                                                               |
-| **children** | `({ref, inView, entry}) => React.ReactNode`, `ReactNode` |         | true     | Children expects a function that receives an object containing the `inView` boolean and a `ref` that should be assigned to the element root. Alternatively pass a plain child, to have the `<InView />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `entry, giving you more details. |
-| **onChange** | `(inView, entry) => void`                                |         | false    | Call this function whenever the in view state changes. It will receive the `inView` boolean, alongside the current `IntersectionObserverEntry`.                                                                                                                                                                               |
+| Name         | Type                                                 | Default   | Required | Description                                                                                                                                                                                                                                                                                                                   |
+| ------------ | ---------------------------------------------------- | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **as**       | `string`                                             | 'div'     | false    | Render the wrapping element as this element. Defaults to `div`.                                                                                                                                                                                                                                                               |
+| **children** | `({ref, inView, entry}) => ReactNode` or `ReactNode` | undefined | true     | Children expects a function that receives an object containing the `inView` boolean and a `ref` that should be assigned to the element root. Alternatively pass a plain child, to have the `<InView />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `entry, giving you more details. |
 
 ### IntersectionObserver v2 🧪
 
