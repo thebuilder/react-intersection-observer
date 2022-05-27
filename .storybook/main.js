@@ -28,9 +28,10 @@ module.exports = {
    * @param config {import('vite').UserConfig}
    */
   async viteFinal(config) {
-    if (!config.optimizeDeps) {
-      config.optimizeDeps = { include: [] };
-    }
+    // The build fails to correctly minify the `ansi-to-html` module with esbuild, so we fallback to Terser.
+    // It's a package used by "Storybook" for the Webpreview, so it's interesting why it fails.
+    config.build.minify = 'terser';
+
     config.optimizeDeps.include = [
       ...config.optimizeDeps.include,
       '@storybook/react/dist/esm/client/docs/config',
