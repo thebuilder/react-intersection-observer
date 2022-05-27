@@ -32,15 +32,17 @@ module.exports = {
     // It's a package used by "Storybook" for the Webpreview, so it's interesting why it fails.
     config.build.minify = 'terser';
 
-    config.optimizeDeps.include = [
-      ...config.optimizeDeps.include,
-      '@storybook/react/dist/esm/client/docs/config',
-      '@storybook/react/dist/esm/client/preview/config',
-      '@storybook/addon-docs/preview.js',
-      '@storybook/addon-actions/preview.js',
-      '@storybook/theming',
-      'intersection-observer',
-    ];
+    if (config.optimizeDeps) {
+      config.optimizeDeps.include = [
+        ...config.optimizeDeps.include,
+        '@storybook/react/dist/esm/client/docs/config',
+        '@storybook/react/dist/esm/client/preview/config',
+        '@storybook/addon-docs/preview.js',
+        '@storybook/addon-actions/preview.js',
+        '@storybook/theming',
+        'intersection-observer',
+      ];
+    }
     return config;
   },
 };
