@@ -253,17 +253,17 @@ In order to write meaningful tests, the `IntersectionObserver` needs to be
 mocked. You can use the included `react-intersection-observer/test-utils` to
 help with this. It mocks the `IntersectionObserver`, and includes a few methods
 to assist with faking the `inView` state. When setting the `isIntersecting`
-value you can pass either a `boolean` value or a threshold between `0` and
-`1`.It wil emulate the real IntersectionObserver, allowing you to validate that
-your components are behaving as expected.
+value you can pass either a `boolean` value or a threshold between 0 and 1.It
+wil emulate the real IntersectionObserver, allowing you to validate that your
+components are behaving as expected.
 
-| Method                                                                      | Description                                                                                                                                                                       |
-| --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `mockAllIsIntersecting(isIntersecting:boolean &#124; number)`               | Set `isIntersecting` on all current IntersectionObserver instances.                                                                                                               |
-| `mockIsIntersecting(element:Element, isIntersecting:boolean &#124; number)` | Set `isIntersecting` for the IntersectionObserver of a specific element.                                                                                                          |
-| `intersectionMockInstance(element:Element): IntersectionObserver`           | Call the `intersectionMockInstance` method with an element, to get the (mocked) `IntersectionObserver` instance. You can use this to spy on the `observe` and`unobserve` methods. |
-| `setupIntersectionMocking(mockFn: typeof jest.fn)`                          | Mock the `IntersectionObserver`, so we can interact with them in tests - Should be called in `beforeEach`. (**Done automatically in Jest environment**)                           |
-| `resetIntersectionMocking()`                                                | Reset the mocks on `IntersectionObserver` - Should be called in `afterEach`. (**Done automatically in Jest environment**)                                                         |
+| Method                                        | Description                                                                                                                                                                       |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mockAllIsIntersecting(isIntersecting)`       | Set `isIntersecting` on all current IntersectionObserver instances. The value of `isIntersecting` should be either a `boolean` or a threshold between 0 and 1.                    |
+| `mockIsIntersecting(element, isIntersecting)` | Set `isIntersecting` for the IntersectionObserver of a specific `element`. The value of `isIntersecting` should be either a `boolean` or a threshold between 0 and 1.             |
+| `intersectionMockInstance(element)`           | Call the `intersectionMockInstance` method with an element, to get the (mocked) `IntersectionObserver` instance. You can use this to spy on the `observe` and`unobserve` methods. |
+| `setupIntersectionMocking(mockFn)`            | Mock the `IntersectionObserver`, so we can interact with them in tests - Should be called in `beforeEach`. (**Done automatically in Jest environment**)                           |
+| `resetIntersectionMocking()`                  | Reset the mocks on `IntersectionObserver` - Should be called in `afterEach`. (**Done automatically in Jest environment**)                                                         |
 
 ### Testing Libraries
 
