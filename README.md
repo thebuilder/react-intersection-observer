@@ -250,18 +250,12 @@ You can read more about this on these links:
 ## Testing
 
 In order to write meaningful tests, the `IntersectionObserver` needs to be
-mocked. If you are writing your tests in Jest, you can use the included
-`test-utils.js`. It mocks the `IntersectionObserver`, and includes a few methods
+mocked. You can use the included `react-intersection-observer/test-utils` to
+help with this. It mocks the `IntersectionObserver`, and includes a few methods
 to assist with faking the `inView` state. When setting the `isIntersecting`
-value you can pass either a `boolean` value or a threshold between `0` and `1`.
-
-### `react-intersection-observer/test-utils`
-
-The `test-utils` contains a set of functions that assist with mocking the
-IntersectionObserver. You can make your observer instances as either
-intersecting, or with a specific threshold value. It wil emulate the real
-IntersectionObserver, allowing you to validate that your components are behaving
-as expected.
+value you can pass either a `boolean` value or a threshold between `0` and
+`1`.It wil emulate the real IntersectionObserver, allowing you to validate that
+your components are behaving as expected.
 
 | Method                                                                      | Description                                                                                                                                                                       |
 | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -273,8 +267,8 @@ as expected.
 
 ### Testing Libraries
 
-**react-intersection-observer** comes with built-in testing support for both
-Jest and Vitest.
+This library comes with built-in support for writing tests in both Jest and
+Vitest.
 
 #### Jest
 
@@ -313,8 +307,8 @@ setup/reset code, adapted the testing library.
 ### Fallback Behavior
 
 You can create a
-[Jest setup file](https://jestjs.io/docs/configuration#setupfiles-array) that
-leverages the
+[Jest setup file](https://jestjs.io/docs/configuration#setupfilesafterenv-array)
+that leverages the
 [unsupported fallback](https://github.com/thebuilder/react-intersection-observer#unsupported-fallback)
 option. In this case, you can override the `IntersectionObserver` in test files
 were you actively import `react-intersection-observer/test-utils`.
@@ -325,6 +319,18 @@ were you actively import `react-intersection-observer/test-utils`.
 import { defaultFallbackInView } from 'react-intersection-observer';
 
 defaultFallbackInView(true); // or `false` - whichever consistent behavior makes the most sense for your use case.
+```
+
+Alternatively, you can mock the IntersectionObserver in all tests with a global
+setup file. Add `react-intersection-observer/test-utils` to
+[setupFilesAfterEnv](https://jestjs.io/docs/configuration#setupfilesafterenv-array)
+in the Jest config, or [setupFiles](https://vitest.dev/config/#setupfiles) in
+Vitest.
+
+```js
+module.exports = {
+  setupFilesAfterEnv: ['react-intersection-observer/test-utils'],
+};
 ```
 
 ### Test Example
