@@ -24,7 +24,7 @@ to tell you when an element enters or leaves the viewport. Contains both a
 - 🛠 **Written in TypeScript** - It'll fit right into your existing TypeScript
   project
 - 🧪 **Ready to test** - Mocks the Intersection Observer for easy testing with
-  [Jest](https://jestjs.io/)
+  [Jest](https://jestjs.io/) or [Vitest](https://vitest.dev/)
 - 🌳 **Tree-shakeable** - Only include the parts you use
 - 💥 **Tiny bundle** - Around **~1.15kB** for `useInView` and **~1.6kB** for
   `<InView>`
@@ -255,59 +255,76 @@ mocked. If you are writing your tests in Jest, you can use the included
 to assist with faking the `inView` state. When setting the `isIntersecting`
 value you can pass either a `boolean` value or a threshold between `0` and `1`.
 
-### `test-utils.js`
+### `react-intersection-observer/test-utils`
 
-You can use these test utilities as imports in individual files OR you can
-globally mock Intersection Observer for all Jest tests. If you use a library or
-an application with a lot of Intersection Observer usage, you may wish to
-globally mock it; however, the official recommendation is to be purposeful about
-your mocking and do so on a per-usage basis.
+The `test-utils` contains a set of functions that assist with mocking the
+IntersectionObserver. You can make your observer instances as either
+intersecting, or with a specific threshold value. It wil emulate the real
+IntersectionObserver, allowing you to validate that your components are behaving
+as expected.
 
-#### Individual Methods
+| Method                                                                      | Description                                                                                                                                                                       |
+| --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mockAllIsIntersecting(isIntersecting:boolean &#124; number)`               | Set `isIntersecting` on all current IntersectionObserver instances.                                                                                                               |
+| `mockIsIntersecting(element:Element, isIntersecting:boolean &#124; number)` | Set `isIntersecting` for the IntersectionObserver of a specific element.                                                                                                          |
+| `intersectionMockInstance(element:Element): IntersectionObserver`           | Call the `intersectionMockInstance` method with an element, to get the (mocked) `IntersectionObserver` instance. You can use this to spy on the `observe` and`unobserve` methods. |
+| `setupIntersectionMocking(mockFn: typeof jest.fn)`                          | Mock the `IntersectionObserver`, so we can interact with them in tests - Should be called in `beforeEach`. (**Done automatically in Jest environment**)                           |
+| `resetIntersectionMocking()`                                                | Reset the mocks on `IntersectionObserver` - Should be called in `afterEach`. (**Done automatically in Jest environment**)                                                         |
 
-Import these from `react-intersection-observer/test-utils`.
+### Testing Libraries
 
-**`mockAllIsIntersecting(isIntersecting:boolean | number)`**  
-Set `isIntersecting` on all current IntersectionObserver instances.
+**react-intersection-observer** comes with built-in testing support for both
+Jest and Vitest.
 
-**`mockIsIntersecting(element:Element, isIntersecting:boolean | number)`**  
-Set `isIntersecting` for the IntersectionObserver of a specific element.
+#### Jest
 
-**`intersectionMockInstance(element:Element): IntersectionObserver`**  
-Call the `intersectionMockInstance` method with an element, to get the (mocked)
-`IntersectionObserver` instance. You can use this to spy on the `observe` and
-`unobserve` methods.
+Testing with Jest should work out of the box. Just import the
+`react-intersection-observer/test-utils` in your test files, and your good to
+go.
 
-#### Global Intersection Observer Behavior
+#### Vitest
 
-##### Use Fallback
+If you're running Vitest with [globals](https://vitest.dev/config/#globals),
+then it'll automatically mock the IntersectionObserver, just like running with
+Jest. Otherwise, you'll need to manually setup/reset the mocking in either the
+individual tests, or a [setup file](https://vitest.dev/config/#setupfiles).
+
+```js
+import { vi, beforeEach, afterEach } from 'vitest';
+import {
+  setupIntersectionMocking,
+  resetIntersectionMocking,
+} from 'react-intersection-observer/test-utils';
+
+beforeEach(() => {
+  setupIntersectionMocking(vi.fn);
+});
+
+afterEach(() => {
+  resetIntersectionMocking();
+});
+```
+
+#### Other Testing Libraries
+
+See the instructions for [Vitest](#vitest). You should be able to use a similar
+setup/reset code, adapted the testing library.
+
+### Fallback Behavior
 
 You can create a
 [Jest setup file](https://jestjs.io/docs/configuration#setupfiles-array) that
 leverages the
 [unsupported fallback](https://github.com/thebuilder/react-intersection-observer#unsupported-fallback)
-option. In this case, you only mock the IntersectionObserver in test files were
-you actively import `react-intersection-observer/test-utils`:
+option. In this case, you can override the `IntersectionObserver` in test files
+were you actively import `react-intersection-observer/test-utils`.
+
+**test-setup.js**
 
 ```js
 import { defaultFallbackInView } from 'react-intersection-observer';
 
-defaultFallbackInView(true); // or 'false' - whichever consistent behavior makes the most sense for your use case.
-```
-
-##### Mock Everywhere
-
-In your Jest config, add `'react-intersection-observer/test-utils'` to the array
-value for the
-[`setupFilesAfterEnv`](https://jestjs.io/docs/configuration#setupfilesafterenv-array)
-option.
-
-```js
-module.exports = {
-  // other config lines
-  setupFilesAfterEnv: ['react-intersection-observer/test-utils'],
-  // other config lines
-};
+defaultFallbackInView(true); // or `false` - whichever consistent behavior makes the most sense for your use case.
 ```
 
 ### Test Example
@@ -316,11 +333,19 @@ module.exports = {
 import React from 'react';
 import { screen, render } from '@testing-library/react';
 import { useInView } from 'react-intersection-observer';
-import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
+import {
+  mockAllIsIntersecting,
+  mockIsIntersecting,
+  intersectionMockInstance,
+} from 'react-intersection-observer/test-utils';
 
 const HookComponent = ({ options }) => {
-  const [ref, inView] = useInView(options);
-  return <div ref={ref}>{inView.toString()}</div>;
+  const { ref, inView } = useInView(options);
+  return (
+    <div ref={ref} id="wrapper">
+      {inView.toString()}
+    </div>
+  );
 };
 
 test('should create a hook inView', () => {
@@ -341,13 +366,31 @@ test('should create a hook inView with threshold', () => {
   mockAllIsIntersecting(0.3);
   screen.getByText('true');
 });
+
+test('should mock intersecing on specific hook', () => {
+  render(<HookComponent />);
+  const wrapper = screen.getByTestId('wrapper');
+
+  // Set the intersection state on the wrapper.
+  mockIsIntersecting(wrapper, 0.5);
+  screen.getByText('true');
+});
+
+test('should create a hook and call observe', () => {
+  const { getByTestId } = render(<HookComponent />);
+  const wrapper = getByTestId('wrapper');
+  // Access the `IntersectionObserver` instance for the wrapper Element.
+  const instance = intersectionMockInstance(wrapper);
+
+  expect(instance.observe).toHaveBeenCalledWith(wrapper);
+});
 ```
 
 ## Intersection Observer
 
 [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
 is the API used to determine if an element is inside the viewport or not.
-[Browser support is really good](http://caniuse.com/#feat=intersectionobserver) -
+[Browser support is excellent](http://caniuse.com/#feat=intersectionobserver) -
 With
 [Safari adding support in 12.1](https://webkit.org/blog/8718/new-webkit-features-in-safari-12-1/),
 all major browsers now support Intersection Observers natively. Add the

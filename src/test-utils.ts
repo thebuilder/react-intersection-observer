@@ -44,7 +44,7 @@ function warnOnMissingSetup() {
 
 export function setupIntersectionMocking(mockFn: typeof jest.fn) {
   /**
-   * Create a custom IntersectionObserver mock, allowing us to intercept the observe and unobserve calls.
+   * Create a custom IntersectionObserver mock, allowing us to intercept the `observe` and `unobserve` calls.
    * We keep track of the elements being observed, so when `mockAllIsIntersecting` is triggered it will
    * know which elements to trigger the event on.
    */
