@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { vi, test, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { useInView } from '../useInView';
 import {
@@ -108,7 +109,7 @@ test('should respect trigger once', () => {
 });
 
 test('should trigger onChange', () => {
-  const onChange = jest.fn();
+  const onChange = vi.fn();
   render(<HookComponent options={{ onChange }} />);
 
   mockAllIsIntersecting(true);
@@ -338,7 +339,7 @@ test('should set intersection ratio as the largest threshold smaller than trigge
   const wrapper = screen.getByTestId('wrapper');
 
   mockIsIntersecting(wrapper, 0.5);
-  expect(screen.getByText(/intersectionRatio: 0.5/)).toBeInTheDocument();
+  screen.getByText(/intersectionRatio: 0.5/);
 });
 
 test('should handle fallback if unsupported', () => {
@@ -353,7 +354,7 @@ test('should handle fallback if unsupported', () => {
   screen.getByText('false');
 
   expect(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
     rerender(<HookComponent options={{ fallbackInView: undefined }} />);
     // @ts-ignore
     console.error.mockRestore();
@@ -375,7 +376,7 @@ test('should handle defaultFallbackInView if unsupported', () => {
 
   defaultFallbackInView(undefined);
   expect(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
     rerender(<HookComponent key="undefined" />);
     // @ts-ignore
     console.error.mockRestore();

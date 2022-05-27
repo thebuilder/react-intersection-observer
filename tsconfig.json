@@ -3,6 +3,7 @@
     "module": "esnext",
     "target": "es5",
     "lib": ["es6", "es7", "esnext", "dom"],
+    "types": ["vitest/globals", "@types/jest"],
     "jsx": "react",
     "moduleResolution": "node",
     "noImplicitReturns": true,

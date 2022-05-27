@@ -6,15 +6,49 @@ type Item = {
   created: number;
 };
 
+let isMocking = false;
+
 const observers = new Map<IntersectionObserver, Item>();
 
-beforeEach(() => {
+// If we are running in a valid testing environment, we can mock the IntersectionObserver.
+if (typeof beforeEach !== 'undefined' && typeof afterEach !== 'undefined') {
+  beforeEach(() => {
+    // Use the exposed mock function. Currently, only supports Jest (`jest.fn`) and Vitest with globals (`vi.fn`).
+    if (typeof jest !== 'undefined') setupIntersectionMocking(jest.fn);
+    else if (typeof vi !== 'undefined') setupIntersectionMocking(vi.fn);
+  });
+
+  afterEach(() => {
+    resetIntersectionMocking();
+  });
+}
+
+function warnOnMissingSetup() {
+  if (isMocking) return;
+  console.error(
+    'React Intersection Observer was not configured to handle mocking.\n' +
+      'Outside Jest, you might need to manually configure it by calling setupIntersectionMocking() and resetIntersectionMocking() in your test setup file.',
+  );
+  console.error(`\n// test-setup.js
+  import { resetIntersectionMocking, setupIntersectionMocking } from 'react-intersection-observer/test-utils';
+  
+  beforeEach(() => {
+    setupIntersectionMocking(vi.fn);
+  });
+
+  afterEach(() => {
+    resetIntersectionMocking();
+  });
+  `);
+}
+
+export function setupIntersectionMocking(mockFn: typeof jest.fn) {
   /**
    * Create a custom IntersectionObserver mock, allowing us to intercept the observe and unobserve calls.
    * We keep track of the elements being observed, so when `mockAllIsIntersecting` is triggered it will
    * know which elements to trigger the event on.
    */
-  global.IntersectionObserver = jest.fn((cb, options = {}) => {
+  global.IntersectionObserver = mockFn((cb, options = {}) => {
     const item = {
       callback: cb,
       elements: new Set<Element>(),
@@ -26,29 +60,31 @@ beforeEach(() => {
         : [options.threshold ?? 0],
       root: options.root ?? null,
       rootMargin: options.rootMargin ?? '',
-      observe: jest.fn((element: Element) => {
+      observe: mockFn((element: Element) => {
         item.elements.add(element);
       }),
-      unobserve: jest.fn((element: Element) => {
+      unobserve: mockFn((element: Element) => {
         item.elements.delete(element);
       }),
-      disconnect: jest.fn(() => {
+      disconnect: mockFn(() => {
         observers.delete(instance);
       }),
-      takeRecords: jest.fn(),
+      takeRecords: mockFn(),
     };
 
     observers.set(instance, item);
 
     return instance;
   });
-});
 
-afterEach(() => {
+  isMocking = true;
+}
+
+export function resetIntersectionMocking() {
   // @ts-ignore
   if (global.IntersectionObserver) global.IntersectionObserver.mockClear();
   observers.clear();
-});
+}
 
 function triggerIntersection(
   elements: Element[],
@@ -108,12 +144,12 @@ function triggerIntersection(
   if (act) act(() => item.callback(entries, observer));
   else item.callback(entries, observer);
 }
-
 /**
  * Set the `isIntersecting` on all current IntersectionObserver instances
  * @param isIntersecting {boolean | number}
  */
 export function mockAllIsIntersecting(isIntersecting: boolean | number) {
+  warnOnMissingSetup();
   for (let [observer, item] of observers) {
     triggerIntersection(
       Array.from(item.elements),
@@ -134,6 +170,7 @@ export function mockIsIntersecting(
   element: Element,
   isIntersecting: boolean | number,
 ) {
+  warnOnMissingSetup();
   const observer = intersectionMockInstance(element);
   if (!observer) {
     throw new Error(
@@ -156,6 +193,7 @@ export function mockIsIntersecting(
 export function intersectionMockInstance(
   element: Element,
 ): IntersectionObserver {
+  warnOnMissingSetup();
   for (let [observer, item] of observers) {
     if (item.elements.has(element)) {
       return observer;
