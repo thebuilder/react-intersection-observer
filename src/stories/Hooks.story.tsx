@@ -21,7 +21,7 @@ import {
   Stories,
   Subtitle,
   Title,
-} from '@storybook/addon-docs/blocks';
+} from '@storybook/addon-docs';
 import { useValidateOptions } from './story-utils';
 
 type Props = IntersectionOptions & {

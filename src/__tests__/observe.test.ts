@@ -4,7 +4,7 @@ import { observe } from '../';
 
 test('should be able to use observe', () => {
   const element = document.createElement('div');
-  const cb = jest.fn();
+  const cb = vi.fn();
   const unmount = observe(element, cb, { threshold: 0.1 });
 
   mockIsIntersecting(element, true);

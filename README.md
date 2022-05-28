@@ -24,7 +24,7 @@ to tell you when an element enters or leaves the viewport. Contains both a
 - 🛠 **Written in TypeScript** - It'll fit right into your existing TypeScript
   project
 - 🧪 **Ready to test** - Mocks the Intersection Observer for easy testing with
-  [Jest](https://jestjs.io/)
+  [Jest](https://jestjs.io/) or [Vitest](https://vitest.dev/)
 - 🌳 **Tree-shakeable** - Only include the parts you use
 - 💥 **Tiny bundle** - Around **~1.15kB** for `useInView` and **~1.6kB** for
   `<InView>`
@@ -88,7 +88,7 @@ const Component = () => {
 To use the `<InView>` component, you pass it a function. It will be called
 whenever the state changes, with the new value of `inView`. In addition to the
 `inView` prop, children also receive a `ref` that should be set on the
-containing DOM element. This is the element that the IntersectionObserver will
+containing DOM element. This is the element that the Intersection Observer will
 monitor.
 
 If you need it, you can also access the
@@ -149,11 +149,11 @@ Provide these as the options argument in the `useInView` hook or as props on the
 
 | Name                   | Type                      | Default     | Description                                                                                                                                                                                                                                                                                     |
 | ---------------------- | ------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **root**               | `Element`                 | `document`  | The IntersectionObserver interface's read-only root property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target. If the root is `null`, then the bounds of the actual document viewport are used.   |
-| **rootMargin**         | `string`                  | `'0px'`     | Margin around the root. Can have values similar to the CSS margin property, e.g. `"10px 20px 30px 40px"` (top, right, bottom, left).                                                                                                                                                              |
+| **root**               | `Element`                 | `document`  | The Intersection Observer interface's read-only root property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target. If the root is `null`, then the bounds of the actual document viewport are used.  |
+| **rootMargin**         | `string`                  | `'0px'`     | Margin around the root. Can have values similar to the CSS margin property, e.g. `"10px 20px 30px 40px"` (top, right, bottom, left).                                                                                                                                                            |
 | **threshold**          | `number` or `number[]`    | `0`         | Number between `0` and `1` indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                                                                                              |
 | **onChange**           | `(inView, entry) => void` | `undefined` | Call this function whenever the in view state changes. It will receive the `inView` boolean, alongside the current `IntersectionObserverEntry`.                                                                                                                                                 |
-| **trackVisibility** 🧪 | `boolean`                 | `false`     | A boolean indicating whether this IntersectionObserver will track visibility changes on the target.                                                                                                                                                                                             |
+| **trackVisibility** 🧪 | `boolean`                 | `false`     | A boolean indicating whether this Intersection Observer will track visibility changes on the target.                                                                                                                                                                                            |
 | **delay** 🧪           | `number`                  | `undefined` | A number indicating the minimum delay in milliseconds between notifications from this observer for a given target. This must be set to at least `100` if `trackVisibility` is `true`.                                                                                                           |
 | **skip**               | `boolean`                 | `false`     | Skip creating the IntersectionObserver. You can use this to enable and disable the observer as needed. If `skip` is set while `inView`, the current state will still be kept.                                                                                                                   |
 | **triggerOnce**        | `boolean`                 | `false`     | Only trigger the observer once.                                                                                                                                                                                                                                                                 |
@@ -169,7 +169,7 @@ The **`<InView />`** component also accepts the following props:
 | **as**       | `string`                                             | `'div'`     | Render the wrapping element as this element. Defaults to `div`.                                                                                                                                                                                                                                                               |
 | **children** | `({ref, inView, entry}) => ReactNode` or `ReactNode` | `undefined` | Children expects a function that receives an object containing the `inView` boolean and a `ref` that should be assigned to the element root. Alternatively pass a plain child, to have the `<InView />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `entry, giving you more details. |
 
-### IntersectionObserver v2 🧪
+### Intersection Observer v2 🧪
 
 The new
 [v2 implementation of IntersectionObserver](https://developers.google.com/web/updates/2019/02/intersectionobserver-v2)
@@ -243,70 +243,97 @@ this will not be the current viewport.
 You can read more about this on these links:
 
 - [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#The_intersection_root_and_root_margin)
-- [w3c/IntersectionObserver: IntersectionObserver rootMargin ignored within iframe](https://github.com/w3c/IntersectionObserver/issues/283#issuecomment-507397917)
+- [w3c/IntersectionObserver: rootMargin ignored within iframe](https://github.com/w3c/IntersectionObserver/issues/283#issuecomment-507397917)
 - [w3c/IntersectionObserver: Cannot track intersection with an iframe's viewport](https://github.com/w3c/IntersectionObserver/issues/372)
 - [w3c/Support iframe viewport tracking](https://github.com/w3c/IntersectionObserver/pull/465)
 
 ## Testing
 
 In order to write meaningful tests, the `IntersectionObserver` needs to be
-mocked. If you are writing your tests in Jest, you can use the included
-`test-utils.js`. It mocks the `IntersectionObserver`, and includes a few methods
+mocked. You can use the included `react-intersection-observer/test-utils` to
+help with this. It mocks the `IntersectionObserver`, and includes a few methods
 to assist with faking the `inView` state. When setting the `isIntersecting`
-value you can pass either a `boolean` value or a threshold between `0` and `1`.
+value you can pass either a `boolean` value or a threshold between 0 and 1.It
+wil emulate the real IntersectionObserver, allowing you to validate that your
+components are behaving as expected.
 
-### `test-utils.js`
+| Method                                        | Description                                                                                                                                                                       |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `mockAllIsIntersecting(isIntersecting)`       | Set `isIntersecting` on all current Intersection Observer instances. The value of `isIntersecting` should be either a `boolean` or a threshold between 0 and 1.                   |
+| `mockIsIntersecting(element, isIntersecting)` | Set `isIntersecting` for the Intersection Observer of a specific `element`. The value of `isIntersecting` should be either a `boolean` or a threshold between 0 and 1.            |
+| `intersectionMockInstance(element)`           | Call the `intersectionMockInstance` method with an element, to get the (mocked) `IntersectionObserver` instance. You can use this to spy on the `observe` and`unobserve` methods. |
+| `setupIntersectionMocking(mockFn)`            | Mock the `IntersectionObserver`, so we can interact with them in tests - Should be called in `beforeEach`. (**Done automatically in Jest environment**)                           |
+| `resetIntersectionMocking()`                  | Reset the mocks on `IntersectionObserver` - Should be called in `afterEach`. (**Done automatically in Jest environment**)                                                         |
 
-You can use these test utilities as imports in individual files OR you can
-globally mock Intersection Observer for all Jest tests. If you use a library or
-an application with a lot of Intersection Observer usage, you may wish to
-globally mock it; however, the official recommendation is to be purposeful about
-your mocking and do so on a per-usage basis.
+### Testing Libraries
 
-#### Individual Methods
+This library comes with built-in support for writing tests in both
+[Jest](https://jestjs.io/) and [Vitest](https://vitest.dev/)
 
-Import these from `react-intersection-observer/test-utils`.
+#### Jest
 
-**`mockAllIsIntersecting(isIntersecting:boolean | number)`**  
-Set `isIntersecting` on all current IntersectionObserver instances.
+Testing with Jest should work out of the box. Just import the
+`react-intersection-observer/test-utils` in your test files, and you can use the
+mocking methods.
 
-**`mockIsIntersecting(element:Element, isIntersecting:boolean | number)`**  
-Set `isIntersecting` for the IntersectionObserver of a specific element.
+#### Vitest
 
-**`intersectionMockInstance(element:Element): IntersectionObserver`**  
-Call the `intersectionMockInstance` method with an element, to get the (mocked)
-`IntersectionObserver` instance. You can use this to spy on the `observe` and
-`unobserve` methods.
+If you're running Vitest with [globals](https://vitest.dev/config/#globals),
+then it'll automatically mock the IntersectionObserver, just like running with
+Jest. Otherwise, you'll need to manually setup/reset the mocking in either the
+individual tests, or a [setup file](https://vitest.dev/config/#setupfiles).
 
-#### Global Intersection Observer Behavior
+```js
+import { vi, beforeEach, afterEach } from 'vitest';
+import {
+  setupIntersectionMocking,
+  resetIntersectionMocking,
+} from 'react-intersection-observer/test-utils';
 
-##### Use Fallback
+beforeEach(() => {
+  setupIntersectionMocking(jest.fn);
+});
+
+afterEach(() => {
+  resetIntersectionMocking();
+});
+```
+
+> ⚠️ You only need to do this if the test environment does not support
+> `beforeEach` globally, alongside either `jest.fn` or `vi.fn`.
+
+#### Other Testing Libraries
+
+See the instructions for [Vitest](#vitest). You should be able to use a similar
+setup/reset code, adapted to the testing library you are using. Failing that,
+copy the code from [test-utils.ts][test-utils-url], and make your own version.
+
+### Fallback Behavior
 
 You can create a
-[Jest setup file](https://jestjs.io/docs/configuration#setupfiles-array) that
-leverages the
+[Jest setup file](https://jestjs.io/docs/configuration#setupfilesafterenv-array)
+that leverages the
 [unsupported fallback](https://github.com/thebuilder/react-intersection-observer#unsupported-fallback)
-option. In this case, you only mock the IntersectionObserver in test files were
-you actively import `react-intersection-observer/test-utils`:
+option. In this case, you can override the `IntersectionObserver` in test files
+were you actively import `react-intersection-observer/test-utils`.
+
+**test-setup.js**
 
 ```js
 import { defaultFallbackInView } from 'react-intersection-observer';
 
-defaultFallbackInView(true); // or 'false' - whichever consistent behavior makes the most sense for your use case.
+defaultFallbackInView(true); // or `false` - whichever consistent behavior makes the most sense for your use case.
 ```
 
-##### Mock Everywhere
-
-In your Jest config, add `'react-intersection-observer/test-utils'` to the array
-value for the
-[`setupFilesAfterEnv`](https://jestjs.io/docs/configuration#setupfilesafterenv-array)
-option.
+Alternatively, you can mock the Intersection Observer in all tests with a global
+setup file. Add `react-intersection-observer/test-utils` to
+[setupFilesAfterEnv](https://jestjs.io/docs/configuration#setupfilesafterenv-array)
+in the Jest config, or [setupFiles](https://vitest.dev/config/#setupfiles) in
+Vitest.
 
 ```js
 module.exports = {
-  // other config lines
   setupFilesAfterEnv: ['react-intersection-observer/test-utils'],
-  // other config lines
 };
 ```
 
@@ -316,11 +343,19 @@ module.exports = {
 import React from 'react';
 import { screen, render } from '@testing-library/react';
 import { useInView } from 'react-intersection-observer';
-import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
+import {
+  mockAllIsIntersecting,
+  mockIsIntersecting,
+  intersectionMockInstance,
+} from 'react-intersection-observer/test-utils';
 
 const HookComponent = ({ options }) => {
-  const [ref, inView] = useInView(options);
-  return <div ref={ref}>{inView.toString()}</div>;
+  const { ref, inView } = useInView(options);
+  return (
+    <div ref={ref} id="wrapper">
+      {inView.toString()}
+    </div>
+  );
 };
 
 test('should create a hook inView', () => {
@@ -341,13 +376,31 @@ test('should create a hook inView with threshold', () => {
   mockAllIsIntersecting(0.3);
   screen.getByText('true');
 });
+
+test('should mock intersecing on specific hook', () => {
+  render(<HookComponent />);
+  const wrapper = screen.getByTestId('wrapper');
+
+  // Set the intersection state on the wrapper.
+  mockIsIntersecting(wrapper, 0.5);
+  screen.getByText('true');
+});
+
+test('should create a hook and call observe', () => {
+  const { getByTestId } = render(<HookComponent />);
+  const wrapper = getByTestId('wrapper');
+  // Access the `IntersectionObserver` instance for the wrapper Element.
+  const instance = intersectionMockInstance(wrapper);
+
+  expect(instance.observe).toHaveBeenCalledWith(wrapper);
+});
 ```
 
 ## Intersection Observer
 
 [Intersection Observer](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
 is the API used to determine if an element is inside the viewport or not.
-[Browser support is really good](http://caniuse.com/#feat=intersectionobserver) -
+[Browser support is excellent](http://caniuse.com/#feat=intersectionobserver) -
 With
 [Safari adding support in 12.1](https://webkit.org/blog/8718/new-webkit-features-in-safari-12-1/),
 all major browsers now support Intersection Observers natively. Add the
@@ -437,11 +490,11 @@ import { observe } from 'react-intersection-observer';
 const destroy = observe(element, callback, options);
 ```
 
-| Name         | Type                       | Required | Description                                               |
-| ------------ | -------------------------- | -------- | --------------------------------------------------------- |
-| **element**  | `Element`                  | true     | DOM element to observe                                    |
-| **callback** | `ObserverInstanceCallback` | true     | The callback function that IntersectionObserver will call |
-| **options**  | `IntersectionObserverInit` | false    | The options for the IntersectionObserver                  |
+| Name         | Type                       | Required | Description                                                |
+| ------------ | -------------------------- | -------- | ---------------------------------------------------------- |
+| **element**  | `Element`                  | true     | DOM element to observe                                     |
+| **callback** | `ObserverInstanceCallback` | true     | The callback function that Intersection Observer will call |
+| **options**  | `IntersectionObserverInit` | false    | The options for the Intersection Observer                  |
 
 The `observe` method returns an `unobserve` function, that you must call in
 order to destroy the observer again.
@@ -465,3 +518,5 @@ order to destroy the observer again.
   https://github.com/thebuilder/react-intersection-observer/workflows/Test/badge.svg
 [test-url]:
   https://github.com/thebuilder/react-intersection-observer/actions?query=workflow%3ATest
+[test-utils-url]:
+  https://github.com/thebuilder/react-intersection-observer/blob/feat/vitest/src/test-utils.ts

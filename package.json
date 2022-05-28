@@ -47,14 +47,14 @@
     "build:utils": "tsc -p tsconfig.test.json",
     "build:copy": "node scripts/build-copy.js",
     "postbuild": "size-limit",
-    "dev": "concurrently -k -r 'jest --watch' 'yarn run storybook'",
+    "dev": "yarn run storybook",
     "lint": "eslint . --ext js,ts,tsx",
     "release": "np --contents dist",
     "version": "yarn build",
     "pretty": "prettier '**/*.{js,ts,tsx,md,json,yml,html}' --write",
     "storybook": "start-storybook -p 9000",
     "storybook:build": "build-storybook --output-dir example",
-    "test": "jest"
+    "test": "vitest"
   },
   "release": {
     "branches": [
@@ -85,42 +85,7 @@
     ],
     "src/**/*.{ts,tsx}": [
       "eslint",
-      "jest --findRelatedTests"
-    ]
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ],
-    "parser": "@typescript-eslint/parser",
-    "plugins": [
-      "@typescript-eslint",
-      "react-hooks"
-    ],
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
-    },
-    "rules": {
-      "@typescript-eslint/no-angle-bracket-type-assertion": 0,
-      "no-unused-vars": 0,
-      "react-hooks/rules-of-hooks": "error",
-      "react-hooks/exhaustive-deps": "warn"
-    }
-  },
-  "jest": {
-    "testEnvironment": "jsdom",
-    "setupFilesAfterEnv": [
-      "@testing-library/jest-dom/extend-expect"
-    ],
-    "modulePathIgnorePatterns": [
-      "/dist/"
-    ],
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      "/src/test-utils.ts",
-      "jest-setup.js"
+      "vitest related --run"
     ]
   },
   "size-limit": [
@@ -147,59 +112,48 @@
     "react": "^15.0.0 || ^16.0.0 || ^17.0.0|| ^18.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.17.6",
-    "@babel/core": "^7.17.9",
-    "@babel/helper-builder-react-jsx": "^7.16.7",
-    "@babel/plugin-proposal-class-properties": "^7.16.7",
-    "@babel/plugin-transform-runtime": "^7.17.0",
-    "@babel/preset-env": "^7.16.11",
-    "@babel/preset-react": "^7.16.7",
-    "@babel/preset-typescript": "^7.16.7",
+    "@babel/core": "^7.18.2",
+    "@babel/preset-env": "^7.18.2",
     "@size-limit/preset-small-lib": "^7.0.8",
-    "@storybook/addon-actions": "^6.4.21",
-    "@storybook/addon-controls": "^6.4.21",
-    "@storybook/addon-docs": "^6.4.21",
+    "@storybook/addon-actions": "6.5.5",
+    "@storybook/addon-controls": "6.5.5",
+    "@storybook/addon-docs": "6.5.5",
     "@storybook/addon-postcss": "^2.0.0",
-    "@storybook/addon-viewport": "^6.4.21",
-    "@storybook/addons": "^6.4.21",
-    "@storybook/builder-webpack5": "^6.4.21",
-    "@storybook/manager-webpack5": "^6.4.21",
-    "@storybook/react": "^6.4.21",
-    "@storybook/theming": "^6.4.21",
+    "@storybook/addon-viewport": "6.5.5",
+    "@storybook/addons": "6.5.5",
+    "@storybook/builder-vite": "^0.1.35",
+    "@storybook/react": "6.5.5",
+    "@storybook/theming": "6.5.5",
     "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.0.1",
-    "@types/jest": "^27.4.1",
-    "@types/react": "^18.0.3",
-    "@types/react-dom": "^18.0.0",
-    "@typescript-eslint/eslint-plugin": "^5.19.0",
-    "@typescript-eslint/parser": "^5.19.0",
-    "autoprefixer": "^10.4.4",
-    "babel-jest": "^27.5.1",
-    "babel-loader": "^8.2.4",
-    "babel-plugin-dev-expression": "^0.2.2",
-    "concurrently": "^7.1.0",
-    "eslint": "^8.13.0",
-    "eslint-config-react-app": "^7.0.1",
+    "@testing-library/react": "^13.2.0",
+    "@types/jest": "^27.5.1",
+    "@types/react": "^18.0.9",
+    "@types/react-dom": "^18.0.5",
+    "@typescript-eslint/eslint-plugin": "^5.26.0",
+    "@typescript-eslint/parser": "^5.26.0",
+    "autoprefixer": "^10.4.7",
+    "eslint": "^8.16.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-react": "^7.29.4",
-    "eslint-plugin-react-hooks": "^4.4.0",
-    "framer-motion": "^6.2.10",
+    "eslint-plugin-react": "^7.30.0",
+    "eslint-plugin-react-hooks": "^4.5.0",
+    "framer-motion": "^6.3.4",
     "intersection-observer": "^0.12.0",
-    "jest": "^27.5.1",
-    "lint-staged": "^12.3.7",
-    "microbundle": "^0.14.2",
+    "jsdom": "^19.0.0",
+    "lint-staged": "^12.4.2",
+    "microbundle": "^0.15.0",
     "npm-run-all": "^4.1.5",
-    "postcss": "^8.4.12",
+    "postcss": "^8.4.14",
     "prettier": "^2.6.2",
-    "prettier-plugin-pkg": "^0.13.0",
-    "prettier-plugin-tailwindcss": "^0.1.8",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "prettier-plugin-pkg": "^0.13.2",
+    "prettier-plugin-tailwindcss": "^0.1.11",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
     "simple-git-hooks": "^2.7.0",
     "size-limit": "^7.0.8",
     "tailwindcss": "^3.0.24",
-    "typescript": "^4.6.3",
-    "webpack": "^5.72.0"
+    "typescript": "^4.7.2",
+    "vite": "^2.9.9",
+    "vitest": "^0.12.9"
   }
 }

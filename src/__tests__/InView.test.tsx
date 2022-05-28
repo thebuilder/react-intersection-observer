@@ -4,8 +4,8 @@ import { intersectionMockInstance, mockAllIsIntersecting } from '../test-utils';
 import { InView } from '../InView';
 import { defaultFallbackInView } from '../observe';
 
-it('Should render <InView /> intersecting', () => {
-  const callback = jest.fn();
+test('Should render <InView /> intersecting', () => {
+  const callback = vi.fn();
   render(
     <InView onChange={callback}>
       {({ inView, ref }) => <div ref={ref}>{inView.toString()}</div>}
@@ -25,24 +25,24 @@ it('Should render <InView /> intersecting', () => {
   );
 });
 
-it('should render plain children', () => {
+test('should render plain children', () => {
   render(<InView>inner</InView>);
   screen.getByText('inner');
 });
 
-it('should render as element', () => {
+test('should render as element', () => {
   const { container } = render(<InView as="span">inner</InView>);
   const tagName = container.children[0].tagName.toLowerCase();
   expect(tagName).toBe('span');
 });
 
-it('should render with className', () => {
+test('should render with className', () => {
   const { container } = render(<InView className="inner-class">inner</InView>);
-  expect(container.children[0]).toHaveClass('inner-class');
+  expect(container.children[0].className).toBe('inner-class');
 });
 
-it('Should respect skip', () => {
-  const cb = jest.fn();
+test('Should respect skip', () => {
+  const cb = vi.fn();
   render(
     <InView skip onChange={cb}>
       inner
@@ -53,8 +53,8 @@ it('Should respect skip', () => {
   expect(cb).not.toHaveBeenCalled();
 });
 
-it('Should handle initialInView', () => {
-  const cb = jest.fn();
+test('Should handle initialInView', () => {
+  const cb = vi.fn();
   render(
     <InView initialInView onChange={cb}>
       {({ inView }) => `InView: ${inView}`}
@@ -63,7 +63,7 @@ it('Should handle initialInView', () => {
   screen.getByText('InView: true');
 });
 
-it('Should unobserve old node', () => {
+test('Should unobserve old node', () => {
   const { rerender } = render(
     <InView>
       {({ inView, ref }) => (
@@ -85,65 +85,65 @@ it('Should unobserve old node', () => {
   mockAllIsIntersecting(true);
 });
 
-it('Should ensure node exists before observing and unobserving', () => {
+test('Should ensure node exists before observing and unobserving', () => {
   const { unmount } = render(<InView>{() => null}</InView>);
   unmount();
 });
 
-it('Should recreate observer when threshold change', () => {
+test('Should recreate observer when threshold change', () => {
   const { container, rerender } = render(<InView>Inner</InView>);
   mockAllIsIntersecting(true);
   const instance = intersectionMockInstance(container.children[0]);
-  jest.spyOn(instance, 'unobserve');
+  vi.spyOn(instance, 'unobserve');
 
   rerender(<InView threshold={0.5}>Inner</InView>);
   expect(instance.unobserve).toHaveBeenCalled();
 });
 
-it('Should recreate observer when root change', () => {
+test('Should recreate observer when root change', () => {
   const { container, rerender } = render(<InView>Inner</InView>);
   mockAllIsIntersecting(true);
   const instance = intersectionMockInstance(container.children[0]);
-  jest.spyOn(instance, 'unobserve');
+  vi.spyOn(instance, 'unobserve');
 
   const root = document.createElement('div');
   rerender(<InView root={root}>Inner</InView>);
   expect(instance.unobserve).toHaveBeenCalled();
 });
 
-it('Should recreate observer when rootMargin change', () => {
+test('Should recreate observer when rootMargin change', () => {
   const { container, rerender } = render(<InView>Inner</InView>);
   mockAllIsIntersecting(true);
   const instance = intersectionMockInstance(container.children[0]);
-  jest.spyOn(instance, 'unobserve');
+  vi.spyOn(instance, 'unobserve');
 
   rerender(<InView rootMargin="10px">Inner</InView>);
   expect(instance.unobserve).toHaveBeenCalled();
 });
 
-it('Should unobserve when triggerOnce comes into view', () => {
+test('Should unobserve when triggerOnce comes into view', () => {
   const { container } = render(<InView triggerOnce>Inner</InView>);
   mockAllIsIntersecting(false);
   const instance = intersectionMockInstance(container.children[0]);
-  jest.spyOn(instance, 'unobserve');
+  vi.spyOn(instance, 'unobserve');
   mockAllIsIntersecting(true);
 
   expect(instance.unobserve).toHaveBeenCalled();
 });
 
-it('Should unobserve when unmounted', () => {
+test('Should unobserve when unmounted', () => {
   const { container, unmount } = render(<InView triggerOnce>Inner</InView>);
   const instance = intersectionMockInstance(container.children[0]);
 
-  jest.spyOn(instance, 'unobserve');
+  vi.spyOn(instance, 'unobserve');
 
   unmount();
 
   expect(instance.unobserve).toHaveBeenCalled();
 });
 
-it('plain children should not catch bubbling onChange event', () => {
-  const onChange = jest.fn();
+test('plain children should not catch bubbling onChange event', () => {
+  const onChange = vi.fn();
   const { getByLabelText } = render(
     <InView onChange={onChange}>
       <label>
@@ -157,8 +157,8 @@ it('plain children should not catch bubbling onChange event', () => {
   expect(onChange).not.toHaveBeenCalled();
 });
 
-it('should render with fallback', () => {
-  const cb = jest.fn();
+test('should render with fallback', () => {
+  const cb = vi.fn();
   // @ts-ignore
   window.IntersectionObserver = undefined;
   render(
@@ -182,7 +182,7 @@ it('should render with fallback', () => {
   );
 
   expect(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
     render(<InView onChange={cb}>Inner</InView>);
     // @ts-ignore
     console.error.mockRestore();
@@ -191,8 +191,8 @@ it('should render with fallback', () => {
   );
 });
 
-it('should render with global fallback', () => {
-  const cb = jest.fn();
+test('should render with global fallback', () => {
+  const cb = vi.fn();
   // @ts-ignore
   window.IntersectionObserver = undefined;
   defaultFallbackInView(true);
@@ -211,7 +211,7 @@ it('should render with global fallback', () => {
 
   defaultFallbackInView(undefined);
   expect(() => {
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+    vi.spyOn(console, 'error').mockImplementation(() => {});
     render(<InView onChange={cb}>Inner</InView>);
     // @ts-ignore
     console.error.mockRestore();
