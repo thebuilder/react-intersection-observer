@@ -1,4 +1,3 @@
-import { vi, test, expect } from 'vitest';
 import { mockIsIntersecting, intersectionMockInstance } from '../test-utils';
 import { optionsToId } from '../observe';
 import { observe } from '../';

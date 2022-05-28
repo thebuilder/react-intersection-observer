@@ -1,5 +1,4 @@
 import React from 'react';
-import { vi, test, expect } from 'vitest';
 import { screen, fireEvent, render } from '@testing-library/react';
 import { intersectionMockInstance, mockAllIsIntersecting } from '../test-utils';
 import { InView } from '../InView';

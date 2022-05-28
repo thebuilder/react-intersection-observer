@@ -28,8 +28,7 @@ function warnOnMissingSetup() {
   console.error(
     'React Intersection Observer was not configured to handle mocking.\n' +
       'Outside Jest, you might need to manually configure it by calling setupIntersectionMocking() and resetIntersectionMocking() in your test setup file.',
-  );
-  console.error(`\n// test-setup.js
+    +`\n// test-setup.js
   import { resetIntersectionMocking, setupIntersectionMocking } from 'react-intersection-observer/test-utils';
   
   beforeEach(() => {
@@ -38,16 +37,17 @@ function warnOnMissingSetup() {
 
   afterEach(() => {
     resetIntersectionMocking();
-  });
-  `);
+  });`,
+  );
 }
 
+/**
+ * Create a custom IntersectionObserver mock, allowing us to intercept the `observe` and `unobserve` calls.
+ * We keep track of the elements being observed, so when `mockAllIsIntersecting` is triggered it will
+ * know which elements to trigger the event on.
+ * @param mockFn The mock function to use. Defaults to `jest.fn`.
+ */
 export function setupIntersectionMocking(mockFn: typeof jest.fn) {
-  /**
-   * Create a custom IntersectionObserver mock, allowing us to intercept the `observe` and `unobserve` calls.
-   * We keep track of the elements being observed, so when `mockAllIsIntersecting` is triggered it will
-   * know which elements to trigger the event on.
-   */
   global.IntersectionObserver = mockFn((cb, options = {}) => {
     const item = {
       callback: cb,
@@ -80,6 +80,9 @@ export function setupIntersectionMocking(mockFn: typeof jest.fn) {
   isMocking = true;
 }
 
+/**
+ * Rest the IntersectionObserver mock to its initial state, and clear all the elements being observed.
+ */
 export function resetIntersectionMocking() {
   // @ts-ignore
   if (global.IntersectionObserver) global.IntersectionObserver.mockClear();
