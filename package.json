@@ -2,12 +2,12 @@
   "name": "react-intersection-observer",
   "version": "8.26.1",
   "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
-  "source": "src/index.tsx",
-  "main": "dist/react-intersection-observer.js",
-  "module": "dist/react-intersection-observer.m.js",
-  "esmodule": "dist/react-intersection-observer.esm.js",
-  "unpkg": "dist/react-intersection-observer.umd.js",
-  "typings": "dist/index.d.ts",
+  "source": "./src/index.tsx",
+  "main": "./dist/react-intersection-observer.js",
+  "module": "./dist/react-intersection-observer.esm.js",
+  "exports": "./dist/react-intersection-observer.modern.js",
+  "unpkg": "./dist/react-intersection-observer.umd.js",
+  "typings": "./dist/index.d.ts",
   "author": "Daniel Schmidt",
   "sideEffects": false,
   "repository": {
@@ -90,19 +90,19 @@
   },
   "size-limit": [
     {
-      "path": "dist/react-intersection-observer.m.js",
+      "path": "dist/react-intersection-observer.esm.js",
       "name": "InView",
       "import": "{ InView }",
       "limit": "1.8 kB"
     },
     {
-      "path": "dist/react-intersection-observer.m.js",
+      "path": "dist/react-intersection-observer.esm.js",
       "name": "useInView",
       "import": "{ useInView }",
       "limit": "1.3 kB"
     },
     {
-      "path": "dist/react-intersection-observer.m.js",
+      "path": "dist/react-intersection-observer.esm.js",
       "name": "observe",
       "import": "{ observe }",
       "limit": "1 kB"
