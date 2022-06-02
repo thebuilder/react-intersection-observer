@@ -5,7 +5,6 @@
   "source": "src/index.tsx",
   "main": "dist/react-intersection-observer.js",
   "module": "dist/react-intersection-observer.m.js",
-  "esmodule": "dist/react-intersection-observer.esm.js",
   "unpkg": "dist/react-intersection-observer.umd.js",
   "typings": "dist/index.d.ts",
   "author": "Daniel Schmidt",
