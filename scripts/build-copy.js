@@ -42,7 +42,17 @@ fields.forEach((key) => {
   if (typeof pck[key] === 'object') {
     const keys = Object.keys(pck[key]);
     keys.forEach((subkey) => {
-      pck[key][subkey] = pck[key][subkey]?.replace('./dist/', './');
+      if (typeof pck[key][subkey] === 'string') {
+        pck[key][subkey] = pck[key][subkey]?.replace('./dist/', './');
+      } else if (typeof pck[key][subkey] === 'object') {
+        const sub = pck[key][subkey];
+        const subkeys = Object.keys(sub);
+        subkeys.forEach((subsubkey) => {
+          if (typeof sub[subsubkey] === 'string') {
+            sub[subsubkey] = sub[subsubkey]?.replace('./dist/', './');
+          }
+        });
+      }
     });
   } else {
     pck[key] = pck[key]?.replace('./dist/', './');
