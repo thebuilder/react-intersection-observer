@@ -8,8 +8,8 @@
   "exports": {
     "./test-utils": "./test-utils.js",
     ".": {
-      "import": "./react-intersection-observer.modern.mjs",
-      "require": "./react-intersection-observer.js"
+      "require": "./react-intersection-observer.js",
+      "default": "./react-intersection-observer.modern.mjs"
     }
   },
   "unpkg": "./dist/react-intersection-observer.umd.js",
