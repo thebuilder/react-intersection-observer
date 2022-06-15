@@ -7,7 +7,8 @@
   "module": "./dist/react-intersection-observer.mjs",
   "exports": {
     "require": "./dist/react-intersection-observer.js",
-    "default": "./dist/react-intersection-observer.modern.mjs"
+    "default": "./dist/react-intersection-observer.modern.mjs",
+    "test-utils": "./dist/test-utils.js"
   },
   "unpkg": "./dist/react-intersection-observer.umd.js",
   "typings": "./dist/index.d.ts",
