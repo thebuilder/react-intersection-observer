@@ -5,15 +5,20 @@
   "source": "./src/index.tsx",
   "main": "./dist/react-intersection-observer.js",
   "module": "./dist/react-intersection-observer.mjs",
+  "unpkg": "./dist/react-intersection-observer.umd.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    "./test-utils": "./test-utils.js",
+    "./test-utils": {
+      "default": "./dist/test-utils.js",
+      "types": "./dist/test-utils.d.ts"
+    },
     ".": {
-      "require": "./react-intersection-observer.js",
-      "default": "./react-intersection-observer.modern.mjs"
+      "require": "./dist/react-intersection-observer.js",
+      "default": "./dist/react-intersection-observer.modern.mjs",
+      "types": "./dist/index.d.ts"
     }
   },
-  "unpkg": "./dist/react-intersection-observer.umd.js",
-  "typings": "./dist/index.d.ts",
+  "files": ["dist", "README.md", "LICENSE", "package.json"],
   "author": "Daniel Schmidt",
   "sideEffects": false,
   "repository": {
@@ -51,7 +56,6 @@
     "build": "run-s build:*",
     "build:bundle": "microbundle --name ReactIntersectionObserver --jsx React.createElement -f cjs,umd,es,modern --no-compress",
     "build:utils": "tsc -p tsconfig.test.json",
-    "build:copy": "node scripts/build-copy.js",
     "postbuild": "size-limit",
     "dev": "yarn run storybook",
     "lint": "eslint . --ext js,ts,tsx",
@@ -73,12 +77,7 @@
     "plugins": [
       "@semantic-release/commit-analyzer",
       "@semantic-release/release-notes-generator",
-      [
-        "@semantic-release/npm",
-        {
-          "pkgRoot": "dist"
-        }
-      ],
+      "@semantic-release/npm",
       "@semantic-release/github"
     ]
   },
