@@ -5,7 +5,7 @@
     "inview-plain-children-vv51y"
   ],
   "publishDirectory": {
-    "react-intersection-observer": "dist"
+    "react-intersection-observer": "."
   },
-  "node": "14"
+  "node": "16"
 }
