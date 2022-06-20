@@ -36,6 +36,7 @@ const fields = [
   'exports',
   'esmodule',
   'exports',
+  'types',
   'typings',
 ];
 fields.forEach((key) => {
