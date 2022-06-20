@@ -20,12 +20,12 @@
     }
   },
   "author": "Daniel Schmidt",
+  "license": "MIT",
   "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/thebuilder/react-intersection-observer.git"
   },
-  "license": "MIT",
   "keywords": [
     "react",
     "component",
