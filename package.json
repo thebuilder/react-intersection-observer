@@ -4,16 +4,16 @@
   "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
   "source": "./src/index.tsx",
   "main": "./dist/react-intersection-observer.js",
-  "module": "./dist/react-intersection-observer.mjs",
+  "module": "./dist/react-intersection-observer.esm.js",
+  "unpkg": "./dist/react-intersection-observer.umd.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    "./test-utils": "./test-utils.js",
+    "./test-utils": "./dist/test-utils.js",
     ".": {
-      "require": "./react-intersection-observer.js",
-      "default": "./react-intersection-observer.modern.mjs"
+      "require": "./dist/react-intersection-observer.js",
+      "default": "./dist/react-intersection-observer.modern.mjs"
     }
   },
-  "unpkg": "./dist/react-intersection-observer.umd.js",
-  "typings": "./dist/index.d.ts",
   "author": "Daniel Schmidt",
   "sideEffects": false,
   "repository": {
