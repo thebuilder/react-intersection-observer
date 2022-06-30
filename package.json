@@ -8,8 +8,12 @@
   "unpkg": "./dist/react-intersection-observer.umd.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    "./test-utils": "./dist/test-utils.js",
+    "./test-utils": {
+      "types": "./dist/test-utils.d.ts",
+      "default": "./dist/test-utils.js"
+    },
     ".": {
+      "types": "./dist/index.d.ts",
       "require": "./dist/react-intersection-observer.js",
       "default": "./dist/react-intersection-observer.modern.mjs"
     }
