@@ -28,6 +28,7 @@ type Props = IntersectionOptions & {
   style?: CSSProperties;
   className?: string;
   lazy?: boolean;
+  inlineRef?: boolean;
 };
 
 const story: Meta = {
@@ -88,7 +89,13 @@ const story: Meta = {
 
 export default story;
 
-const Template: Story<Props> = ({ style, className, lazy, ...rest }) => {
+const Template: Story<Props> = ({
+  style,
+  className,
+  lazy,
+  inlineRef,
+  ...rest
+}) => {
   const { options, error } = useValidateOptions(rest);
   const { ref, inView, entry } = useInView(!error ? options : {});
   const [isLoading, setIsLoading] = useState(lazy);
@@ -109,7 +116,11 @@ const Template: Story<Props> = ({ style, className, lazy, ...rest }) => {
   return (
     <ScrollWrapper indicators={options.initialInView ? 'bottom' : 'all'}>
       <Status inView={inView} />
-      <InViewBlock ref={ref} inView={inView} style={style}>
+      <InViewBlock
+        ref={inlineRef ? (node) => ref(node) : ref}
+        inView={inView}
+        style={style}
+      >
         <InViewIcon inView={inView} />
         <EntryDetails options={options} />
       </InViewBlock>
@@ -125,6 +136,11 @@ Basic.args = {};
 export const LazyHookRendering = Template.bind({});
 LazyHookRendering.args = {
   lazy: true,
+};
+
+export const InlineRef = Template.bind({});
+LazyHookRendering.args = {
+  inlineRef: true,
 };
 
 export const StartInView = Template.bind({});
