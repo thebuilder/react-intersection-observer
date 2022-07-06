@@ -58,46 +58,35 @@ export function useInView({
 
   React.useEffect(
     () => {
-      if (ref && !skip) {
-        unobserve.current = observe(
-          ref,
-          (inView, entry) => {
-            setState({
-              inView,
-              entry,
-            });
-            if (callback.current) callback.current(inView, entry);
+      // Ensure we have node ref, and that we shouldn't skip observing
+      if (skip || !ref) return;
 
-            if (entry.isIntersecting && triggerOnce && unobserve.current) {
-              // If it should only trigger once, unobserve the element after it's inView
-              unobserve.current();
-              unobserve.current = undefined;
-            }
-          },
-          {
-            root,
-            rootMargin,
-            threshold,
-            // @ts-ignore
-            trackVisibility,
-            // @ts-ignore
-            delay,
-          },
-          fallbackInView,
-        );
-      } else if (!ref && !triggerOnce && !skip) {
-        // If we don't have a ref, then reset the state (unless the hook is set to only `triggerOnce` or `skip`)
-        // This ensures we correctly reflect the current state - If you aren't observing anything, then nothing is inView
-        setState((prevState) => {
-          if (prevState.entry) {
-            return {
-              inView: !!initialInView,
-              entry: undefined,
-            };
+      unobserve.current = observe(
+        ref,
+        (inView, entry) => {
+          setState({
+            inView,
+            entry,
+          });
+          if (callback.current) callback.current(inView, entry);
+
+          if (entry.isIntersecting && triggerOnce && unobserve.current) {
+            // If it should only trigger once, unobserve the element after it's inView
+            unobserve.current();
+            unobserve.current = undefined;
           }
-          return prevState;
-        });
-      }
+        },
+        {
+          root,
+          rootMargin,
+          threshold,
+          // @ts-ignore
+          trackVisibility,
+          // @ts-ignore
+          delay,
+        },
+        fallbackInView,
+      );
 
       return () => {
         if (unobserve.current) {
@@ -112,6 +101,7 @@ export function useInView({
       // If the threshold is an array, convert it to a string, so it won't change between renders.
       // eslint-disable-next-line react-hooks/exhaustive-deps
       Array.isArray(threshold) ? threshold.toString() : threshold,
+      ref,
       root,
       rootMargin,
       triggerOnce,
@@ -119,20 +109,21 @@ export function useInView({
       trackVisibility,
       fallbackInView,
       delay,
-      ref,
     ],
   );
 
-  /* eslint-disable-next-line */
-  // React.useEffect(() => {
-  //   if (!unobserve.current && state.entry && !triggerOnce && !skip) {
-  //     // If we don't have a ref, then reset the state (unless the hook is set to only `triggerOnce` or `skip`)
-  //     // This ensures we correctly reflect the current state - If you aren't observing anything, then nothing is inView
-  //     setState({
-  //       inView: !!initialInView,
-  //     });
-  //   }
-  // });
+  const entryTarget = state.entry?.target;
+
+  React.useEffect(() => {
+    if (!ref && entryTarget && !triggerOnce && !skip) {
+      // If we don't have a node ref, then reset the state (unless the hook is set to only `triggerOnce` or `skip`)
+      // This ensures we correctly reflect the current state - If you aren't observing anything, then nothing is inView
+      setState({
+        inView: !!initialInView,
+        entry: undefined,
+      });
+    }
+  }, [ref, entryTarget, triggerOnce, skip, initialInView]);
 
   const result = [setRef, state.inView, state.entry] as InViewHookResponse;
 
