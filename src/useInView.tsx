@@ -53,7 +53,8 @@ export function useInView({
     entry: undefined,
   });
 
-  // Store the onChange callback in a `ref`, so we can access the latest instance inside the `useCallback`.
+  // Store the onChange callback in a `ref`, so we can access the latest instance
+  // inside the `useEffect`, but without triggering a rerender.
   callback.current = onChange;
 
   React.useEffect(
