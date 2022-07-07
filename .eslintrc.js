@@ -91,7 +91,7 @@ module.exports = {
     'no-this-before-super': 'warn',
     'no-throw-literal': 'warn',
     'no-unexpected-multiline': 'warn',
-    'no-unreachable': 'wa' + 'rn',
+    'no-unreachable': 'warn',
     'no-unused-expressions': [
       'error',
       {
