@@ -45,7 +45,7 @@ export function useInView({
   fallbackInView,
   onChange,
 }: IntersectionOptions = {}): InViewHookResponse {
-  const [ref, setRef] = React.useState<Element | null>(null);
+  const ref = React.useRef<Element | null>(null);
   const unobserve = React.useRef<Function>();
   const callback = React.useRef<IntersectionOptions['onChange']>();
   const [state, setState] = React.useState<State>({
@@ -54,21 +54,28 @@ export function useInView({
   });
 
   // Store the onChange callback in a `ref`, so we can access the latest instance
-  // inside the `useEffect`, but without triggering a rerender.
+  // inside the `useCallback`, but without triggering a rerender.
   callback.current = onChange;
 
-  React.useEffect(
-    () => {
+  const setRef = React.useCallback(
+    (node: Element) => {
+      ref.current = node;
       // Ensure we have node ref, and that we shouldn't skip observing
-      if (skip || !ref) return;
+      if (skip || !node) return;
 
+      // Store a reference the current unobserve function, so we can destroy it later
+      const previousObserver = unobserve.current;
+
+      // Create a new IntersectionObserver, and store the `unobserve` function.
       unobserve.current = observe(
-        ref,
+        node,
         (inView, entry) => {
           setState({
             inView,
             entry,
           });
+
+          // Trigger any onChange callback function
           if (callback.current) callback.current(inView, entry);
 
           if (entry.isIntersecting && triggerOnce && unobserve.current) {
@@ -89,12 +96,11 @@ export function useInView({
         fallbackInView,
       );
 
-      return () => {
-        if (unobserve.current) {
-          unobserve.current();
-          unobserve.current = undefined;
-        }
-      };
+      if (previousObserver) {
+        // Was already observing a node - Make sure we destroy the previous observer.
+        // Do it after we create the new one, so the IntersectionObserver instance can be reused.
+        previousObserver();
+      }
     },
     // We break the rule here, because we aren't including the actual `threshold` variable
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,7 +108,6 @@ export function useInView({
       // If the threshold is an array, convert it to a string, so it won't change between renders.
       // eslint-disable-next-line react-hooks/exhaustive-deps
       Array.isArray(threshold) ? threshold.toString() : threshold,
-      ref,
       root,
       rootMargin,
       triggerOnce,
@@ -113,18 +118,27 @@ export function useInView({
     ],
   );
 
-  const entryTarget = state.entry?.target;
-
+  // We break the rule here, since we want to ensure we check the `ref` instances on every render.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   React.useEffect(() => {
-    if (!ref && entryTarget && !triggerOnce && !skip) {
+    if (!ref.current && state.entry?.target && !triggerOnce && !skip) {
       // If we don't have a node ref, then reset the state (unless the hook is set to only `triggerOnce` or `skip`)
-      // This ensures we correctly reflect the current state - If you aren't observing anything, then nothing is inView
+      // This ensures we correctly reflect the current state - If you aren't observing anything, then nothing is inView.
       setState({
         inView: !!initialInView,
         entry: undefined,
       });
     }
-  }, [ref, entryTarget, triggerOnce, skip, initialInView]);
+
+    return () => {
+      if (!ref.current && unobserve.current) {
+        // We no longer have a valid ref. Destroy the observer
+        unobserve.current();
+        unobserve.current = undefined;
+        ref.current = null;
+      }
+    };
+  });
 
   const result = [setRef, state.inView, state.entry] as InViewHookResponse;
 
