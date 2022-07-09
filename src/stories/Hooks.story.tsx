@@ -139,7 +139,7 @@ LazyHookRendering.args = {
 };
 
 export const InlineRef = Template.bind({});
-LazyHookRendering.args = {
+InlineRef.args = {
   inlineRef: true,
 };
 
