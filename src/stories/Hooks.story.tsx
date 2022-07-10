@@ -1,4 +1,3 @@
-import { action } from '@storybook/addon-actions';
 import { Meta, Story } from '@storybook/react';
 import { IntersectionOptions, InView, useInView } from '../index';
 import { motion } from 'framer-motion';
@@ -80,6 +79,7 @@ const story: Meta = {
       table: {
         disable: true,
       },
+      action: 'InView',
     },
   },
   args: {
@@ -96,10 +96,12 @@ const Template: Story<Props> = ({
   inlineRef,
   ...rest
 }) => {
+  // const onChange: IntersectionOptions['onChange'] = (inView, entry) => {
+  //   action('InView')(inView, entry);
+  // }
   const { options, error } = useValidateOptions(rest);
-  const { ref, inView, entry } = useInView(!error ? options : {});
+  const { ref, inView } = useInView(!error ? { ...options } : {});
   const [isLoading, setIsLoading] = useState(lazy);
-  action('InView')(inView, entry);
 
   useEffect(() => {
     if (isLoading) setIsLoading(false);
