@@ -135,7 +135,8 @@ export default Component;
 
 [![Edit InView plain children](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/inview-plain-children-vv51y?fontsize=14&hidenavigation=1&theme=dark)
 
-> ⚠️ When rendering a plain child, make sure you keep your HTML output semantic.
+> **Note**<br>
+> When rendering a plain child, make sure you keep your HTML output semantic.
 > Change the `as` to match the context, and add a `className` to style the
 > `<InView />`. The component does not support Ref Forwarding, so if you need a
 > `ref` to the HTML element, use the Render Props version instead.
@@ -299,8 +300,8 @@ afterEach(() => {
 });
 ```
 
-> ⚠️ You only need to do this if the test environment does not support
-> `beforeEach` globally, alongside either `jest.fn` or `vi.fn`.
+You only need to do this if the test environment does not support
+`beforeEach` globally, alongside either `jest.fn` or `vi.fn`.
 
 #### Other Testing Libraries
 
@@ -499,7 +500,8 @@ const destroy = observe(element, callback, options);
 The `observe` method returns an `unobserve` function, that you must call in
 order to destroy the observer again.
 
-> ⚠️ You most likely won't need this, but it can be useful if you need to handle
+> **Warning**<br>
+> You most likely won't need this, but it can be useful if you need to handle
 > IntersectionObservers outside React, or need full control over how instances
 > are created.
 
