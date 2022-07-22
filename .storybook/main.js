@@ -11,14 +11,6 @@ module.exports = {
     '@storybook/addon-controls',
     '@storybook/addon-actions',
     '@storybook/addon-viewport',
-    {
-      name: '@storybook/addon-postcss',
-      options: {
-        postcssLoaderOptions: {
-          implementation: require('postcss'),
-        },
-      },
-    },
   ],
   core: {
     builder: '@storybook/builder-vite',
@@ -28,10 +20,6 @@ module.exports = {
    * @param config {import('vite').UserConfig}
    */
   async viteFinal(config) {
-    // The build fails to correctly minify the `ansi-to-html` module with esbuild, so we fallback to Terser.
-    // It's a package used by "Storybook" for the Webpreview, so it's interesting why it fails.
-    if (config.build) config.build.minify = 'terser';
-
     if (config.optimizeDeps) {
       config.optimizeDeps.include = [
         ...config.optimizeDeps.include,
