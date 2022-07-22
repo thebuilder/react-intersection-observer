@@ -165,9 +165,9 @@ Provide these as the options argument in the `useInView` hook or as props on the
 
 The **`<InView />`** component also accepts the following props:
 
-| Name         | Type                                                 | Default     | Description                                                                                                                                                                                                                                                                                                                   |
-| ------------ | ---------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **as**       | `string`                                             | `'div'`     | Render the wrapping element as this element. Defaults to `div`.                                                                                                                                                                                                                                                               |
+| Name         | Type                                                 | Default     | Description                                                                                                                                                                                                                                                                                                                    |
+| ------------ | ---------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **as**       | `string`                                             | `'div'`     | Render the wrapping element as this element. Defaults to `div`.                                                                                                                                                                                                                                                                |
 | **children** | `({ref, inView, entry}) => ReactNode` or `ReactNode` | `undefined` | Children expects a function that receives an object containing the `inView` boolean and a `ref` that should be assigned to the element root. Alternatively pass a plain child, to have the `<InView />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `entry`, giving you more details. |
 
 ### Intersection Observer v2 🧪
@@ -218,9 +218,9 @@ import { useInView } from 'react-intersection-observer';
 
 function Component(props) {
   const ref = useRef();
-  const [inViewRef, inView] = useInView();
+  const { ref: inViewRef, inView } = useInView();
 
-  // Use `useCallback` so we don't recreate the function on each render - Could result in infinite loop
+  // Use `useCallback` so we don't recreate the function on each render
   const setRefs = useCallback(
     (node) => {
       // Ref's from useRef needs to have the node assigned to `current`
