@@ -61,7 +61,8 @@ export function useInView({
       // Ensure we have node ref, and that we shouldn't skip observing
       if (skip || !ref) return;
 
-      let unobserve: (() => void) | undefined = observe(
+      let unobserve: (() => void) | undefined;
+      unobserve = observe(
         ref,
         (inView, entry) => {
           setState({
