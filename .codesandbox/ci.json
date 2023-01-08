@@ -7,5 +7,5 @@
   "publishDirectory": {
     "react-intersection-observer": "dist"
   },
-  "node": "14"
+  "node": "18"
 }
