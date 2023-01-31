@@ -48,10 +48,10 @@ npm install react-intersection-observer --save
 ### `useInView` hook
 
 ```js
-// Use object destructing, so you don't need to remember the exact order
+// Use object destructuring, so you don't need to remember the exact order
 const { ref, inView, entry } = useInView(options);
 
-// Or array destructing, making it easy to customize the field names
+// Or array destructuring, making it easy to customize the field names
 const [ref, inView, entry] = useInView(options);
 ```
 
