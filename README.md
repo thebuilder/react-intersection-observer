@@ -291,7 +291,7 @@ import {
 } from 'react-intersection-observer/test-utils';
 
 beforeEach(() => {
-  setupIntersectionMocking(jest.fn);
+  setupIntersectionMocking(vi.fn);
 });
 
 afterEach(() => {
