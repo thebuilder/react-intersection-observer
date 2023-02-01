@@ -8,7 +8,7 @@
 React implementation of the
 [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
 to tell you when an element enters or leaves the viewport. Contains both a
-[Hooks](#hooks-), [render props](#render-props) and
+[Hooks](#useinview-hook), [render props](#render-props) and
 [plain children](#plain-children) implementation.
 
 **Storybook Demo:**
@@ -135,11 +135,10 @@ export default Component;
 
 [![Edit InView plain children](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/inview-plain-children-vv51y?fontsize=14&hidenavigation=1&theme=dark)
 
-> **Note**<br>
-> When rendering a plain child, make sure you keep your HTML output semantic.
-> Change the `as` to match the context, and add a `className` to style the
-> `<InView />`. The component does not support Ref Forwarding, so if you need a
-> `ref` to the HTML element, use the Render Props version instead.
+> **Note**<br> When rendering a plain child, make sure you keep your HTML output
+> semantic. Change the `as` to match the context, and add a `className` to style
+> the `<InView />`. The component does not support Ref Forwarding, so if you
+> need a `ref` to the HTML element, use the Render Props version instead.
 
 ## API
 
@@ -300,8 +299,8 @@ afterEach(() => {
 });
 ```
 
-You only need to do this if the test environment does not support
-`beforeEach` globally, alongside either `jest.fn` or `vi.fn`.
+You only need to do this if the test environment does not support `beforeEach`
+globally, alongside either `jest.fn` or `vi.fn`.
 
 #### Other Testing Libraries
 
@@ -464,9 +463,9 @@ import 'intersection-observer';
 ```
 
 If you are using Webpack (or similar) you could use
-[dynamic imports](https://webpack.js.org/api/module-methods/#import-), to load
-the Polyfill only if needed. A basic implementation could look something like
-this:
+[dynamic imports](https://webpack.js.org/api/module-methods/#dynamic-expressions-in-import),
+to load the Polyfill only if needed. A basic implementation could look something
+like this:
 
 ```js
 /**
@@ -500,10 +499,9 @@ const destroy = observe(element, callback, options);
 The `observe` method returns an `unobserve` function, that you must call in
 order to destroy the observer again.
 
-> **Warning**<br>
-> You most likely won't need this, but it can be useful if you need to handle
-> IntersectionObservers outside React, or need full control over how instances
-> are created.
+> **Warning**<br> You most likely won't need this, but it can be useful if you
+> need to handle IntersectionObservers outside React, or need full control over
+> how instances are created.
 
 [package-url]: https://npmjs.org/package/react-intersection-observer
 [npm-version-svg]: https://img.shields.io/npm/v/react-intersection-observer.svg
@@ -521,4 +519,4 @@ order to destroy the observer again.
 [test-url]:
   https://github.com/thebuilder/react-intersection-observer/actions?query=workflow%3ATest
 [test-utils-url]:
-  https://github.com/thebuilder/react-intersection-observer/blob/feat/vitest/src/test-utils.ts
+  https://github.com/thebuilder/react-intersection-observer/blob/master/src/test-utils.ts
