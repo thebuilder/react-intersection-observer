@@ -115,7 +115,6 @@ export function useInView({
   const entryTarget = state.entry?.target;
   const previousEntryTarget = React.useRef<Element>();
   if (
-    typeof window !== 'undefined' &&
     !ref &&
     entryTarget &&
     !triggerOnce &&
