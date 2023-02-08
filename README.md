@@ -2,7 +2,8 @@
 
 [![Version Badge][npm-version-svg]][package-url]
 [![GZipped size][npm-minzip-svg]][bundlephobia-url]
-[![Test][test-image]][test-url] [![License][license-image]][license-url]
+[![Test][test-image]][test-url] 
+[![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
 
 React implementation of the
