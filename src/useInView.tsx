@@ -113,17 +113,22 @@ export function useInView({
   );
 
   const entryTarget = state.entry?.target;
-
-  React.useEffect(() => {
-    if (!ref && entryTarget && !triggerOnce && !skip) {
-      // If we don't have a node ref, then reset the state (unless the hook is set to only `triggerOnce` or `skip`)
-      // This ensures we correctly reflect the current state - If you aren't observing anything, then nothing is inView
-      setState({
-        inView: !!initialInView,
-        entry: undefined,
-      });
-    }
-  }, [ref, entryTarget, triggerOnce, skip, initialInView]);
+  const previousEntryTarget = React.useRef<Element>();
+  if (
+    !ref &&
+    entryTarget &&
+    !triggerOnce &&
+    !skip &&
+    previousEntryTarget.current !== entryTarget
+  ) {
+    // If we don't have a node ref, then reset the state (unless the hook is set to only `triggerOnce` or `skip`)
+    // This ensures we correctly reflect the current state - If you aren't observing anything, then nothing is inView
+    previousEntryTarget.current = entryTarget;
+    setState({
+      inView: !!initialInView,
+      entry: undefined,
+    });
+  }
 
   const result = [setRef, state.inView, state.entry] as InViewHookResponse;
 
