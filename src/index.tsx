@@ -62,7 +62,7 @@ export type PlainChildrenProps = IntersectionOptions & {
 
   /** Call this function whenever the in view state changes */
   onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void;
-} & Omit<React.HTMLProps<HTMLElement>, 'onChange'>;
+} & Omit<React.HTMLProps<HTMLElement>, 'onChange' | 'as'>;
 
 /**
  * The Hook response supports both array and object destructing
