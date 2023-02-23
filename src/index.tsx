@@ -56,7 +56,7 @@ export type PlainChildrenProps = IntersectionOptions & {
 
   /**
    * Render the wrapping element as this element.
-   * This need to be an intrinsic element.
+   * This needs to be an intrinsic element.
    * If you want to use a custom element, please use the useInView
    * hook to manage the ref explicitly.
    * @default `'div'`
