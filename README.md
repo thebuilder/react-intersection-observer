@@ -2,7 +2,8 @@
 
 [![Version Badge][npm-version-svg]][package-url]
 [![GZipped size][npm-minzip-svg]][bundlephobia-url]
-[![Test][test-image]][test-url] [![License][license-image]][license-url]
+[![Test][test-image]][test-url]
+[![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
 
 React implementation of the
@@ -166,7 +167,7 @@ The **`<InView />`** component also accepts the following props:
 
 | Name         | Type                                                 | Default     | Description                                                                                                                                                                                                                                                                                                                    |
 | ------------ | ---------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **as**       | `IntrinsicElement`                                   | `'div'`     | Render the wrapping element as this element. Defaults to `div`. If you want to use a custom component, please use the `useInView` hook instead to manage the reference explictly.                                                                                                                                              |
+| **as**       | `IntrinsicElement`                                   | `'div'`     | Render the wrapping element as this element. Defaults to `div`. If you want to use a custom component, please use the `useInView` hook or a render prop instead to manage the reference explictly.                                                                                                                                              |
 | **children** | `({ref, inView, entry}) => ReactNode` or `ReactNode` | `undefined` | Children expects a function that receives an object containing the `inView` boolean and a `ref` that should be assigned to the element root. Alternatively pass a plain child, to have the `<InView />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `entry`, giving you more details. |
 
 ### Intersection Observer v2 🧪
