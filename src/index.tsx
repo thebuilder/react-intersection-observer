@@ -56,9 +56,12 @@ export type PlainChildrenProps = IntersectionOptions & {
 
   /**
    * Render the wrapping element as this element.
+   * This need to be an intrinsic element.
+   * If you want to use a custom element, please use the useInView
+   * hook to manage the ref explicitly.
    * @default `'div'`
    */
-  as?: React.ElementType;
+  as?: keyof JSX.IntrinsicElements;
 
   /** Call this function whenever the in view state changes */
   onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void;
