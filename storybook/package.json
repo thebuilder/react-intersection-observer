@@ -32,8 +32,6 @@
     "@storybook/addon-links": "7.0.0-beta.61",
     "@storybook/addons": "7.0.0-beta.61",
     "@storybook/builder-vite": "7.0.0-beta.61",
-    "@storybook/client-logger": "7.0.0-beta.61",
-    "@storybook/preview-api": "7.0.0-beta.61",
     "@storybook/react": "7.0.0-beta.61",
     "@storybook/react-vite": "7.0.0-beta.61",
     "@storybook/theming": "7.0.0-beta.61",

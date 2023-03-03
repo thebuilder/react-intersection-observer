@@ -67,8 +67,6 @@ importers:
       '@storybook/addon-links': 7.0.0-beta.61
       '@storybook/addons': 7.0.0-beta.61
       '@storybook/builder-vite': 7.0.0-beta.61
-      '@storybook/client-logger': 7.0.0-beta.61
-      '@storybook/preview-api': 7.0.0-beta.61
       '@storybook/react': 7.0.0-beta.61
       '@storybook/react-vite': 7.0.0-beta.61
       '@storybook/theming': 7.0.0-beta.61
@@ -108,8 +106,6 @@ importers:
       '@storybook/addon-links': 7.0.0-beta.61_biqbaboplfbrettd7655fr4n2y
       '@storybook/addons': 7.0.0-beta.61_biqbaboplfbrettd7655fr4n2y
       '@storybook/builder-vite': 7.0.0-beta.61_vwvfc4ezh6jlf6pa67auy3eulu
-      '@storybook/client-logger': 7.0.0-beta.61
-      '@storybook/preview-api': 7.0.0-beta.61
       '@storybook/react': 7.0.0-beta.61_ygqkwb4gg3aean7xjfdauovyqq
       '@storybook/react-vite': 7.0.0-beta.61_ndsstb2ob2rgr4m75wxvpqsrpi
       '@storybook/theming': 7.0.0-beta.61_biqbaboplfbrettd7655fr4n2y

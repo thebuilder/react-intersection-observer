@@ -32,11 +32,13 @@
     "build:utils": "tsc -p tsconfig.test.json",
     "build:copy": "node scripts/build-copy.js",
     "postbuild": "size-limit",
-    "dev": "pnpm --filter storybook dev",
+    "dev": "run-p dev:*",
+    "dev:package": "microbundle --jsx React.createElement -f cjs,es,modern --no-compress --watch",
+    "dev:storybook": "pnpm --filter storybook dev",
     "lint": "eslint . --ext js,ts,tsx",
     "release": "np --contents dist",
     "version": "pnpm build",
-    "storybook:build": "pnpm --filter storybook build",
+    "storybook:build": "pnpm build:bundle && pnpm --filter storybook build",
     "test": "vitest"
   },
   "keywords": [
