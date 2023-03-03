@@ -53,6 +53,7 @@ export const argTypes: ArgTypes<IntersectionOptions> = {
   },
   onChange: {
     table: { disable: true },
+    action: 'InView',
   },
 };
 

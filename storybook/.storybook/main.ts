@@ -6,12 +6,7 @@ const config: StorybookConfig = {
     '../stories/**/*.mdx',
     '../stories/**/*.@(story|stories).@(ts|tsx)',
   ],
-  addons: [
-    {
-      name: '@storybook/addon-essentials',
-    },
-    'storybook-dark-mode',
-  ],
+  addons: ['@storybook/addon-essentials'],
   core: {
     builder: '@storybook/builder-vite',
   },
