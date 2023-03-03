@@ -1,5 +1,5 @@
-import { Meta, Story } from '@storybook/react';
-import { IntersectionOptions, InView, useInView } from '../index';
+import { Meta, StoryFn } from '@storybook/react';
+import { IntersectionOptions, InView, useInView } from '../../src';
 import { motion } from 'framer-motion';
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import {
@@ -89,7 +89,7 @@ const story: Meta = {
 
 export default story;
 
-const Template: Story<Props> = ({
+const Template: StoryFn<Props> = ({
   style,
   className,
   lazy,
@@ -196,7 +196,7 @@ Skip.args = {
   skip: true,
 };
 
-const VisibilityTemplate: Story<IntersectionOptions> = (args) => {
+const VisibilityTemplate: StoryFn<IntersectionOptions> = (args) => {
   const { options, error } = useValidateOptions(args);
   const ref = useRef<HTMLDivElement>(null);
   const { entry, inView, ref: inViewRef } = useInView(options);

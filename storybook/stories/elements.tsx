@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
-import type { IntersectionOptions } from '../index';
+import type { IntersectionOptions } from '../../src';
 
 type ScrollProps = {
   children: React.ReactNode;
@@ -86,7 +86,7 @@ export const InViewBlock = React.forwardRef<
 
 export function InViewIcon({ inView }: { inView: boolean }) {
   return (
-    <AnimatePresence exitBeforeEnter>
+    <AnimatePresence mode="wait">
       <motion.div
         key={inView ? 'inview' : 'outside'}
         initial={{ opacity: 0, scale: 0.8 }}
@@ -244,7 +244,7 @@ export function EntryDetails({ options }: { options?: IntersectionOptions }) {
   if (value === '{}') return null;
 
   return (
-    <pre className="mt-8 w-full overflow-x-scroll bg-gray-900 bg-opacity-50 p-2 text-purple-100">
+    <pre className="mt-8 w-full overflow-x-auto bg-gray-900 bg-opacity-50 p-2 text-purple-100">
       <code>{value}</code>
     </pre>
   );

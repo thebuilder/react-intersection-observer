@@ -17,15 +17,13 @@ npm-debug.log
 .tmp
 .eslintignore
 .flowconfig
-.travis.yml
-.babelrc
 .editorconfig
-.storybook
-yarn.lock
+storybook/.storybook
+pnpm-lock.yaml
 
 # Project files
 coverage
-stories
+storybook/stories
 tests
 example
 jest-setup.js
