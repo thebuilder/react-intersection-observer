@@ -1,5 +1,9 @@
-import { Meta, StoryFn } from '@storybook/react';
-import { IntersectionOptions, InView, useInView } from '../../src';
+import { Meta, StoryObj } from '@storybook/react';
+import {
+  IntersectionOptions,
+  InView,
+  useInView,
+} from 'react-intersection-observer';
 import { motion } from 'framer-motion';
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import {
@@ -12,16 +16,7 @@ import {
   RootMargin,
   ErrorMessage,
 } from './elements';
-import {
-  ArgsTable,
-  Description,
-  Primary,
-  PRIMARY_STORY,
-  Stories,
-  Subtitle,
-  Title,
-} from '@storybook/addon-docs';
-import { useValidateOptions } from './story-utils';
+import { argTypes, useValidateOptions } from './story-utils';
 
 type Props = IntersectionOptions & {
   style?: CSSProperties;
@@ -30,75 +25,30 @@ type Props = IntersectionOptions & {
   inlineRef?: boolean;
 };
 
-const story: Meta = {
+type Story = StoryObj<Props>;
+
+export default {
   title: 'useInView Hook',
   component: InView,
   parameters: {
-    docs: {
-      page: () => (
-        <>
-          <Title />
-          <Subtitle />
-          <Description />
-          <Primary />
-          <ArgsTable
-            story={PRIMARY_STORY}
-            exclude={['children', 'as', 'onChange']}
-          />
-          <Stories />
-        </>
-      ),
+    controls: {
+      expanded: true,
     },
   },
   argTypes: {
-    rootMargin: { control: { type: 'text' } },
-    threshold: {
-      control: {
-        type: 'range',
-        min: 0,
-        max: 1,
-        step: 0.05,
-      },
-    },
-    root: {
-      table: {
-        disable: true,
-      },
-    },
-    children: {
-      table: {
-        disable: true,
-      },
-    },
-    as: {
-      table: {
-        disable: true,
-      },
-    },
-    onChange: {
-      table: {
-        disable: true,
-      },
-      action: 'InView',
-    },
+    ...argTypes,
+    style: { table: { disable: true } },
+    className: { table: { disable: true } },
+    lazy: { table: { disable: true } },
+    inlineRef: { table: { disable: true } },
   },
   args: {
     threshold: 0,
   },
-};
+  render: HooksRender,
+} satisfies Meta<Props>;
 
-export default story;
-
-const Template: StoryFn<Props> = ({
-  style,
-  className,
-  lazy,
-  inlineRef,
-  ...rest
-}) => {
-  // const onChange: IntersectionOptions['onChange'] = (inView, entry) => {
-  //   action('InView')(inView, entry);
-  // }
+function HooksRender({ style, className, lazy, inlineRef, ...rest }: Props) {
   const { options, error } = useValidateOptions(rest);
   const { ref, inView } = useInView(!error ? { ...options } : {});
   const [isLoading, setIsLoading] = useState(lazy);
@@ -130,74 +80,88 @@ const Template: StoryFn<Props> = ({
       <RootMargin rootMargin={options.rootMargin} />
     </ScrollWrapper>
   );
+}
+
+export const Basic: Story = {
+  args: {},
 };
 
-export const Basic = Template.bind({});
-Basic.args = {};
-
-export const LazyHookRendering = Template.bind({});
-LazyHookRendering.args = {
-  lazy: true,
+export const LazyHookRendering: Story = {
+  args: { lazy: true },
 };
 
-export const InlineRef = Template.bind({});
-InlineRef.args = {
-  inlineRef: true,
-};
-
-export const StartInView = Template.bind({});
-StartInView.args = {
-  initialInView: true,
-};
-
-export const WithRootMargin = Template.bind({});
-WithRootMargin.args = {
-  rootMargin: '25px 0px',
-};
-
-export const TallerThanViewport = Template.bind({});
-TallerThanViewport.args = {
-  style: { minHeight: '150vh' },
-};
-
-export const WithThreshold100percentage = Template.bind({});
-WithThreshold100percentage.args = {
-  threshold: 1,
-};
-
-export const WithThreshold50percentage = Template.bind({});
-WithThreshold50percentage.args = {
-  threshold: 0.5,
-};
-
-export const TallerThanViewportWithThreshold100percentage = Template.bind({});
-TallerThanViewportWithThreshold100percentage.args = {
-  threshold: 1,
-  style: { minHeight: '150vh' },
-};
-
-export const MultipleThresholds = Template.bind({});
-MultipleThresholds.args = {
-  threshold: [0, 0.2, 0.4, 0.6, 0.8, 1],
-};
-MultipleThresholds.argTypes = {
-  threshold: {
-    control: { type: 'array' },
+export const InlineRef: Story = {
+  args: {
+    inlineRef: true,
   },
 };
 
-export const TriggerOnce = Template.bind({});
-TriggerOnce.args = {
-  triggerOnce: true,
+export const StartInView: Story = {
+  args: {
+    initialInView: true,
+  },
 };
 
-export const Skip = Template.bind({});
-Skip.args = {
-  skip: true,
+export const WithRootMargin: Story = {
+  args: {
+    initialInView: true,
+    rootMargin: '25px 0px',
+  },
 };
 
-const VisibilityTemplate: StoryFn<IntersectionOptions> = (args) => {
-  const { options, error } = useValidateOptions(args);
+export const TallerThanViewport: Story = {
+  args: {
+    style: { minHeight: '150vh' },
+  },
+};
+
+export const WithThreshold100percentage: Story = {
+  args: {
+    initialInView: true,
+    threshold: 1,
+  },
+};
+
+export const WithThreshold50percentage: Story = {
+  args: {
+    initialInView: true,
+    threshold: 0.5,
+  },
+};
+
+export const TallerThanViewportWithThreshold100percentage: Story = {
+  args: {
+    threshold: 1,
+    style: { minHeight: '150vh' },
+  },
+};
+
+export const MultipleThresholds: Story = {
+  args: {
+    threshold: [0, 0.2, 0.4, 0.6, 0.8, 1],
+  },
+  argTypes: {
+    threshold: {
+      control: { type: 'array' },
+    },
+  },
+};
+
+export const TriggerOnce: Story = {
+  args: {
+    triggerOnce: true,
+  },
+};
+
+export const Skip: Story = {
+  args: {
+    initialInView: true,
+    skip: true,
+  },
+};
+
+const VisibilityTemplate = (props: Props) => {
+  const { options, error } = useValidateOptions(props);
   const ref = useRef<HTMLDivElement>(null);
   const { entry, inView, ref: inViewRef } = useInView(options);
 
@@ -232,8 +196,10 @@ const VisibilityTemplate: StoryFn<IntersectionOptions> = (args) => {
   );
 };
 
-export const TrackVisibility = VisibilityTemplate.bind({});
-TrackVisibility.args = {
-  trackVisibility: true,
-  delay: 100,
+export const TrackVisibility: Story = {
+  render: VisibilityTemplate,
+  args: {
+    trackVisibility: true,
+    delay: 100,
+  },
 };

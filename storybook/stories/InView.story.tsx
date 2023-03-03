@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { CSSProperties } from 'react';
 import { action } from '@storybook/addon-actions';
-import { Meta, Story } from '@storybook/react';
-import { IntersectionOptions, InView } from '../../src';
+import { Meta, StoryObj } from '@storybook/react';
+import { IntersectionOptions, InView } from 'react-intersection-observer';
 import {
   EntryDetails,
   InViewBlock,
@@ -14,42 +14,27 @@ import {
   ErrorMessage,
   RootMargin,
 } from './elements';
-import { useValidateOptions } from './story-utils';
+import { argTypes, useValidateOptions } from './story-utils';
 
 type Props = IntersectionOptions & {
   style?: CSSProperties;
   className?: string;
 };
 
-const story: Meta = {
+type Story = StoryObj<Props>;
+
+export default {
   title: 'InView Component',
   component: InView,
   argTypes: {
-    rootMargin: { control: { type: 'text' } },
-    threshold: {
-      control: {
-        type: 'range',
-        min: 0,
-        max: 1,
-        step: 0.05,
-      },
-    },
-    root: {
-      table: {
-        disable: true,
-      },
-    },
-    children: {
-      table: {
-        disable: true,
-      },
-    },
+    ...argTypes,
+    style: { table: { disable: true } },
+    className: { table: { disable: true } },
   },
-};
+  render: InViewRender,
+} satisfies Meta<Props>;
 
-export default story;
-
-const Template: Story<Props> = ({ style, className, ...rest }) => {
+function InViewRender({ style, className, ...rest }: Props) {
   const { options, error } = useValidateOptions(rest);
   if (error) return <ErrorMessage>{error}</ErrorMessage>;
 
@@ -70,92 +55,105 @@ const Template: Story<Props> = ({ style, className, ...rest }) => {
       </InView>
     </ScrollWrapper>
   );
-};
+}
 
-const RootTemplate: Story<Props> = (props) => {
-  return (
-    <RootComponent>
-      {(node) => <Template {...props} root={node} />}
-    </RootComponent>
-  );
-};
-
-export const Basic = Template.bind({});
-Basic.args = {
-  threshold: 0,
-};
-
-export const WithRootMargin = Template.bind({});
-WithRootMargin.args = {
-  rootMargin: '25px 0px',
-  threshold: 0,
-};
-
-export const StartInView = Template.bind({});
-StartInView.args = {
-  threshold: 0,
-  initialInView: true,
-};
-
-export const TallerThanViewport = Template.bind({});
-TallerThanViewport.args = {
-  threshold: 0,
-  style: { minHeight: '150vh' },
-};
-
-export const WithThreshold100percentage = Template.bind({});
-WithThreshold100percentage.args = {
-  threshold: 1,
-};
-
-export const WithThreshold50percentage = Template.bind({});
-WithThreshold50percentage.args = {
-  threshold: 0.5,
-};
-
-export const TallerThanViewportWithThreshold100percentage = Template.bind({});
-TallerThanViewportWithThreshold100percentage.args = {
-  threshold: 1,
-  style: { minHeight: '150vh' },
-};
-
-export const MultipleThresholds = Template.bind({});
-MultipleThresholds.args = {
-  threshold: [0, 0.25, 0.5, 0.75, 1],
-};
-MultipleThresholds.argTypes = {
-  threshold: {
-    control: { type: 'array' },
+export const Basic: Story = {
+  args: {
+    threshold: 0,
   },
 };
 
-export const TriggerOnce = Template.bind({});
-TriggerOnce.args = {
-  threshold: 0,
-  triggerOnce: true,
+export const WithRootMarginexport: Story = {
+  args: {
+    rootMargin: '25px 0px',
+    threshold: 0,
+  },
 };
 
-export const Skip = Template.bind({});
-Skip.args = {
-  threshold: 1,
-  skip: true,
+export const StartInView: Story = {
+  args: {
+    threshold: 0,
+    initialInView: true,
+  },
 };
 
-export const WithRoot = RootTemplate.bind({});
-WithRoot.args = {
-  threshold: 0,
+export const TallerThanViewport: Story = {
+  args: {
+    threshold: 0,
+    style: { minHeight: '150vh' },
+  },
 };
 
-export const WithRootAndRootMargin = RootTemplate.bind({});
-WithRootAndRootMargin.args = {
-  rootMargin: '25px 0px',
-  threshold: 0,
+export const WithThreshold100percentage: Story = {
+  args: {
+    threshold: 1,
+  },
+};
+
+export const WithThreshold50percentage: Story = {
+  args: {
+    threshold: 0.5,
+  },
+};
+
+export const TallerThanViewportWithThreshold100percentage: Story = {
+  args: {
+    threshold: 1,
+    style: { minHeight: '150vh' },
+  },
+};
+
+export const MultipleThresholds: Story = {
+  args: {
+    threshold: [0, 0.25, 0.5, 0.75, 1],
+  },
+  argTypes: {
+    threshold: {
+      control: { type: 'array' },
+    },
+  },
+};
+
+export const TriggerOnce: Story = {
+  args: {
+    threshold: 0,
+    triggerOnce: true,
+  },
+};
+
+export const Skip: Story = {
+  args: {
+    threshold: 1,
+    skip: true,
+  },
+};
+
+export const WithRoot: Story = {
+  args: {
+    threshold: 0,
+  },
+  render: (props) => (
+    <RootComponent>
+      {(node) => <InViewRender {...props} root={node} />}
+    </RootComponent>
+  ),
+};
+export const WithRootAndRootMargin: Story = {
+  args: {
+    rootMargin: '25px 0px',
+    threshold: 0,
+  },
+  render: (props) => (
+    <RootComponent>
+      {(node) => <InViewRender {...props} root={node} />}
+    </RootComponent>
+  ),
 };
 
 export const multipleObservers = () => (
   <ScrollWrapper>
     <InView threshold={0.25}>
-      {({ ref, inView, entry }) => (
+      {({ ref, inView }) => (
         <>
           <InViewBlock ref={ref} inView={inView}>
             <InViewIcon inView={inView} />
@@ -164,7 +162,7 @@ export const multipleObservers = () => (
       )}
     </InView>
     <InView threshold={0.25}>
-      {({ ref, inView, entry }) => (
+      {({ ref, inView }) => (
         <>
           <InViewBlock ref={ref} inView={inView}>
             <InViewIcon inView={inView} />
@@ -173,7 +171,7 @@ export const multipleObservers = () => (
       )}
     </InView>
     <InView threshold={0.25}>
-      {({ ref, inView, entry }) => (
+      {({ ref, inView }) => (
         <>
           <InViewBlock ref={ref} inView={inView}>
             <InViewIcon inView={inView} />

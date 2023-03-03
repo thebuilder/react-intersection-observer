@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from 'framer-motion';
 import React, { useEffect, useRef, useState } from 'react';
-import type { IntersectionOptions } from '../../src';
+import type { IntersectionOptions } from 'react-intersection-observer';
 
 type ScrollProps = {
   children: React.ReactNode;
@@ -130,7 +130,7 @@ export function Status({ inView }: { inView: boolean }) {
   return (
     <div
       className={[
-        'sbdocs-hidden group fixed right-0 top-0 z-10 m-1 flex items-center justify-center rounded-lg bg-white p-1 shadow-md',
+        'sbdocs-hidden group fixed right-0 top-0 z-10 m-1 flex items-center justify-center rounded-lg p-1 shadow-md',
         inView ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900',
       ].join(' ')}
     >

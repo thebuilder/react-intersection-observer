@@ -9,9 +9,6 @@ const config: StorybookConfig = {
   addons: [
     {
       name: '@storybook/addon-essentials',
-      options: {
-        backgrounds: false,
-      },
     },
     'storybook-dark-mode',
   ],
