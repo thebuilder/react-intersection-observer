@@ -9,16 +9,20 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - name: Install PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 7
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
+          cache: 'pnpm'
       - name: Install dependencies
-        run: yarn --frozen-lockfile
+        run: pnpm install
       - name: Build
-        run: yarn build
+        run: pnpm build
       - name: Release
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}

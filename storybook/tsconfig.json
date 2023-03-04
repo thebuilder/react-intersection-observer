@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "ESNext",
+    "lib": ["es6", "es7", "esnext", "dom"],
+    "jsx": "react",
+    "moduleResolution": "node",
+    "noImplicitReturns": true,
+    "strict": true,
+    "strictFunctionTypes": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "noUnusedLocals": true,
+    "pretty": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "skipLibCheck": true,
+    "listEmittedFiles": true,
+    "noEmit": true
+  },
+  "exclude": ["storybook-static"]
+}

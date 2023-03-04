@@ -15,7 +15,10 @@ if (typeof beforeEach !== 'undefined' && typeof afterEach !== 'undefined') {
   beforeEach(() => {
     // Use the exposed mock function. Currently, only supports Jest (`jest.fn`) and Vitest with globals (`vi.fn`).
     if (typeof jest !== 'undefined') setupIntersectionMocking(jest.fn);
-    else if (typeof vi !== 'undefined') setupIntersectionMocking(vi.fn);
+    else if (typeof vi !== 'undefined') {
+      // Cast the `vi.fn` to `jest.fn` - The returned `Mock` type has a different signature than `jest.fn`
+      setupIntersectionMocking(vi.fn as unknown as typeof jest.fn);
+    }
   });
 
   afterEach(() => {

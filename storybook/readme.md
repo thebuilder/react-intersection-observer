@@ -1,7 +1,3 @@
-import { Meta, Canvas, Story } from '@storybook/addon-docs';
-
-<Meta title="Introduction" />
-
 # react-intersection-observer
 
 React implementation of the

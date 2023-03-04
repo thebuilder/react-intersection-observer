@@ -1,6 +1,5 @@
 .vscode
 .cache
-.docz
 node_modules
 reports
 example
@@ -11,10 +10,10 @@ nuget
 npm-debug.log*
 .DS_store
 .eslintcache
-.stylelintcache
 .idea
 .tern
 .tmp
 *.log
+storybook-static
 test-utils.js
 test-utils.d.ts

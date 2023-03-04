@@ -25,6 +25,22 @@
     "url": "https://github.com/thebuilder/react-intersection-observer.git"
   },
   "license": "MIT",
+  "scripts": {
+    "prebuild": "rm -rf dist lib",
+    "build": "run-s build:*",
+    "build:bundle": "microbundle --name ReactIntersectionObserver --jsx React.createElement -f cjs,umd,es,modern --no-compress",
+    "build:utils": "tsc -p tsconfig.test.json",
+    "build:copy": "node scripts/build-copy.js",
+    "postbuild": "size-limit",
+    "dev": "run-p dev:*",
+    "dev:package": "microbundle --jsx React.createElement -f cjs,es,modern --no-compress --watch",
+    "dev:storybook": "pnpm --filter storybook dev",
+    "lint": "eslint . --ext js,ts,tsx",
+    "release": "np --contents dist",
+    "version": "pnpm build",
+    "storybook:build": "pnpm build:bundle && pnpm --filter storybook build",
+    "test": "vitest"
+  },
   "keywords": [
     "react",
     "component",
@@ -50,22 +66,6 @@
     "example/**",
     "webpack.config.js"
   ],
-  "scripts": {
-    "prebuild": "rm -rf dist lib",
-    "build": "run-s build:*",
-    "build:bundle": "microbundle --name ReactIntersectionObserver --jsx React.createElement -f cjs,umd,es,modern --no-compress",
-    "build:utils": "tsc -p tsconfig.test.json",
-    "build:copy": "node scripts/build-copy.js",
-    "postbuild": "size-limit",
-    "dev": "yarn run storybook",
-    "lint": "eslint . --ext js,ts,tsx",
-    "release": "np --contents dist",
-    "version": "yarn build",
-    "pretty": "prettier '**/*.{js,ts,tsx,md,json,yml,html}' --write",
-    "storybook": "start-storybook -p 9000",
-    "storybook:build": "build-storybook --output-dir example",
-    "test": "vitest"
-  },
   "release": {
     "branches": [
       "main",
@@ -122,47 +122,44 @@
     "react": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.18.9",
-    "@babel/preset-env": "^7.18.9",
-    "@size-limit/preset-small-lib": "^7.0.8",
-    "@storybook/addon-actions": "6.5.9",
-    "@storybook/addon-controls": "6.5.9",
-    "@storybook/addon-docs": "6.5.9",
-    "@storybook/addon-viewport": "6.5.9",
-    "@storybook/addons": "6.5.9",
-    "@storybook/builder-vite": "^0.2.0",
-    "@storybook/react": "6.5.9",
-    "@storybook/theming": "6.5.9",
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
-    "@types/jest": "^27.5.1",
-    "@types/react": "^18.0.15",
-    "@types/react-dom": "^18.0.6",
-    "@typescript-eslint/eslint-plugin": "^5.30.7",
-    "@typescript-eslint/parser": "^5.30.7",
-    "autoprefixer": "^10.4.7",
-    "eslint": "^8.20.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsx-a11y": "^6.6.1",
-    "eslint-plugin-react": "^7.30.1",
+    "@size-limit/preset-small-lib": "^8.2.4",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^14.0.0",
+    "@types/jest": "^29.4.0",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.54.0",
+    "@typescript-eslint/parser": "^5.54.0",
+    "eslint": "^8.35.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsx-a11y": "^6.7.1",
+    "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "framer-motion": "^6.5.1",
-    "intersection-observer": "^0.12.2",
-    "jsdom": "^20.0.0",
-    "lint-staged": "^13.0.3",
-    "microbundle": "^0.15.0",
+    "jsdom": "^21.1.0",
+    "lint-staged": "^13.1.2",
+    "microbundle": "^0.15.1",
     "npm-run-all": "^4.1.5",
-    "postcss": "^8.4.14",
-    "prettier": "^2.7.1",
-    "prettier-plugin-pkg": "^0.16.0",
-    "prettier-plugin-tailwindcss": "^0.1.12",
+    "prettier": "^2.8.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "simple-git-hooks": "^2.8.0",
-    "size-limit": "^7.0.8",
-    "tailwindcss": "^3.1.6",
-    "typescript": "^4.7.4",
-    "vite": "^3.0.2",
-    "vitest": "^0.18.1"
+    "simple-git-hooks": "^2.8.1",
+    "size-limit": "^8.2.4",
+    "typescript": "^4.9.5",
+    "vitest": "^0.29.2"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "react": "18"
+      }
+    },
+    "allowedDeprecatedVersions": {
+      "rollup-plugin-terser": "*",
+      "sourcemap-codec": "*",
+      "source-map-resolve": "*",
+      "source-map-url": "*",
+      "stable": "*",
+      "urix": "*"
+    }
   }
 }
