@@ -353,7 +353,7 @@ import {
 const HookComponent = ({ options }) => {
   const { ref, inView } = useInView(options);
   return (
-    <div ref={ref} id="wrapper">
+    <div ref={ref} data-testid="wrapper">
       {inView.toString()}
     </div>
   );
