@@ -14,7 +14,7 @@ workspaces:
 ## Development
 
 Start by forking the repository, and after cloning it locally you can install
-the dependencies using PNPM:
+the dependencies using [PNPM](https://pnpm.io/):
 
 ```shell
 pnpm install
@@ -78,3 +78,9 @@ submitting your pull request.
 `react-intersection-observer` uses [Vitest](https://vitest.dev/) for testing.
 Please ensure that your changes are covered by tests, and that all tests pass
 before submitting your pull request.
+
+You can run the tests with the `test` task:
+
+```shell
+pnpm test
+```
