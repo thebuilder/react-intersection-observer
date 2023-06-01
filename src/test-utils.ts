@@ -29,18 +29,19 @@ if (typeof beforeEach !== 'undefined' && typeof afterEach !== 'undefined') {
 function warnOnMissingSetup() {
   if (isMocking) return;
   console.error(
-    'React Intersection Observer was not configured to handle mocking.\n' +
-      'Outside Jest, you might need to manually configure it by calling setupIntersectionMocking() and resetIntersectionMocking() in your test setup file.',
-    +`\n// test-setup.js
-  import { resetIntersectionMocking, setupIntersectionMocking } from 'react-intersection-observer/test-utils';
-  
-  beforeEach(() => {
-    setupIntersectionMocking(vi.fn);
-  });
+    `React Intersection Observer was not configured to handle mocking.
+Outside Jest and Vitest, you might need to manually configure it by calling setupIntersectionMocking() and resetIntersectionMocking() in your test setup file.
 
-  afterEach(() => {
-    resetIntersectionMocking();
-  });`,
+// test-setup.js
+import { resetIntersectionMocking, setupIntersectionMocking } from 'react-intersection-observer/test-utils';
+
+beforeEach(() => {
+  setupIntersectionMocking(vi.fn);
+});
+
+afterEach(() => {
+  resetIntersectionMocking();
+});`,
   );
 }
 
