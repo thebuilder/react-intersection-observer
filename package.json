@@ -3,9 +3,8 @@
   "version": "8.26.1",
   "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
   "source": "./src/index.tsx",
-  "main": "./dist/react-intersection-observer.js",
-  "module": "./dist/react-intersection-observer.esm.js",
-  "unpkg": "./dist/react-intersection-observer.umd.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
   "exports": {
     "./test-utils": {
@@ -14,8 +13,8 @@
     },
     ".": {
       "types": "./dist/index.d.ts",
-      "require": "./dist/react-intersection-observer.js",
-      "default": "./dist/react-intersection-observer.modern.mjs"
+      "require": "./dist/index.js",
+      "default": "./dist/index.mjs"
     }
   },
   "author": "Daniel Schmidt",
@@ -28,12 +27,12 @@
   "scripts": {
     "prebuild": "rm -rf dist lib",
     "build": "run-s build:*",
-    "build:bundle": "microbundle --name ReactIntersectionObserver --jsx React.createElement -f cjs,umd,es,modern --no-compress",
+    "build:bundle": "tsup src/index.tsx",
     "build:utils": "tsc -p tsconfig.test.json",
     "build:copy": "node scripts/build-copy.js",
     "postbuild": "size-limit",
     "dev": "run-p dev:*",
-    "dev:package": "microbundle --jsx React.createElement -f cjs,es,modern --no-compress --watch",
+    "dev:package": "tsup src/index.tsx --watch",
     "dev:storybook": "pnpm --filter storybook dev",
     "lint": "eslint . --ext js,ts,tsx",
     "release": "np --contents dist",
@@ -100,19 +99,19 @@
   },
   "size-limit": [
     {
-      "path": "dist/react-intersection-observer.esm.js",
+      "path": "dist/index.mjs",
       "name": "InView",
       "import": "{ InView }",
       "limit": "1.8 kB"
     },
     {
-      "path": "dist/react-intersection-observer.esm.js",
+      "path": "dist/index.mjs",
       "name": "useInView",
       "import": "{ useInView }",
       "limit": "1.3 kB"
     },
     {
-      "path": "dist/react-intersection-observer.esm.js",
+      "path": "dist/index.mjs",
       "name": "observe",
       "import": "{ observe }",
       "limit": "1 kB"
@@ -144,6 +143,7 @@
     "react-dom": "^18.2.0",
     "simple-git-hooks": "^2.8.1",
     "size-limit": "^8.2.4",
+    "tsup": "^6.7.0",
     "typescript": "^4.9.5",
     "vitest": "^0.31.3"
   },
