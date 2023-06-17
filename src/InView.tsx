@@ -163,13 +163,13 @@ export class InView extends React.Component<
   };
 
   render() {
-    if (!isPlainChildren(this.props)) {
+    const { children } = this.props;
+    if (typeof children === 'function') {
       const { inView, entry } = this.state;
-      return this.props.children({ inView, entry, ref: this.handleNode });
+      return children({ inView, entry, ref: this.handleNode });
     }
 
     const {
-      children,
       as,
       triggerOnce,
       threshold,
@@ -182,7 +182,7 @@ export class InView extends React.Component<
       initialInView,
       fallbackInView,
       ...props
-    } = this.props;
+    } = this.props as PlainChildrenProps;
 
     return React.createElement(
       as || 'div',

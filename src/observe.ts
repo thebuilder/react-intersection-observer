@@ -44,10 +44,14 @@ function getRootId(root: IntersectionObserverInit['root']) {
 export function optionsToId(options: IntersectionObserverInit) {
   return Object.keys(options)
     .sort()
-    .filter((key) => options[key] !== undefined)
+    .filter(
+      (key) => options[key as keyof IntersectionObserverInit] !== undefined,
+    )
     .map((key) => {
       return `${key}_${
-        key === 'root' ? getRootId(options.root) : options[key]
+        key === 'root'
+          ? getRootId(options.root)
+          : options[key as keyof IntersectionObserverInit]
       }`;
     })
     .toString();

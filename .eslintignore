@@ -1,0 +1,7 @@
+.idea
+node_modules
+
+# production
+/build
+/dist
+/storybook/storybook-static
