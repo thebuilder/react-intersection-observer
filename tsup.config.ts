@@ -8,9 +8,4 @@ export default defineConfig({
   target: 'es2020',
   external: ['react'],
   format: ['esm', 'cjs'],
-  esbuildOptions(options) {
-    options.banner = {
-      js: '"use client"',
-    };
-  },
 });

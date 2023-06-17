@@ -1,3 +1,5 @@
+'use client';
+
 import * as React from 'react';
 export { InView } from './InView';
 export { useInView } from './useInView';
