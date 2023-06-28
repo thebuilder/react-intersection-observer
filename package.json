@@ -28,7 +28,7 @@
     "prebuild": "rm -rf dist lib",
     "build": "run-s build:*",
     "build:bundle": "tsup src/index.tsx",
-    "build:legacy": "tsup src/index.tsx --format esm --legacy-output --no-clean --no-dts --target es2020",
+    "build:legacy": "tsup src/index.tsx --format esm --legacy-output --no-clean --no-dts",
     "build:utils": "tsc -p tsconfig.test.json",
     "build:copy": "node scripts/build-copy.js",
     "postbuild": "size-limit",
