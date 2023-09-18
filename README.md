@@ -254,8 +254,8 @@ In order to write meaningful tests, the `IntersectionObserver` needs to be
 mocked. You can use the included `react-intersection-observer/test-utils` to
 help with this. It mocks the `IntersectionObserver`, and includes a few methods
 to assist with faking the `inView` state. When setting the `isIntersecting`
-value you can pass either a `boolean` value or a threshold between 0 and 1.It
-wil emulate the real IntersectionObserver, allowing you to validate that your
+value you can pass either a `boolean` value or a threshold between 0 and 1. It
+will emulate the real IntersectionObserver, allowing you to validate that your
 components are behaving as expected.
 
 | Method                                        | Description                                                                                                                                                                       |
