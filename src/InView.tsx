@@ -74,6 +74,11 @@ export class InView extends React.Component<
     };
   }
 
+  componentDidMount() {
+    this.unobserve();
+    this.observeNode();
+  }
+
   componentDidUpdate(prevProps: IntersectionObserverProps) {
     // If a IntersectionObserver option changed, reinit the observer
     if (
@@ -91,7 +96,6 @@ export class InView extends React.Component<
 
   componentWillUnmount() {
     this.unobserve();
-    this.node = null;
   }
 
   node: Element | null = null;
