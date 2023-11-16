@@ -12,7 +12,7 @@
       "default": "./dist/test-utils.js"
     },
     ".": {
-      "types": "./dist/index.d.ts",
+      "types": "./dist/index.d.mts",
       "require": "./dist/index.js",
       "default": "./dist/index.mjs"
     }
@@ -144,8 +144,8 @@
     "react-dom": "^18.2.0",
     "simple-git-hooks": "^2.8.1",
     "size-limit": "^8.2.4",
-    "tsup": "^7.0.0",
-    "typescript": "^5.1.3",
+    "tsup": "^7.2.0",
+    "typescript": "^5.2.2",
     "vitest": "^0.32.2"
   },
   "pnpm": {
