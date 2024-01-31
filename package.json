@@ -149,6 +149,11 @@
     "typescript": "^5.2.2",
     "vitest": "^0.32.2"
   },
+  "peerDependenciesMeta": {
+    "react-dom": {
+      "optional": true
+    }
+  },
   "pnpm": {
     "peerDependencyRules": {
       "allowedVersions": {
