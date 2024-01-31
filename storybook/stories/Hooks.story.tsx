@@ -55,7 +55,7 @@ function HooksRender({ style, className, lazy, inlineRef, ...rest }: Props) {
 
   useEffect(() => {
     if (isLoading) setIsLoading(false);
-  }, [isLoading, lazy]);
+  }, [isLoading]);
 
   if (error) {
     return <ErrorMessage>{error}</ErrorMessage>;

@@ -358,7 +358,7 @@ test('should handle fallback if unsupported', () => {
     // @ts-ignore
     console.error.mockRestore();
   }).toThrowErrorMatchingInlineSnapshot(
-    `"IntersectionObserver is not a constructor"`,
+    `[TypeError: IntersectionObserver is not a constructor]`,
   );
 });
 
@@ -380,6 +380,6 @@ test('should handle defaultFallbackInView if unsupported', () => {
     // @ts-ignore
     console.error.mockRestore();
   }).toThrowErrorMatchingInlineSnapshot(
-    `"IntersectionObserver is not a constructor"`,
+    `[TypeError: IntersectionObserver is not a constructor]`,
   );
 });

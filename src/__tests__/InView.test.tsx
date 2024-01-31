@@ -187,7 +187,7 @@ test('should render with fallback', () => {
     // @ts-ignore
     console.error.mockRestore();
   }).toThrowErrorMatchingInlineSnapshot(
-    `"IntersectionObserver is not a constructor"`,
+    `[TypeError: IntersectionObserver is not a constructor]`,
   );
 });
 
@@ -216,6 +216,6 @@ test('should render with global fallback', () => {
     // @ts-ignore
     console.error.mockRestore();
   }).toThrowErrorMatchingInlineSnapshot(
-    `"IntersectionObserver is not a constructor"`,
+    `[TypeError: IntersectionObserver is not a constructor]`,
   );
 });

@@ -10,6 +10,9 @@ const config: StorybookConfig = {
   core: {
     builder: '@storybook/builder-vite',
   },
+  typescript: {
+    reactDocgen: 'react-docgen', // or false if you don't need docgen at all
+  },
   /**
    * In preparation for the vite build plugin, add the needed config here.
    * @param config {import('vite').UserConfig}

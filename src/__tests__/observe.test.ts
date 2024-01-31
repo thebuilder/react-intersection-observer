@@ -15,7 +15,7 @@ test('should be able to use observe', () => {
   expect(() =>
     intersectionMockInstance(element),
   ).toThrowErrorMatchingInlineSnapshot(
-    `"Failed to find IntersectionObserver for element. Is it being observed?"`,
+    `[Error: Failed to find IntersectionObserver for element. Is it being observed?]`,
   );
 });
 

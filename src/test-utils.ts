@@ -120,8 +120,8 @@ function triggerIntersection(
     ratio = trigger ? 1 : 0;
   }
 
-  elements.forEach((element) => {
-    entries.push({
+  for (const element of elements) {
+    entries.push(<IntersectionObserverEntry>{
       boundingClientRect: element.getBoundingClientRect(),
       intersectionRatio: ratio,
       intersectionRect: isIntersecting
@@ -135,7 +135,7 @@ function triggerIntersection(
             width: 0,
             x: 0,
             y: 0,
-            toJSON(): any {},
+            toJSON() {},
           },
       isIntersecting,
       rootBounds:
@@ -145,7 +145,7 @@ function triggerIntersection(
       target: element,
       time: Date.now() - item.created,
     });
-  });
+  }
 
   // Trigger the IntersectionObserver callback with all the entries
   if (act) act(() => item.callback(entries, observer));
@@ -157,7 +157,7 @@ function triggerIntersection(
  */
 export function mockAllIsIntersecting(isIntersecting: boolean | number) {
   warnOnMissingSetup();
-  for (let [observer, item] of observers) {
+  for (const [observer, item] of observers) {
     triggerIntersection(
       Array.from(item.elements),
       isIntersecting,
@@ -201,7 +201,7 @@ export function intersectionMockInstance(
   element: Element,
 ): IntersectionObserver {
   warnOnMissingSetup();
-  for (let [observer, item] of observers) {
+  for (const [observer, item] of observers) {
     if (item.elements.has(element)) {
       return observer;
     }

@@ -177,7 +177,7 @@ export function RootMargin({ rootMargin }: { rootMargin?: string }) {
   // Invert the root margin, so it correctly renders the outline
   const invertedRootMargin = rootMargin
     .split(' ')
-    .map((val) => (val.charAt(0) === '-' ? val.substr(1) : '-' + val))
+    .map((val) => (val.charAt(0) === '-' ? val.substr(1) : `-${val}`))
     .join(' ');
 
   return (

@@ -59,12 +59,13 @@ export function optionsToId(options: IntersectionObserverInit) {
 
 function createObserver(options: IntersectionObserverInit) {
   // Create a unique ID for this observer instance, based on the root, root margin and threshold.
-  let id = optionsToId(options);
+  const id = optionsToId(options);
   let instance = observerMap.get(id);
 
   if (!instance) {
     // Create a map of elements this observer is going to observe. Each element has a list of callbacks that should be triggered, once it comes into view.
     const elements = new Map<Element, Array<ObserverInstanceCallback>>();
+    // biome-ignore lint/style/useConst: It's fine to use let here, as we are going to assign it later
     let thresholds: number[] | readonly number[];
 
     const observer = new IntersectionObserver((entries) => {
@@ -143,7 +144,7 @@ export function observe(
   const { id, observer, elements } = createObserver(options);
 
   // Register the callback listener for this element
-  let callbacks = elements.get(element) || [];
+  const callbacks = elements.get(element) || [];
   if (!elements.has(element)) {
     elements.set(element, callbacks);
   }

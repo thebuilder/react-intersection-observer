@@ -16,6 +16,7 @@ npm-debug.log
 .project
 .tmp
 .eslintignore
+biome.json
 .flowconfig
 .editorconfig
 storybook/.storybook

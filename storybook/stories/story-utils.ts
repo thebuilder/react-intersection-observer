@@ -67,8 +67,8 @@ export function getRoot(options: IntersectionOptions) {
 export function useValidateOptions(options: IntersectionOptions) {
   const finalOptions = { root: getRoot(options), ...options };
   // @ts-ignore
-  delete finalOptions.as;
-  if (!finalOptions.root) delete finalOptions.root;
+  finalOptions.as = undefined;
+  if (!finalOptions.root) finalOptions.root = undefined;
 
   let error = undefined;
   try {

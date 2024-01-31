@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig",
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ES2020",
     "target": "es6",
     "declaration": true,
     "emitDeclarationOnly": false,
