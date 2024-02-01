@@ -1,4 +1,4 @@
-import { ArgTypes } from "@storybook/types";
+import { ArgTypes } from "@storybook/react";
 import type { IntersectionOptions } from "react-intersection-observer";
 
 export const argTypes: ArgTypes<IntersectionOptions> = {
