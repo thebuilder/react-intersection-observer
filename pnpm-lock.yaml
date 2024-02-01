@@ -87,11 +87,8 @@ importers:
       '@mdx-js/react':
         specifier: ^3.0.0
         version: 3.0.0(@types/react@18.2.51)(react@18.2.0)
-      '@storybook/addon-a11y':
-        specifier: 7.6.12
-        version: 7.6.12
       '@storybook/addon-actions':
-        specifier: 7.6.12
+        specifier: ^7.6.12
         version: 7.6.12
       '@storybook/addon-docs':
         specifier: 7.6.12
@@ -99,12 +96,6 @@ importers:
       '@storybook/addon-essentials':
         specifier: 7.6.12
         version: 7.6.12(@types/react-dom@18.2.18)(@types/react@18.2.51)(react-dom@18.2.0)(react@18.2.0)
-      '@storybook/addon-interactions':
-        specifier: 7.6.12
-        version: 7.6.12
-      '@storybook/addon-links':
-        specifier: 7.6.12
-        version: 7.6.12(react@18.2.0)
       '@storybook/addons':
         specifier: 7.6.12
         version: 7.6.12(react-dom@18.2.0)(react@18.2.0)
@@ -120,9 +111,6 @@ importers:
       '@storybook/theming':
         specifier: 7.6.12
         version: 7.6.12(react-dom@18.2.0)(react@18.2.0)
-      '@storybook/types':
-        specifier: 7.6.12
-        version: 7.6.12
       '@types/react':
         specifier: ^18.2.51
         version: 18.2.51
@@ -3434,17 +3422,6 @@ packages:
       - supports-color
     dev: true
 
-  /@jest/types@27.5.1:
-    resolution: {integrity: sha512-Cx46iJ9QpwQTjIdq5VJu2QTMMs3QlEjI0x1QbBP5W1+nMzyc2XmimiRR/CbX9TO0cPTeUlxWMOu8mslYsJ8DEw==}
-    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
-    dependencies:
-      '@types/istanbul-lib-coverage': 2.0.6
-      '@types/istanbul-reports': 3.0.4
-      '@types/node': 20.11.14
-      '@types/yargs': 16.0.9
-      chalk: 4.1.2
-    dev: true
-
   /@jest/types@29.6.3:
     resolution: {integrity: sha512-u3UPsIilWKOM3F9CXtrG8LEJmNxwoCQC/XVj4IKYXvvpx7QIi/Kg1LI5uDmDpKlac62NUtX7eLjRh+jVZcLOzw==}
     engines: {node: ^14.15.0 || ^16.10.0 || >=18.0.0}
@@ -4375,13 +4352,6 @@ packages:
       size-limit: 11.0.2
     dev: true
 
-  /@storybook/addon-a11y@7.6.12:
-    resolution: {integrity: sha512-Y4vGTI7VslAt/PSpZZsFieceOkXHLagTsz9Zba4s1cw7Dd8KFB1+NcjkMmo6BhGq7K17JQljosXSbGhOoqrMVg==}
-    dependencies:
-      '@storybook/addon-highlight': 7.6.12
-      axe-core: 4.8.3
-    dev: true
-
   /@storybook/addon-actions@7.6.12:
     resolution: {integrity: sha512-vK/H6K+AJ4ZSsCu/+MapYYI/xrynB6JoCOejt//flTigZOhwTWv7WXbmEeqGIIToXy0LA2IUZ1/kCjFXR0lEdQ==}
     dependencies:
@@ -4483,30 +4453,6 @@ packages:
     resolution: {integrity: sha512-rWNEyBhwncXEDd9z7l67BLBIPqn0SRI/CJpZvCSF5KLWrVaoSEDF8INavmbikd1JBMcajJ28Ur6NsGj+eJjJiw==}
     dependencies:
       '@storybook/global': 5.0.0
-    dev: true
-
-  /@storybook/addon-interactions@7.6.12:
-    resolution: {integrity: sha512-D8NX2xu9WiqPInoN842DU+KAFVC8HscGczqkDGEiWCAqq0DfXtW/0ClMSaE6d2+twhGv6uiPfeJ2IdynSZolXg==}
-    dependencies:
-      '@storybook/global': 5.0.0
-      '@storybook/types': 7.6.12
-      jest-mock: 27.5.1
-      polished: 4.2.2
-      ts-dedent: 2.2.0
-    dev: true
-
-  /@storybook/addon-links@7.6.12(react@18.2.0):
-    resolution: {integrity: sha512-rGwPYpZAANPrf2GaNi5t9zAjLF8PgzKizyBPltIXUtplxDg88ziXlDA1dhsuGDs4Kf0oXECyAHPw79JjkJQziA==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || 18
-    peerDependenciesMeta:
-      react:
-        optional: true
-    dependencies:
-      '@storybook/csf': 0.1.2
-      '@storybook/global': 5.0.0
-      react: 18.2.0
-      ts-dedent: 2.2.0
     dev: true
 
   /@storybook/addon-measure@7.6.12:
@@ -5459,12 +5405,6 @@ packages:
     resolution: {integrity: sha512-I4q9QU9MQv4oEOz4tAHJtNz1cwuLxn2F3xcc2iV5WdqLPpUnj30aUuxt1mAxYTG+oe8CZMV/+6rU4S4gRDzqtQ==}
     dev: true
 
-  /@types/yargs@16.0.9:
-    resolution: {integrity: sha512-tHhzvkFXZQeTECenFoRljLBYPZJ7jAVxqqtEI0qTLOmuultnFp4I9yKE17vTuhf7BkhCu7I4XuemPgikDVuYqA==}
-    dependencies:
-      '@types/yargs-parser': 21.0.3
-    dev: true
-
   /@types/yargs@17.0.32:
     resolution: {integrity: sha512-xQ67Yc/laOG5uMfX/093MRlGGCIBzZMarVa+gfNKJxWAIgykYpVGkBdbqEzGDDfCrVUj6Hiff4mTZ5BA6TmAog==}
     dependencies:
@@ -5826,11 +5766,6 @@ packages:
   /available-typed-arrays@1.0.6:
     resolution: {integrity: sha512-j1QzY8iPNPG4o4xmO3ptzpRxTciqD3MgEHtifP/YnJpIo58Xu+ne4BejlbkuaLfXn/nz6HFiw29bLpj2PNMdGg==}
     engines: {node: '>= 0.4'}
-    dev: true
-
-  /axe-core@4.8.3:
-    resolution: {integrity: sha512-d5ZQHPSPkF9Tw+yfyDcRoUOc4g/8UloJJe5J8m4L5+c7AtDdjDLRxew/knnI4CxvtdxEUVgWz4x3OIQUIFiMfw==}
-    engines: {node: '>=4'}
     dev: true
 
   /babel-core@7.0.0-bridge.0(@babel/core@7.23.9):
@@ -8461,14 +8396,6 @@ packages:
       pretty-format: 29.7.0
       slash: 3.0.0
       stack-utils: 2.0.6
-    dev: true
-
-  /jest-mock@27.5.1:
-    resolution: {integrity: sha512-K4jKbY1d4ENhbrG2zuPWaQBvDly+iZ2yAW+T1fATN78hc0sInwn7wZB8XtlNnvHug5RMwV897Xm4LqmPM4e2Og==}
-    engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
-    dependencies:
-      '@jest/types': 27.5.1
-      '@types/node': 20.11.14
     dev: true
 
   /jest-regex-util@29.6.3:

@@ -24,6 +24,7 @@
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
     "@mdx-js/react": "^3.0.0",
+    "@storybook/addon-actions": "^7.6.12",
     "@storybook/addon-docs": "7.6.12",
     "@storybook/addon-essentials": "7.6.12",
     "@storybook/addons": "7.6.12",
