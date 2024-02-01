@@ -81,12 +81,9 @@ importers:
         specifier: ^3.4.1
         version: 3.4.1
     devDependencies:
-      '@babel/core':
-        specifier: ^7.23.9
-        version: 7.23.9
-      '@babel/preset-env':
-        specifier: ^7.23.9
-        version: 7.23.9(@babel/core@7.23.9)
+      '@biomejs/biome':
+        specifier: ^1.5.3
+        version: 1.5.3
       '@mdx-js/react':
         specifier: ^3.0.0
         version: 3.0.0(@types/react@18.2.51)(react@18.2.0)

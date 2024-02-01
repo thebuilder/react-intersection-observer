@@ -78,7 +78,7 @@
   },
   "lint-staged": {
     "*.{js,json,css,md,ts,tsx}": [
-      "biome check --apply"
+      "biome check --apply --no-errors-on-unmatched --files-ignore-unknown=true"
     ]
   },
   "size-limit": [

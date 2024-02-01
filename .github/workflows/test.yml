@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Lint
-        run: pnpm lint
+        run: pnpm biome ci .
       - name: Test
         run: pnpm test
         env:
