@@ -53,11 +53,6 @@
     "useInView",
     "useIntersectionObserver"
   ],
-  "prettier": {
-    "singleQuote": true,
-    "trailingComma": "all",
-    "proseWrap": "always"
-  },
   "release": {
     "branches": [
       "main",
@@ -83,10 +78,7 @@
   },
   "lint-staged": {
     "*.{js,json,css,md,ts,tsx}": [
-      "prettier --write"
-    ],
-    "src/**/*.{ts,tsx}": [
-      "biome lint --apply"
+      "biome check --apply"
     ]
   },
   "size-limit": [
@@ -116,16 +108,15 @@
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
     "@size-limit/preset-small-lib": "^11.0.2",
-    "@testing-library/jest-dom": "^6.4.0",
-    "@testing-library/react": "^14.2.0",
-    "@types/jest": "^29.5.11",
-    "@types/react": "^18.2.48",
+    "@testing-library/jest-dom": "^6.4.1",
+    "@testing-library/react": "^14.2.1",
+    "@types/jest": "^29.5.12",
+    "@types/react": "^18.2.51",
     "@types/react-dom": "^18.2.18",
     "jsdom": "^24.0.0",
     "lint-staged": "^15.2.1",
     "microbundle": "^0.15.1",
     "npm-run-all": "^4.1.5",
-    "prettier": "^3.2.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "simple-git-hooks": "^2.9.0",
@@ -142,7 +133,8 @@
   "pnpm": {
     "peerDependencyRules": {
       "allowedVersions": {
-        "react": "18"
+        "react": "18",
+        "vite": "5"
       }
     },
     "allowedDeprecatedVersions": {

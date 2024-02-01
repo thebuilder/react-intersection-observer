@@ -1,10 +1,10 @@
-import { AnimatePresence, motion } from 'framer-motion';
-import React, { useEffect, useRef, useState } from 'react';
-import type { IntersectionOptions } from 'react-intersection-observer';
+import { AnimatePresence, motion } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import type { IntersectionOptions } from "react-intersection-observer";
 
 type ScrollProps = {
   children: React.ReactNode;
-  indicators?: 'all' | 'top' | 'bottom' | 'none';
+  indicators?: "all" | "top" | "bottom" | "none";
 };
 
 export function ErrorMessage({ children }: { children?: React.ReactNode }) {
@@ -24,12 +24,12 @@ export function ErrorMessage({ children }: { children?: React.ReactNode }) {
  */
 export function ScrollWrapper({
   children,
-  indicators = 'all',
+  indicators = "all",
   ...props
 }: ScrollProps) {
   return (
     <div className="container mx-auto" {...props}>
-      {indicators === 'top' || indicators === 'all' ? (
+      {indicators === "top" || indicators === "all" ? (
         <section className="sbdocs-hidden flex h-screen flex-col items-center justify-center rounded-lg border-4 border-indigo-300 bg-gradient-to-b from-blue-700 to-blue-500 text-center text-white">
           <h1 className="my-4 text-3xl font-bold">Scroll down</h1>
           <svg
@@ -48,10 +48,10 @@ export function ScrollWrapper({
         </section>
       ) : null}
       <section className="relative">{children}</section>
-      {indicators === 'bottom' || indicators === 'all' ? (
+      {indicators === "bottom" || indicators === "all" ? (
         <section
           className="sbdocs-hidden flex h-screen items-center justify-center rounded-lg border-4 border-indigo-300 bg-gradient-to-t from-blue-700 to-blue-500 text-white"
-          style={{ height: '101vh' }}
+          style={{ height: "101vh" }}
         >
           <svg
             className="h-12 w-12"
@@ -88,14 +88,14 @@ export function InViewIcon({ inView }: { inView: boolean }) {
   return (
     <AnimatePresence mode="wait">
       <motion.div
-        key={inView ? 'inview' : 'outside'}
+        key={inView ? "inview" : "outside"}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0 }}
         className={`h-20 w-20 rounded-full border-4 p-2 ${
           inView
-            ? 'border-green-400 bg-green-600'
-            : 'border-yellow-400 bg-yellow-600'
+            ? "border-green-400 bg-green-600"
+            : "border-yellow-400 bg-yellow-600"
         }`}
       >
         <svg
@@ -130,9 +130,9 @@ export function Status({ inView }: { inView: boolean }) {
   return (
     <div
       className={[
-        'sbdocs-hidden group fixed right-0 top-0 z-10 m-1 flex items-center justify-center rounded-lg p-1 shadow-md',
-        inView ? 'bg-green-300 text-green-900' : 'bg-red-300 text-red-900',
-      ].join(' ')}
+        "sbdocs-hidden group fixed right-0 top-0 z-10 m-1 flex items-center justify-center rounded-lg p-1 shadow-md",
+        inView ? "bg-green-300 text-green-900" : "bg-red-300 text-red-900",
+      ].join(" ")}
     >
       <code className="ml-2 mr-1 hidden font-mono group-hover:block">
         InView: {inView.toString()}
@@ -176,9 +176,9 @@ export function RootMargin({ rootMargin }: { rootMargin?: string }) {
   if (!rootMargin) return null;
   // Invert the root margin, so it correctly renders the outline
   const invertedRootMargin = rootMargin
-    .split(' ')
-    .map((val) => (val.charAt(0) === '-' ? val.substr(1) : `-${val}`))
-    .join(' ');
+    .split(" ")
+    .map((val) => (val.charAt(0) === "-" ? val.substr(1) : `-${val}`))
+    .join(" ");
 
   return (
     <div
@@ -237,11 +237,11 @@ export function ThresholdMarker({
 export function EntryDetails({ options }: { options?: IntersectionOptions }) {
   if (!options || !Object.keys(options).length) return null;
   const value = JSON.stringify(
-    { ...options, root: options.root ? 'Element' : undefined },
+    { ...options, root: options.root ? "Element" : undefined },
     null,
     2,
   );
-  if (value === '{}') return null;
+  if (value === "{}") return null;
 
   return (
     <pre className="mt-8 w-full overflow-x-auto bg-gray-900 bg-opacity-50 p-2 text-purple-100">

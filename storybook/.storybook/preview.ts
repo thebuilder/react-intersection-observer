@@ -1,6 +1,6 @@
-import 'intersection-observer';
-import 'tailwindcss/tailwind.css';
-import { themes } from '@storybook/theming';
+import { themes } from "@storybook/theming";
+import "intersection-observer";
+import "tailwindcss/tailwind.css";
 
 export const parameters = {
   controls: {

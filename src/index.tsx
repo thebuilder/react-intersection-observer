@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import * as React from 'react';
-export { InView } from './InView';
-export { useInView } from './useInView';
-export { observe, defaultFallbackInView } from './observe';
+import * as React from "react";
+export { InView } from "./InView";
+export { useInView } from "./useInView";
+export { observe, defaultFallbackInView } from "./observe";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
@@ -68,7 +68,7 @@ export type PlainChildrenProps = IntersectionOptions & {
 
   /** Call this function whenever the in view state changes */
   onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void;
-} & Omit<React.HTMLProps<HTMLElement>, 'onChange'>;
+} & Omit<React.HTMLProps<HTMLElement>, "onChange">;
 
 /**
  * The Hook response supports both array and object destructing

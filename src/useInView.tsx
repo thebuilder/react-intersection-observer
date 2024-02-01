@@ -1,6 +1,6 @@
-import * as React from 'react';
-import type { InViewHookResponse, IntersectionOptions } from './index';
-import { observe } from './observe';
+import * as React from "react";
+import type { InViewHookResponse, IntersectionOptions } from "./index";
+import { observe } from "./observe";
 
 type State = {
   inView: boolean;
@@ -46,7 +46,7 @@ export function useInView({
   onChange,
 }: IntersectionOptions = {}): InViewHookResponse {
   const [ref, setRef] = React.useState<Element | null>(null);
-  const callback = React.useRef<IntersectionOptions['onChange']>();
+  const callback = React.useRef<IntersectionOptions["onChange"]>();
   const [state, setState] = React.useState<State>({
     inView: !!initialInView,
     entry: undefined,

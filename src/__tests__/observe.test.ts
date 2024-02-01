@@ -1,9 +1,9 @@
-import { mockIsIntersecting, intersectionMockInstance } from '../test-utils';
-import { optionsToId } from '../observe';
-import { observe } from '../';
+import { observe } from "../";
+import { optionsToId } from "../observe";
+import { intersectionMockInstance, mockIsIntersecting } from "../test-utils";
 
-test('should be able to use observe', () => {
-  const element = document.createElement('div');
+test("should be able to use observe", () => {
+  const element = document.createElement("div");
   const cb = vi.fn();
   const unmount = observe(element, cb, { threshold: 0.1 });
 
@@ -19,18 +19,18 @@ test('should be able to use observe', () => {
   );
 });
 
-test('should convert options to id', () => {
+test("should convert options to id", () => {
   expect(
     optionsToId({
-      root: document.createElement('div'),
-      rootMargin: '10px 10px',
+      root: document.createElement("div"),
+      rootMargin: "10px 10px",
       threshold: [0, 1],
     }),
   ).toMatchInlineSnapshot(`"root_1,rootMargin_10px 10px,threshold_0,1"`);
   expect(
     optionsToId({
       root: null,
-      rootMargin: '10px 10px',
+      rootMargin: "10px 10px",
       threshold: 1,
     }),
   ).toMatchInlineSnapshot(`"root_0,rootMargin_10px 10px,threshold_1"`);

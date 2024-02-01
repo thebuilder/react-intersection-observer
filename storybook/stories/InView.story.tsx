@@ -1,20 +1,20 @@
-import * as React from 'react';
-import { CSSProperties } from 'react';
-import { action } from '@storybook/addon-actions';
-import { Meta, StoryObj } from '@storybook/react';
-import { IntersectionOptions, InView } from 'react-intersection-observer';
+import { action } from "@storybook/addon-actions";
+import { Meta, StoryObj } from "@storybook/react";
+import * as React from "react";
+import { CSSProperties } from "react";
+import { InView, IntersectionOptions } from "react-intersection-observer";
 import {
   EntryDetails,
+  ErrorMessage,
   InViewBlock,
   InViewIcon,
   RootComponent,
-  Status,
-  ScrollWrapper,
-  ThresholdMarker,
-  ErrorMessage,
   RootMargin,
-} from './elements';
-import { argTypes, useValidateOptions } from './story-utils';
+  ScrollWrapper,
+  Status,
+  ThresholdMarker,
+} from "./elements";
+import { argTypes, useValidateOptions } from "./story-utils";
 
 type Props = IntersectionOptions & {
   style?: CSSProperties;
@@ -24,7 +24,7 @@ type Props = IntersectionOptions & {
 type Story = StoryObj<Props>;
 
 export default {
-  title: 'InView Component',
+  title: "InView Component",
   component: InView,
   argTypes: {
     ...argTypes,
@@ -39,8 +39,8 @@ function InViewRender({ style, className, ...rest }: Props) {
   if (error) return <ErrorMessage>{error}</ErrorMessage>;
 
   return (
-    <ScrollWrapper indicators={options.initialInView ? 'bottom' : 'all'}>
-      <InView onChange={action('InView')} {...options}>
+    <ScrollWrapper indicators={options.initialInView ? "bottom" : "all"}>
+      <InView onChange={action("InView")} {...options}>
         {({ ref, inView, entry }) => (
           <>
             <Status inView={inView} />
@@ -65,7 +65,7 @@ export const Basic: Story = {
 
 export const WithRootMarginexport: Story = {
   args: {
-    rootMargin: '25px 0px',
+    rootMargin: "25px 0px",
     threshold: 0,
   },
 };
@@ -80,7 +80,7 @@ export const StartInView: Story = {
 export const TallerThanViewport: Story = {
   args: {
     threshold: 0,
-    style: { minHeight: '150vh' },
+    style: { minHeight: "150vh" },
   },
 };
 
@@ -99,7 +99,7 @@ export const WithThreshold50percentage: Story = {
 export const TallerThanViewportWithThreshold100percentage: Story = {
   args: {
     threshold: 1,
-    style: { minHeight: '150vh' },
+    style: { minHeight: "150vh" },
   },
 };
 
@@ -109,7 +109,7 @@ export const MultipleThresholds: Story = {
   },
   argTypes: {
     threshold: {
-      control: { type: 'array' },
+      control: { type: "array" },
     },
   },
 };
@@ -140,7 +140,7 @@ export const WithRoot: Story = {
 };
 export const WithRootAndRootMargin: Story = {
   args: {
-    rootMargin: '25px 0px',
+    rootMargin: "25px 0px",
     threshold: 0,
   },
   render: (props) => (
