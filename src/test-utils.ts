@@ -1,4 +1,4 @@
-import { act } from 'react-dom/test-utils';
+import { act } from "react-dom/test-utils";
 
 type Item = {
   callback: IntersectionObserverCallback;
@@ -11,11 +11,11 @@ let isMocking = false;
 const observers = new Map<IntersectionObserver, Item>();
 
 // If we are running in a valid testing environment, we can mock the IntersectionObserver.
-if (typeof beforeEach !== 'undefined' && typeof afterEach !== 'undefined') {
+if (typeof beforeEach !== "undefined" && typeof afterEach !== "undefined") {
   beforeEach(() => {
     // Use the exposed mock function. Currently, only supports Jest (`jest.fn`) and Vitest with globals (`vi.fn`).
-    if (typeof jest !== 'undefined') setupIntersectionMocking(jest.fn);
-    else if (typeof vi !== 'undefined') {
+    if (typeof jest !== "undefined") setupIntersectionMocking(jest.fn);
+    else if (typeof vi !== "undefined") {
       // Cast the `vi.fn` to `jest.fn` - The returned `Mock` type has a different signature than `jest.fn`
       setupIntersectionMocking(vi.fn as unknown as typeof jest.fn);
     }
@@ -63,7 +63,7 @@ export function setupIntersectionMocking(mockFn: typeof jest.fn) {
         ? options.threshold
         : [options.threshold ?? 0],
       root: options.root ?? null,
-      rootMargin: options.rootMargin ?? '',
+      rootMargin: options.rootMargin ?? "",
       observe: mockFn((element: Element) => {
         item.elements.add(element);
       }),
@@ -102,13 +102,13 @@ function triggerIntersection(
   const entries: IntersectionObserverEntry[] = [];
 
   const isIntersecting =
-    typeof trigger === 'number'
+    typeof trigger === "number"
       ? observer.thresholds.some((threshold) => trigger >= threshold)
       : trigger;
 
   let ratio: number;
 
-  if (typeof trigger === 'number') {
+  if (typeof trigger === "number") {
     const intersectedThresholds = observer.thresholds.filter(
       (threshold) => trigger >= threshold,
     );
@@ -120,8 +120,8 @@ function triggerIntersection(
     ratio = trigger ? 1 : 0;
   }
 
-  elements.forEach((element) => {
-    entries.push({
+  for (const element of elements) {
+    entries.push(<IntersectionObserverEntry>{
       boundingClientRect: element.getBoundingClientRect(),
       intersectionRatio: ratio,
       intersectionRect: isIntersecting
@@ -135,7 +135,7 @@ function triggerIntersection(
             width: 0,
             x: 0,
             y: 0,
-            toJSON(): any {},
+            toJSON() {},
           },
       isIntersecting,
       rootBounds:
@@ -145,7 +145,7 @@ function triggerIntersection(
       target: element,
       time: Date.now() - item.created,
     });
-  });
+  }
 
   // Trigger the IntersectionObserver callback with all the entries
   if (act) act(() => item.callback(entries, observer));
@@ -157,7 +157,7 @@ function triggerIntersection(
  */
 export function mockAllIsIntersecting(isIntersecting: boolean | number) {
   warnOnMissingSetup();
-  for (let [observer, item] of observers) {
+  for (const [observer, item] of observers) {
     triggerIntersection(
       Array.from(item.elements),
       isIntersecting,
@@ -181,7 +181,7 @@ export function mockIsIntersecting(
   const observer = intersectionMockInstance(element);
   if (!observer) {
     throw new Error(
-      'No IntersectionObserver instance found for element. Is it still mounted in the DOM?',
+      "No IntersectionObserver instance found for element. Is it still mounted in the DOM?",
     );
   }
   const item = observers.get(observer);
@@ -201,13 +201,13 @@ export function intersectionMockInstance(
   element: Element,
 ): IntersectionObserver {
   warnOnMissingSetup();
-  for (let [observer, item] of observers) {
+  for (const [observer, item] of observers) {
     if (item.elements.has(element)) {
       return observer;
     }
   }
 
   throw new Error(
-    'Failed to find IntersectionObserver for element. Is it being observed?',
+    "Failed to find IntersectionObserver for element. Is it being observed?",
   );
 }

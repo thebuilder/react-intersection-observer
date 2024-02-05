@@ -1,32 +1,26 @@
 name: Test
 
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x]
-
     steps:
-      - uses: actions/checkout@v3
-      - uses: pnpm/action-setup@v2
+      - run: corepack enable
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          version: 8
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 20
           cache: 'pnpm'
       - name: Install dependencies
         run: pnpm install
       - name: Lint
-        run: pnpm lint
+        run: pnpm biome ci .
       - name: Test
         run: pnpm test
         env:
           CI: true
       - name: Build
-        run: yarn build
+        run: pnpm build

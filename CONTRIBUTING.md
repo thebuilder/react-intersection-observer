@@ -67,10 +67,10 @@ Here's what each part of the commit message means:
   updating dependencies).
 - `<subject>`: A short description of the change.
 
-### Code Style
+### Code Style and Linting
 
-`react-intersection-observer` uses [Prettier](https://prettier.io/) for code
-formatting. Please ensure that your changes are formatted with Prettier before
+`react-intersection-observer` uses [Biome](https://biomejs.dev/) for code
+formatting and linting. Please ensure that your changes are formatted with Biome before
 submitting your pull request.
 
 ### Testing

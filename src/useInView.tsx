@@ -1,6 +1,6 @@
-import * as React from 'react';
-import type { InViewHookResponse, IntersectionOptions } from './index';
-import { observe } from './observe';
+import * as React from "react";
+import type { InViewHookResponse, IntersectionOptions } from "./index";
+import { observe } from "./observe";
 
 type State = {
   inView: boolean;
@@ -46,7 +46,7 @@ export function useInView({
   onChange,
 }: IntersectionOptions = {}): InViewHookResponse {
   const [ref, setRef] = React.useState<Element | null>(null);
-  const callback = React.useRef<IntersectionOptions['onChange']>();
+  const callback = React.useRef<IntersectionOptions["onChange"]>();
   const [state, setState] = React.useState<State>({
     inView: !!initialInView,
     entry: undefined,
@@ -56,6 +56,7 @@ export function useInView({
   // inside the `useEffect`, but without triggering a rerender.
   callback.current = onChange;
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: threshold is not correctly detected as a dependency
   React.useEffect(
     () => {
       // Ensure we have node ref, and that we shouldn't skip observing
@@ -99,7 +100,6 @@ export function useInView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
       // If the threshold is an array, convert it to a string, so it won't change between renders.
-      // eslint-disable-next-line react-hooks/exhaustive-deps
       Array.isArray(threshold) ? threshold.toString() : threshold,
       ref,
       root,

@@ -1,0 +1,49 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.5.3/schema.json",
+  "files": {
+    "ignore": [
+      ".idea/**",
+      "node_modules/**",
+      "dist/**",
+      "coverage/**",
+      "storybook-static/**",
+      "pnpm-lock.yaml"
+    ]
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space"
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "complexity": {
+        "noForEach": "off"
+      },
+      "a11y": {
+        "noSvgWithoutTitle": "off"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "include": ["**/*.test.ts", "**/*.test.tsx"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noUnusedTemplateLiteral": "off"
+          }
+        }
+      }
+    }
+  ],
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  }
+}

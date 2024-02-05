@@ -1,6 +1,6 @@
-import * as React from 'react';
-import type { IntersectionObserverProps, PlainChildrenProps } from './index';
-import { observe } from './observe';
+import * as React from "react";
+import type { IntersectionObserverProps, PlainChildrenProps } from "./index";
+import { observe } from "./observe";
 
 type State = {
   inView: boolean;
@@ -10,7 +10,7 @@ type State = {
 function isPlainChildren(
   props: IntersectionObserverProps | PlainChildrenProps,
 ): props is PlainChildrenProps {
-  return typeof props.children !== 'function';
+  return typeof props.children !== "function";
 }
 
 /**
@@ -66,6 +66,9 @@ export class InView extends React.Component<
   IntersectionObserverProps | PlainChildrenProps,
   State
 > {
+  node: Element | null = null;
+  _unobserveCb: (() => void) | null = null;
+
   constructor(props: IntersectionObserverProps | PlainChildrenProps) {
     super(props);
     this.state = {
@@ -97,9 +100,6 @@ export class InView extends React.Component<
   componentWillUnmount() {
     this.unobserve();
   }
-
-  node: Element | null = null;
-  _unobserveCb: (() => void) | null = null;
 
   observeNode() {
     if (!this.node || this.props.skip) return;
@@ -168,7 +168,7 @@ export class InView extends React.Component<
 
   render() {
     const { children } = this.props;
-    if (typeof children === 'function') {
+    if (typeof children === "function") {
       const { inView, entry } = this.state;
       return children({ inView, entry, ref: this.handleNode });
     }
@@ -189,7 +189,7 @@ export class InView extends React.Component<
     } = this.props as PlainChildrenProps;
 
     return React.createElement(
-      as || 'div',
+      as || "div",
       { ref: this.handleNode, ...props },
       children,
     );

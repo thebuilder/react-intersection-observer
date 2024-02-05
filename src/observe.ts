@@ -1,4 +1,4 @@
-import type { ObserverInstanceCallback } from './index';
+import type { ObserverInstanceCallback } from "./index";
 
 const observerMap = new Map<
   string,
@@ -28,8 +28,8 @@ export function defaultFallbackInView(inView: boolean | undefined) {
  * Generate a unique ID for the root element
  * @param root
  */
-function getRootId(root: IntersectionObserverInit['root']) {
-  if (!root) return '0';
+function getRootId(root: IntersectionObserverInit["root"]) {
+  if (!root) return "0";
   if (RootIds.has(root)) return RootIds.get(root);
   rootId += 1;
   RootIds.set(root, rootId.toString());
@@ -49,7 +49,7 @@ export function optionsToId(options: IntersectionObserverInit) {
     )
     .map((key) => {
       return `${key}_${
-        key === 'root'
+        key === "root"
           ? getRootId(options.root)
           : options[key as keyof IntersectionObserverInit]
       }`;
@@ -59,12 +59,13 @@ export function optionsToId(options: IntersectionObserverInit) {
 
 function createObserver(options: IntersectionObserverInit) {
   // Create a unique ID for this observer instance, based on the root, root margin and threshold.
-  let id = optionsToId(options);
+  const id = optionsToId(options);
   let instance = observerMap.get(id);
 
   if (!instance) {
     // Create a map of elements this observer is going to observe. Each element has a list of callbacks that should be triggered, once it comes into view.
     const elements = new Map<Element, Array<ObserverInstanceCallback>>();
+    // biome-ignore lint/style/useConst: It's fine to use let here, as we are going to assign it later
     let thresholds: number[] | readonly number[];
 
     const observer = new IntersectionObserver((entries) => {
@@ -76,7 +77,7 @@ function createObserver(options: IntersectionObserverInit) {
           thresholds.some((threshold) => entry.intersectionRatio >= threshold);
 
         // @ts-ignore support IntersectionObserver v2
-        if (options.trackVisibility && typeof entry.isVisible === 'undefined') {
+        if (options.trackVisibility && typeof entry.isVisible === "undefined") {
           // The browser doesn't support Intersection Observer v2, falling back to v1 behavior.
           // @ts-ignore
           entry.isVisible = inView;
@@ -121,7 +122,7 @@ export function observe(
   fallbackInView = unsupportedValue,
 ) {
   if (
-    typeof window.IntersectionObserver === 'undefined' &&
+    typeof window.IntersectionObserver === "undefined" &&
     fallbackInView !== undefined
   ) {
     const bounds = element.getBoundingClientRect();
@@ -129,7 +130,7 @@ export function observe(
       isIntersecting: fallbackInView,
       target: element,
       intersectionRatio:
-        typeof options.threshold === 'number' ? options.threshold : 0,
+        typeof options.threshold === "number" ? options.threshold : 0,
       time: 0,
       boundingClientRect: bounds,
       intersectionRect: bounds,
@@ -143,7 +144,7 @@ export function observe(
   const { id, observer, elements } = createObserver(options);
 
   // Register the callback listener for this element
-  let callbacks = elements.get(element) || [];
+  const callbacks = elements.get(element) || [];
   if (!elements.has(element)) {
     elements.set(element, callbacks);
   }
