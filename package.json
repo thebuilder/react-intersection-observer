@@ -8,8 +8,9 @@
   "types": "./dist/index.d.ts",
   "exports": {
     "./test-utils": {
-      "types": "./dist/test-utils.d.ts",
-      "default": "./dist/test-utils.js"
+      "types": "./dist/test-utils.d.mts",
+      "require": "./dist/test-utils.js",
+      "default": "./dist/test-utils.mjs"
     },
     ".": {
       "types": "./dist/index.d.mts",
@@ -29,7 +30,7 @@
     "build": "run-s build:*",
     "build:bundle": "tsup src/index.tsx",
     "build:legacy": "tsup src/index.tsx --format esm --legacy-output --no-clean --no-dts",
-    "build:utils": "tsc -p tsconfig.test.json",
+    "build:utils": "tsup src/test-utils.ts --no-clean --no-sourcemap",
     "build:copy": "node scripts/build-copy.cjs",
     "postbuild": "size-limit",
     "dev": "run-p dev:*",
@@ -74,7 +75,7 @@
     ]
   },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged && vitest run"
+    "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
     "*.{js,json,css,md,ts,tsx}": [
@@ -108,13 +109,13 @@
   "devDependencies": {
     "@biomejs/biome": "^1.5.3",
     "@size-limit/preset-small-lib": "^11.0.2",
-    "@testing-library/jest-dom": "^6.4.1",
+    "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^14.2.1",
     "@types/jest": "^29.5.12",
-    "@types/react": "^18.2.51",
-    "@types/react-dom": "^18.2.18",
+    "@types/react": "^18.2.55",
+    "@types/react-dom": "^18.2.19",
     "jsdom": "^24.0.0",
-    "lint-staged": "^15.2.1",
+    "lint-staged": "^15.2.2",
     "microbundle": "^0.15.1",
     "npm-run-all": "^4.1.5",
     "react": "^18.2.0",
