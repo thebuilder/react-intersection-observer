@@ -1,5 +1,8 @@
 import { act } from "react-dom/test-utils";
-
+declare global {
+  // biome-ignore lint/style/noVar: Needs to be `var`, not `let` or `const`, for typing to work
+  var IS_REACT_ACT_ENVIRONMENT: boolean;
+}
 type Item = {
   callback: IntersectionObserverCallback;
   elements: Set<Element>;
@@ -93,6 +96,10 @@ export function resetIntersectionMocking() {
   observers.clear();
 }
 
+function getIsReactActEnvironment() {
+  return Boolean(global.IS_REACT_ACT_ENVIRONMENT);
+}
+
 function triggerIntersection(
   elements: Element[],
   trigger: boolean | number,
@@ -148,7 +155,8 @@ function triggerIntersection(
   }
 
   // Trigger the IntersectionObserver callback with all the entries
-  if (act) act(() => item.callback(entries, observer));
+  if (act && getIsReactActEnvironment())
+    act(() => item.callback(entries, observer));
   else item.callback(entries, observer);
 }
 /**
