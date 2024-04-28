@@ -12,8 +12,6 @@ to tell you when an element enters or leaves the viewport. Contains both a
 [Hooks](#useinview-hook), [render props](#render-props) and
 [plain children](#plain-children) implementation.
 
-**Storybook Demo:**
-[https://react-intersection-observer.vercel.app](https://react-intersection-observer.vercel.app)
 
 ## Features
 
@@ -32,13 +30,7 @@ to tell you when an element enters or leaves the viewport. Contains both a
 
 ## Installation
 
-Install using [Yarn](https://yarnpkg.com):
-
-```sh
-yarn add react-intersection-observer
-```
-
-or NPM:
+Install the package with your package manager of choice:
 
 ```sh
 npm install react-intersection-observer --save
@@ -82,8 +74,6 @@ const Component = () => {
 };
 ```
 
-[![Edit useInView](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/useinview-ud2vo?fontsize=14&hidenavigation=1&theme=dark)
-
 ### Render props
 
 To use the `<InView>` component, you pass it a function. It will be called
@@ -113,8 +103,6 @@ const Component = () => (
 export default Component;
 ```
 
-[![Edit InView render props](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/inview-render-props-hvhcb?fontsize=14&hidenavigation=1&theme=dark)
-
 ### Plain children
 
 You can pass any element to the `<InView />`, and it will handle creating the
@@ -133,8 +121,6 @@ const Component = () => (
 
 export default Component;
 ```
-
-[![Edit InView plain children](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/inview-plain-children-vv51y?fontsize=14&hidenavigation=1&theme=dark)
 
 > **Note**<br> When rendering a plain child, make sure you keep your HTML output
 > semantic. Change the `as` to match the context, and add a `className` to style
