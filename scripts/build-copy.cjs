@@ -1,5 +1,5 @@
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 const pck = require("../package");
 const rootDir = path.resolve(__dirname, "../");
 const distDir = path.resolve(__dirname, "../dist");
