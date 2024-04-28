@@ -1,9 +1,9 @@
-import { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import { motion } from "framer-motion";
-import React, { CSSProperties, useEffect, useRef, useState } from "react";
+import React, { type CSSProperties, useEffect, useRef, useState } from "react";
 import {
   InView,
-  IntersectionOptions,
+  type IntersectionOptions,
   useInView,
 } from "react-intersection-observer";
 import {
@@ -142,7 +142,8 @@ export const MultipleThresholds: Story = {
   },
   argTypes: {
     threshold: {
-      control: { type: "array" },
+      options: [0, 0.25, 0.5, 0.75, 1],
+      control: { type: "multi-select" },
     },
   },
 };
