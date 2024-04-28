@@ -1,8 +1,8 @@
 import { action } from "@storybook/addon-actions";
-import { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/react";
 import * as React from "react";
-import { CSSProperties } from "react";
-import { InView, IntersectionOptions } from "react-intersection-observer";
+import type { CSSProperties } from "react";
+import { InView, type IntersectionOptions } from "react-intersection-observer";
 import {
   EntryDetails,
   ErrorMessage,
@@ -109,7 +109,8 @@ export const MultipleThresholds: Story = {
   },
   argTypes: {
     threshold: {
-      control: { type: "array" },
+      options: [0, 0.25, 0.5, 0.75, 1],
+      control: { type: "multi-select" },
     },
   },
 };

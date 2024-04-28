@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import React, { useCallback } from "react";
-import { IntersectionOptions, defaultFallbackInView } from "../index";
+import { type IntersectionOptions, defaultFallbackInView } from "../index";
 import {
   intersectionMockInstance,
   mockAllIsIntersecting,
