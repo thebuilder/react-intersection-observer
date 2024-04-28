@@ -12,9 +12,6 @@ to tell you when an element enters or leaves the viewport. Contains both a
 [Hooks](#useinview-hook), [render props](#render-props) and
 [plain children](#plain-children) implementation.
 
-**Storybook Demo:**
-[https://react-intersection-observer.vercel.app](https://react-intersection-observer.vercel.app)
-
 ## Features
 
 - 🪝 **Hooks or Component API** - With `useInView` it's easier than ever to
@@ -30,15 +27,11 @@ to tell you when an element enters or leaves the viewport. Contains both a
 - 💥 **Tiny bundle** - Around **~1.15kB** for `useInView` and **~1.6kB** for
   `<InView>`
 
+[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/thebuilder/react-intersection-observer)
+
 ## Installation
 
-Install using [Yarn](https://yarnpkg.com):
-
-```sh
-yarn add react-intersection-observer
-```
-
-or NPM:
+Install the package with your package manager of choice:
 
 ```sh
 npm install react-intersection-observer --save
@@ -65,8 +58,8 @@ Assign the `ref` to the DOM element you want to monitor, and the hook will
 report the status.
 
 ```jsx
-import React from 'react';
-import { useInView } from 'react-intersection-observer';
+import React from "react";
+import { useInView } from "react-intersection-observer";
 
 const Component = () => {
   const { ref, inView, entry } = useInView({
@@ -82,8 +75,6 @@ const Component = () => {
 };
 ```
 
-[![Edit useInView](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/useinview-ud2vo?fontsize=14&hidenavigation=1&theme=dark)
-
 ### Render props
 
 To use the `<InView>` component, you pass it a function. It will be called
@@ -98,7 +89,7 @@ on `entry`, giving you access to all the details about the current intersection
 state.
 
 ```jsx
-import { InView } from 'react-intersection-observer';
+import { InView } from "react-intersection-observer";
 
 const Component = () => (
   <InView>
@@ -113,8 +104,6 @@ const Component = () => (
 export default Component;
 ```
 
-[![Edit InView render props](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/inview-render-props-hvhcb?fontsize=14&hidenavigation=1&theme=dark)
-
 ### Plain children
 
 You can pass any element to the `<InView />`, and it will handle creating the
@@ -123,18 +112,16 @@ state in your own component. Any extra props you add to `<InView>` will be
 passed to the HTML element, allowing you set the `className`, `style`, etc.
 
 ```jsx
-import { InView } from 'react-intersection-observer';
+import { InView } from "react-intersection-observer";
 
 const Component = () => (
-  <InView as="div" onChange={(inView, entry) => console.log('Inview:', inView)}>
+  <InView as="div" onChange={(inView, entry) => console.log("Inview:", inView)}>
     <h2>Plain children are always rendered. Use onChange to monitor state.</h2>
   </InView>
 );
 
 export default Component;
 ```
-
-[![Edit InView plain children](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/inview-plain-children-vv51y?fontsize=14&hidenavigation=1&theme=dark)
 
 > **Note**<br> When rendering a plain child, make sure you keep your HTML output
 > semantic. Change the `as` to match the context, and add a `className` to style
@@ -149,7 +136,7 @@ Provide these as the options argument in the `useInView` hook or as props on the
 **`<InView />`** component.
 
 | Name                   | Type                      | Default     | Description                                                                                                                                                                                                                                                                                     |
-|------------------------|---------------------------|-------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ---------------------- | ------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **root**               | `Element`                 | `document`  | The Intersection Observer interface's read-only root property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target. If the root is `null`, then the bounds of the actual document viewport are used.  |
 | **rootMargin**         | `string`                  | `'0px'`     | Margin around the root. Can have values similar to the CSS margin property, e.g. `"10px 20px 30px 40px"` (top, right, bottom, left). Also supports percentages, to check if an element intersects with the center of the viewport for example "-50% 0% -50% 0%".                                |
 | **threshold**          | `number` or `number[]`    | `0`         | Number between `0` and `1` indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                                                                                              |
@@ -166,7 +153,7 @@ Provide these as the options argument in the `useInView` hook or as props on the
 The **`<InView />`** component also accepts the following props:
 
 | Name         | Type                                                 | Default     | Description                                                                                                                                                                                                                                                                                                                    |
-|--------------|------------------------------------------------------|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------ | ---------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **as**       | `IntrinsicElement`                                   | `'div'`     | Render the wrapping element as this element. Defaults to `div`. If you want to use a custom component, please use the `useInView` hook or a render prop instead to manage the reference explictly.                                                                                                                             |
 | **children** | `({ref, inView, entry}) => ReactNode` or `ReactNode` | `undefined` | Children expects a function that receives an object containing the `inView` boolean and a `ref` that should be assigned to the element root. Alternatively pass a plain child, to have the `<InView />` deal with the wrapping element. You will also get the `IntersectionObserverEntry` as `entry`, giving you more details. |
 
@@ -213,8 +200,8 @@ few ideas for how you can use it.
 You can wrap multiple `ref` assignments in a single `useCallback`:
 
 ```jsx
-import React, { useRef, useCallback } from 'react';
-import { useInView } from 'react-intersection-observer';
+import React, { useRef, useCallback } from "react";
+import { useInView } from "react-intersection-observer";
 
 function Component(props) {
   const ref = useRef();
@@ -259,7 +246,7 @@ will emulate the real IntersectionObserver, allowing you to validate that your
 components are behaving as expected.
 
 | Method                                        | Description                                                                                                                                                                       |
-|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `mockAllIsIntersecting(isIntersecting)`       | Set `isIntersecting` on all current Intersection Observer instances. The value of `isIntersecting` should be either a `boolean` or a threshold between 0 and 1.                   |
 | `mockIsIntersecting(element, isIntersecting)` | Set `isIntersecting` for the Intersection Observer of a specific `element`. The value of `isIntersecting` should be either a `boolean` or a threshold between 0 and 1.            |
 | `intersectionMockInstance(element)`           | Call the `intersectionMockInstance` method with an element, to get the (mocked) `IntersectionObserver` instance. You can use this to spy on the `observe` and`unobserve` methods. |
@@ -285,11 +272,11 @@ Jest. Otherwise, you'll need to manually setup/reset the mocking in either the
 individual tests, or a [setup file](https://vitest.dev/config/#setupfiles).
 
 ```js
-import { vi, beforeEach, afterEach } from 'vitest';
+import { vi, beforeEach, afterEach } from "vitest";
 import {
   setupIntersectionMocking,
   resetIntersectionMocking,
-} from 'react-intersection-observer/test-utils';
+} from "react-intersection-observer/test-utils";
 
 beforeEach(() => {
   setupIntersectionMocking(vi.fn);
@@ -321,7 +308,7 @@ were you actively import `react-intersection-observer/test-utils`.
 **test-setup.js**
 
 ```js
-import { defaultFallbackInView } from 'react-intersection-observer';
+import { defaultFallbackInView } from "react-intersection-observer";
 
 defaultFallbackInView(true); // or `false` - whichever consistent behavior makes the most sense for your use case.
 ```
@@ -334,21 +321,21 @@ Vitest.
 
 ```js
 module.exports = {
-  setupFilesAfterEnv: ['react-intersection-observer/test-utils'],
+  setupFilesAfterEnv: ["react-intersection-observer/test-utils"],
 };
 ```
 
 ### Test Example
 
 ```js
-import React from 'react';
-import { screen, render } from '@testing-library/react';
-import { useInView } from 'react-intersection-observer';
+import React from "react";
+import { screen, render } from "@testing-library/react";
+import { useInView } from "react-intersection-observer";
 import {
   mockAllIsIntersecting,
   mockIsIntersecting,
   intersectionMockInstance,
-} from 'react-intersection-observer/test-utils';
+} from "react-intersection-observer/test-utils";
 
 const HookComponent = ({ options }) => {
   const { ref, inView } = useInView(options);
@@ -359,37 +346,37 @@ const HookComponent = ({ options }) => {
   );
 };
 
-test('should create a hook inView', () => {
-  render(<HookComponent/>);
+test("should create a hook inView", () => {
+  render(<HookComponent />);
 
   // This causes all (existing) IntersectionObservers to be set as intersecting
   mockAllIsIntersecting(true);
-  screen.getByText('true');
+  screen.getByText("true");
 });
 
-test('should create a hook inView with threshold', () => {
-  render(<HookComponent options={{ threshold: 0.3 }}/>);
+test("should create a hook inView with threshold", () => {
+  render(<HookComponent options={{ threshold: 0.3 }} />);
 
   mockAllIsIntersecting(0.1);
-  screen.getByText('false');
+  screen.getByText("false");
 
   // Once the threshold has been passed, it will trigger inView.
   mockAllIsIntersecting(0.3);
-  screen.getByText('true');
+  screen.getByText("true");
 });
 
-test('should mock intersecing on specific hook', () => {
-  render(<HookComponent/>);
-  const wrapper = screen.getByTestId('wrapper');
+test("should mock intersecing on specific hook", () => {
+  render(<HookComponent />);
+  const wrapper = screen.getByTestId("wrapper");
 
   // Set the intersection state on the wrapper.
   mockIsIntersecting(wrapper, 0.5);
-  screen.getByText('true');
+  screen.getByText("true");
 });
 
-test('should create a hook and call observe', () => {
-  const { getByTestId } = render(<HookComponent/>);
-  const wrapper = getByTestId('wrapper');
+test("should create a hook and call observe", () => {
+  const { getByTestId } = render(<HookComponent />);
+  const wrapper = getByTestId("wrapper");
   // Access the `IntersectionObserver` instance for the wrapper Element.
   const instance = intersectionMockInstance(wrapper);
 
@@ -422,7 +409,7 @@ application can correctly handle all your observers firing either `true` or
 You can set the fallback globally:
 
 ```js
-import { defaultFallbackInView } from 'react-intersection-observer';
+import { defaultFallbackInView } from "react-intersection-observer";
 
 defaultFallbackInView(true); // or 'false'
 ```
@@ -431,8 +418,8 @@ You can also define the fallback locally on `useInView` or `<InView>` as an
 option. This will override the global fallback value.
 
 ```jsx
-import React from 'react';
-import { useInView } from 'react-intersection-observer';
+import React from "react";
+import { useInView } from "react-intersection-observer";
 
 const Component = () => {
   const { ref, inView, entry } = useInView({
@@ -461,7 +448,7 @@ yarn add intersection-observer
 Then import it in your app:
 
 ```js
-import 'intersection-observer';
+import "intersection-observer";
 ```
 
 If you are using Webpack (or similar) you could use
@@ -474,8 +461,8 @@ like this:
  * Do feature detection, to figure out which polyfills needs to be imported.
  **/
 async function loadPolyfills() {
-  if (typeof window.IntersectionObserver === 'undefined') {
-    await import('intersection-observer');
+  if (typeof window.IntersectionObserver === "undefined") {
+    await import("intersection-observer");
   }
 }
 ```
@@ -488,13 +475,13 @@ IntersectionObserver instances. This allows you to handle more advanced use
 cases, where you need full control over when and how observers are created.
 
 ```js
-import { observe } from 'react-intersection-observer';
+import { observe } from "react-intersection-observer";
 
 const destroy = observe(element, callback, options);
 ```
 
 | Name         | Type                       | Required | Description                                                |
-|--------------|----------------------------|----------|------------------------------------------------------------|
+| ------------ | -------------------------- | -------- | ---------------------------------------------------------- |
 | **element**  | `Element`                  | true     | DOM element to observe                                     |
 | **callback** | `ObserverInstanceCallback` | true     | The callback function that Intersection Observer will call |
 | **options**  | `IntersectionObserverInit` | false    | The options for the Intersection Observer                  |
@@ -507,29 +494,13 @@ order to destroy the observer again.
 > how instances are created.
 
 [package-url]: https://npmjs.org/package/react-intersection-observer
-
 [npm-version-svg]: https://img.shields.io/npm/v/react-intersection-observer.svg
-
-[npm-minzip-svg]:
-https://img.shields.io/bundlephobia/minzip/react-intersection-observer.svg
-
-[bundlephobia-url]:
-https://bundlephobia.com/result?p=react-intersection-observer
-
+[npm-minzip-svg]: https://img.shields.io/bundlephobia/minzip/react-intersection-observer.svg
+[bundlephobia-url]: https://bundlephobia.com/result?p=react-intersection-observer
 [license-image]: http://img.shields.io/npm/l/react-intersection-observer.svg
-
 [license-url]: LICENSE
-
 [downloads-image]: http://img.shields.io/npm/dm/react-intersection-observer.svg
-
-[downloads-url]:
-http://npm-stat.com/charts.html?package=react-intersection-observer
-
-[test-image]:
-https://github.com/thebuilder/react-intersection-observer/workflows/Test/badge.svg
-
-[test-url]:
-https://github.com/thebuilder/react-intersection-observer/actions?query=workflow%3ATest
-
-[test-utils-url]:
-https://github.com/thebuilder/react-intersection-observer/blob/master/src/test-utils.ts
+[downloads-url]: http://npm-stat.com/charts.html?package=react-intersection-observer
+[test-image]: https://github.com/thebuilder/react-intersection-observer/workflows/Test/badge.svg
+[test-url]: https://github.com/thebuilder/react-intersection-observer/actions?query=workflow%3ATest
+[test-utils-url]: https://github.com/thebuilder/react-intersection-observer/blob/master/src/test-utils.ts
