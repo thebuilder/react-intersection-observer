@@ -24,6 +24,9 @@
       "complexity": {
         "noForEach": "off"
       },
+      "style": {
+        "noVar": "off"
+      },
       "a11y": {
         "noSvgWithoutTitle": "off"
       }
