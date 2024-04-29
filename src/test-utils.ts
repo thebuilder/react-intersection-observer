@@ -1,6 +1,5 @@
-import { act } from "react-dom/test-utils";
+import { act } from "react";
 declare global {
-  // biome-ignore lint/style/noVar: Needs to be `var`, not `let` or `const`, for typing to work
   var IS_REACT_ACT_ENVIRONMENT: boolean;
 }
 type Item = {
