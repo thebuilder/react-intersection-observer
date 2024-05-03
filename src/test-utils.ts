@@ -1,11 +1,12 @@
-import * as React from 'react';
-import * as DeprecatedReactTestUtils from 'react-dom/test-utils';
+import * as React from "react";
+import * as DeprecatedReactTestUtils from "react-dom/test-utils";
 
 declare global {
   var IS_REACT_ACT_ENVIRONMENT: boolean;
 }
 
-const act = typeof React.act === 'function' ? React.act : DeprecatedReactTestUtils.act;
+const act =
+  typeof React.act === "function" ? React.act : DeprecatedReactTestUtils.act;
 
 type Item = {
   callback: IntersectionObserverCallback;
