@@ -13,6 +13,8 @@ const packageFieldsToRemove = [
   "private",
   "devDependencies",
   "optionalDependencies",
+  "packageManager",
+  "engines",
   "lint-staged",
   "scripts",
   "husky",
