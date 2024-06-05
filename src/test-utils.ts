@@ -96,8 +96,13 @@ export function setupIntersectionMocking(mockFn: typeof jest.fn) {
  * Reset the IntersectionObserver mock to its initial state, and clear all the elements being observed.
  */
 export function resetIntersectionMocking() {
-  // @ts-ignore
-  if (global.IntersectionObserver) global.IntersectionObserver.mockClear();
+  if (
+    global.IntersectionObserver &&
+    "mockClear" in global.IntersectionObserver &&
+    typeof global.IntersectionObserver.mockClear === "function"
+  ) {
+    global.IntersectionObserver.mockClear();
+  }
   observers.clear();
 }
 
