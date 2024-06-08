@@ -6,7 +6,7 @@ declare global {
 }
 
 const act =
-  // @ts-expect-error - Older versions of React don't have the `act` method, so TypeScript will complain about it
+  // @ts-ignore - Older versions of React don't have the `act` method, so TypeScript will complain about it
   typeof React.act === "function" ? React.act : DeprecatedReactTestUtils.act;
 
 type Item = {
