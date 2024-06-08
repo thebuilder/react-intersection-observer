@@ -57,7 +57,7 @@ test("Should handle initialInView", () => {
   const cb = vi.fn();
   render(
     <InView initialInView onChange={cb}>
-      {({ inView }) => `InView: ${inView}`}
+      {({ inView }) => <span>InView: {inView.toString()}</span>}
     </InView>,
   );
   screen.getByText("InView: true");

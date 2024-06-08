@@ -31,6 +31,7 @@ jobs:
       fail-fast: false
       matrix:
         react:
+          - 15
           - 16
           - 17
           - 18
@@ -49,11 +50,17 @@ jobs:
       - name: Install legacy testing-library
         if: ${{ startsWith(matrix.react, '16') || startsWith(matrix.react, '17') }}
         run: pnpm add -D @testing-library/react@12.1.4
-      - name: Install legacy types
+      - name: Install legacy React types
         if: ${{ startsWith(matrix.react, '16') || startsWith(matrix.react, '17') || startsWith(matrix.react, '18')  }}
         run: pnpm add -D @types/react@${{ matrix.react }} @types/react-dom@${{ matrix.react }}
-      - name: Test ${{ matrix.react }} ${{ matrix.devtools-skip }}
-        run: |
-          pnpm add -D react@${{ matrix.react }} react-dom@${{ matrix.react }}
-          pnpm test
-          pnpm tsc
+      - name: Install ${{ matrix.react }}
+        run: pnpm add -D react@${{ matrix.react }} react-dom@${{ matrix.react }}
+      - name: Validate types
+        run:  pnpm tsc
+      - name: Test React 15
+        # Hooks are not supported in React 15, so skip testing it
+        if: ${{ startsWith(matrix.react, '15') }}
+        run:  pnpm vitest InView observe setup
+      - name: Test React
+        if: ${{ !startsWith(matrix.react, '5') }}
+        run:  pnpm test
