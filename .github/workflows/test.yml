@@ -31,7 +31,6 @@ jobs:
       fail-fast: false
       matrix:
         react:
-          - 15
           - 16
           - 17
           - 18
@@ -56,11 +55,6 @@ jobs:
       - name: Install ${{ matrix.react }}
         run: pnpm add -D react@${{ matrix.react }} react-dom@${{ matrix.react }}
       - name: Validate types
-        run:  pnpm tsc
-      - name: Test React 15
-        # Hooks are not supported in React 15, so skip testing it
-        if: ${{ startsWith(matrix.react, '15') }}
-        run:  pnpm vitest InView observe setup
-      - name: Test React
-        if: ${{ !startsWith(matrix.react, '5') }}
-        run:  pnpm test
+        run: |
+          pnpm tsc
+          pnpm test
