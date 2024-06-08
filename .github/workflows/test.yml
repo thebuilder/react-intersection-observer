@@ -1,9 +1,9 @@
 name: Test
 
-on: [ push, pull_request ]
+on: [push, pull_request]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
 
     steps:
@@ -13,7 +13,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
       - name: Lint
@@ -24,3 +24,37 @@ jobs:
           CI: true
       - name: Build
         run: pnpm build
+
+  test_matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        react:
+          - 16
+          - 17
+          - 18
+          - latest
+          - rc
+    steps:
+      - run: corepack enable
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install
+      - name: Install legacy testing-library
+        if: ${{ startsWith(matrix.react, '16') || startsWith(matrix.react, '17') }}
+        run: pnpm add -D @testing-library/react@12.1.4
+      - name: Install legacy React types
+        if: ${{ startsWith(matrix.react, '16') || startsWith(matrix.react, '17') || startsWith(matrix.react, '18')  }}
+        run: pnpm add -D @types/react@${{ matrix.react }} @types/react-dom@${{ matrix.react }}
+      - name: Install ${{ matrix.react }}
+        run: pnpm add -D react@${{ matrix.react }} react-dom@${{ matrix.react }}
+      - name: Validate types
+        run: |
+          pnpm tsc
+          pnpm test

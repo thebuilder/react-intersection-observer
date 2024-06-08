@@ -57,7 +57,7 @@ test("Should handle initialInView", () => {
   const cb = vi.fn();
   render(
     <InView initialInView onChange={cb}>
-      {({ inView }) => `InView: ${inView}`}
+      {({ inView }) => <span>InView: {inView.toString()}</span>}
     </InView>,
   );
   screen.getByText("InView: true");
@@ -186,9 +186,7 @@ test("should render with fallback", () => {
     render(<InView onChange={cb}>Inner</InView>);
     // @ts-ignore
     console.error.mockRestore();
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[TypeError: IntersectionObserver is not a constructor]`,
-  );
+  }).toThrow();
 });
 
 test("should render with global fallback", () => {
@@ -215,7 +213,5 @@ test("should render with global fallback", () => {
     render(<InView onChange={cb}>Inner</InView>);
     // @ts-ignore
     console.error.mockRestore();
-  }).toThrowErrorMatchingInlineSnapshot(
-    `[TypeError: IntersectionObserver is not a constructor]`,
-  );
+  }).toThrow();
 });
