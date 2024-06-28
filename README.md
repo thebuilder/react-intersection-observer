@@ -438,7 +438,7 @@ const Component = () => {
 
 You can import the
 [polyfill](https://www.npmjs.com/package/intersection-observer) directly or use
-a service like [polyfill.io](https://polyfill.io/v2/docs/) to add it when
+a service like [https://cdnjs.cloudflare.com/polyfill](https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js) to add it when
 needed.
 
 ```sh
