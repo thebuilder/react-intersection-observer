@@ -123,7 +123,8 @@ const Component = () => (
 export default Component;
 ```
 
-> **Note**<br> When rendering a plain child, make sure you keep your HTML output
+> [!NOTE]
+> When rendering a plain child, make sure you keep your HTML output
 > semantic. Change the `as` to match the context, and add a `className` to style
 > the `<InView />`. The component does not support Ref Forwarding, so if you
 > need a `ref` to the HTML element, use the Render Props version instead.
@@ -138,7 +139,7 @@ Provide these as the options argument in the `useInView` hook or as props on the
 | Name                   | Type                      | Default     | Description                                                                                                                                                                                                                                                                                     |
 | ---------------------- | ------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **root**               | `Element`                 | `document`  | The Intersection Observer interface's read-only root property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target. If the root is `null`, then the bounds of the actual document viewport are used.  |
-| **rootMargin**         | `string`                  | `'0px'`     | Margin around the root. Can have values similar to the CSS margin property, e.g. `"10px 20px 30px 40px"` (top, right, bottom, left). Also supports percentages, to check if an element intersects with the center of the viewport for example `"-50% 0% -50% 0%"`.                                |
+| **rootMargin**         | `string`                  | `'0px'`     | Margin around the root. Can have values similar to the CSS margin property, e.g. `"10px 20px 30px 40px"` (top, right, bottom, left). Also supports percentages, to check if an element intersects with the center of the viewport for example `"-50% 0% -50% 0%"`.                              |
 | **threshold**          | `number` or `number[]`    | `0`         | Number between `0` and `1` indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                                                                                              |
 | **onChange**           | `(inView, entry) => void` | `undefined` | Call this function whenever the in view state changes. It will receive the `inView` boolean, alongside the current `IntersectionObserverEntry`.                                                                                                                                                 |
 | **trackVisibility** 🧪 | `boolean`                 | `false`     | A boolean indicating whether this Intersection Observer will track visibility changes on the target.                                                                                                                                                                                            |
@@ -191,7 +192,7 @@ few ideas for how you can use it.
 - [Lazy image load](docs/Recipes.md#lazy-image-load)
 - [Trigger animations](docs/Recipes.md#trigger-animations)
 - [Track impressions](docs/Recipes.md#track-impressions) _(Google Analytics, Tag
-  Manager, etc)_
+  Manager, etc.)_
 
 ## FAQ
 
@@ -489,7 +490,8 @@ const destroy = observe(element, callback, options);
 The `observe` method returns an `unobserve` function, that you must call in
 order to destroy the observer again.
 
-> **Warning**<br> You most likely won't need this, but it can be useful if you
+> [!IMPORTANT]
+> You most likely won't need this, but it can be useful if you
 > need to handle IntersectionObservers outside React, or need full control over
 > how instances are created.
 

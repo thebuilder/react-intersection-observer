@@ -25,46 +25,38 @@ build it according to your needs.
 - Either hide the `<img />` with CSS, or skip rendering it until it's inside the
   viewport.
 
-> 🔥 The example has been expanded to include support for the new native
-> `loading` attribute on images. If it's supported, we can skip the `useInView`
-> hook and render the `<img>`.
+> [!TIP]
+> All modern browsers support the native `loading` attribute on `<img />` tags, so unless you need
+> fine-grained control, you can skip the `IntersectionObserver` and use `loading="lazy"` instead.
 >
-> See https://web.dev/native-lazy-loading for details about using the `loading`
-> attribute.
->
-> [@charlietango/use-native-lazy-loading](https://www.npmjs.com/package/@charlietango/use-native-lazy-loading)
-> is a small hook that detects support for `loading` as a side effect.
+> https://web.dev/articles/browser-level-image-lazy-loading
 
 ```jsx
-import React from 'react';
-import useNativeLazyLoading from '@charlietango/use-native-lazy-loading';
-import { useInView } from 'react-intersection-observer';
+import React from "react";
+import { useInView } from "react-intersection-observer";
 
 const LazyImage = ({ width, height, src, ...rest }) => {
-  const supportsLazyLoading = useNativeLazyLoading();
   const { ref, inView } = useInView({
     triggerOnce: true,
-    rootMargin: '200px 0px',
-    skip: supportsLazyLoading !== false,
+    rootMargin: "200px 0px",
   });
 
   return (
     <div
       ref={ref}
       style={{
-        position: 'relative',
+        position: "relative",
         paddingBottom: `${(height / width) * 100}%`,
-        background: '#2a4b7a',
+        background: "#2a4b7a",
       }}
     >
-      {inView || supportsLazyLoading ? (
+      {inView ? (
         <img
           {...rest}
           src={src}
           width={width}
           height={height}
-          loading="lazy"
-          style={{ position: 'absolute', width: '100%', height: '100%' }}
+          style={{ position: "absolute", width: "100%", height: "100%" }}
         />
       ) : null}
     </div>
@@ -89,19 +81,19 @@ for an IntersectionObserver.
   have it go inwards. You can also use a percentage value, instead of pixels.
 
 ```jsx
-import React from 'react';
-import { useInView } from 'react-intersection-observer';
+import React from "react";
+import { useInView } from "react-intersection-observer";
 
 const LazyAnimation = () => {
   const { ref, inView } = useInView({
     triggerOnce: true,
-    rootMargin: '-100px 0px',
+    rootMargin: "-100px 0px",
   });
 
   return (
     <div
       ref={ref}
-      className={`transition-opacity ${inView ? 'opacity-1' : 'opacity-0'}`}
+      className={`transition-opacity ${inView ? "opacity-1" : "opacity-0"}`}
     >
       <span aria-label="Wave">👋</span>
     </div>
@@ -126,17 +118,17 @@ fire an event on your tracking service.
 - You can use the `onChange` callback to trigger the tracking.
 
 ```jsx
-import * as React from 'react';
-import { useInView } from 'react-intersection-observer';
+import * as React from "react";
+import { useInView } from "react-intersection-observer";
 
 const TrackImpression = () => {
   const { ref } = useInView({
     triggerOnce: true,
-    rootMargin: '-100px 0',
+    rootMargin: "-100px 0",
     onChange: (inView) => {
       if (inView) {
         // Fire a tracking event to your tracking service of choice.
-        dataLayer.push('Section shown'); // Here's a GTM dataLayer push
+        dataLayer.push("Section shown"); // Here's a GTM dataLayer push
       }
     },
   });
