@@ -28,6 +28,8 @@ build it according to your needs.
 > [!TIP]
 > All modern browsers support the native `loading` attribute on `<img />` tags, so unless you need
 > fine-grained control, you can skip the `IntersectionObserver` and use `loading="lazy"` instead.
+>
+> https://web.dev/articles/browser-level-image-lazy-loading
 
 ```jsx
 import React from "react";
@@ -54,7 +56,6 @@ const LazyImage = ({ width, height, src, ...rest }) => {
           src={src}
           width={width}
           height={height}
-          loading="lazy"
           style={{ position: "absolute", width: "100%", height: "100%" }}
         />
       ) : null}
