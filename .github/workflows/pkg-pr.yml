@@ -1,13 +1,9 @@
-name: Publish Approved Pull Requests
-on:
-  pull_request_review:
-    types: [submitted]
+name: Publish Pull Requests
+on: [push, pull_request]
 
 jobs:
-  approved:
-    if: github.event.review.state == 'APPROVED'
+  pr-package:
     runs-on: ubuntu-latest
-
     steps:
       - run: corepack enable
       - uses: actions/checkout@v4
@@ -20,4 +16,4 @@ jobs:
         run: pnpm install
 
       - name: Publish preview package
-        run: pnpx pkg-pr-new publish
+        run: pnpx pkg-pr-new publish --no-template
