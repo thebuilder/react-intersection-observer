@@ -1,13 +1,9 @@
 name: Publish Approved Pull Requests
-on:
-  pull_request_review:
-    types: [submitted]
+on: [push, pull_request]
 
 jobs:
-  approved:
-    if: github.event.review.state == 'APPROVED'
+  pr-package:
     runs-on: ubuntu-latest
-
     steps:
       - run: corepack enable
       - uses: actions/checkout@v4
