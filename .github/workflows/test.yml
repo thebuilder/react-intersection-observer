@@ -59,4 +59,5 @@ jobs:
       - name: Validate types
         run: |
           pnpm tsc
+          pnpx playwright install chromium
           pnpm test
