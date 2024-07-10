@@ -3,10 +3,10 @@
   "version": "8.26.1",
   "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
   "type": "commonjs",
-  "source": "./src/index.tsx",
-  "main": "./dist/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/index.d.ts",
+  "source": "src/index.tsx",
+  "main": "dist/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     "./test-utils": {
       "types": "./dist/test-utils.d.mts",
