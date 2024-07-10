@@ -3,6 +3,7 @@ import * as DeprecatedReactTestUtils from "react-dom/test-utils";
 
 declare global {
   var IS_REACT_ACT_ENVIRONMENT: boolean;
+  var jest: { fn: typeof vi.fn } | undefined;
 }
 
 const act =
@@ -25,8 +26,7 @@ if (typeof beforeEach !== "undefined" && typeof afterEach !== "undefined") {
     // Use the exposed mock function. Currently, only supports Jest (`jest.fn`) and Vitest with globals (`vi.fn`).
     if (typeof jest !== "undefined") setupIntersectionMocking(jest.fn);
     else if (typeof vi !== "undefined") {
-      // Cast the `vi.fn` to `jest.fn` - The returned `Mock` type has a different signature than `jest.fn`
-      setupIntersectionMocking(vi.fn as unknown as typeof jest.fn);
+      setupIntersectionMocking(vi.fn);
     }
   });
 
@@ -60,7 +60,7 @@ afterEach(() => {
  * know which elements to trigger the event on.
  * @param mockFn The mock function to use. Defaults to `jest.fn`.
  */
-export function setupIntersectionMocking(mockFn: typeof jest.fn) {
+export function setupIntersectionMocking(mockFn: typeof vi.fn) {
   global.IntersectionObserver = mockFn((cb, options = {}) => {
     const item = {
       callback: cb,
