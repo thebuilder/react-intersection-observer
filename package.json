@@ -5,21 +5,31 @@
   "type": "commonjs",
   "source": "src/index.tsx",
   "main": "dist/index.js",
-  "module": "dist/esm/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
   "exports": {
     "./test-utils": {
-      "types": "./dist/test-utils.d.mts",
-      "require": "./dist/test-utils.js",
-      "default": "./dist/test-utils.mjs"
+      "import": {
+        "types": "./test-utils/index.d.mts",
+        "default": "./test-utils/index.mjs"
+      },
+      "require": {
+        "types": "./test-utils/index.d.ts",
+        "default": "./test-utils/index.js"
+      }
     },
     ".": {
-      "types": "./dist/index.d.mts",
-      "require": "./dist/index.js",
-      "default": "./dist/index.mjs"
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
     }
   },
-  "files": ["dist"],
+  "files": ["dist", "test-utils"],
   "author": "Daniel Schmidt",
   "license": "MIT",
   "sideEffects": false,
@@ -30,10 +40,7 @@
   "packageManager": "pnpm@9.5.0+sha256.dbdf5961c32909fb030595a9daa1dae720162e658609a8f92f2fa99835510ca5",
   "scripts": {
     "prebuild": "rm -rf dist lib",
-    "build": "run-s build:* && attw --pack",
-    "build:bundle": "tsup src/index.tsx",
-    "build:legacy": "tsup src/index.tsx --format esm --legacy-output --no-clean --no-dts",
-    "build:utils": "tsup src/test-utils.ts --no-clean --no-sourcemap",
+    "build": "tsup && attw --pack",
     "postbuild": "size-limit",
     "dev": "run-p dev:*",
     "dev:package": "tsup src/index.tsx --watch",

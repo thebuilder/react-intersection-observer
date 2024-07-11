@@ -1,6 +1,6 @@
-import { defineConfig } from "tsup";
+import { type Options, defineConfig } from "tsup";
 
-export default defineConfig({
+const commons: Options = {
   minify: false,
   sourcemap: true,
   dts: true,
@@ -8,4 +8,17 @@ export default defineConfig({
   target: "es2018",
   external: ["react"],
   format: ["esm", "cjs"],
-});
+};
+
+export default defineConfig([
+  {
+    entryPoints: ["src/index.tsx"],
+    outDir: "dist",
+    ...commons,
+  },
+  {
+    entryPoints: { index: "src/test-utils.ts" },
+    outDir: "test-utils",
+    ...commons,
+  },
+]);
