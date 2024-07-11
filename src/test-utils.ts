@@ -21,8 +21,8 @@ let isMocking = false;
 const observers = new Map<IntersectionObserver, Item>();
 
 // If we are running in a valid testing environment, we can mock the IntersectionObserver.
-if (typeof beforeEach !== "undefined" && typeof afterEach !== "undefined") {
-  beforeEach(() => {
+if (typeof beforeAll !== "undefined" && typeof afterEach !== "undefined") {
+  beforeAll(() => {
     // Use the exposed mock function. Currently, only supports Jest (`jest.fn`) and Vitest with globals (`vi.fn`).
     if (typeof jest !== "undefined") setupIntersectionMocking(jest.fn);
     else if (typeof vi !== "undefined") {
