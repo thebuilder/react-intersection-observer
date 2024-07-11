@@ -12,13 +12,14 @@ const commons: Options = {
 
 export default defineConfig([
   {
+    ...commons,
     entryPoints: ["src/index.tsx"],
     outDir: "dist",
-    ...commons,
   },
   {
+    ...commons,
     entryPoints: { index: "src/test-utils.ts" },
     outDir: "test-utils",
-    ...commons,
+    sourcemap: false,
   },
 ]);
