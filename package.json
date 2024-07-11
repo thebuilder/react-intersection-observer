@@ -30,7 +30,7 @@
   "packageManager": "pnpm@9.5.0+sha256.dbdf5961c32909fb030595a9daa1dae720162e658609a8f92f2fa99835510ca5",
   "scripts": {
     "prebuild": "rm -rf dist lib",
-    "build": "run-s build:*",
+    "build": "run-s build:* && attw --pack",
     "build:bundle": "tsup src/index.tsx",
     "build:legacy": "tsup src/index.tsx --format esm --legacy-output --no-clean --no-dts",
     "build:utils": "tsup src/test-utils.ts --no-clean --no-sourcemap",
@@ -104,6 +104,7 @@
     "react-dom": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.15.3",
     "@biomejs/biome": "^1.8.3",
     "@size-limit/preset-small-lib": "^11.1.4",
     "@testing-library/jest-dom": "^6.4.6",
