@@ -58,7 +58,7 @@ afterEach(() => {
  * Create a custom IntersectionObserver mock, allowing us to intercept the `observe` and `unobserve` calls.
  * We keep track of the elements being observed, so when `mockAllIsIntersecting` is triggered it will
  * know which elements to trigger the event on.
- * @param mockFn The mock function to use. Defaults to `jest.fn`.
+ * @param mockFn The mock function to use. Defaults to `vi.fn`.
  */
 export function setupIntersectionMocking(mockFn: typeof jest.fn) {
   global.IntersectionObserver = mockFn((cb, options = {}) => {

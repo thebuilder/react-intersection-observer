@@ -3,10 +3,10 @@
   "version": "8.26.1",
   "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
   "type": "commonjs",
-  "source": "./src/index.tsx",
-  "main": "./dist/index.js",
-  "module": "./dist/esm/index.js",
-  "types": "./dist/index.d.ts",
+  "source": "src/index.tsx",
+  "main": "dist/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     "./test-utils": {
       "types": "./dist/test-utils.d.mts",
@@ -19,15 +19,13 @@
       "default": "./dist/index.mjs"
     }
   },
+  "files": ["dist"],
   "author": "Daniel Schmidt",
   "license": "MIT",
   "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/thebuilder/react-intersection-observer.git"
-  },
-  "engines": {
-    "pnpm": ">=9"
   },
   "packageManager": "pnpm@9.5.0+sha256.dbdf5961c32909fb030595a9daa1dae720162e658609a8f92f2fa99835510ca5",
   "scripts": {
@@ -36,13 +34,11 @@
     "build:bundle": "tsup src/index.tsx",
     "build:legacy": "tsup src/index.tsx --format esm --legacy-output --no-clean --no-dts",
     "build:utils": "tsup src/test-utils.ts --no-clean --no-sourcemap",
-    "build:copy": "node scripts/build-copy.cjs",
     "postbuild": "size-limit",
     "dev": "run-p dev:*",
     "dev:package": "tsup src/index.tsx --watch",
     "dev:storybook": "pnpm --filter storybook dev",
     "lint": "biome check .",
-    "release": "np --contents dist",
     "version": "pnpm build",
     "storybook:build": "pnpm build:bundle && pnpm --filter storybook build",
     "test": "vitest"
