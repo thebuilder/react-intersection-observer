@@ -16,10 +16,12 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install
+      - name: Install playwright
+        run: pnpx playwright install chromium
       - name: Lint
         run: pnpm biome ci .
       - name: Test
-        run: pnpm test
+        run: pnpm vitest --coverage
         env:
           CI: true
       - name: Build
@@ -57,4 +59,5 @@ jobs:
       - name: Validate types
         run: |
           pnpm tsc
+          pnpx playwright install chromium
           pnpm test

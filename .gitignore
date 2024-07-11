@@ -17,3 +17,4 @@ npm-debug.log*
 storybook-static
 test-utils.js
 test-utils.d.ts
+__screenshots__

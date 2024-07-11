@@ -41,7 +41,8 @@
     "lint": "biome check .",
     "version": "pnpm build",
     "storybook:build": "pnpm build:bundle && pnpm --filter storybook build",
-    "test": "vitest"
+    "test": "vitest",
+    "test:browser": "vitest --workspace=vitest.workspace.ts"
   },
   "keywords": [
     "react",
@@ -107,20 +108,23 @@
     "@size-limit/preset-small-lib": "^11.1.4",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
-    "@types/jest": "^29.5.12",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "@vitest/browser": "^2.0.1",
+    "@vitest/coverage-istanbul": "^2.0.1",
     "jsdom": "^24.1.0",
     "lint-staged": "^15.2.7",
     "microbundle": "^0.15.1",
     "npm-run-all": "^4.1.5",
+    "playwright": "^1.45.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "simple-git-hooks": "^2.11.1",
     "size-limit": "^11.1.4",
     "tsup": "^8.1.0",
     "typescript": "^5.5.3",
-    "vitest": "^1.6.0"
+    "vitest": "^2.0.1"
   },
   "peerDependenciesMeta": {
     "react-dom": {
