@@ -9,17 +9,27 @@
   "types": "dist/index.d.ts",
   "exports": {
     "./test-utils": {
-      "types": "./dist/test-utils.d.mts",
-      "require": "./dist/test-utils.js",
-      "default": "./dist/test-utils.mjs"
+      "import": {
+        "types": "./test-utils/index.d.mts",
+        "default": "./test-utils/index.mjs"
+      },
+      "require": {
+        "types": "./test-utils/index.d.ts",
+        "default": "./test-utils/index.js"
+      }
     },
     ".": {
-      "types": "./dist/index.d.mts",
-      "require": "./dist/index.js",
-      "default": "./dist/index.mjs"
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
     }
   },
-  "files": ["dist"],
+  "files": ["dist", "test-utils"],
   "author": "Daniel Schmidt",
   "license": "MIT",
   "sideEffects": false,
@@ -30,17 +40,14 @@
   "packageManager": "pnpm@9.5.0+sha256.dbdf5961c32909fb030595a9daa1dae720162e658609a8f92f2fa99835510ca5",
   "scripts": {
     "prebuild": "rm -rf dist lib",
-    "build": "run-s build:*",
-    "build:bundle": "tsup src/index.tsx",
-    "build:legacy": "tsup src/index.tsx --format esm --legacy-output --no-clean --no-dts",
-    "build:utils": "tsup src/test-utils.ts --no-clean --no-sourcemap",
-    "postbuild": "size-limit",
+    "build": "tsup && mkdir dist/esm && cp dist/index.mjs dist/esm/index.js",
+    "postbuild": "attw --pack && publint && size-limit",
     "dev": "run-p dev:*",
     "dev:package": "tsup src/index.tsx --watch",
     "dev:storybook": "pnpm --filter storybook dev",
     "lint": "biome check .",
     "version": "pnpm build",
-    "storybook:build": "pnpm build:bundle && pnpm --filter storybook build",
+    "storybook:build": "pnpm build && pnpm --filter storybook build",
     "test": "vitest",
     "test:browser": "vitest --workspace=vitest.workspace.ts"
   },
@@ -104,6 +111,7 @@
     "react-dom": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
+    "@arethetypeswrong/cli": "^0.15.3",
     "@biomejs/biome": "^1.8.3",
     "@size-limit/preset-small-lib": "^11.1.4",
     "@testing-library/jest-dom": "^6.4.6",
@@ -118,6 +126,7 @@
     "microbundle": "^0.15.1",
     "npm-run-all": "^4.1.5",
     "playwright": "^1.45.1",
+    "publint": "^0.2.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "simple-git-hooks": "^2.11.1",

@@ -5,6 +5,7 @@ reports
 example
 lib/
 dist/
+test-utils/
 coverage/
 nuget
 npm-debug.log*
