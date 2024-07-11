@@ -5,7 +5,7 @@
   "type": "commonjs",
   "source": "src/index.tsx",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/esm/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     "./test-utils": {
@@ -40,7 +40,7 @@
   "packageManager": "pnpm@9.5.0+sha256.dbdf5961c32909fb030595a9daa1dae720162e658609a8f92f2fa99835510ca5",
   "scripts": {
     "prebuild": "rm -rf dist lib",
-    "build": "tsup && attw --pack",
+    "build": "tsup && mkdir dist/esm && cp dist/index.mjs dist/esm/index.js && attw --pack",
     "postbuild": "size-limit",
     "dev": "run-p dev:*",
     "dev:package": "tsup src/index.tsx --watch",
