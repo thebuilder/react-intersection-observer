@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Install playwright
-        run: pnpx playwright install chromium
+        run: pnpm exec playwright install
       - name: Lint
         run: pnpm biome ci .
       - name: Test
@@ -57,7 +57,8 @@ jobs:
       - name: Install ${{ matrix.react }}
         run: pnpm add -D react@${{ matrix.react }} react-dom@${{ matrix.react }}
       - name: Validate types
+        run: pnpm tsc
+      - name: Run test
         run: |
-          pnpm tsc
-          pnpx playwright install chromium
+          pnpm exec playwright install
           pnpm test
