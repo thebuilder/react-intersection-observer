@@ -1,5 +1,6 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { userEvent } from "@vitest/browser/context";
 import React from "react";
+import { render } from "vitest-browser-react";
 import { InView } from "../InView";
 import { defaultFallbackInView } from "../observe";
 import { intersectionMockInstance, mockAllIsIntersecting } from "../test-utils";
@@ -26,7 +27,7 @@ test("Should render <InView /> intersecting", () => {
 });
 
 test("should render plain children", () => {
-  render(<InView>inner</InView>);
+  const screen = render(<InView>inner</InView>);
   screen.getByText("inner");
 });
 
@@ -55,7 +56,7 @@ test("Should respect skip", () => {
 
 test("Should handle initialInView", () => {
   const cb = vi.fn();
-  render(
+  const screen = render(
     <InView initialInView onChange={cb}>
       {({ inView }) => <span>InView: {inView.toString()}</span>}
     </InView>,
@@ -142,7 +143,7 @@ test("Should unobserve when unmounted", () => {
   expect(instance.unobserve).toHaveBeenCalled();
 });
 
-test("plain children should not catch bubbling onChange event", () => {
+test("plain children should not catch bubbling onChange event", async () => {
   const onChange = vi.fn();
   const { getByLabelText } = render(
     <InView onChange={onChange}>
@@ -153,7 +154,7 @@ test("plain children should not catch bubbling onChange event", () => {
     </InView>,
   );
   const input = getByLabelText("input");
-  fireEvent.change(input, { target: { value: "changed value" } });
+  await userEvent.type(input, "changed value");
   expect(onChange).not.toHaveBeenCalled();
 });
 

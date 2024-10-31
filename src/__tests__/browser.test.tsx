@@ -1,11 +1,13 @@
-import { cleanup, render, screen } from "@testing-library/react/pure";
 import React from "react";
-import type { IntersectionOptions } from "../../index";
-import { useInView } from "../../useInView";
+import { render } from "vitest-browser-react";
+import type { IntersectionOptions } from "../index";
+import { useInView } from "../useInView";
 
-afterEach(() => {
-  cleanup();
-});
+/**
+ * Test the real Intersection Observer API, without using the mocked version from `test-utils`
+ * @param options
+ * @constructor
+ */
 
 const HookComponent = ({ options }: { options?: IntersectionOptions }) => {
   const [ref, inView] = useInView(options);
@@ -23,13 +25,13 @@ const HookComponent = ({ options }: { options?: IntersectionOptions }) => {
 };
 
 test("should come into view on after rendering", async () => {
-  render(<HookComponent />);
+  const screen = render(<HookComponent />);
   const wrapper = screen.getByTestId("wrapper");
   await expect.element(wrapper).toHaveAttribute("data-inview", "true");
 });
 
 test("should come into view after scrolling", async () => {
-  render(
+  const screen = render(
     <>
       <div style={{ height: window.innerHeight }} />
       <HookComponent />
@@ -39,12 +41,12 @@ test("should come into view after scrolling", async () => {
   const wrapper = screen.getByTestId("wrapper");
 
   // Should not be inside the view
-  expect(wrapper).toHaveAttribute("data-inview", "false");
+  await expect.element(wrapper).toHaveAttribute("data-inview", "false");
 
   // Scroll so the element comes into view
   window.scrollTo(0, window.innerHeight);
   // Should not be updated until intersection observer triggers
-  expect(wrapper).toHaveAttribute("data-inview", "false");
+  await expect.element(wrapper).toHaveAttribute("data-inview", "false");
 
   await expect.element(wrapper).toHaveAttribute("data-inview", "true");
 });

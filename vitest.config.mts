@@ -2,12 +2,17 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   optimizeDeps: {
-    include: ["@vitest/coverage-istanbul"],
+    include: ["@vitest/coverage-istanbul", "react", "vitest-browser-react", "react-dom/test-utils"],
   },
   test: {
-    environment: "jsdom",
+    environment: "node",
     globals: true,
-
+      browser: {
+        enabled: true,
+        name: "chromium",
+        provider: "playwright",
+        headless: true,
+      },
     coverage: {
       provider: "istanbul",
       include: ["src/**"],
