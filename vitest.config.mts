@@ -5,7 +5,6 @@ export default defineConfig({
     include: [
       "@vitest/coverage-istanbul",
       "react",
-      "vitest-browser-react",
       "react-dom/test-utils",
     ],
   },
