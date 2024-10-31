@@ -25,25 +25,14 @@
         "noForEach": "off"
       },
       "style": {
-        "noVar": "off"
+        "noVar": "off",
+        "noUnusedTemplateLiteral": "off"
       },
       "a11y": {
         "noSvgWithoutTitle": "off"
       }
     }
   },
-  "overrides": [
-    {
-      "include": ["**/*.test.ts", "**/*.test.tsx"],
-      "linter": {
-        "rules": {
-          "style": {
-            "noUnusedTemplateLiteral": "off"
-          }
-        }
-      }
-    }
-  ],
   "vcs": {
     "enabled": true,
     "clientKind": "git",
