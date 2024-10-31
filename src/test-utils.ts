@@ -61,7 +61,7 @@ afterEach(() => {
  * @param mockFn The mock function to use. Defaults to `vi.fn`.
  */
 export function setupIntersectionMocking(mockFn: typeof vi.fn) {
-  window.IntersectionObserver = mockFn((cb, options = {}) => {
+  global.IntersectionObserver = mockFn((cb, options = {}) => {
     const item = {
       callback: cb,
       elements: new Set<Element>(),
@@ -98,19 +98,17 @@ export function setupIntersectionMocking(mockFn: typeof vi.fn) {
  */
 export function resetIntersectionMocking() {
   if (
-    window.IntersectionObserver &&
-    "mockClear" in window.IntersectionObserver &&
-    typeof window.IntersectionObserver.mockClear === "function"
+    global.IntersectionObserver &&
+    "mockClear" in global.IntersectionObserver &&
+    typeof global.IntersectionObserver.mockClear === "function"
   ) {
-    window.IntersectionObserver.mockClear();
+    global.IntersectionObserver.mockClear();
   }
   observers.clear();
 }
 
 function getIsReactActEnvironment() {
-  return Boolean(
-    typeof window !== "undefined" && window.IS_REACT_ACT_ENVIRONMENT,
-  );
+  return Boolean(global.IS_REACT_ACT_ENVIRONMENT);
 }
 
 function triggerIntersection(
