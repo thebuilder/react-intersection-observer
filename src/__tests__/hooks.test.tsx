@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
 import React, { useCallback } from "react";
+import { render } from "vitest-browser-react";
 import { type IntersectionOptions, defaultFallbackInView } from "../index";
 import {
   intersectionMockInstance,
@@ -40,7 +40,7 @@ const LazyHookComponent = ({ options }: { options?: IntersectionOptions }) => {
 
 test("should create a hook", () => {
   const { getByTestId } = render(<HookComponent />);
-  const wrapper = getByTestId("wrapper");
+  const wrapper = getByTestId("wrapper").element();
   const instance = intersectionMockInstance(wrapper);
 
   expect(instance.observe).toHaveBeenCalledWith(wrapper);
@@ -50,7 +50,7 @@ test("should create a hook with array threshold", () => {
   const { getByTestId } = render(
     <HookComponent options={{ threshold: [0.1, 1] }} />,
   );
-  const wrapper = getByTestId("wrapper");
+  const wrapper = getByTestId("wrapper").element();
   const instance = intersectionMockInstance(wrapper);
 
   expect(instance.observe).toHaveBeenCalledWith(wrapper);
@@ -58,7 +58,7 @@ test("should create a hook with array threshold", () => {
 
 test("should create a lazy hook", () => {
   const { getByTestId } = render(<LazyHookComponent />);
-  const wrapper = getByTestId("wrapper");
+  const wrapper = getByTestId("wrapper").element();
   const instance = intersectionMockInstance(wrapper);
 
   expect(instance.observe).toHaveBeenCalledWith(wrapper);
@@ -72,7 +72,7 @@ test("should create a hook inView", () => {
 });
 
 test("should mock thresholds", () => {
-  render(<HookComponent options={{ threshold: [0.5, 1] }} />);
+  const screen = render(<HookComponent options={{ threshold: [0.5, 1] }} />);
   mockAllIsIntersecting(0.2);
   screen.getByText("false");
   mockAllIsIntersecting(0.5);
@@ -147,7 +147,7 @@ test("should not reset current state if changing skip", () => {
 
 test("should unmount the hook", () => {
   const { unmount, getByTestId } = render(<HookComponent />);
-  const wrapper = getByTestId("wrapper");
+  const wrapper = getByTestId("wrapper").element();
   const instance = intersectionMockInstance(wrapper);
   unmount();
   expect(instance.unobserve).toHaveBeenCalledWith(wrapper);
@@ -190,7 +190,7 @@ const SwitchHookComponent = ({
       />
       <div
         data-testid="item-2"
-        data-inview={!!toggle && inView}
+        data-inview={toggle && inView}
         ref={toggle && !unmount ? ref : undefined}
       />
     </>
@@ -208,27 +208,27 @@ test("should handle ref removed", () => {
   const item2 = getByTestId("item-2");
 
   // Item1 should be inView
-  expect(item1.getAttribute("data-inview")).toBe("true");
-  expect(item2.getAttribute("data-inview")).toBe("false");
+  expect.element(item1).toHaveAttribute("data-inview", "true");
+  expect.element(item2).toHaveAttribute("data-inview", "false");
 
   rerender(<SwitchHookComponent toggle />);
   mockAllIsIntersecting(true);
 
   // Item2 should be inView
-  expect(item1.getAttribute("data-inview")).toBe("false");
-  expect(item2.getAttribute("data-inview")).toBe("true");
+  expect.element(item1).toHaveAttribute("data-inview", "false");
+  expect.element(item2).toHaveAttribute("data-inview", "true");
 
   rerender(<SwitchHookComponent unmount />);
 
   // Nothing should be inView
-  expect(item1.getAttribute("data-inview")).toBe("false");
-  expect(item2.getAttribute("data-inview")).toBe("false");
+  expect.element(item1).toHaveAttribute("data-inview", "false");
+  expect.element(item2).toHaveAttribute("data-inview", "false");
 
   // Add the ref back
   rerender(<SwitchHookComponent />);
   mockAllIsIntersecting(true);
-  expect(item1.getAttribute("data-inview")).toBe("true");
-  expect(item2.getAttribute("data-inview")).toBe("false");
+  expect.element(item1).toHaveAttribute("data-inview", "true");
+  expect.element(item2).toHaveAttribute("data-inview", "false");
 });
 
 const MergeRefsComponent = ({ options }: { options?: IntersectionOptions }) => {
@@ -248,7 +248,7 @@ test("should handle ref merged", () => {
   mockAllIsIntersecting(true);
   rerender(<MergeRefsComponent />);
 
-  expect(getByTestId("inview").getAttribute("data-inview")).toBe("true");
+  expect.element(getByTestId("inview")).toHaveAttribute("data-inview", "true");
 });
 
 const MultipleHookComponent = ({
@@ -289,14 +289,14 @@ test("should handle multiple hooks on the same element", () => {
     <MultipleHookComponent options={{ threshold: 0.1 }} />,
   );
   mockAllIsIntersecting(true);
-  expect(getByTestId("item-1").getAttribute("data-inview")).toBe("true");
-  expect(getByTestId("item-2").getAttribute("data-inview")).toBe("true");
-  expect(getByTestId("item-3").getAttribute("data-inview")).toBe("true");
+  expect.element(getByTestId("item-1")).toHaveAttribute("data-inview", "true");
+  expect.element(getByTestId("item-2")).toHaveAttribute("data-inview", "true");
+  expect.element(getByTestId("item-3")).toHaveAttribute("data-inview", "true");
 });
 
 test("should handle thresholds missing on observer instance", () => {
-  render(<HookComponent options={{ threshold: [0.1, 1] }} />);
-  const wrapper = screen.getByTestId("wrapper");
+  const screen = render(<HookComponent options={{ threshold: [0.1, 1] }} />);
+  const wrapper = screen.getByTestId("wrapper").element();
   const instance = intersectionMockInstance(wrapper);
   // @ts-ignore
   instance.thresholds = undefined;
@@ -306,8 +306,8 @@ test("should handle thresholds missing on observer instance", () => {
 });
 
 test("should handle thresholds missing on observer instance with no threshold set", () => {
-  render(<HookComponent />);
-  const wrapper = screen.getByTestId("wrapper");
+  const screen = render(<HookComponent />);
+  const wrapper = screen.getByTestId("wrapper").element();
   const instance = intersectionMockInstance(wrapper);
   // @ts-ignore
   instance.thresholds = undefined;
@@ -332,10 +332,10 @@ const HookComponentWithEntry = ({
 };
 
 test("should set intersection ratio as the largest threshold smaller than trigger", () => {
-  render(
+  const screen = render(
     <HookComponentWithEntry options={{ threshold: [0, 0.25, 0.5, 0.75, 1] }} />,
   );
-  const wrapper = screen.getByTestId("wrapper");
+  const wrapper = screen.getByTestId("wrapper").element();
 
   mockIsIntersecting(wrapper, 0.5);
   screen.getByText(/intersectionRatio: 0.5/);
@@ -344,17 +344,15 @@ test("should set intersection ratio as the largest threshold smaller than trigge
 test("should handle fallback if unsupported", () => {
   // @ts-ignore
   window.IntersectionObserver = undefined;
-  const { rerender } = render(
-    <HookComponent options={{ fallbackInView: true }} />,
-  );
+  const screen = render(<HookComponent options={{ fallbackInView: true }} />);
   screen.getByText("true");
 
-  rerender(<HookComponent options={{ fallbackInView: false }} />);
+  screen.rerender(<HookComponent options={{ fallbackInView: false }} />);
   screen.getByText("false");
 
   expect(() => {
     vi.spyOn(console, "error").mockImplementation(() => {});
-    rerender(<HookComponent options={{ fallbackInView: undefined }} />);
+    screen.rerender(<HookComponent options={{ fallbackInView: undefined }} />);
     // @ts-ignore
     console.error.mockRestore();
   }).toThrowErrorMatchingInlineSnapshot(
@@ -366,17 +364,17 @@ test("should handle defaultFallbackInView if unsupported", () => {
   // @ts-ignore
   window.IntersectionObserver = undefined;
   defaultFallbackInView(true);
-  const { rerender } = render(<HookComponent key="true" />);
+  const screen = render(<HookComponent key="true" />);
   screen.getByText("true");
 
   defaultFallbackInView(false);
-  rerender(<HookComponent key="false" />);
+  screen.rerender(<HookComponent key="false" />);
   screen.getByText("false");
 
   defaultFallbackInView(undefined);
   expect(() => {
     vi.spyOn(console, "error").mockImplementation(() => {});
-    rerender(<HookComponent key="undefined" />);
+    screen.rerender(<HookComponent key="undefined" />);
     // @ts-ignore
     console.error.mockRestore();
   }).toThrowErrorMatchingInlineSnapshot(
