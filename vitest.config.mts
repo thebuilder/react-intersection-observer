@@ -2,11 +2,7 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   optimizeDeps: {
-    include: [
-      "@vitest/coverage-istanbul",
-      "react",
-      "react-dom/test-utils",
-    ],
+    include: ["@vitest/coverage-istanbul", "react", "react-dom/test-utils"],
   },
   test: {
     environment: "node",
