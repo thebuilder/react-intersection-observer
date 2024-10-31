@@ -1,6 +1,6 @@
+import { render, screen } from "@testing-library/react";
 import { userEvent } from "@vitest/browser/context";
 import React from "react";
-import { render } from "vitest-browser-react";
 import { InView } from "../InView";
 import { defaultFallbackInView } from "../observe";
 import { intersectionMockInstance, mockAllIsIntersecting } from "../test-utils";
@@ -27,7 +27,7 @@ test("Should render <InView /> intersecting", () => {
 });
 
 test("should render plain children", () => {
-  const screen = render(<InView>inner</InView>);
+  render(<InView>inner</InView>);
   screen.getByText("inner");
 });
 

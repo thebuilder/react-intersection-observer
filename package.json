@@ -114,6 +114,8 @@
     "@arethetypeswrong/cli": "^0.15.3",
     "@biomejs/biome": "^1.9.4",
     "@size-limit/preset-small-lib": "^11.1.4",
+    "@testing-library/jest-dom": "^6.4.6",
+    "@testing-library/react": "^16.0.0",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.1",
