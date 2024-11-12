@@ -56,7 +56,7 @@ test("Should respect skip", () => {
 
 test("Should handle initialInView", () => {
   const cb = vi.fn();
-  const screen = render(
+  render(
     <InView initialInView onChange={cb}>
       {({ inView }) => <span>InView: {inView.toString()}</span>}
     </InView>,
