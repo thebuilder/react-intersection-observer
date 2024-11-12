@@ -1,4 +1,5 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import { userEvent } from "@vitest/browser/context";
 import React from "react";
 import { InView } from "../InView";
 import { defaultFallbackInView } from "../observe";
@@ -142,7 +143,7 @@ test("Should unobserve when unmounted", () => {
   expect(instance.unobserve).toHaveBeenCalled();
 });
 
-test("plain children should not catch bubbling onChange event", () => {
+test("plain children should not catch bubbling onChange event", async () => {
   const onChange = vi.fn();
   const { getByLabelText } = render(
     <InView onChange={onChange}>
@@ -153,7 +154,7 @@ test("plain children should not catch bubbling onChange event", () => {
     </InView>,
   );
   const input = getByLabelText("input");
-  fireEvent.change(input, { target: { value: "changed value" } });
+  await userEvent.type(input, "changed value");
   expect(onChange).not.toHaveBeenCalled();
 });
 
