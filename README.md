@@ -238,6 +238,10 @@ You can read more about this on these links:
 
 ## Testing
 
+> [!TIP]
+> Consider using [Vitest Browser Mode](https://vitest.dev/guide/browser/) instead of `jsdom` or `happy-dom`.
+> This option allows you to utilize the real browser implementation and triggers correctly when scrolling or adding elements to the viewport. You can skip the `react-intersection-observer/test-utils`, or use it as needed.
+
 In order to write meaningful tests, the `IntersectionObserver` needs to be
 mocked. You can use the included `react-intersection-observer/test-utils` to
 help with this. It mocks the `IntersectionObserver`, and includes a few methods
