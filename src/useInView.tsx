@@ -113,7 +113,7 @@ export function useInView({
   );
 
   const entryTarget = state.entry?.target;
-  const previousEntryTarget = React.useRef<Element>(null);
+  const previousEntryTarget = React.useRef<Element | undefined>(undefined);
   if (
     !ref &&
     entryTarget &&
