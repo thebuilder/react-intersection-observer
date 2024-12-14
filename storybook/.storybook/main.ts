@@ -6,7 +6,7 @@ const config: StorybookConfig = {
     "../stories/**/*.mdx",
     "../stories/**/*.@(story|stories).@(ts|tsx)",
   ],
-  addons: ["@storybook/addon-essentials"],
+  addons: ["@storybook/addon-essentials", "@storybook/experimental-addon-test"],
   core: {
     builder: "@storybook/builder-vite",
   },

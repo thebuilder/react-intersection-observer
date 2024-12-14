@@ -107,32 +107,32 @@
     }
   ],
   "peerDependencies": {
-    "react": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
-    "react-dom": "^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+    "react": "^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
-    "@arethetypeswrong/cli": "^0.15.3",
+    "@arethetypeswrong/cli": "^0.17.1",
     "@biomejs/biome": "^1.9.4",
-    "@size-limit/preset-small-lib": "^11.1.4",
-    "@testing-library/jest-dom": "^6.4.6",
-    "@testing-library/react": "^16.0.0",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.1",
-    "@vitejs/plugin-react": "^4.3.1",
-    "@vitest/browser": "^2.1.4",
-    "@vitest/coverage-istanbul": "^2.1.4",
-    "lint-staged": "^15.2.7",
+    "@size-limit/preset-small-lib": "^11.1.6",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
+    "@types/react": "^19.0.1",
+    "@types/react-dom": "^19.0.2",
+    "@vitejs/plugin-react": "^4.3.4",
+    "@vitest/browser": "^2.1.8",
+    "@vitest/coverage-istanbul": "^2.1.8",
+    "lint-staged": "^15.2.11",
     "microbundle": "^0.15.1",
     "npm-run-all": "^4.1.5",
-    "playwright": "^1.45.1",
-    "publint": "^0.2.8",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "playwright": "^1.49.1",
+    "publint": "^0.2.12",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "simple-git-hooks": "^2.11.1",
-    "size-limit": "^11.1.4",
-    "tsup": "^8.1.0",
-    "typescript": "^5.5.3",
-    "vitest": "^2.1.4"
+    "size-limit": "^11.1.6",
+    "tsup": "^8.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
   },
   "peerDependenciesMeta": {
     "react-dom": {
@@ -140,12 +140,6 @@
     }
   },
   "pnpm": {
-    "peerDependencyRules": {
-      "allowedVersions": {
-        "react": "18",
-        "vite": "5"
-      }
-    },
     "allowedDeprecatedVersions": {
       "rollup-plugin-terser": "*",
       "sourcemap-codec": "*",
