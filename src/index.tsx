@@ -64,7 +64,7 @@ export type PlainChildrenProps = IntersectionOptions & {
    * hook to manage the ref explicitly.
    * @default `'div'`
    */
-  as?: keyof JSX.IntrinsicElements;
+  as?: React.ElementType;
 
   /** Call this function whenever the in view state changes */
   onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void;
