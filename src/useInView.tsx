@@ -46,7 +46,9 @@ export function useInView({
   onChange,
 }: IntersectionOptions = {}): InViewHookResponse {
   const [ref, setRef] = React.useState<Element | null>(null);
-  const callback = React.useRef<IntersectionOptions["onChange"]>(onChange);
+  const callback = React.useRef<IntersectionOptions["onChange"] | undefined>(
+    onChange,
+  );
   const [state, setState] = React.useState<State>({
     inView: !!initialInView,
     entry: undefined,
