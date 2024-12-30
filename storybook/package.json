@@ -15,12 +15,12 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@storybook/manager-api": "^8.4.2",
-    "framer-motion": "^11.11.13",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "@storybook/manager-api": "^8.4.7",
+    "framer-motion": "^11.15.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-intersection-observer": "workspace:*",
-    "tailwindcss": "^3.4.14"
+    "tailwindcss": "^3.4.17"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
@@ -33,7 +33,7 @@
     "@storybook/react": "8.4.7",
     "@storybook/react-vite": "8.4.7",
     "@storybook/theming": "8.4.7",
-    "@types/react": "^19.0.1",
+    "@types/react": "^19.0.2",
     "@types/react-dom": "^19.0.2",
     "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
@@ -41,6 +41,6 @@
     "postcss": "^8.4.49",
     "storybook": "8.4.7",
     "typescript": "^5.7.2",
-    "vite": "^6.0.3"
+    "vite": "^6.0.6"
   }
 }
