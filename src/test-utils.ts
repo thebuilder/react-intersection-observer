@@ -1,15 +1,6 @@
 import * as React from "react";
 import * as DeprecatedReactTestUtils from "react-dom/test-utils";
 
-declare global {
-  var IS_REACT_ACT_ENVIRONMENT: boolean;
-  var jest: { fn: typeof vi.fn } | undefined;
-}
-
-const act =
-  // @ts-ignore - Older versions of React don't have the `act` method, so TypeScript will complain about it
-  typeof React.act === "function" ? React.act : DeprecatedReactTestUtils.act;
-
 type Item = {
   callback: IntersectionObserverCallback;
   elements: Set<Element>;
@@ -20,10 +11,17 @@ let isMocking = false;
 
 const observers = new Map<IntersectionObserver, Item>();
 
-// If we are running in a valid testing environment, we can mock the IntersectionObserver.
-if (typeof beforeAll !== "undefined" && typeof afterEach !== "undefined") {
+/*
+ ** If we are running in a valid testing environment, we can automate mocking the IntersectionObserver.
+ */
+if (
+  typeof window !== "undefined" &&
+  typeof beforeAll !== "undefined" &&
+  typeof afterEach !== "undefined"
+) {
   beforeAll(() => {
     // Use the exposed mock function. Currently, only supports Jest (`jest.fn`) and Vitest with globals (`vi.fn`).
+    // @ts-ignore
     if (typeof jest !== "undefined") setupIntersectionMocking(jest.fn);
     else if (typeof vi !== "undefined") {
       setupIntersectionMocking(vi.fn);
@@ -33,6 +31,23 @@ if (typeof beforeAll !== "undefined" && typeof afterEach !== "undefined") {
   afterEach(() => {
     resetIntersectionMocking();
   });
+}
+
+function getActFn() {
+  if (
+    !(
+      typeof window !== "undefined" &&
+      // @ts-ignore
+      window.IS_REACT_ACT_ENVIRONMENT
+    )
+  ) {
+    return undefined;
+  }
+  // @ts-ignore - Older versions of React don't have the `act` method, so TypeScript will complain about it
+  return typeof React.act === "function"
+    ? // @ts-ignore
+      React.act
+    : DeprecatedReactTestUtils.act;
 }
 
 function warnOnMissingSetup() {
@@ -107,12 +122,6 @@ export function resetIntersectionMocking() {
   observers.clear();
 }
 
-function getIsReactActEnvironment() {
-  return Boolean(
-    typeof window !== "undefined" && window.IS_REACT_ACT_ENVIRONMENT,
-  );
-}
-
 function triggerIntersection(
   elements: Element[],
   trigger: boolean | number,
@@ -168,8 +177,8 @@ function triggerIntersection(
   }
 
   // Trigger the IntersectionObserver callback with all the entries
-  if (act && getIsReactActEnvironment())
-    act(() => item.callback(entries, observer));
+  const act = getActFn();
+  if (act) act(() => item.callback(entries, observer));
   else item.callback(entries, observer);
 }
 /**
