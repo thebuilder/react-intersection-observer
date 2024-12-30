@@ -43,9 +43,9 @@ function getActFn() {
   ) {
     return undefined;
   }
-
+  // @ts-ignore - Older versions of React don't have the `act` method, so TypeScript will complain about it
   return typeof React.act === "function"
-    ? // @ts-ignore - Older versions of React don't have the `act` method, so TypeScript will complain about it
+    ? // @ts-ignore
       React.act
     : DeprecatedReactTestUtils.act;
 }
