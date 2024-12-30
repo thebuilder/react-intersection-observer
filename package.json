@@ -29,10 +29,7 @@
       }
     }
   },
-  "files": [
-    "dist",
-    "test-utils"
-  ],
+  "files": ["dist", "test-utils"],
   "author": "Daniel Schmidt",
   "license": "MIT",
   "sideEffects": false,
