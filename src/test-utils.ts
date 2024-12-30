@@ -11,7 +11,9 @@ let isMocking = false;
 
 const observers = new Map<IntersectionObserver, Item>();
 
-// If we are running in a valid testing environment, we can mock the IntersectionObserver.
+/*
+ ** If we are running in a valid testing environment, we can automate mocking the IntersectionObserver.
+ */
 if (
   typeof window !== "undefined" &&
   typeof beforeAll !== "undefined" &&
@@ -29,6 +31,23 @@ if (
   afterEach(() => {
     resetIntersectionMocking();
   });
+}
+
+function getActFn() {
+  if (
+    !(
+      typeof window !== "undefined" &&
+      // @ts-ignore
+      window.IS_REACT_ACT_ENVIRONMENT
+    )
+  ) {
+    return undefined;
+  }
+
+  return typeof React.act === "function"
+    ? // @ts-ignore - Older versions of React don't have the `act` method, so TypeScript will complain about it
+      React.act
+    : DeprecatedReactTestUtils.act;
 }
 
 function warnOnMissingSetup() {
@@ -101,23 +120,6 @@ export function resetIntersectionMocking() {
     window.IntersectionObserver.mockClear();
   }
   observers.clear();
-}
-
-function getActFn() {
-  if (
-    !(
-      typeof window !== "undefined" &&
-      // @ts-ignore
-      window.IS_REACT_ACT_ENVIRONMENT
-    )
-  ) {
-    return undefined;
-  }
-
-  // @ts-ignore - Older versions of React don't have the `act` method, so TypeScript will complain about it
-  return typeof React.act === "function"
-    ? React.act
-    : DeprecatedReactTestUtils.act;
 }
 
 function triggerIntersection(
