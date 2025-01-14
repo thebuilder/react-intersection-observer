@@ -7,9 +7,22 @@ type Item = {
   created: number;
 };
 
-let isMocking = false;
-
 const observers = new Map<IntersectionObserver, Item>();
+
+/**
+ * Check if the IntersectionObserver is currently being mocked.
+ * @return boolean
+ */
+const isMocking = () => {
+  // @ts-ignore
+  if (typeof jest !== "undefined") {
+    // @ts-ignore
+    return jest.isMockFunction(window.IntersectionObserver);
+  }
+  if (typeof vi !== "undefined") {
+    return vi.isMockFunction(window.IntersectionObserver);
+  }
+};
 
 // Store a reference to the original `IntersectionObserver` so we can restore it later.
 // This can be relevant if testing in a browser environment, where you actually have a native `IntersectionObserver`.
@@ -57,7 +70,7 @@ function getActFn() {
 }
 
 function warnOnMissingSetup() {
-  if (isMocking) return;
+  if (isMocking()) return;
   console.error(
     `React Intersection Observer was not configured to handle mocking.
 Outside Jest and Vitest, you might need to manually configure it by calling setupIntersectionMocking() and resetIntersectionMocking() in your test setup file.
@@ -82,7 +95,7 @@ afterEach(() => {
  * @param mockFn The mock function to use. Defaults to `vi.fn`.
  */
 export function setupIntersectionMocking(mockFn: typeof vi.fn) {
-  if (isMocking) return;
+  if (isMocking()) return;
   window.IntersectionObserver = mockFn((cb, options = {}) => {
     const item = {
       callback: cb,
@@ -111,8 +124,6 @@ export function setupIntersectionMocking(mockFn: typeof vi.fn) {
 
     return instance;
   });
-
-  isMocking = true;
 }
 
 /**
@@ -137,7 +148,6 @@ export function destroyIntersectionMocking() {
   resetIntersectionMocking();
   // @ts-ignore
   window.IntersectionObserver = originalIntersectionObserver;
-  isMocking = false;
 }
 
 function triggerIntersection(
