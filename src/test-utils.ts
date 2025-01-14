@@ -11,26 +11,32 @@ let isMocking = false;
 
 const observers = new Map<IntersectionObserver, Item>();
 
+// Store a reference to the original `IntersectionObserver` so we can restore it later.
+// This can be relevant if testing in a browser environment, where you actually have a native `IntersectionObserver`.
+const originalIntersectionObserver =
+  typeof window !== "undefined" ? window.IntersectionObserver : undefined;
+
 /*
  ** If we are running in a valid testing environment, we can automate mocking the IntersectionObserver.
  */
 if (
   typeof window !== "undefined" &&
   typeof beforeAll !== "undefined" &&
+  typeof beforeEach !== "undefined" &&
   typeof afterEach !== "undefined"
 ) {
-  beforeAll(() => {
-    // Use the exposed mock function. Currently, only supports Jest (`jest.fn`) and Vitest with globals (`vi.fn`).
+  const initMocking = () => {
+    // Use the exposed mock function. Currently, it supports Jest (`jest.fn`) and Vitest with globals (`vi.fn`).
     // @ts-ignore
     if (typeof jest !== "undefined") setupIntersectionMocking(jest.fn);
     else if (typeof vi !== "undefined") {
       setupIntersectionMocking(vi.fn);
     }
-  });
+  };
 
-  afterEach(() => {
-    resetIntersectionMocking();
-  });
+  beforeAll(initMocking);
+  beforeEach(initMocking);
+  afterEach(resetIntersectionMocking);
 }
 
 function getActFn() {
@@ -76,6 +82,7 @@ afterEach(() => {
  * @param mockFn The mock function to use. Defaults to `vi.fn`.
  */
 export function setupIntersectionMocking(mockFn: typeof vi.fn) {
+  if (isMocking) return;
   window.IntersectionObserver = mockFn((cb, options = {}) => {
     const item = {
       callback: cb,
@@ -120,6 +127,17 @@ export function resetIntersectionMocking() {
     window.IntersectionObserver.mockClear();
   }
   observers.clear();
+}
+
+/**
+ * Destroy the IntersectionObserver mock function, and restore the original browser implementation of `IntersectionObserver`.
+ * You can use this to opt of mocking in a specific test.
+ **/
+export function destroyIntersectionMocking() {
+  resetIntersectionMocking();
+  // @ts-ignore
+  window.IntersectionObserver = originalIntersectionObserver;
+  isMocking = false;
 }
 
 function triggerIntersection(

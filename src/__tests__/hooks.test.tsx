@@ -2,6 +2,7 @@ import { render, screen } from "@testing-library/react";
 import React, { useCallback } from "react";
 import { type IntersectionOptions, defaultFallbackInView } from "../index";
 import {
+  destroyIntersectionMocking,
   intersectionMockInstance,
   mockAllIsIntersecting,
   mockIsIntersecting,
@@ -342,6 +343,7 @@ test("should set intersection ratio as the largest threshold smaller than trigge
 });
 
 test("should handle fallback if unsupported", () => {
+  destroyIntersectionMocking();
   // @ts-ignore
   window.IntersectionObserver = undefined;
   const { rerender } = render(
@@ -363,6 +365,7 @@ test("should handle fallback if unsupported", () => {
 });
 
 test("should handle defaultFallbackInView if unsupported", () => {
+  destroyIntersectionMocking();
   // @ts-ignore
   window.IntersectionObserver = undefined;
   defaultFallbackInView(true);
@@ -382,4 +385,13 @@ test("should handle defaultFallbackInView if unsupported", () => {
   }).toThrowErrorMatchingInlineSnapshot(
     `[TypeError: IntersectionObserver is not a constructor]`,
   );
+});
+
+test("should restore the browser IntersectingObserver", () => {
+  expect(vi.isMockFunction(window.IntersectionObserver)).toBe(true);
+  destroyIntersectionMocking();
+
+  // This should restore the original IntersectionObserver
+  expect(window.IntersectionObserver).toBeDefined();
+  expect(vi.isMockFunction(window.IntersectionObserver)).toBe(false);
 });
