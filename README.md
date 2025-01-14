@@ -251,12 +251,13 @@ will emulate the real IntersectionObserver, allowing you to validate that your
 components are behaving as expected.
 
 | Method                                        | Description                                                                                                                                                                       |
-| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|-----------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `mockAllIsIntersecting(isIntersecting)`       | Set `isIntersecting` on all current Intersection Observer instances. The value of `isIntersecting` should be either a `boolean` or a threshold between 0 and 1.                   |
 | `mockIsIntersecting(element, isIntersecting)` | Set `isIntersecting` for the Intersection Observer of a specific `element`. The value of `isIntersecting` should be either a `boolean` or a threshold between 0 and 1.            |
 | `intersectionMockInstance(element)`           | Call the `intersectionMockInstance` method with an element, to get the (mocked) `IntersectionObserver` instance. You can use this to spy on the `observe` and`unobserve` methods. |
 | `setupIntersectionMocking(mockFn)`            | Mock the `IntersectionObserver`, so we can interact with them in tests - Should be called in `beforeEach`. (**Done automatically in Jest environment**)                           |
-| `resetIntersectionMocking()`                  | Reset the mocks on `IntersectionObserver` - Should be called in `afterEach`. (**Done automatically in Jest environment**)                                                         |
+| `resetIntersectionMocking()`                  | Reset the mocks on `IntersectionObserver` - Should be called in `afterEach`. (**Done automatically in Jest/Vitest environment**)                                                  |
+| `destroyIntersectionMocking()`                | Destroy the mocked `IntersectionObserver` function, and return `window.IntersectionObserver` to the original browser implementation                                               |
 
 ### Testing Libraries
 
