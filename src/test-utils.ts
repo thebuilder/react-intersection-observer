@@ -34,21 +34,20 @@ const originalIntersectionObserver =
  */
 if (
   typeof window !== "undefined" &&
-  typeof beforeAll !== "undefined" &&
   typeof beforeEach !== "undefined" &&
   typeof afterEach !== "undefined"
 ) {
-  const initMocking = () => {
+  beforeEach(() => {
     // Use the exposed mock function. Currently, it supports Jest (`jest.fn`) and Vitest with globals (`vi.fn`).
     // @ts-ignore
     if (typeof jest !== "undefined") setupIntersectionMocking(jest.fn);
     else if (typeof vi !== "undefined") {
       setupIntersectionMocking(vi.fn);
     }
-  };
+    // Ensure there's no observers from previous tests
+    observers.clear();
+  });
 
-  beforeAll(initMocking);
-  beforeEach(initMocking);
   afterEach(resetIntersectionMocking);
 }
 
@@ -95,7 +94,6 @@ afterEach(() => {
  * @param mockFn The mock function to use. Defaults to `vi.fn`.
  */
 export function setupIntersectionMocking(mockFn: typeof vi.fn) {
-  if (isMocking()) return;
   window.IntersectionObserver = mockFn((cb, options = {}) => {
     const item = {
       callback: cb,
