@@ -9,25 +9,33 @@ type Item = {
 
 const observers = new Map<IntersectionObserver, Item>();
 
-/**
- * Check if the IntersectionObserver is currently being mocked.
- * @return boolean
- */
-const isMocking = () => {
-  // @ts-ignore
-  if (typeof jest !== "undefined") {
-    // @ts-ignore
-    return jest.isMockFunction(window.IntersectionObserver);
-  }
-  if (typeof vi !== "undefined") {
-    return vi.isMockFunction(window.IntersectionObserver);
-  }
-};
-
 // Store a reference to the original `IntersectionObserver` so we can restore it later.
 // This can be relevant if testing in a browser environment, where you actually have a native `IntersectionObserver`.
 const originalIntersectionObserver =
   typeof window !== "undefined" ? window.IntersectionObserver : undefined;
+
+/**
+ * Get the test utility object, depending on the environment. This could be either `vi` (Vitest) or `jest`.
+ * Type is mapped to Vitest, so we don't mix in Jest types when running in Vitest.
+ */
+function testLibraryUtil(): typeof vi | undefined {
+  if (typeof vi !== "undefined") return vi;
+  // @ts-expect-error We don't include the Jest types
+  if (typeof jest !== "undefined") return jest;
+  return undefined;
+}
+
+/**
+ * Check if the IntersectionObserver is currently being mocked.
+ * @return boolean
+ */
+function isMocking() {
+  const util = testLibraryUtil();
+  if (util && typeof util.isMockFunction === "function") {
+    return util.isMockFunction(window.IntersectionObserver);
+  }
+  return false;
+}
 
 /*
  ** If we are running in a valid testing environment, we can automate mocking the IntersectionObserver.
@@ -38,11 +46,9 @@ if (
   typeof afterEach !== "undefined"
 ) {
   beforeEach(() => {
-    // Use the exposed mock function. Currently, it supports Jest (`jest.fn`) and Vitest with globals (`vi.fn`).
-    // @ts-ignore
-    if (typeof jest !== "undefined") setupIntersectionMocking(jest.fn);
-    else if (typeof vi !== "undefined") {
-      setupIntersectionMocking(vi.fn);
+    const util = testLibraryUtil();
+    if (util) {
+      setupIntersectionMocking(util.fn);
     }
     // Ensure there's no observers from previous tests
     observers.clear();
