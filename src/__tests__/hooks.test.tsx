@@ -387,7 +387,7 @@ test("should handle defaultFallbackInView if unsupported", () => {
   );
 });
 
-test("should restore the browser IntersectingObserver", () => {
+test("should restore the browser IntersectionObserver", () => {
   expect(vi.isMockFunction(window.IntersectionObserver)).toBe(true);
   destroyIntersectionMocking();
 
