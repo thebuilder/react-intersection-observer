@@ -3,6 +3,7 @@
 import type * as React from "react";
 export { InView } from "./InView";
 export { useInView } from "./useInView";
+export { useOnInViewChanged } from "./useOnInViewChanged";
 export { observe } from "./observe";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;

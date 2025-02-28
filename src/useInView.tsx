@@ -63,20 +63,24 @@ export function useInView(
     (inView, entry) => {
       setState({ inView, entry });
 
-      // Call the external onChange if provided
       const { onChange } = latestOptions.current;
+      // Call the external onChange if provided
+      // entry is undefined only if this is triggered by initialInView
       if (onChange && entry) {
         onChange(inView, entry);
       }
 
-      // If triggerOnce is true, we don't need to reset state in cleanup
+      // If triggerOnce is true no reset state is done in the cleanup
+      // this allows destroying the observer as soon as the element is inView
       if (triggerOnce) {
         return undefined;
       }
 
       // Return cleanup function that will run when element is removed or goes out of view
       return (entry) => {
+        const { onChange } = latestOptions.current;
         // Call the external onChange if provided
+        // entry is undefined if the element is getting unmounted
         if (onChange && entry) {
           onChange(false, entry);
         }
