@@ -20,7 +20,7 @@ interface RenderProps {
   ref: React.RefObject<any> | ((node?: Element | null) => void);
 }
 
-export interface IntersectionOptions extends IntersectionObserverInit {
+export interface IntersectionListenerOptions extends IntersectionObserverInit {
   /** The IntersectionObserver interface's read-only `root` property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target. If the `root` is null, then the bounds of the actual document viewport are used.*/
   root?: Element | Document | null;
   /** Margin around the root. Can have values similar to the CSS margin property, e.g. `10px 20px 30px 40px` (top, right, bottom, left). */
@@ -37,6 +37,9 @@ export interface IntersectionOptions extends IntersectionObserverInit {
   trackVisibility?: boolean;
   /** IntersectionObserver v2 - Set a minimum delay between notifications */
   delay?: number;
+}
+
+export interface IntersectionOptions extends IntersectionListenerOptions {
   /** Call this function whenever the in view state changes */
   onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void;
 }
@@ -81,3 +84,15 @@ export type InViewHookResponse = [
   inView: boolean;
   entry?: IntersectionObserverEntry;
 };
+
+/**
+ * The callback called by the useOnInViewChanged hook
+ */
+export type InViewHookChangeListener<TElement extends Element> = (
+  element: TElement,
+  /** Entry is always defined except when `initialInView` is true for the first call */
+  entry: IntersectionObserverEntry | undefined,
+) => // biome-ignore lint/suspicious/noConfusingVoidType: Allow no return statement
+  | void
+  | undefined
+  | ((entry?: IntersectionObserverEntry | undefined) => void);

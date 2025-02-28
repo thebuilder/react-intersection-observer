@@ -53,45 +53,44 @@ export function useInView(
     entry: undefined,
   });
 
-  // Store the onChange callback in a ref
+  // The cleanup function is created when the element gets in view and therefore
+  // needs a ref to access the latest options
   const latestOptions = React.useRef(options);
   latestOptions.current = options;
 
   // Create the ref tracking function using useOnInViewChanged
   const refCallback = useOnInViewChanged(
     // Combined callback - updates state, calls onChange, and returns cleanup if needed
-    (inView, entry) => {
-      setState({ inView, entry });
+    (_, entry) => {
+      setState({ inView: true, entry });
 
       const { onChange } = latestOptions.current;
       // Call the external onChange if provided
       // entry is undefined only if this is triggered by initialInView
       if (onChange && entry) {
-        onChange(inView, entry);
+        onChange(true, entry);
       }
 
-      // If triggerOnce is true no reset state is done in the cleanup
-      // this allows destroying the observer as soon as the element is inView
-      if (triggerOnce) {
-        return undefined;
-      }
-
-      // Return cleanup function that will run when element is removed or goes out of view
-      return (entry) => {
-        const { onChange } = latestOptions.current;
-        // Call the external onChange if provided
-        // entry is undefined if the element is getting unmounted
-        if (onChange && entry) {
-          onChange(false, entry);
-        }
-        // should not reset current state if changing skip
-        if (!latestOptions.current.skip) {
-          setState({
-            inView: false,
-            entry: undefined,
-          });
-        }
-      };
+      return triggerOnce
+        ? // If triggerOnce is true no reset state is done in the cleanup
+          // this allows destroying the observer as soon as the element is inView
+          undefined
+        : // Return cleanup function that will run when element is removed or goes out of view
+          (entry) => {
+            const { onChange, skip } = latestOptions.current;
+            // Call the external onChange if provided
+            // entry is undefined if the element is getting unmounted
+            if (onChange && entry) {
+              onChange(false, entry);
+            }
+            // should not reset current state if changing skip
+            if (!skip) {
+              setState({
+                inView: false,
+                entry: undefined,
+              });
+            }
+          };
     },
     {
       root,

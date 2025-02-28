@@ -1,5 +1,8 @@
 import * as React from "react";
-import type { IntersectionOptions } from "./index";
+import type {
+  InViewHookChangeListener,
+  IntersectionListenerOptions,
+} from "./index";
 import { observe } from "./observe";
 
 /**
@@ -36,11 +39,7 @@ import { observe } from "./observe";
  * ```
  */
 export const useOnInViewChanged = <TElement extends Element>(
-  onGetsIntoView: (
-    inView: boolean,
-    entry: IntersectionObserverEntry | undefined,
-    element: TElement,
-  ) => undefined | ((entry: IntersectionObserverEntry | undefined) => void),
+  onGetsIntoView: InViewHookChangeListener<TElement>,
   {
     threshold,
     delay,
@@ -50,7 +49,7 @@ export const useOnInViewChanged = <TElement extends Element>(
     triggerOnce,
     skip,
     initialInView,
-  }: IntersectionOptions = {},
+  }: IntersectionListenerOptions = {},
   dependencies: React.DependencyList = [],
 ) => {
   // Store the onGetsIntoView in a ref to avoid triggering recreation
@@ -65,13 +64,13 @@ export const useOnInViewChanged = <TElement extends Element>(
 
       let callbackCleanup:
         | undefined
-        | ((entry?: IntersectionObserverEntry) => void);
+        | ReturnType<InViewHookChangeListener<TElement>>;
       let didTriggerOnce = false;
 
       // If initialInView is true, we have to call the callback immediately
       // to get a cleanup function for the out of view event
       if (initialInView) {
-        callbackCleanup = onGetsIntoViewRef.current(true, undefined, element);
+        callbackCleanup = onGetsIntoViewRef.current(element, undefined);
       }
 
       const destroyInviewObserver = observe(
@@ -88,7 +87,7 @@ export const useOnInViewChanged = <TElement extends Element>(
           }
 
           // Call callback with inView state, entry, and element
-          callbackCleanup = onGetsIntoViewRef.current(inView, entry, element);
+          callbackCleanup = onGetsIntoViewRef.current(element, entry);
 
           didTriggerOnce = true;
 
