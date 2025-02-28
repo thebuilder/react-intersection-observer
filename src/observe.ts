@@ -12,18 +12,6 @@ const observerMap = new Map<
 const RootIds: WeakMap<Element | Document, string> = new WeakMap();
 let rootId = 0;
 
-let unsupportedValue: boolean | undefined = undefined;
-
-/**
- * What should be the default behavior if the IntersectionObserver is unsupported?
- * Ideally the polyfill has been loaded, you can have the following happen:
- * - `undefined`: Throw an error
- * - `true` or `false`: Set the `inView` value to this regardless of intersection state
- * **/
-export function defaultFallbackInView(inView: boolean | undefined) {
-  unsupportedValue = inView;
-}
-
 /**
  * Generate a unique ID for the root element
  * @param root
@@ -112,34 +100,13 @@ function createObserver(options: IntersectionObserverInit) {
  * @param element - DOM Element to observe
  * @param callback - Callback function to trigger when intersection status changes
  * @param options - Intersection Observer options
- * @param fallbackInView - Fallback inView value.
  * @return Function - Cleanup function that should be triggered to unregister the observer
  */
 export function observe(
   element: Element,
   callback: ObserverInstanceCallback,
   options: IntersectionObserverInit = {},
-  fallbackInView = unsupportedValue,
 ) {
-  if (
-    typeof window.IntersectionObserver === "undefined" &&
-    fallbackInView !== undefined
-  ) {
-    const bounds = element.getBoundingClientRect();
-    callback(fallbackInView, {
-      isIntersecting: fallbackInView,
-      target: element,
-      intersectionRatio:
-        typeof options.threshold === "number" ? options.threshold : 0,
-      time: 0,
-      boundingClientRect: bounds,
-      intersectionRect: bounds,
-      rootBounds: bounds,
-    });
-    return () => {
-      // Nothing to cleanup
-    };
-  }
   // An observer with the same options can be reused, so lets use this fact
   const { id, observer, elements } = createObserver(options);
 

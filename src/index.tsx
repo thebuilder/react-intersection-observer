@@ -3,7 +3,7 @@
 import type * as React from "react";
 export { InView } from "./InView";
 export { useInView } from "./useInView";
-export { observe, defaultFallbackInView } from "./observe";
+export { observe } from "./observe";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
@@ -32,8 +32,6 @@ export interface IntersectionOptions extends IntersectionObserverInit {
   skip?: boolean;
   /** Set the initial value of the `inView` boolean. This can be used if you expect the element to be in the viewport to start with, and you want to trigger something when it leaves. */
   initialInView?: boolean;
-  /** Fallback to this inView state if the IntersectionObserver is unsupported, and a polyfill wasn't loaded */
-  fallbackInView?: boolean;
   /** IntersectionObserver v2 - Track the actual visibility of the element */
   trackVisibility?: boolean;
   /** IntersectionObserver v2 - Set a minimum delay between notifications */
@@ -74,11 +72,11 @@ export type PlainChildrenProps = IntersectionOptions & {
  * The Hook response supports both array and object destructing
  */
 export type InViewHookResponse = [
-  (node?: Element | null) => void,
+  (node?: Element | null) => () => void,
   boolean,
   IntersectionObserverEntry | undefined,
 ] & {
-  ref: (node?: Element | null) => void;
+  ref: (node?: Element | null) => () => void;
   inView: boolean;
   entry?: IntersectionObserverEntry;
 };
