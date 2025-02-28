@@ -50,7 +50,6 @@ export const useOnInViewChanged = <TElement extends Element>(
     skip,
     initialInView,
   }: IntersectionListenerOptions = {},
-  dependencies: React.DependencyList = [],
 ) => {
   // Store the onGetsIntoView in a ref to avoid triggering recreation
   const onGetsIntoViewRef = React.useRef(onGetsIntoView);
@@ -115,7 +114,6 @@ export const useOnInViewChanged = <TElement extends Element>(
     },
     // We break the rule here, because we aren't including the actual `threshold` variable
     [
-      ...dependencies,
       root,
       rootMargin,
       // Convert threshold array to string for stable dependency

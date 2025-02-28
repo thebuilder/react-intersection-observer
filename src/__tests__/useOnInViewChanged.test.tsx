@@ -330,32 +330,3 @@ test("should pass the element to the callback", () => {
 
   expect(capturedElement).toBe(element);
 });
-
-test("should handle dependencies properly", () => {
-  const dependencyTest = vi.fn();
-
-  const DependencyTestComponent = ({ value }: { value: number }) => {
-    const inViewRef = useOnInViewChanged(
-      (element, entry) => {
-        dependencyTest(value);
-        return undefined;
-      },
-      {},
-      [value],
-    );
-
-    return <div data-testid="dependency-test" ref={inViewRef} />;
-  };
-
-  const { rerender } = render(<DependencyTestComponent value={1} />);
-  mockAllIsIntersecting(true);
-
-  expect(dependencyTest).toHaveBeenCalledWith(1);
-
-  // Update the dependency
-  rerender(<DependencyTestComponent value={2} />);
-  mockAllIsIntersecting(true);
-
-  // Should be called with new value
-  expect(dependencyTest).toHaveBeenCalledWith(2);
-});
