@@ -53,7 +53,14 @@ export const useOnInViewChanged = <TElement extends Element>(
 ) => {
   // Store the onGetsIntoView in a ref to avoid triggering recreation
   const onGetsIntoViewRef = React.useRef(onGetsIntoView);
-  onGetsIntoViewRef.current = onGetsIntoView;
+  // https://react.dev/reference/react/useRef#caveats
+  // > Do not write or read ref.current during rendering, except for initialization. This makes your component’s behavior unpredictable.
+  //
+  // With useInsertionEffect, ref.current can be updated after a successful render
+  // from https://github.com/sanity-io/use-effect-event/blob/main/src/useEffectEvent.ts
+  React.useInsertionEffect(() => {
+    onGetsIntoViewRef.current = onGetsIntoView;
+  }, [onGetsIntoView]);
 
   return React.useCallback(
     (element: TElement | undefined | null) => {
