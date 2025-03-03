@@ -111,13 +111,14 @@ export function observe(
   const { id, observer, elements } = createObserver(options);
 
   // Register the callback listener for this element
-  const callbacks = elements.get(element) || [];
-  if (!elements.has(element)) {
+  let callbacks = elements.get(element);
+  if (!callbacks) {
+    callbacks = [];
     elements.set(element, callbacks);
+    observer.observe(element);
   }
 
   callbacks.push(callback);
-  observer.observe(element);
 
   return function unobserve() {
     // Remove the callback from the callback list
