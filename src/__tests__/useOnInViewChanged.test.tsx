@@ -15,14 +15,14 @@ const OnInViewChangedComponent = ({
   const [callCount, setCallCount] = React.useState(0);
   const [cleanupCount, setCleanupCount] = React.useState(0);
 
-  const inViewRef = useOnInViewChanged((element, entry) => {
+  const inViewRef = useOnInViewChanged((entry) => {
     setInView(entry ? entry.isIntersecting : false);
     setCallCount((prev) => prev + 1);
 
     // Return cleanup function
-    return (entry) => {
+    return (cleanupEntry) => {
       setCleanupCount((prev) => prev + 1);
-      if (entry) {
+      if (cleanupEntry) {
         setInView(false);
       }
     };
@@ -53,7 +53,7 @@ const LazyOnInViewChangedComponent = ({
     setIsLoading(false);
   }, []);
 
-  const inViewRef = useOnInViewChanged((element, entry) => {
+  const inViewRef = useOnInViewChanged((entry) => {
     setInView(entry ? entry.isIntersecting : false);
     return () => setInView(false);
   }, options);
@@ -232,7 +232,7 @@ const MergeRefsComponent = ({
 }: { options?: IntersectionListenerOptions }) => {
   const [inView, setInView] = React.useState(false);
 
-  const inViewRef = useOnInViewChanged((element, entry) => {
+  const inViewRef = useOnInViewChanged((entry) => {
     setInView(entry ? entry.isIntersecting : false);
     return () => setInView(false);
   }, options);
@@ -263,17 +263,17 @@ const MultipleCallbacksComponent = ({
   const [inView2, setInView2] = React.useState(false);
   const [inView3, setInView3] = React.useState(false);
 
-  const ref1 = useOnInViewChanged((element, entry) => {
+  const ref1 = useOnInViewChanged((entry) => {
     setInView1(entry ? entry.isIntersecting : false);
     return () => setInView1(false);
   }, options);
 
-  const ref2 = useOnInViewChanged((element, entry) => {
+  const ref2 = useOnInViewChanged((entry) => {
     setInView2(entry ? entry.isIntersecting : false);
     return () => setInView2(false);
   }, options);
 
-  const ref3 = useOnInViewChanged((element, entry) => {
+  const ref3 = useOnInViewChanged((entry) => {
     setInView3(entry ? entry.isIntersecting : false);
     return () => setInView3(false);
   });
@@ -316,8 +316,8 @@ test("should pass the element to the callback", () => {
   let capturedElement: Element | undefined;
 
   const ElementTestComponent = () => {
-    const inViewRef = useOnInViewChanged((element, entry) => {
-      capturedElement = element;
+    const inViewRef = useOnInViewChanged((entry) => {
+      capturedElement = entry?.target;
       return undefined;
     });
 

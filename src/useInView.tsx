@@ -61,7 +61,7 @@ export function useInView(
   // Create the ref tracking function using useOnInViewChanged
   const refCallback = useOnInViewChanged(
     // Combined callback - updates state, calls onChange, and returns cleanup if needed
-    (_, entry) => {
+    (entry) => {
       setState({ inView: true, entry });
 
       const { onChange } = latestOptions.current;

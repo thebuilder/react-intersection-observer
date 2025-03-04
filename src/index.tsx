@@ -8,9 +8,9 @@ export { observe } from "./observe";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
-export type ObserverInstanceCallback = (
+export type ObserverInstanceCallback<TElement = Element> = (
   inView: boolean,
-  entry: IntersectionObserverEntry,
+  entry: IntersectionObserverEntry & { target: TElement },
 ) => void;
 
 interface RenderProps {
@@ -86,12 +86,13 @@ export type InViewHookResponse = [
 };
 
 /**
- * The callback called by the useOnInViewChanged hook
+ * The callback called by the useOnInViewChanged hook once the element is in view
+ *
+ * Allows to return a cleanup function that will be called when the element goes out of view or when the observer is destroyed
  */
-export type InViewHookChangeListener<TElement extends Element> = (
-  element: TElement,
+export type InViewEnterHookListener<TElement extends Element> = (
   /** Entry is always defined except when `initialInView` is true for the first call */
-  entry: IntersectionObserverEntry | undefined,
+  entry: (IntersectionObserverEntry & { target: TElement }) | undefined,
 ) => // biome-ignore lint/suspicious/noConfusingVoidType: Allow no return statement
   | void
   | undefined

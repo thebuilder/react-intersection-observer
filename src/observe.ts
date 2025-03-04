@@ -102,9 +102,9 @@ function createObserver(options: IntersectionObserverInit) {
  * @param options - Intersection Observer options
  * @return Function - Cleanup function that should be triggered to unregister the observer
  */
-export function observe(
-  element: Element,
-  callback: ObserverInstanceCallback,
+export function observe<TElement extends Element>(
+  element: TElement,
+  callback: ObserverInstanceCallback<TElement>,
   options: IntersectionObserverInit = {},
 ) {
   // An observer with the same options can be reused, so lets use this fact
@@ -114,15 +114,18 @@ export function observe(
   let callbacks = elements.get(element);
   if (!callbacks) {
     callbacks = [];
-    elements.set(element, callbacks);
+    elements.set(element, callbacks as ObserverInstanceCallback[]);
     observer.observe(element);
   }
 
-  callbacks.push(callback);
+  callbacks.push(callback as ObserverInstanceCallback);
 
   return function unobserve() {
     // Remove the callback from the callback list
-    callbacks.splice(callbacks.indexOf(callback), 1);
+    callbacks.splice(
+      callbacks.indexOf(callback as ObserverInstanceCallback),
+      1,
+    );
 
     if (callbacks.length === 0) {
       // No more callback exists for element, so destroy it

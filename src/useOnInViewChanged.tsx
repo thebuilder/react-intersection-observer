@@ -1,6 +1,6 @@
 import * as React from "react";
 import type {
-  InViewHookChangeListener,
+  InViewEnterHookListener,
   IntersectionListenerOptions,
 } from "./index";
 import { observe } from "./observe";
@@ -20,12 +20,12 @@ import { observe } from "./observe";
  * import { useOnInViewChanged } from 'react-intersection-observer';
  *
  * const Component = () => {
- *   const inViewRef = useOnInViewChanged((inView, entry, element) => {
- *     console.log(`Element is ${inView ? 'in view' : 'out of view'}`);
+ *   const inViewRef = useOnInViewChanged((entry) => {
+ *     console.log(`Element is in view`, entry?.target);
  *     // Optional: cleanup function:
- *    return () => {
- *     console.log('Element moved out of view or unmounted');
- *    };
+ *     return () => {
+ *       console.log('Element moved out of view or unmounted');
+ *     };
  *   }, {
  *     threshold: 0,
  *   });
@@ -39,7 +39,7 @@ import { observe } from "./observe";
  * ```
  */
 export const useOnInViewChanged = <TElement extends Element>(
-  onGetsIntoView: InViewHookChangeListener<TElement>,
+  onGetsIntoView: InViewEnterHookListener<TElement>,
   {
     threshold,
     delay,
@@ -70,13 +70,13 @@ export const useOnInViewChanged = <TElement extends Element>(
 
       let callbackCleanup:
         | undefined
-        | ReturnType<InViewHookChangeListener<TElement>>;
+        | ReturnType<InViewEnterHookListener<TElement>>;
       let didTriggerOnce = false;
 
       // If initialInView is true, we have to call the callback immediately
       // to get a cleanup function for the out of view event
       if (initialInView) {
-        callbackCleanup = onGetsIntoViewRef.current(element, undefined);
+        callbackCleanup = onGetsIntoViewRef.current(undefined);
       }
 
       const destroyInviewObserver = observe(
@@ -93,7 +93,7 @@ export const useOnInViewChanged = <TElement extends Element>(
           }
 
           // Call callback with inView state, entry, and element
-          callbackCleanup = onGetsIntoViewRef.current(element, entry);
+          callbackCleanup = onGetsIntoViewRef.current(entry);
 
           didTriggerOnce = true;
 
