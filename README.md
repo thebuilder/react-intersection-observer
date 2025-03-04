@@ -240,12 +240,12 @@ You can read more about this on these links:
 
 ```js
 const inViewRef = useOnInViewChanged(
-  (element, entry) => {
+  (enterEntry) => {
     // Do something with the element that came into view
-    console.log('Element is in view', element);
+    console.log('Element is in view', enterEntry?.element);
     
     // Optionally return a cleanup function
-    return (entry) => {
+    return (exitEntry) => {
       console.log('Element moved out of view or unmounted');
     };
   },
