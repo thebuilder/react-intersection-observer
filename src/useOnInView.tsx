@@ -1,13 +1,13 @@
 import * as React from "react";
 import type {
-  InViewEnterHookListener,
-  IntersectionListenerOptions,
+  IntersectionChangeEffect,
+  IntersectionEffectOptions,
 } from "./index";
 import { observe } from "./observe";
 
 /**
  * React Hooks make it easy to monitor when elements come into and leave view. Call
- * the `useOnInViewChanged` hook with your callback and (optional) [options](#options).
+ * the `useOnInView` hook with your callback and (optional) [options](#options).
  * It will return a ref callback that you can assign to the DOM element you want to monitor.
  * When the element enters or leaves the viewport, your callback will be triggered.
  *
@@ -17,10 +17,10 @@ import { observe } from "./observe";
  * @example
  * ```jsx
  * import React from 'react';
- * import { useOnInViewChanged } from 'react-intersection-observer';
+ * import { useOnInView } from 'react-intersection-observer';
  *
  * const Component = () => {
- *   const inViewRef = useOnInViewChanged((entry) => {
+ *   const inViewRef = useOnInView((entry) => {
  *     console.log(`Element is in view`, entry?.target);
  *     // Optional: cleanup function:
  *     return () => {
@@ -38,29 +38,29 @@ import { observe } from "./observe";
  * };
  * ```
  */
-export const useOnInViewChanged = <TElement extends Element>(
-  onGetsIntoView: InViewEnterHookListener<TElement>,
+export const useOnInView = <TElement extends Element>(
+  onIntersectionChange: IntersectionChangeEffect<TElement>,
   {
     threshold,
-    delay,
-    trackVisibility,
-    rootMargin,
     root,
+    rootMargin,
+    trackVisibility,
+    delay,
     triggerOnce,
     skip,
-    initialInView,
-  }: IntersectionListenerOptions = {},
+    trigger,
+  }: IntersectionEffectOptions = {},
 ) => {
-  // Store the onGetsIntoView in a ref to avoid triggering recreation
-  const onGetsIntoViewRef = React.useRef(onGetsIntoView);
+  // Store the onIntersectionChange in a ref to avoid triggering recreation
+  const onIntersectionChangeRef = React.useRef(onIntersectionChange);
   // https://react.dev/reference/react/useRef#caveats
   // > Do not write or read ref.current during rendering, except for initialization. This makes your component’s behavior unpredictable.
   //
   // With useInsertionEffect, ref.current can be updated after a successful render
   // from https://github.com/sanity-io/use-effect-event/blob/main/src/useEffectEvent.ts
   React.useInsertionEffect(() => {
-    onGetsIntoViewRef.current = onGetsIntoView;
-  }, [onGetsIntoView]);
+    onIntersectionChangeRef.current = onIntersectionChange;
+  }, [onIntersectionChange]);
 
   return React.useCallback(
     (element: TElement | undefined | null) => {
@@ -70,43 +70,43 @@ export const useOnInViewChanged = <TElement extends Element>(
 
       let callbackCleanup:
         | undefined
-        | ReturnType<InViewEnterHookListener<TElement>>;
-      let didTriggerOnce = false;
+        | ReturnType<IntersectionChangeEffect<TElement>>;
 
-      // If initialInView is true, we have to call the callback immediately
-      // to get a cleanup function for the out of view event
-      if (initialInView) {
-        callbackCleanup = onGetsIntoViewRef.current(undefined);
-      }
+      // enter: intersectionsStateTrigger = true
+      // leave: intersectionsStateTrigger = false
+      const intersectionsStateTrigger = trigger !== "leave";
 
       const destroyInviewObserver = observe(
         element,
         (inView, entry) => {
-          // Call cleanup when going out of view
-          if (!inView) {
-            if (triggerOnce && didTriggerOnce) {
-              destroyInviewObserver?.();
+          // Call cleanup when going out of view (if trigger is "enter")
+          // Call cleanup when going in view (if trigger is "leave")
+          if (inView !== intersectionsStateTrigger) {
+            if (callbackCleanup) {
+              callbackCleanup(entry);
+              callbackCleanup = undefined;
+              // If the callbackCleanup was called and triggerOnce is true
+              // the observer can be destroyed immediately after the callback is called
+              if (triggerOnce) {
+                destroyInviewObserver();
+              }
             }
-            callbackCleanup?.(entry);
-            callbackCleanup = undefined;
-            return;
-          }
+          } else {
+            // Call the callback when the element is in view (if trigger is "enter")
+            // Call the callback when the element is out of view (if trigger is "leave")
+            callbackCleanup = onIntersectionChangeRef.current(entry);
 
-          // Call callback with inView state, entry, and element
-          callbackCleanup = onGetsIntoViewRef.current(entry);
-
-          didTriggerOnce = true;
-
-          // if the cleanup is not waiting for the element to go out of view
-          // and triggerOnce is true, we can destroy the observer
-          if (triggerOnce && !callbackCleanup) {
-            destroyInviewObserver?.();
+            // if there is no cleanup function returned from the callback
+            // and triggerOnce is true, the observer can be destroyed immediately
+            if (triggerOnce && !callbackCleanup) {
+              destroyInviewObserver();
+            }
           }
         },
         {
+          threshold,
           root,
           rootMargin,
-          threshold,
           // @ts-ignore
           trackVisibility,
           // @ts-ignore
@@ -121,14 +121,15 @@ export const useOnInViewChanged = <TElement extends Element>(
     },
     // We break the rule here, because we aren't including the actual `threshold` variable
     [
-      root,
-      rootMargin,
       // Convert threshold array to string for stable dependency
       Array.isArray(threshold) ? threshold.toString() : threshold,
+      root,
+      rootMargin,
       trackVisibility,
       delay,
       triggerOnce,
       skip,
+      trigger,
     ],
   );
 };

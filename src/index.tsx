@@ -3,7 +3,7 @@
 import type * as React from "react";
 export { InView } from "./InView";
 export { useInView } from "./useInView";
-export { useOnInViewChanged } from "./useOnInViewChanged";
+export { useOnInView } from "./useOnInView";
 export { observe } from "./observe";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
@@ -20,7 +20,7 @@ interface RenderProps {
   ref: React.RefObject<any> | ((node?: Element | null) => void);
 }
 
-export interface IntersectionListenerOptions extends IntersectionObserverInit {
+export interface IntersectionBaseOptions extends IntersectionObserverInit {
   /** The IntersectionObserver interface's read-only `root` property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target. If the `root` is null, then the bounds of the actual document viewport are used.*/
   root?: Element | Document | null;
   /** Margin around the root. Can have values similar to the CSS margin property, e.g. `10px 20px 30px 40px` (top, right, bottom, left). */
@@ -31,17 +31,22 @@ export interface IntersectionListenerOptions extends IntersectionObserverInit {
   triggerOnce?: boolean;
   /** Skip assigning the observer to the `ref` */
   skip?: boolean;
-  /** Set the initial value of the `inView` boolean. This can be used if you expect the element to be in the viewport to start with, and you want to trigger something when it leaves. */
-  initialInView?: boolean;
   /** IntersectionObserver v2 - Track the actual visibility of the element */
   trackVisibility?: boolean;
   /** IntersectionObserver v2 - Set a minimum delay between notifications */
   delay?: number;
 }
 
-export interface IntersectionOptions extends IntersectionListenerOptions {
+export interface IntersectionOptions extends IntersectionBaseOptions {
   /** Call this function whenever the in view state changes */
   onChange?: (inView: boolean, entry: IntersectionObserverEntry) => void;
+  /** Set the initial value of the `inView` boolean. This can be used if you expect the element to be in the viewport to start with, and you want to trigger something when it leaves. */
+  initialInView?: boolean;
+}
+
+export interface IntersectionEffectOptions extends IntersectionBaseOptions {
+  /** When to trigger the inView callback - default: "enter" */
+  trigger?: "enter" | "leave";
 }
 
 export interface IntersectionObserverProps extends IntersectionOptions {
@@ -86,14 +91,14 @@ export type InViewHookResponse = [
 };
 
 /**
- * The callback called by the useOnInViewChanged hook once the element is in view
+ * The callback called by the useOnInView hook once the element is in view
  *
  * Allows to return a cleanup function that will be called when the element goes out of view or when the observer is destroyed
  */
-export type InViewEnterHookListener<TElement extends Element> = (
-  /** Entry is always defined except when `initialInView` is true for the first call */
-  entry: (IntersectionObserverEntry & { target: TElement }) | undefined,
+export type IntersectionChangeEffect<TElement extends Element> = (
+  entry: IntersectionObserverEntry & { target: TElement },
 ) => // biome-ignore lint/suspicious/noConfusingVoidType: Allow no return statement
   | void
   | undefined
+  /** Entry is defined except when the element is unmounting */
   | ((entry?: IntersectionObserverEntry | undefined) => void);

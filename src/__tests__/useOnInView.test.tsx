@@ -1,24 +1,23 @@
 import { render } from "@testing-library/react";
 import React, { useCallback } from "react";
-import type { IntersectionListenerOptions } from "../index";
+import type { IntersectionEffectOptions } from "..";
 import { intersectionMockInstance, mockAllIsIntersecting } from "../test-utils";
-import { useOnInViewChanged } from "../useOnInViewChanged";
+import { useOnInView } from "../useOnInView";
 
 const OnInViewChangedComponent = ({
   options,
   unmount,
 }: {
-  options?: IntersectionListenerOptions;
+  options?: IntersectionEffectOptions;
   unmount?: boolean;
 }) => {
   const [inView, setInView] = React.useState(false);
   const [callCount, setCallCount] = React.useState(0);
   const [cleanupCount, setCleanupCount] = React.useState(0);
 
-  const inViewRef = useOnInViewChanged((entry) => {
-    setInView(entry ? entry.isIntersecting : false);
+  const inViewRef = useOnInView((entry) => {
+    setInView(entry.isIntersecting);
     setCallCount((prev) => prev + 1);
-
     // Return cleanup function
     return (cleanupEntry) => {
       setCleanupCount((prev) => prev + 1);
@@ -44,7 +43,7 @@ const OnInViewChangedComponent = ({
 const LazyOnInViewChangedComponent = ({
   options,
 }: {
-  options?: IntersectionListenerOptions;
+  options?: IntersectionEffectOptions;
 }) => {
   const [isLoading, setIsLoading] = React.useState(true);
   const [inView, setInView] = React.useState(false);
@@ -53,7 +52,7 @@ const LazyOnInViewChangedComponent = ({
     setIsLoading(false);
   }, []);
 
-  const inViewRef = useOnInViewChanged((entry) => {
+  const inViewRef = useOnInView((entry) => {
     setInView(entry ? entry.isIntersecting : false);
     return () => setInView(false);
   }, options);
@@ -71,11 +70,11 @@ const OnInViewChangedComponentWithoutClenaup = ({
   options,
   unmount,
 }: {
-  options?: IntersectionListenerOptions;
+  options?: IntersectionEffectOptions;
   unmount?: boolean;
 }) => {
   const [callCount, setCallCount] = React.useState(0);
-  const inViewRef = useOnInViewChanged(() => {
+  const inViewRef = useOnInView(() => {
     setCallCount((prev) => prev + 1);
   }, options);
 
@@ -88,7 +87,7 @@ const OnInViewChangedComponentWithoutClenaup = ({
   );
 };
 
-test("should create a hook with useOnInViewChanged", () => {
+test("should create a hook with useOnInView", () => {
   const { getByTestId } = render(<OnInViewChangedComponent />);
   const wrapper = getByTestId("wrapper");
   const instance = intersectionMockInstance(wrapper);
@@ -106,7 +105,7 @@ test("should create a hook with array threshold", () => {
   expect(instance.observe).toHaveBeenCalledWith(wrapper);
 });
 
-test("should create a lazy hook with useOnInViewChanged", () => {
+test("should create a lazy hook with useOnInView", () => {
   const { getByTestId } = render(<LazyOnInViewChangedComponent />);
   const wrapper = getByTestId("wrapper");
   const instance = intersectionMockInstance(wrapper);
@@ -149,16 +148,38 @@ test("should respect threshold values", () => {
   expect(wrapper.getAttribute("data-inview")).toBe("true");
 });
 
-test("should call callback with initialInView", () => {
+test("should call callback with trigger: leave", () => {
   const { getByTestId } = render(
-    <OnInViewChangedComponent options={{ initialInView: true }} />,
+    <OnInViewChangedComponent options={{ trigger: "leave" }} />,
   );
   const wrapper = getByTestId("wrapper");
 
-  // initialInView should have triggered the callback once
+  mockAllIsIntersecting(false);
+  // Should call callback
   expect(wrapper.getAttribute("data-call-count")).toBe("1");
 
+  mockAllIsIntersecting(true);
+  // Should call cleanup
+  expect(wrapper.getAttribute("data-cleanup-count")).toBe("1");
+});
+
+test("should call callback with trigger: leave and triggerOnce is true", () => {
+  const { getByTestId } = render(
+    <OnInViewChangedComponent
+      options={{ trigger: "leave", triggerOnce: true }}
+    />,
+  );
+  const wrapper = getByTestId("wrapper");
+
+  mockAllIsIntersecting(true);
+  // initialInView should have triggered the callback once
+  expect(wrapper.getAttribute("data-call-count")).toBe("0");
+
   mockAllIsIntersecting(false);
+  // Should call callback
+  expect(wrapper.getAttribute("data-call-count")).toBe("1");
+
+  mockAllIsIntersecting(true);
   // Should call cleanup
   expect(wrapper.getAttribute("data-cleanup-count")).toBe("1");
 });
@@ -229,10 +250,10 @@ test("should handle ref changes", () => {
 // Test for merging refs
 const MergeRefsComponent = ({
   options,
-}: { options?: IntersectionListenerOptions }) => {
+}: { options?: IntersectionEffectOptions }) => {
   const [inView, setInView] = React.useState(false);
 
-  const inViewRef = useOnInViewChanged((entry) => {
+  const inViewRef = useOnInView((entry) => {
     setInView(entry ? entry.isIntersecting : false);
     return () => setInView(false);
   }, options);
@@ -258,22 +279,22 @@ test("should handle merged refs", () => {
 // Test multiple callbacks on the same element
 const MultipleCallbacksComponent = ({
   options,
-}: { options?: IntersectionListenerOptions }) => {
+}: { options?: IntersectionEffectOptions }) => {
   const [inView1, setInView1] = React.useState(false);
   const [inView2, setInView2] = React.useState(false);
   const [inView3, setInView3] = React.useState(false);
 
-  const ref1 = useOnInViewChanged((entry) => {
+  const ref1 = useOnInView((entry) => {
     setInView1(entry ? entry.isIntersecting : false);
     return () => setInView1(false);
   }, options);
 
-  const ref2 = useOnInViewChanged((entry) => {
+  const ref2 = useOnInView((entry) => {
     setInView2(entry ? entry.isIntersecting : false);
     return () => setInView2(false);
   }, options);
 
-  const ref3 = useOnInViewChanged((entry) => {
+  const ref3 = useOnInView((entry) => {
     setInView3(entry ? entry.isIntersecting : false);
     return () => setInView3(false);
   });
@@ -316,7 +337,7 @@ test("should pass the element to the callback", () => {
   let capturedElement: Element | undefined;
 
   const ElementTestComponent = () => {
-    const inViewRef = useOnInViewChanged((entry) => {
+    const inViewRef = useOnInView((entry) => {
       capturedElement = entry?.target;
       return undefined;
     });

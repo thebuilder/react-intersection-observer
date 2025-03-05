@@ -1,6 +1,6 @@
 import * as React from "react";
 import type { InViewHookResponse, IntersectionOptions } from "./index";
-import { useOnInViewChanged } from "./useOnInViewChanged";
+import { useOnInView } from "./useOnInView";
 
 type State = {
   inView: boolean;
@@ -38,10 +38,10 @@ export function useInView(
 ): InViewHookResponse {
   const {
     threshold,
-    delay,
-    trackVisibility,
-    rootMargin,
     root,
+    rootMargin,
+    trackVisibility,
+    delay,
     triggerOnce,
     skip,
     initialInView,
@@ -58,17 +58,18 @@ export function useInView(
   const latestOptions = React.useRef(options);
   latestOptions.current = options;
 
-  // Create the ref tracking function using useOnInViewChanged
-  const refCallback = useOnInViewChanged(
+  // Create the ref tracking function using useOnInView
+  const refCallback = useOnInView(
     // Combined callback - updates state, calls onChange, and returns cleanup if needed
     (entry) => {
-      setState({ inView: true, entry });
+      const inView = !initialInView;
+      setState({ inView, entry });
 
       const { onChange } = latestOptions.current;
       // Call the external onChange if provided
       // entry is undefined only if this is triggered by initialInView
-      if (onChange && entry) {
-        onChange(true, entry);
+      if (onChange) {
+        onChange(inView, entry);
       }
 
       return triggerOnce
@@ -81,28 +82,28 @@ export function useInView(
             // Call the external onChange if provided
             // entry is undefined if the element is getting unmounted
             if (onChange && entry) {
-              onChange(false, entry);
+              onChange(!inView, entry);
             }
             // should not reset current state if changing skip
             if (!skip) {
               setState({
-                inView: false,
+                inView: !inView,
                 entry: undefined,
               });
             }
           };
     },
     {
+      threshold,
       root,
       rootMargin,
-      threshold,
       // @ts-ignore
       trackVisibility,
       // @ts-ignore
       delay,
-      initialInView,
       triggerOnce,
       skip,
+      trigger: initialInView ? "leave" : undefined,
     },
   );
 
