@@ -72,16 +72,27 @@ export const useOnInView = <TElement extends Element>(
         | undefined
         | ReturnType<IntersectionChangeEffect<TElement>>;
 
-      // enter: intersectionsStateTrigger = true
-      // leave: intersectionsStateTrigger = false
+      // trigger "enter": intersectionsStateTrigger = true
+      // trigger "leave": intersectionsStateTrigger = false
       const intersectionsStateTrigger = trigger !== "leave";
 
       const destroyInviewObserver = observe(
         element,
         (inView, entry) => {
+          // Call the callback when the element is in view (if trigger is "enter")
+          // Call the callback when the element is out of view (if trigger is "leave")
+          if (inView === intersectionsStateTrigger) {
+            callbackCleanup = onIntersectionChangeRef.current(entry);
+
+            // if there is no cleanup function returned from the callback
+            // and triggerOnce is true, the observer can be destroyed immediately
+            if (triggerOnce && !callbackCleanup) {
+              destroyInviewObserver();
+            }
+          }
           // Call cleanup when going out of view (if trigger is "enter")
           // Call cleanup when going in view (if trigger is "leave")
-          if (inView !== intersectionsStateTrigger) {
+          else {
             if (callbackCleanup) {
               callbackCleanup(entry);
               callbackCleanup = undefined;
@@ -90,16 +101,6 @@ export const useOnInView = <TElement extends Element>(
               if (triggerOnce) {
                 destroyInviewObserver();
               }
-            }
-          } else {
-            // Call the callback when the element is in view (if trigger is "enter")
-            // Call the callback when the element is out of view (if trigger is "leave")
-            callbackCleanup = onIntersectionChangeRef.current(entry);
-
-            // if there is no cleanup function returned from the callback
-            // and triggerOnce is true, the observer can be destroyed immediately
-            if (triggerOnce && !callbackCleanup) {
-              destroyInviewObserver();
             }
           }
         },
