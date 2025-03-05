@@ -455,12 +455,12 @@ test("should track thresholds when crossing multiple in a single update", () => 
   mockAllIsIntersecting(0);
   expect(element.getAttribute("data-cleanup-count")).toBe("1");
 
-  // Jump to full visibility
+  // Change to 0.5 (crosses 0.2, 0.4 thresholds)
   mockAllIsIntersecting(0.5);
   expect(element.getAttribute("data-trigger-count")).toBe("2");
   expect(element.getAttribute("data-last-ratio")).toBe("0.40");
 
-  // Jump to full visibility
+  // Jump to full visibility - should cleanup the 0.5 callback
   mockAllIsIntersecting(1.0);
   expect(element.getAttribute("data-trigger-count")).toBe("3");
   expect(element.getAttribute("data-cleanup-count")).toBe("2");
