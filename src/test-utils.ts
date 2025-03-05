@@ -34,6 +34,16 @@ function isMocking() {
   if (util && typeof util.isMockFunction === "function") {
     return util.isMockFunction(window.IntersectionObserver);
   }
+
+  // No global test utility found. Check if the IntersectionObserver was manually mocked.
+  if (
+    typeof window !== "undefined" &&
+    window.IntersectionObserver &&
+    "mockClear" in window.IntersectionObserver
+  ) {
+    return true;
+  }
+
   return false;
 }
 
