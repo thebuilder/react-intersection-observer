@@ -93,6 +93,7 @@ const ThresholdTriggerComponent = ({
   options?: IntersectionEffectOptions;
 }) => {
   const [triggerCount, setTriggerCount] = React.useState(0);
+  const [cleanupCount, setCleanupCount] = React.useState(0);
   const [lastRatio, setLastRatio] = React.useState<number | null>(null);
   const [triggeredThresholds, setTriggeredThresholds] = React.useState<
     number[]
@@ -106,6 +107,7 @@ const ThresholdTriggerComponent = ({
     setTriggeredThresholds((prev) => [...prev, entry.intersectionRatio]);
 
     return (exitEntry) => {
+      setCleanupCount((prev) => prev + 1);
       if (exitEntry) {
         setLastRatio(exitEntry.intersectionRatio);
       }
@@ -117,6 +119,7 @@ const ThresholdTriggerComponent = ({
       data-testid="threshold-trigger"
       ref={inViewRef}
       data-trigger-count={triggerCount}
+      data-cleanup-count={cleanupCount}
       data-last-ratio={lastRatio !== null ? lastRatio.toFixed(2) : "null"}
       data-triggered-thresholds={JSON.stringify(triggeredThresholds)}
     >
@@ -445,14 +448,22 @@ test("should track thresholds when crossing multiple in a single update", () => 
   // with the highest threshold that was crossed
   mockAllIsIntersecting(0.7);
   expect(element.getAttribute("data-trigger-count")).toBe("1");
+  expect(element.getAttribute("data-cleanup-count")).toBe("0");
   expect(element.getAttribute("data-last-ratio")).toBe("0.60");
 
   // Go out of view
   mockAllIsIntersecting(0);
+  expect(element.getAttribute("data-cleanup-count")).toBe("1");
+
+  // Jump to full visibility
+  mockAllIsIntersecting(0.5);
+  expect(element.getAttribute("data-trigger-count")).toBe("2");
+  expect(element.getAttribute("data-last-ratio")).toBe("0.40");
 
   // Jump to full visibility
   mockAllIsIntersecting(1.0);
-  expect(element.getAttribute("data-trigger-count")).toBe("2");
+  expect(element.getAttribute("data-trigger-count")).toBe("3");
+  expect(element.getAttribute("data-cleanup-count")).toBe("2");
   expect(element.getAttribute("data-last-ratio")).toBe("0.80");
 });
 
