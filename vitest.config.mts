@@ -9,9 +9,9 @@ export default defineConfig({
     globals: true,
     browser: {
       enabled: true,
-      name: "chromium",
       provider: "playwright",
       headless: true,
+      instances: [{ browser: "chromium" }],
     },
     coverage: {
       provider: "istanbul",
