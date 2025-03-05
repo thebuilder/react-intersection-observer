@@ -257,7 +257,7 @@ The `useOnInView` hook provides a more direct alternative to `useInView`. It tak
 
 Key differences from `useInView`:
 - **No re-renders** - This hook doesn't update any state, making it ideal for performance-critical scenarios
-- **Direct element access** - Your callback receives the actual DOM element and the IntersectionObserverEntry
+- **Direct element access** - Your callback receives the actual IntersectionObserverEntry with the `target` element
 - **Optional cleanup** - Return a function from your callback to run when the element leaves the viewport
 - **Similar options** - Accepts all the same [options](#options) as `useInView` except `onChange` and `initialInView`
 

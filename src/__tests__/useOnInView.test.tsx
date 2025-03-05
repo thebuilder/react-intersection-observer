@@ -87,6 +87,44 @@ const OnInViewChangedComponentWithoutClenaup = ({
   );
 };
 
+const ThresholdTriggerComponent = ({
+  options,
+}: {
+  options?: IntersectionEffectOptions;
+}) => {
+  const [triggerCount, setTriggerCount] = React.useState(0);
+  const [lastRatio, setLastRatio] = React.useState<number | null>(null);
+  const [triggeredThresholds, setTriggeredThresholds] = React.useState<
+    number[]
+  >([]);
+
+  const inViewRef = useOnInView((entry) => {
+    setTriggerCount((prev) => prev + 1);
+    setLastRatio(entry.intersectionRatio);
+
+    // Add this ratio to our list of triggered thresholds
+    setTriggeredThresholds((prev) => [...prev, entry.intersectionRatio]);
+
+    return (exitEntry) => {
+      if (exitEntry) {
+        setLastRatio(exitEntry.intersectionRatio);
+      }
+    };
+  }, options);
+
+  return (
+    <div
+      data-testid="threshold-trigger"
+      ref={inViewRef}
+      data-trigger-count={triggerCount}
+      data-last-ratio={lastRatio !== null ? lastRatio.toFixed(2) : "null"}
+      data-triggered-thresholds={JSON.stringify(triggeredThresholds)}
+    >
+      Tracking thresholds
+    </div>
+  );
+};
+
 test("should create a hook with useOnInView", () => {
   const { getByTestId } = render(<OnInViewChangedComponent />);
   const wrapper = getByTestId("wrapper");
@@ -172,7 +210,7 @@ test("should call callback with trigger: leave and triggerOnce is true", () => {
   const wrapper = getByTestId("wrapper");
 
   mockAllIsIntersecting(true);
-  // initialInView should have triggered the callback once
+  // the callback should not be called as it is triggered on leave
   expect(wrapper.getAttribute("data-call-count")).toBe("0");
 
   mockAllIsIntersecting(false);
@@ -338,7 +376,7 @@ test("should pass the element to the callback", () => {
 
   const ElementTestComponent = () => {
     const inViewRef = useOnInView((entry) => {
-      capturedElement = entry?.target;
+      capturedElement = entry.target;
       return undefined;
     });
 
@@ -350,4 +388,88 @@ test("should pass the element to the callback", () => {
   mockAllIsIntersecting(true);
 
   expect(capturedElement).toBe(element);
+});
+
+test("should track which threshold triggered the visibility change", () => {
+  // Using multiple specific thresholds
+  const { getByTestId } = render(
+    <ThresholdTriggerComponent options={{ threshold: [0.25, 0.5, 0.75] }} />,
+  );
+  const element = getByTestId("threshold-trigger");
+
+  // Initially not in view
+  expect(element.getAttribute("data-trigger-count")).toBe("0");
+
+  // Trigger at exactly the first threshold (0.25)
+  mockAllIsIntersecting(0.25);
+  expect(element.getAttribute("data-trigger-count")).toBe("1");
+  expect(element.getAttribute("data-last-ratio")).toBe("0.25");
+
+  // Go out of view
+  mockAllIsIntersecting(0);
+
+  // Trigger at exactly the second threshold (0.5)
+  mockAllIsIntersecting(0.5);
+  expect(element.getAttribute("data-trigger-count")).toBe("2");
+  expect(element.getAttribute("data-last-ratio")).toBe("0.50");
+
+  // Go out of view
+  mockAllIsIntersecting(0);
+
+  // Trigger at exactly the third threshold (0.75)
+  mockAllIsIntersecting(0.75);
+  expect(element.getAttribute("data-trigger-count")).toBe("3");
+  expect(element.getAttribute("data-last-ratio")).toBe("0.75");
+
+  // Check all triggered thresholds were recorded
+  const triggeredThresholds = JSON.parse(
+    element.getAttribute("data-triggered-thresholds") || "[]",
+  );
+  expect(triggeredThresholds).toContain(0.25);
+  expect(triggeredThresholds).toContain(0.5);
+  expect(triggeredThresholds).toContain(0.75);
+});
+
+test("should track thresholds when crossing multiple in a single update", () => {
+  // Using multiple specific thresholds
+  const { getByTestId } = render(
+    <ThresholdTriggerComponent options={{ threshold: [0.2, 0.4, 0.6, 0.8] }} />,
+  );
+  const element = getByTestId("threshold-trigger");
+
+  // Initially not in view
+  expect(element.getAttribute("data-trigger-count")).toBe("0");
+
+  // Jump straight to 0.7 (crosses 0.2, 0.4, 0.6 thresholds)
+  // The IntersectionObserver will still only call the callback once
+  // with the highest threshold that was crossed
+  mockAllIsIntersecting(0.7);
+  expect(element.getAttribute("data-trigger-count")).toBe("1");
+  expect(element.getAttribute("data-last-ratio")).toBe("0.60");
+
+  // Go out of view
+  mockAllIsIntersecting(0);
+
+  // Jump to full visibility
+  mockAllIsIntersecting(1.0);
+  expect(element.getAttribute("data-trigger-count")).toBe("2");
+  expect(element.getAttribute("data-last-ratio")).toBe("0.80");
+});
+
+test("should track thresholds when trigger is set to leave", () => {
+  // Using multiple specific thresholds with trigger: leave
+  const { getByTestId } = render(
+    <ThresholdTriggerComponent
+      options={{
+        threshold: [0.25, 0.5, 0.75],
+        trigger: "leave",
+      }}
+    />,
+  );
+  const element = getByTestId("threshold-trigger");
+
+  // Make element 30% visible - above first threshold, should call cleanup
+  mockAllIsIntersecting(0);
+  expect(element.getAttribute("data-trigger-count")).toBe("1");
+  expect(element.getAttribute("data-last-ratio")).toBe("0.00");
 });
