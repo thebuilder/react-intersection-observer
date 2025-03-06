@@ -1,10 +1,14 @@
 import { vi } from "vitest";
-import { mockAllIsIntersecting } from "../test-utils";
+import { mockAllIsIntersecting, setupIntersectionMocking } from "../test-utils";
 
 vi.hoisted(() => {
   // Clear the `vi` from global, so we can detect if this is a test env
   // @ts-ignore
   window.vi = undefined;
+});
+
+afterEach(() => {
+  vi.resetAllMocks();
 });
 
 test("should warn if not running in test env", () => {
@@ -25,4 +29,11 @@ beforeEach(() => {
 afterEach(() => {
   resetIntersectionMocking();
 });`);
+});
+
+test('should not warn if running in test env with global "vi"', () => {
+  vi.spyOn(console, "error").mockImplementation(() => {});
+  setupIntersectionMocking(vi.fn);
+  mockAllIsIntersecting(true);
+  expect(console.error).not.toHaveBeenCalled();
 });

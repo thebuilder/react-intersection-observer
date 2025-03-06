@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - run: npm install --global corepack@latest
       - run: corepack enable
       - uses: actions/checkout@v4
       - name: Setup Node.js
@@ -38,6 +39,7 @@ jobs:
           - 19
           - latest
     steps:
+      - run: npm install --global corepack@latest
       - run: corepack enable
       - uses: actions/checkout@v4
       - name: Setup Node.js
