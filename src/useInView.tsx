@@ -62,10 +62,16 @@ export function useInView(
   const refCallback = useOnInView(
     // Combined callback - updates state, calls onChange, and returns cleanup if needed
     (entry) => {
+      const { onChange } = latestOptions.current;
+      // The callback is triggered when the element enters or leaves the viewport
+      // depending on trigger (which is defined by initialInView)
+      // If initialInView is false we wait for the element to enter the viewport
+      // in that case we set inView to true
+      // If initialInView is true we wait for the element to leave the viewport
+      // in that case we set inView to false
       const inView = !initialInView;
       setState({ inView, entry });
 
-      const { onChange } = latestOptions.current;
       // Call the external onChange if provided
       // entry is undefined only if this is triggered by initialInView
       if (onChange) {
