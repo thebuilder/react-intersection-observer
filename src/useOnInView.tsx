@@ -93,7 +93,10 @@ export const useOnInView = <TElement extends Element>(
           // Call the callback when the element is in view (if trigger is "enter")
           // Call the callback when the element is out of view (if trigger is "leave")
           if (inView === intersectionsStateTrigger) {
-            callbackCleanup = onIntersectionChangeRef.current(entry);
+            callbackCleanup = onIntersectionChangeRef.current(
+              entry,
+              destroyInviewObserver,
+            );
             // if there is no cleanup function returned from the callback
             // and triggerOnce is true, the observer can be destroyed immediately
             if (triggerOnce && !callbackCleanup) {

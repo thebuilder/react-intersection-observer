@@ -484,3 +484,127 @@ test("should track thresholds when trigger is set to leave", () => {
   expect(element.getAttribute("data-trigger-count")).toBe("1");
   expect(element.getAttribute("data-last-ratio")).toBe("0.00");
 });
+
+test("should allow destroying the observer after custom condition is met", () => {
+  // Component that stops observing after a specific number of views
+  const DestroyAfterCountComponent = ({ maxViewCount = 2 }) => {
+    const [viewCount, setViewCount] = React.useState(0);
+    const [inView, setInView] = React.useState(false);
+    const [observerDestroyed, setObserverDestroyed] = React.useState(false);
+
+    const inViewRef = useOnInView((entry, destroyObserver) => {
+      setInView(entry.isIntersecting);
+
+      // Increment view count when element comes into view
+      if (entry.isIntersecting) {
+        const newCount = viewCount + 1;
+        setViewCount(newCount);
+
+        // If we've reached the max view count, destroy the observer
+        if (newCount >= maxViewCount) {
+          destroyObserver();
+          setObserverDestroyed(true);
+        }
+      }
+
+      return () => {
+        setInView(false);
+      };
+    });
+
+    return (
+      <div
+        data-testid="destroy-test"
+        ref={inViewRef}
+        data-inview={inView.toString()}
+        data-view-count={viewCount}
+        data-observer-destroyed={observerDestroyed.toString()}
+      >
+        Destroy after {maxViewCount} views
+      </div>
+    );
+  };
+
+  const { getByTestId } = render(<DestroyAfterCountComponent />);
+  const wrapper = getByTestId("destroy-test");
+  const instance = intersectionMockInstance(wrapper);
+
+  // Initially not in view
+  expect(wrapper.getAttribute("data-view-count")).toBe("0");
+  expect(wrapper.getAttribute("data-observer-destroyed")).toBe("false");
+
+  // First view
+  mockAllIsIntersecting(true);
+  expect(wrapper.getAttribute("data-inview")).toBe("true");
+  expect(wrapper.getAttribute("data-view-count")).toBe("1");
+  expect(wrapper.getAttribute("data-observer-destroyed")).toBe("false");
+
+  // Back out of view
+  mockAllIsIntersecting(false);
+  expect(wrapper.getAttribute("data-inview")).toBe("false");
+
+  // Second view - should hit max count and destroy observer
+  mockAllIsIntersecting(true);
+  expect(wrapper.getAttribute("data-inview")).toBe("true");
+  expect(wrapper.getAttribute("data-view-count")).toBe("2");
+  expect(wrapper.getAttribute("data-observer-destroyed")).toBe("true");
+
+  // Verify unobserve was called when destroying the observer
+  expect(instance.unobserve).toHaveBeenCalledWith(wrapper);
+
+  // Additional intersection changes should have no effect since observer is destroyed
+  mockAllIsIntersecting(false);
+  mockAllIsIntersecting(true);
+  expect(wrapper.getAttribute("data-view-count")).toBe("2"); // Count should not increase
+});
+
+test("should allow destroying the observer immediately on first visibility", () => {
+  // This is useful for one-time animations or effects that should only run once
+  const DestroyImmediatelyComponent = () => {
+    const [hasBeenVisible, setHasBeenVisible] = React.useState(false);
+    const [observerDestroyed, setObserverDestroyed] = React.useState(false);
+
+    const inViewRef = useOnInView((entry, destroyObserver) => {
+      if (entry.isIntersecting) {
+        setHasBeenVisible(true);
+        destroyObserver();
+        setObserverDestroyed(true);
+      }
+
+      return undefined;
+    });
+
+    return (
+      <div
+        data-testid="destroy-immediate"
+        ref={inViewRef}
+        data-has-been-visible={hasBeenVisible.toString()}
+        data-observer-destroyed={observerDestroyed.toString()}
+      >
+        Destroy immediately
+      </div>
+    );
+  };
+
+  const { getByTestId } = render(<DestroyImmediatelyComponent />);
+  const wrapper = getByTestId("destroy-immediate");
+
+  // Initially not visible
+  expect(wrapper.getAttribute("data-has-been-visible")).toBe("false");
+  expect(wrapper.getAttribute("data-observer-destroyed")).toBe("false");
+
+  // Trigger visibility
+  mockAllIsIntersecting(true);
+
+  // Should have been marked as visible and destroyed
+  expect(wrapper.getAttribute("data-has-been-visible")).toBe("true");
+  expect(wrapper.getAttribute("data-observer-destroyed")).toBe("true");
+
+  // Additional intersection changes should have no effect
+  mockAllIsIntersecting(false);
+  mockAllIsIntersecting(true);
+
+  // State should remain the same
+  expect(wrapper.getAttribute("data-has-been-visible")).toBe("true");
+  expect(wrapper.getAttribute("data-observer-destroyed")).toBe("true");
+});

@@ -97,6 +97,7 @@ export type InViewHookResponse = [
  */
 export type IntersectionChangeEffect<TElement extends Element> = (
   entry: IntersectionObserverEntry & { target: TElement },
+  destroyObserver: () => void,
 ) => // biome-ignore lint/suspicious/noConfusingVoidType: Allow no return statement
   | void
   | undefined
