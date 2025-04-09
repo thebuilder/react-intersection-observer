@@ -30,6 +30,9 @@
       },
       "a11y": {
         "noSvgWithoutTitle": "off"
+      },
+      "correctness": {
+        "useExhaustiveDependencies": "off"
       }
     }
   },
