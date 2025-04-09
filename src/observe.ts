@@ -71,9 +71,16 @@ function createObserver(options: IntersectionObserverInit) {
           entry.isVisible = inView;
         }
 
-        elements.get(entry.target)?.forEach((callback) => {
-          callback(inView, entry);
-        });
+        elements
+          .get(entry.target)
+          // slice creates a shallow copy of the array
+          // otherwise an `unobserve` call from a callback
+          // would modifiy `elements` and therefore some
+          // callbacks in the forEach loop would be skipped
+          ?.slice()
+          .forEach((callback) => {
+            callback(inView, entry);
+          });
       });
     }, options);
 
