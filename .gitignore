@@ -9,6 +9,7 @@ test-utils/
 coverage/
 nuget
 npm-debug.log*
+package-lock.json
 .DS_store
 .eslintcache
 .idea
