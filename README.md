@@ -1,7 +1,6 @@
 # react-intersection-observer
 
 [![Version Badge][npm-version-svg]][package-url]
-[![GZipped size][npm-minzip-svg]][bundlephobia-url]
 [![Test][test-image]][test-url]
 [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
@@ -499,8 +498,6 @@ order to destroy the observer again.
 
 [package-url]: https://npmjs.org/package/react-intersection-observer
 [npm-version-svg]: https://img.shields.io/npm/v/react-intersection-observer.svg
-[npm-minzip-svg]: https://img.shields.io/bundlephobia/minzip/react-intersection-observer.svg
-[bundlephobia-url]: https://bundlephobia.com/result?p=react-intersection-observer
 [license-image]: http://img.shields.io/npm/l/react-intersection-observer.svg
 [license-url]: LICENSE
 [downloads-image]: http://img.shields.io/npm/dm/react-intersection-observer.svg
