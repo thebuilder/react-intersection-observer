@@ -232,6 +232,62 @@ You can read more about this on these links:
 - [w3c/IntersectionObserver: Cannot track intersection with an iframe's viewport](https://github.com/w3c/IntersectionObserver/issues/372)
 - [w3c/Support iframe viewport tracking](https://github.com/w3c/IntersectionObserver/pull/465)
 
+### `useOnInView` hook
+
+```js
+const inViewRef = useOnInView(
+  (enterEntry) => {
+    // Do something with the element that came into view
+    console.log('Element is in view', enterEntry?.target);
+    
+    // Optionally return a cleanup function
+    return (exitEntry) => {
+      console.log('Element moved out of view or unmounted');
+    };
+  },
+  options // Optional IntersectionObserver options
+);
+```
+
+The `useOnInView` hook provides a more direct alternative to `useInView`. It takes a callback function and returns a ref that you can assign to the DOM element you want to monitor. When the element enters the viewport, your callback will be triggered.
+
+Key differences from `useInView`:
+- **No re-renders** - This hook doesn't update any state, making it ideal for performance-critical scenarios
+- **Direct element access** - Your callback receives the actual IntersectionObserverEntry with the `target` element
+- **Optional cleanup** - Return a function from your callback to run when the element leaves the viewport
+- **Similar options** - Accepts all the same [options](#options) as `useInView` except `onChange` and `initialInView`
+
+The `trigger` option allows to listen for the element entering the viewport or leaving the viewport. The default is `enter`.
+
+```jsx
+import React from "react";
+import { useOnInView } from "react-intersection-observer";
+
+const Component = () => {
+  // Track when element appears without causing re-renders
+  const trackingRef = useOnInView((entry) => {
+    // Element is in view - perhaps log an impression
+    console.log("Element appeared in view", entry.target);
+    
+    // Return optional cleanup function
+    return () => {
+      console.log("Element left view");
+    };
+  }, {
+    /* Optional options */
+    threshold: 0.5,
+    trigger: "enter",
+    triggerOnce: true,
+  });
+
+  return (
+    <div ref={trackingRef}>
+      <h2>This element is being tracked without re-renders</h2>
+    </div>
+  );
+};
+```
+
 ## Testing
 
 > [!TIP]

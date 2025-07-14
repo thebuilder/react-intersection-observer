@@ -2,7 +2,6 @@ import { render, screen } from "@testing-library/react";
 import { userEvent } from "@vitest/browser/context";
 import React from "react";
 import { InView } from "../InView";
-import { defaultFallbackInView } from "../observe";
 import { intersectionMockInstance, mockAllIsIntersecting } from "../test-utils";
 
 test("Should render <InView /> intersecting", () => {
@@ -156,63 +155,4 @@ test("plain children should not catch bubbling onChange event", async () => {
   const input = getByLabelText("input");
   await userEvent.type(input, "changed value");
   expect(onChange).not.toHaveBeenCalled();
-});
-
-test("should render with fallback", () => {
-  const cb = vi.fn();
-  // @ts-ignore
-  window.IntersectionObserver = undefined;
-  render(
-    <InView fallbackInView={true} onChange={cb}>
-      Inner
-    </InView>,
-  );
-  expect(cb).toHaveBeenLastCalledWith(
-    true,
-    expect.objectContaining({ isIntersecting: true }),
-  );
-
-  render(
-    <InView fallbackInView={false} onChange={cb}>
-      Inner
-    </InView>,
-  );
-  expect(cb).toHaveBeenLastCalledWith(
-    false,
-    expect.objectContaining({ isIntersecting: false }),
-  );
-
-  expect(() => {
-    vi.spyOn(console, "error").mockImplementation(() => {});
-    render(<InView onChange={cb}>Inner</InView>);
-    // @ts-ignore
-    console.error.mockRestore();
-  }).toThrow();
-});
-
-test("should render with global fallback", () => {
-  const cb = vi.fn();
-  // @ts-ignore
-  window.IntersectionObserver = undefined;
-  defaultFallbackInView(true);
-  render(<InView onChange={cb}>Inner</InView>);
-  expect(cb).toHaveBeenLastCalledWith(
-    true,
-    expect.objectContaining({ isIntersecting: true }),
-  );
-
-  defaultFallbackInView(false);
-  render(<InView onChange={cb}>Inner</InView>);
-  expect(cb).toHaveBeenLastCalledWith(
-    false,
-    expect.objectContaining({ isIntersecting: false }),
-  );
-
-  defaultFallbackInView(undefined);
-  expect(() => {
-    vi.spyOn(console, "error").mockImplementation(() => {});
-    render(<InView onChange={cb}>Inner</InView>);
-    // @ts-ignore
-    console.error.mockRestore();
-  }).toThrow();
 });
