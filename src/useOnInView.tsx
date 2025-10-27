@@ -53,7 +53,13 @@ export const useOnInView = <TElement extends Element>(
 ) => {
   const onIntersectionChangeRef = React.useRef(onIntersectionChange);
   const syncEffect =
-    React.useInsertionEffect ?? React.useLayoutEffect ?? React.useEffect;
+    (
+      React as typeof React & {
+        useInsertionEffect?: typeof React.useEffect;
+      }
+    ).useInsertionEffect ??
+    React.useLayoutEffect ??
+    React.useEffect;
 
   syncEffect(() => {
     onIntersectionChangeRef.current = onIntersectionChange;
