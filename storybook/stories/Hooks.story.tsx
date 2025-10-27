@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { motion } from "framer-motion";
-import React, { type CSSProperties, useEffect, useRef, useState } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 import {
-  InView,
   type IntersectionOptions,
+  InView,
   useInView,
 } from "react-intersection-observer";
 import {

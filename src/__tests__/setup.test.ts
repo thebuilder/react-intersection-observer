@@ -3,7 +3,7 @@ import { mockAllIsIntersecting, setupIntersectionMocking } from "../test-utils";
 
 vi.hoisted(() => {
   // Clear the `vi` from global, so we can detect if this is a test env
-  // @ts-ignore
+  // @ts-expect-error
   window.vi = undefined;
 });
 

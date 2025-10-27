@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { InViewHookResponse, IntersectionOptions } from "./index";
+import type { IntersectionOptions, InViewHookResponse } from "./index";
 import { observe } from "./observe";
 
 type State = {
@@ -82,9 +82,8 @@ export function useInView({
           root,
           rootMargin,
           threshold,
-          // @ts-ignore
+          // @ts-expect-error
           trackVisibility,
-          // @ts-ignore
           delay,
         },
         fallbackInView,

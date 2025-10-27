@@ -119,9 +119,8 @@ export class InView extends React.Component<
         threshold,
         root,
         rootMargin,
-        // @ts-ignore
+        // @ts-expect-error
         trackVisibility,
-        // @ts-ignore
         delay,
       },
       fallbackInView,

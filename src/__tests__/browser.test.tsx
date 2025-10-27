@@ -1,5 +1,4 @@
 import { cleanup, render, screen } from "@testing-library/react/pure";
-import React from "react";
 import type { IntersectionOptions } from "../index";
 import { useInView } from "../useInView";
 

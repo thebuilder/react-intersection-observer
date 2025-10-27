@@ -66,11 +66,11 @@ export function getRoot(options: IntersectionOptions) {
 
 export function useValidateOptions(options: IntersectionOptions) {
   const finalOptions = { root: getRoot(options), ...options };
-  // @ts-ignore
+  // @ts-expect-error
   finalOptions.as = undefined;
   if (!finalOptions.root) finalOptions.root = undefined;
 
-  let error = undefined;
+  let error: string | undefined;
   try {
     new IntersectionObserver(() => {}, finalOptions);
   } catch (e) {

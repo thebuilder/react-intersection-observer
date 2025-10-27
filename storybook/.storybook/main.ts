@@ -6,7 +6,7 @@ const config: StorybookConfig = {
     "../stories/**/*.mdx",
     "../stories/**/*.@(story|stories).@(ts|tsx)",
   ],
-  addons: ["@storybook/addon-essentials", "@storybook/experimental-addon-test"],
+  addons: ["@storybook/addon-docs", "@storybook/addon-vitest"],
   core: {
     builder: "@storybook/builder-vite",
   },
@@ -21,10 +21,7 @@ const config: StorybookConfig = {
     if (config.optimizeDeps) {
       config.optimizeDeps.include = [
         ...(config.optimizeDeps.include ?? []),
-        "@storybook/theming",
-        "@storybook/addon-essentials/docs/mdx-react-shim",
-        "@storybook/addon-actions",
-        "intersection-observer",
+        "storybook/theming",
       ];
     }
     return config;

@@ -1,9 +1,10 @@
 "use client";
 
 import type * as React from "react";
+
 export { InView } from "./InView";
+export { defaultFallbackInView, observe } from "./observe";
 export { useInView } from "./useInView";
-export { observe, defaultFallbackInView } from "./observe";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
