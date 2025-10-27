@@ -66,7 +66,7 @@ const LazyOnInViewChangedComponent = ({
   );
 };
 
-const OnInViewChangedComponentWithoutClenaup = ({
+const OnInViewChangedComponentWithoutCleanup = ({
   options,
   unmount,
 }: {
@@ -227,7 +227,7 @@ test("should respect triggerOnce option", () => {
   const { getByTestId } = render(
     <>
       <OnInViewChangedComponent />
-      <OnInViewChangedComponentWithoutClenaup options={{ triggerOnce: true }} />
+      <OnInViewChangedComponentWithoutCleanup options={{ triggerOnce: true }} />
     </>,
   );
   const wrapper = getByTestId("wrapper");
