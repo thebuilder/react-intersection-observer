@@ -77,6 +77,8 @@ function getActFn() {
   ) {
     return undefined;
   }
+  // biome-ignore lint/suspicious/noTsIgnore: Needed for compatibility with multiple React versions
+  // @ts-ignore
   return typeof React.act === "function"
     ? // @ts-ignore
       React.act
