@@ -1,5 +1,5 @@
 import { themes } from "storybook/theming";
-import "tailwindcss/tailwind.css";
+import "../styles.css";
 
 export const parameters = {
   controls: {
