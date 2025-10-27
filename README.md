@@ -10,8 +10,8 @@ to tell you when an element enters or leaves the viewport. Contains [Hooks](#use
 
 ## Features
 
-- 🪝 **Hooks or Component API** - With `useInView` it's easier than ever to
-  monitor elements
+- 🪝 **Hooks or Component API** - With `useInView` and `useOnInView` it's easier
+  than ever to monitor elements
 - ⚡️ **Optimized performance** - Reuses Intersection Observer instances where
   possible
 - ⚙️ **Matches native API** - Intuitive to use
@@ -66,6 +66,70 @@ const Component = () => {
   return (
     <div ref={ref}>
       <h2>{`Header inside viewport ${inView}.`}</h2>
+    </div>
+  );
+};
+```
+
+### `useOnInView` hook
+
+```js
+const inViewRef = useOnInView(
+  (enterEntry) => {
+    // Do something with the element that came into view
+    console.log('Element is in view', enterEntry?.target);
+    
+    // Optionally return a cleanup function
+    return (exitEntry) => {
+      console.log('Element moved out of view or unmounted');
+    };
+  },
+  options // Optional IntersectionObserver options
+);
+```
+
+The `useOnInView` hook provides a more direct alternative to `useInView`. It
+takes a callback function and returns a ref that you can assign to the DOM
+element you want to monitor. When the element enters the viewport, your callback
+will be triggered.
+
+Key differences from `useInView`:
+- **No re-renders** - This hook doesn't update any state, making it ideal for
+  performance-critical scenarios
+- **Direct element access** - Your callback receives the actual
+  IntersectionObserverEntry with the `target` element
+- **Optional cleanup** - Return a function from your callback to run when the
+  element leaves the viewport
+- **Similar options** - Accepts all the same [options](#options) as `useInView`
+  except `onChange`, `initialInView`, and `fallbackInView`
+
+The `trigger` option allows to listen for the element entering the viewport or
+leaving the viewport. The default is `enter`.
+
+```jsx
+import React from "react";
+import { useOnInView } from "react-intersection-observer";
+
+const Component = () => {
+  // Track when element appears without causing re-renders
+  const trackingRef = useOnInView((entry) => {
+    // Element is in view - perhaps log an impression
+    console.log("Element appeared in view", entry.target);
+    
+    // Return optional cleanup function
+    return () => {
+      console.log("Element left view");
+    };
+  }, {
+    /* Optional options */
+    threshold: 0.5,
+    trigger: "enter",
+    triggerOnce: true,
+  });
+
+  return (
+    <div ref={trackingRef}>
+      <h2>This element is being tracked without re-renders</h2>
     </div>
   );
 };
@@ -144,6 +208,13 @@ Provide these as the options argument in the `useInView` hook or as props on the
 | **triggerOnce**        | `boolean`                 | `false`     | Only trigger the observer once.                                                                                                                                                                                                                                                                 |
 | **initialInView**      | `boolean`                 | `false`     | Set the initial value of the `inView` boolean. This can be used if you expect the element to be in the viewport to start with, and you want to trigger something when it leaves.                                                                                                                |
 | **fallbackInView**     | `boolean`                 | `undefined` | If the `IntersectionObserver` API isn't available in the client, the default behavior is to throw an Error. You can set a specific fallback behavior, and the `inView` value will be set to this instead of failing. To set a global default, you can set it with the `defaultFallbackInView()` |
+
+`useOnInView` accepts the same options as `useInView` except `onChange`,
+`initialInView`, and `fallbackInView`, and adds the following configuration:
+
+| Name        | Type                  | Default   | Description                                                                                                                                  |
+| ----------- | --------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| **trigger** | `"enter"` or `"leave"` | `"enter"` | Decide whether the callback runs when the element enters (`"enter"`) or leaves (`"leave"`) the viewport.                                    |
 
 ### InView Props
 

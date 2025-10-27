@@ -5,6 +5,7 @@ import type * as React from "react";
 export { InView } from "./InView";
 export { defaultFallbackInView, observe } from "./observe";
 export { useInView } from "./useInView";
+export { useOnInView } from "./useOnInView";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
@@ -12,6 +13,15 @@ export type ObserverInstanceCallback = (
   inView: boolean,
   entry: IntersectionObserverEntry,
 ) => void;
+
+export type IntersectionChangeCleanup = (
+  entry?: IntersectionObserverEntry,
+) => void;
+
+export type IntersectionChangeEffect<TElement extends Element = Element> = (
+  entry: IntersectionObserverEntry,
+  unobserve: () => void,
+) => void | IntersectionChangeCleanup;
 
 interface RenderProps {
   inView: boolean;
@@ -83,3 +93,21 @@ export type InViewHookResponse = [
   inView: boolean;
   entry?: IntersectionObserverEntry;
 };
+
+export interface IntersectionEffectOptions
+  extends Pick<
+    IntersectionOptions,
+    | "threshold"
+    | "root"
+    | "rootMargin"
+    | "trackVisibility"
+    | "delay"
+    | "triggerOnce"
+    | "skip"
+  > {
+  /**
+   * Trigger the callback when the element either enters (`enter`) or leaves (`leave`) the viewport.
+   * @default "enter"
+   */
+  trigger?: "enter" | "leave";
+}
