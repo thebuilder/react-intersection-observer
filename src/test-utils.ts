@@ -71,13 +71,12 @@ function getActFn() {
   if (
     !(
       typeof window !== "undefined" &&
-      // @ts-ignore
+      // @ts-expect-error
       window.IS_REACT_ACT_ENVIRONMENT
     )
   ) {
     return undefined;
   }
-  // @ts-ignore - Older versions of React don't have the `act` method, so TypeScript will complain about it
   return typeof React.act === "function"
     ? // @ts-ignore
       React.act
@@ -110,7 +109,11 @@ afterEach(() => {
  * @param mockFn The mock function to use. Defaults to `vi.fn`.
  */
 export function setupIntersectionMocking(mockFn: typeof vi.fn) {
-  window.IntersectionObserver = mockFn((cb, options = {}) => {
+  window.IntersectionObserver = mockFn(function IntersectionObserverMock(
+    this: IntersectionObserver,
+    cb,
+    options = {},
+  ) {
     const item = {
       callback: cb,
       elements: new Set<Element>(),
@@ -160,7 +163,7 @@ export function resetIntersectionMocking() {
  **/
 export function destroyIntersectionMocking() {
   resetIntersectionMocking();
-  // @ts-ignore
+  // @ts-expect-error
   window.IntersectionObserver = originalIntersectionObserver;
 }
 

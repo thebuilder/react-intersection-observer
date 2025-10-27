@@ -1,6 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { userEvent } from "@vitest/browser/context";
-import React from "react";
+import { userEvent } from "vitest/browser";
 import { InView } from "../InView";
 import { defaultFallbackInView } from "../observe";
 import { intersectionMockInstance, mockAllIsIntersecting } from "../test-utils";
@@ -160,7 +159,7 @@ test("plain children should not catch bubbling onChange event", async () => {
 
 test("should render with fallback", () => {
   const cb = vi.fn();
-  // @ts-ignore
+  // @ts-expect-error
   window.IntersectionObserver = undefined;
   render(
     <InView fallbackInView={true} onChange={cb}>
@@ -185,14 +184,14 @@ test("should render with fallback", () => {
   expect(() => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     render(<InView onChange={cb}>Inner</InView>);
-    // @ts-ignore
+    // @ts-expect-error
     console.error.mockRestore();
   }).toThrow();
 });
 
 test("should render with global fallback", () => {
   const cb = vi.fn();
-  // @ts-ignore
+  // @ts-expect-error
   window.IntersectionObserver = undefined;
   defaultFallbackInView(true);
   render(<InView onChange={cb}>Inner</InView>);
@@ -212,7 +211,7 @@ test("should render with global fallback", () => {
   expect(() => {
     vi.spyOn(console, "error").mockImplementation(() => {});
     render(<InView onChange={cb}>Inner</InView>);
-    // @ts-ignore
+    // @ts-expect-error
     console.error.mockRestore();
   }).toThrow();
 });

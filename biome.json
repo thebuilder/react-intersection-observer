@@ -1,18 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.5.3/schema.json",
-  "files": {
-    "ignore": [
-      ".idea/**",
-      "node_modules/**",
-      "dist/**",
-      "coverage/**",
-      "storybook-static/**",
-      "pnpm-lock.yaml"
-    ]
-  },
-  "organizeImports": {
-    "enabled": true
-  },
+  "$schema": "/node_modules/@biomejs/biome/configuration_schema.json",
   "formatter": {
     "enabled": true,
     "indentStyle": "space"
@@ -24,8 +11,15 @@
       "complexity": {
         "noForEach": "off"
       },
+      "correctness": {
+        "noUnusedVariables": {
+          "level": "warn",
+          "options": {
+            "ignoreRestSiblings": true
+          }
+        }
+      },
       "style": {
-        "noVar": "off",
         "noUnusedTemplateLiteral": "off"
       },
       "a11y": {

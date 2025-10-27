@@ -1,4 +1,4 @@
-import { type Options, defineConfig } from "tsup";
+import { defineConfig, type Options } from "tsup";
 
 const commons: Options = {
   minify: false,
@@ -13,12 +13,12 @@ const commons: Options = {
 export default defineConfig([
   {
     ...commons,
-    entryPoints: ["src/index.tsx"],
+    entry: ["src/index.tsx"],
     outDir: "dist",
   },
   {
     ...commons,
-    entryPoints: { index: "src/test-utils.ts" },
+    entry: { index: "src/test-utils.ts" },
     outDir: "test-utils",
     sourcemap: false,
   },

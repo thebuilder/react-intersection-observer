@@ -37,9 +37,9 @@ test("should convert options to id", () => {
   expect(
     optionsToId({
       threshold: 0,
-      // @ts-ignore
+      // @ts-expect-error
       trackVisibility: true,
-      // @ts-ignore
+      // @ts-expect-error
       delay: 500,
     }),
   ).toMatchInlineSnapshot(`"delay_500,threshold_0,trackVisibility_true"`);

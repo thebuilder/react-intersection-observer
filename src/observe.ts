@@ -12,7 +12,7 @@ const observerMap = new Map<
 const RootIds: WeakMap<Element | Document, string> = new WeakMap();
 let rootId = 0;
 
-let unsupportedValue: boolean | undefined = undefined;
+let unsupportedValue: boolean | undefined;
 
 /**
  * What should be the default behavior if the IntersectionObserver is unsupported?
@@ -65,7 +65,6 @@ function createObserver(options: IntersectionObserverInit) {
   if (!instance) {
     // Create a map of elements this observer is going to observe. Each element has a list of callbacks that should be triggered, once it comes into view.
     const elements = new Map<Element, Array<ObserverInstanceCallback>>();
-    // biome-ignore lint/style/useConst: It's fine to use let here, as we are going to assign it later
     let thresholds: number[] | readonly number[];
 
     const observer = new IntersectionObserver((entries) => {
@@ -76,10 +75,10 @@ function createObserver(options: IntersectionObserverInit) {
           entry.isIntersecting &&
           thresholds.some((threshold) => entry.intersectionRatio >= threshold);
 
-        // @ts-ignore support IntersectionObserver v2
+        // @ts-expect-error support IntersectionObserver v2
         if (options.trackVisibility && typeof entry.isVisible === "undefined") {
           // The browser doesn't support Intersection Observer v2, falling back to v1 behavior.
-          // @ts-ignore
+          // @ts-expect-error
           entry.isVisible = inView;
         }
 

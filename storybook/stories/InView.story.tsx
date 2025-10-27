@@ -1,8 +1,7 @@
-import { action } from "@storybook/addon-actions";
 import type { Meta, StoryObj } from "@storybook/react";
-import * as React from "react";
 import type { CSSProperties } from "react";
-import { InView, type IntersectionOptions } from "react-intersection-observer";
+import { type IntersectionOptions, InView } from "react-intersection-observer";
+import { action } from "storybook/actions";
 import {
   EntryDetails,
   ErrorMessage,
@@ -41,7 +40,7 @@ function InViewRender({ style, className, ...rest }: Props) {
   return (
     <ScrollWrapper indicators={options.initialInView ? "bottom" : "all"}>
       <InView onChange={action("InView")} {...options}>
-        {({ ref, inView, entry }) => (
+        {({ ref, inView }) => (
           <>
             <Status inView={inView} />
             <InViewBlock ref={ref} inView={inView} style={style}>
