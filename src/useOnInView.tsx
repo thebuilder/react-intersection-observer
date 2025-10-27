@@ -5,6 +5,15 @@ import type {
 } from "./index";
 import { observe } from "./observe";
 
+const useSyncEffect =
+  (
+    React as typeof React & {
+      useInsertionEffect?: typeof React.useEffect;
+    }
+  ).useInsertionEffect ??
+  React.useLayoutEffect ??
+  React.useEffect;
+
 /**
  * React Hooks make it easy to monitor when elements come into and leave view. Call
  * the `useOnInView` hook with your callback and (optional) [options](#options).
@@ -52,52 +61,71 @@ export const useOnInView = <TElement extends Element>(
   }: IntersectionEffectOptions = {},
 ) => {
   const onIntersectionChangeRef = React.useRef(onIntersectionChange);
-  const syncEffect =
-    (
-      React as typeof React & {
-        useInsertionEffect?: typeof React.useEffect;
-      }
-    ).useInsertionEffect ??
-    React.useLayoutEffect ??
-    React.useEffect;
+  const observedElementRef = React.useRef<TElement | null>(null);
+  const observerCleanupRef = React.useRef<(() => void) | undefined>(undefined);
+  const callbackCleanupRef =
+    React.useRef<ReturnType<IntersectionChangeEffect<TElement>>>(undefined);
 
-  syncEffect(() => {
+  useSyncEffect(() => {
     onIntersectionChangeRef.current = onIntersectionChange;
   }, [onIntersectionChange]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Threshold is validated to be stable
+  // biome-ignore lint/correctness/useExhaustiveDependencies: Threshold arrays are normalized inside the callback
   return React.useCallback(
     (element: TElement | undefined | null) => {
+      // React <19 never calls ref callbacks with `null` during unmount, so we
+      // eagerly tear down existing observers manually whenever the target changes.
+      const cleanupExisting = () => {
+        if (observerCleanupRef.current) {
+          const cleanup = observerCleanupRef.current;
+          observerCleanupRef.current = undefined;
+          cleanup();
+        } else if (callbackCleanupRef.current) {
+          const cleanup = callbackCleanupRef.current;
+          callbackCleanupRef.current = undefined;
+          cleanup();
+        }
+      };
+
+      if (element === observedElementRef.current) {
+        return observerCleanupRef.current;
+      }
+
       if (!element || skip) {
+        observedElementRef.current = element ?? null;
+        cleanupExisting();
         return;
       }
 
-      let callbackCleanup:
-        | undefined
-        | ReturnType<IntersectionChangeEffect<TElement>>;
+      cleanupExisting();
 
+      observedElementRef.current = element;
       const intersectionsStateTrigger = trigger !== "leave";
+      let destroyed = false;
 
-      const destroyInViewObserver = observe(
+      const destroyObserver = observe(
         element,
         (inView, entry) => {
-          if (callbackCleanup) {
-            callbackCleanup(entry);
-            callbackCleanup = undefined;
+          if (callbackCleanupRef.current) {
+            const cleanup = callbackCleanupRef.current;
+            callbackCleanupRef.current = undefined;
+            cleanup(entry);
             if (triggerOnce) {
-              destroyInViewObserver();
+              stopObserving();
               return;
             }
           }
 
           if (inView === intersectionsStateTrigger) {
-            callbackCleanup = onIntersectionChangeRef.current(
+            const nextCleanup = onIntersectionChangeRef.current(
               entry,
-              destroyInViewObserver,
+              stopObserving,
             );
+            callbackCleanupRef.current =
+              typeof nextCleanup === "function" ? nextCleanup : undefined;
 
-            if (triggerOnce && !callbackCleanup) {
-              destroyInViewObserver();
+            if (triggerOnce && !callbackCleanupRef.current) {
+              stopObserving();
             }
           }
         },
@@ -105,16 +133,27 @@ export const useOnInView = <TElement extends Element>(
           threshold,
           root,
           rootMargin,
-          // @ts-expect-error Track visibility is a non-standard extension
           trackVisibility,
           delay,
-        },
+        } as IntersectionObserverInit,
       );
 
-      return () => {
-        destroyInViewObserver();
-        callbackCleanup?.();
-      };
+      function stopObserving() {
+        // Centralized teardown so both manual destroys and React ref updates share
+        // the same cleanup path (needed for React versions that never call the ref with `null`).
+        if (destroyed) return;
+        destroyed = true;
+        destroyObserver();
+        observedElementRef.current = null;
+        const cleanup = callbackCleanupRef.current;
+        callbackCleanupRef.current = undefined;
+        cleanup?.();
+        observerCleanupRef.current = undefined;
+      }
+
+      observerCleanupRef.current = stopObserving;
+
+      return observerCleanupRef.current;
     },
     [
       Array.isArray(threshold) ? threshold.toString() : threshold,
