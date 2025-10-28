@@ -189,12 +189,12 @@ const SwitchHookComponent = ({
     <>
       <div
         data-testid="item-1"
-        data-inview={!toggle && inView}
+        data-inview={(!toggle && inView).toString()}
         ref={!toggle && !unmount ? ref : undefined}
       />
       <div
         data-testid="item-2"
-        data-inview={toggle && inView}
+        data-inview={(!!toggle && inView).toString()}
         ref={toggle && !unmount ? ref : undefined}
       />
     </>
