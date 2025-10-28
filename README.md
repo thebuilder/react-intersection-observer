@@ -71,6 +71,8 @@ const Component = () => {
 };
 ```
 
+> **Note:** The first `false` notification from the underlying IntersectionObserver is ignored so your handlers only run after a real visibility change. Subsequent transitions still report both `true` and `false` states as the element enters and leaves the viewport.
+
 ### `useOnInView` hook
 
 ```js
@@ -102,6 +104,8 @@ Key differences from `useInView`:
   `useInView`
 - **Similar options** - Accepts all the same [options](#options) as `useInView`
   except `onChange`, `initialInView`, and `fallbackInView`
+
+> **Note:** Just like `useInView`, the initial `false` notification is skipped. Your callback fires the first time the element becomes visible (and on every subsequent enter/leave transition).
 
 ```jsx
 import React from "react";
@@ -149,9 +153,9 @@ state.
 ```jsx
 import { InView } from "react-intersection-observer";
 
-const Component = () => (
-  <InView>
-    {({ inView, ref, entry }) => (
+ const Component = () => (
+ <InView>
+ {({ inView, ref, entry }) => (
       <div ref={ref}>
         <h2>{`Header inside viewport ${inView}.`}</h2>
       </div>
@@ -159,8 +163,10 @@ const Component = () => (
   </InView>
 );
 
-export default Component;
-```
+ export default Component;
+ ```
+
+> **Note:** `<InView>` mirrors the hook behaviour—it suppresses the very first `false` notification so render props and `onChange` handlers only run after a genuine visibility change.
 
 ### Plain children
 

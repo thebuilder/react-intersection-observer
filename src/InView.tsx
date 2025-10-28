@@ -68,6 +68,7 @@ export class InView extends React.Component<
 > {
   node: Element | null = null;
   _unobserveCb: (() => void) | null = null;
+  lastInView: boolean | undefined;
 
   constructor(props: IntersectionObserverProps | PlainChildrenProps) {
     super(props);
@@ -75,6 +76,7 @@ export class InView extends React.Component<
       inView: !!props.initialInView,
       entry: undefined,
     };
+    this.lastInView = props.initialInView;
   }
 
   componentDidMount() {
@@ -112,6 +114,9 @@ export class InView extends React.Component<
       fallbackInView,
     } = this.props;
 
+    if (this.lastInView === undefined) {
+      this.lastInView = this.props.initialInView;
+    }
     this._unobserveCb = observe(
       this.node,
       this.handleChange,
@@ -142,6 +147,7 @@ export class InView extends React.Component<
       if (!node && !this.props.triggerOnce && !this.props.skip) {
         // Reset the state if we get a new node, and we aren't ignoring updates
         this.setState({ inView: !!this.props.initialInView, entry: undefined });
+        this.lastInView = this.props.initialInView;
       }
     }
 
@@ -150,6 +156,14 @@ export class InView extends React.Component<
   };
 
   handleChange = (inView: boolean, entry: IntersectionObserverEntry) => {
+    const previousInView = this.lastInView;
+    this.lastInView = inView;
+
+    // Ignore the very first `false` notification so consumers only hear about actual state changes.
+    if (previousInView === undefined && !inView) {
+      return;
+    }
+
     if (inView && this.props.triggerOnce) {
       // If `triggerOnce` is true, we should stop observing the element.
       this.unobserve();

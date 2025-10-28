@@ -60,6 +60,7 @@ export const useOnInView = <TElement extends Element>(
   const onIntersectionChangeRef = React.useRef(onIntersectionChange);
   const observedElementRef = React.useRef<TElement | null>(null);
   const observerCleanupRef = React.useRef<(() => void) | undefined>(undefined);
+  const lastInViewRef = React.useRef<boolean | undefined>(undefined);
 
   useSyncEffect(() => {
     onIntersectionChangeRef.current = onIntersectionChange;
@@ -85,6 +86,7 @@ export const useOnInView = <TElement extends Element>(
       if (!element || skip) {
         cleanupExisting();
         observedElementRef.current = null;
+        lastInViewRef.current = undefined;
         return;
       }
 
@@ -96,6 +98,14 @@ export const useOnInView = <TElement extends Element>(
       const destroyObserver = observe(
         element,
         (inView, entry) => {
+          const previousInView = lastInViewRef.current;
+          lastInViewRef.current = inView;
+
+          // Ignore the very first `false` notification so consumers only hear about actual state changes.
+          if (previousInView === undefined && !inView) {
+            return;
+          }
+
           onIntersectionChangeRef.current(
             inView,
             entry as IntersectionObserverEntry & { target: TElement },
@@ -121,6 +131,7 @@ export const useOnInView = <TElement extends Element>(
         destroyObserver();
         observedElementRef.current = null;
         observerCleanupRef.current = undefined;
+        lastInViewRef.current = undefined;
       }
 
       observerCleanupRef.current = stopObserving;

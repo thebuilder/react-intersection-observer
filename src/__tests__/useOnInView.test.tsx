@@ -153,6 +153,17 @@ test("should call the callback when element comes into view", () => {
   expect(wrapper.getAttribute("data-call-count")).toBe("1");
 });
 
+test("should ignore initial false intersection", () => {
+  const { getByTestId } = render(<OnInViewChangedComponent />);
+  const wrapper = getByTestId("wrapper");
+
+  mockAllIsIntersecting(false);
+  expect(wrapper.getAttribute("data-call-count")).toBe("0");
+
+  mockAllIsIntersecting(true);
+  expect(wrapper.getAttribute("data-call-count")).toBe("1");
+});
+
 test("should call cleanup when element leaves view", () => {
   const { getByTestId } = render(<OnInViewChangedComponent />);
   mockAllIsIntersecting(true);

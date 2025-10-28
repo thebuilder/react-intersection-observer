@@ -112,6 +112,9 @@ test("should trigger onChange", () => {
   const onChange = vi.fn();
   render(<HookComponent options={{ onChange }} />);
 
+  mockAllIsIntersecting(false);
+  expect(onChange).not.toHaveBeenCalled();
+
   mockAllIsIntersecting(true);
   expect(onChange).toHaveBeenLastCalledWith(
     true,
@@ -191,7 +194,7 @@ const SwitchHookComponent = ({
       />
       <div
         data-testid="item-2"
-        data-inview={!!toggle && inView}
+        data-inview={toggle && inView}
         ref={toggle && !unmount ? ref : undefined}
       />
     </>

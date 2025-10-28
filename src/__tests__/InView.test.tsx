@@ -13,15 +13,18 @@ test("Should render <InView /> intersecting", () => {
   );
 
   mockAllIsIntersecting(false);
-  expect(callback).toHaveBeenLastCalledWith(
-    false,
-    expect.objectContaining({ isIntersecting: false }),
-  );
+  expect(callback).not.toHaveBeenCalled();
 
   mockAllIsIntersecting(true);
   expect(callback).toHaveBeenLastCalledWith(
     true,
     expect.objectContaining({ isIntersecting: true }),
+  );
+
+  mockAllIsIntersecting(false);
+  expect(callback).toHaveBeenLastCalledWith(
+    false,
+    expect.objectContaining({ isIntersecting: false }),
   );
 });
 
