@@ -83,8 +83,8 @@ export const useOnInView = <TElement extends Element>(
       }
 
       if (!element || skip) {
-        observedElementRef.current = element ?? null;
         cleanupExisting();
+        observedElementRef.current = null;
         return;
       }
 

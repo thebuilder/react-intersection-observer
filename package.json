@@ -94,7 +94,7 @@
       "path": "dist/index.mjs",
       "name": "InView",
       "import": "{ InView }",
-      "limit": "1.8 kB"
+      "limit": "1.5 kB"
     },
     {
       "path": "dist/index.mjs",
@@ -104,9 +104,15 @@
     },
     {
       "path": "dist/index.mjs",
+      "name": "useOnInView",
+      "import": "{ useOnInView }",
+      "limit": "1.1 kB"
+    },
+    {
+      "path": "dist/index.mjs",
       "name": "observe",
       "import": "{ observe }",
-      "limit": "1 kB"
+      "limit": "0.9 kB"
     }
   ],
   "peerDependencies": {

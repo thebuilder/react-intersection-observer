@@ -106,7 +106,8 @@ export default LazyAnimation;
 ## Track impressions
 
 You can use `IntersectionObserver` to track when a user views your element, and
-fire an event on your tracking service.
+fire an event on your tracking service. Consider using the `useOnInView` to 
+trigger changes via a callback.
 
 - Set `triggerOnce`, to only trigger an event the first time the element enters
   the viewport.
@@ -115,22 +116,20 @@ fire an event on your tracking service.
 - Instead of `threshold`, you can use `rootMargin` to have a fixed amount be
   visible before triggering. Use a negative margin value, like `-100px 0px`, to
   have it go inwards. You can also use a percentage value, instead of pixels.
-- You can use the `onChange` callback to trigger the tracking.
 
 ```jsx
 import * as React from "react";
-import { useInView } from "react-intersection-observer";
+import { useOnInView } from "react-intersection-observer";
 
 const TrackImpression = () => {
-  const { ref } = useInView({
+  const ref = useOnInView((inView) => {
+      if (inView) {
+          // Fire a tracking event to your tracking service of choice.
+          dataLayer.push("Section shown"); // Here's a GTM dataLayer push
+      }
+  }, {
     triggerOnce: true,
     rootMargin: "-100px 0",
-    onChange: (inView) => {
-      if (inView) {
-        // Fire a tracking event to your tracking service of choice.
-        dataLayer.push("Section shown"); // Here's a GTM dataLayer push
-      }
-    },
   });
 
   return (
