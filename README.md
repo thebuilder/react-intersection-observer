@@ -75,14 +75,13 @@ const Component = () => {
 
 ```js
 const inViewRef = useOnInView(
-  (enterEntry) => {
-    // Do something with the element that came into view
-    console.log('Element is in view', enterEntry?.target);
-    
-    // Optionally return a cleanup function
-    return (exitEntry) => {
-      console.log('Element moved out of view or unmounted');
-    };
+  (inView, entry) => {
+    if (inView) {
+      // Do something with the element that came into view
+      console.log("Element is in view", entry.target);
+    } else {
+      console.log("Element left view", entry.target);
+    }
   },
   options // Optional IntersectionObserver options
 );
