@@ -10,8 +10,8 @@ to tell you when an element enters or leaves the viewport. Contains [Hooks](#use
 
 ## Features
 
-- 🪝 **Hooks or Component API** - With `useInView` it's easier than ever to
-  monitor elements
+- 🪝 **Hooks or Component API** - With `useInView` and `useOnInView` it's easier
+  than ever to monitor elements
 - ⚡️ **Optimized performance** - Reuses Intersection Observer instances where
   possible
 - ⚙️ **Matches native API** - Intuitive to use
@@ -71,6 +71,72 @@ const Component = () => {
 };
 ```
 
+> **Note:** The first `false` notification from the underlying IntersectionObserver is ignored so your handlers only run after a real visibility change. Subsequent transitions still report both `true` and `false` states as the element enters and leaves the viewport.
+
+### `useOnInView` hook
+
+```js
+const inViewRef = useOnInView(
+  (inView, entry) => {
+    if (inView) {
+      // Do something with the element that came into view
+      console.log("Element is in view", entry.target);
+    } else {
+      console.log("Element left view", entry.target);
+    }
+  },
+  options // Optional IntersectionObserver options
+);
+```
+
+The `useOnInView` hook provides a more direct alternative to `useInView`. It
+takes a callback function and returns a ref that you can assign to the DOM
+element you want to monitor. Whenever the element enters or leaves the viewport,
+your callback will be triggered with the latest in-view state.
+
+Key differences from `useInView`:
+- **No re-renders** - This hook doesn't update any state, making it ideal for
+  performance-critical scenarios
+- **Direct element access** - Your callback receives the actual
+  IntersectionObserverEntry with the `target` element
+- **Boolean-first callback** - The callback receives the current `inView`
+  boolean as the first argument, matching the `onChange` signature from
+  `useInView`
+- **Similar options** - Accepts all the same [options](#options) as `useInView`
+  except `onChange`, `initialInView`, and `fallbackInView`
+
+> **Note:** Just like `useInView`, the initial `false` notification is skipped. Your callback fires the first time the element becomes visible (and on every subsequent enter/leave transition).
+
+```jsx
+import React from "react";
+import { useOnInView } from "react-intersection-observer";
+
+const Component = () => {
+  // Track when element appears without causing re-renders
+  const trackingRef = useOnInView(
+    (inView, entry) => {
+      if (inView) {
+        // Element is in view - perhaps log an impression
+        console.log("Element appeared in view", entry.target);
+      } else {
+        console.log("Element left view", entry.target);
+      }
+    },
+    {
+      /* Optional options */
+      threshold: 0.5,
+      triggerOnce: true,
+    },
+  );
+
+  return (
+    <div ref={trackingRef}>
+      <h2>This element is being tracked without re-renders</h2>
+    </div>
+  );
+};
+```
+
 ### Render props
 
 To use the `<InView>` component, you pass it a function. It will be called
@@ -87,9 +153,9 @@ state.
 ```jsx
 import { InView } from "react-intersection-observer";
 
-const Component = () => (
-  <InView>
-    {({ inView, ref, entry }) => (
+ const Component = () => (
+ <InView>
+ {({ inView, ref, entry }) => (
       <div ref={ref}>
         <h2>{`Header inside viewport ${inView}.`}</h2>
       </div>
@@ -97,8 +163,10 @@ const Component = () => (
   </InView>
 );
 
-export default Component;
-```
+ export default Component;
+ ```
+
+> **Note:** `<InView>` mirrors the hook behaviour—it suppresses the very first `false` notification so render props and `onChange` handlers only run after a genuine visibility change.
 
 ### Plain children
 
@@ -144,6 +212,9 @@ Provide these as the options argument in the `useInView` hook or as props on the
 | **triggerOnce**        | `boolean`                 | `false`     | Only trigger the observer once.                                                                                                                                                                                                                                                                 |
 | **initialInView**      | `boolean`                 | `false`     | Set the initial value of the `inView` boolean. This can be used if you expect the element to be in the viewport to start with, and you want to trigger something when it leaves.                                                                                                                |
 | **fallbackInView**     | `boolean`                 | `undefined` | If the `IntersectionObserver` API isn't available in the client, the default behavior is to throw an Error. You can set a specific fallback behavior, and the `inView` value will be set to this instead of failing. To set a global default, you can set it with the `defaultFallbackInView()` |
+
+`useOnInView` accepts the same options as `useInView` except `onChange`,
+`initialInView`, and `fallbackInView`.
 
 ### InView Props
 

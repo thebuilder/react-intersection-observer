@@ -47,6 +47,7 @@ export function useInView({
 }: IntersectionOptions = {}): InViewHookResponse {
   const [ref, setRef] = React.useState<Element | null>(null);
   const callback = React.useRef<IntersectionOptions["onChange"]>(onChange);
+  const lastInViewRef = React.useRef<boolean | undefined>(initialInView);
   const [state, setState] = React.useState<State>({
     inView: !!initialInView,
     entry: undefined,
@@ -59,6 +60,9 @@ export function useInView({
   // biome-ignore lint/correctness/useExhaustiveDependencies: threshold is not correctly detected as a dependency
   React.useEffect(
     () => {
+      if (lastInViewRef.current === undefined) {
+        lastInViewRef.current = initialInView;
+      }
       // Ensure we have node ref, and that we shouldn't skip observing
       if (skip || !ref) return;
 
@@ -66,6 +70,14 @@ export function useInView({
       unobserve = observe(
         ref,
         (inView, entry) => {
+          const previousInView = lastInViewRef.current;
+          lastInViewRef.current = inView;
+
+          // Ignore the very first `false` notification so consumers only hear about actual state changes.
+          if (previousInView === undefined && !inView) {
+            return;
+          }
+
           setState({
             inView,
             entry,
@@ -127,6 +139,7 @@ export function useInView({
       inView: !!initialInView,
       entry: undefined,
     });
+    lastInViewRef.current = initialInView;
   }
 
   const result = [setRef, state.inView, state.entry] as InViewHookResponse;

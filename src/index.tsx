@@ -5,12 +5,18 @@ import type * as React from "react";
 export { InView } from "./InView";
 export { defaultFallbackInView, observe } from "./observe";
 export { useInView } from "./useInView";
+export { useOnInView } from "./useOnInView";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 export type ObserverInstanceCallback = (
   inView: boolean,
   entry: IntersectionObserverEntry,
+) => void;
+
+export type IntersectionChangeEffect<TElement extends Element = Element> = (
+  inView: boolean,
+  entry: IntersectionObserverEntry & { target: TElement },
 ) => void;
 
 interface RenderProps {
@@ -83,3 +89,8 @@ export type InViewHookResponse = [
   inView: boolean;
   entry?: IntersectionObserverEntry;
 };
+
+export type IntersectionEffectOptions = Omit<
+  IntersectionOptions,
+  "onChange" | "fallbackInView" | "initialInView"
+>;
