@@ -17,9 +17,7 @@ import {
 } from "./elements";
 import { argTypes, useValidateOptions } from "./story-utils";
 
-type Props = IntersectionEffectOptions & {
-  trigger?: NonNullable<IntersectionEffectOptions["trigger"]>;
-};
+type Props = IntersectionEffectOptions;
 
 type Story = StoryObj<Props>;
 
@@ -32,16 +30,9 @@ const meta = {
   },
   argTypes: {
     ...argTypes,
-    trigger: {
-      control: { type: "inline-radio" },
-      options: ["enter", "leave"],
-      description:
-        'Trigger the callback when the element enters ("enter") or leaves ("leave") the viewport.',
-    },
   },
   args: {
     threshold: 0,
-    trigger: "enter",
     triggerOnce: false,
     skip: false,
   },
@@ -50,7 +41,7 @@ const meta = {
 
 export default meta;
 
-function UseOnInViewRender({ trigger = "enter", ...rest }: Props) {
+function UseOnInViewRender(rest: Props) {
   const { options, error } = useValidateOptions(rest as IntersectionOptions);
 
   const { onChange, initialInView, fallbackInView, ...observerOptions } =
@@ -58,10 +49,7 @@ function UseOnInViewRender({ trigger = "enter", ...rest }: Props) {
 
   const effectOptions: IntersectionEffectOptions | undefined = error
     ? undefined
-    : {
-        ...observerOptions,
-        trigger,
-      };
+    : observerOptions;
 
   const [inView, setInView] = useState(false);
   const [events, setEvents] = useState<string[]>([]);
@@ -69,7 +57,6 @@ function UseOnInViewRender({ trigger = "enter", ...rest }: Props) {
   const optionsKey = useMemo(
     () =>
       JSON.stringify({
-        trigger,
         threshold: effectOptions?.threshold,
         rootMargin: effectOptions?.rootMargin,
         trackVisibility: effectOptions?.trackVisibility,
@@ -84,7 +71,6 @@ function UseOnInViewRender({ trigger = "enter", ...rest }: Props) {
       effectOptions?.threshold,
       effectOptions?.trackVisibility,
       effectOptions?.triggerOnce,
-      trigger,
     ],
   );
 
@@ -94,21 +80,18 @@ function UseOnInViewRender({ trigger = "enter", ...rest }: Props) {
     setInView(false);
   }, [optionsKey]);
 
-  const ref = useOnInView((entry) => {
-    setInView(true);
-    setEvents((prev) => [
-      ...prev,
-      `Entered viewport at ${(entry.time / 1000).toFixed(2)}s`,
-    ]);
-    return (exitEntry) => {
-      setInView(false);
-      setEvents((prev) => [
-        ...prev,
-        exitEntry
-          ? `Exited viewport at ${(exitEntry.time / 1000).toFixed(2)}s`
-          : "Observer disconnected or element unmounted",
-      ]);
-    };
+  const ref = useOnInView((isInView, entry) => {
+    setInView(isInView);
+    const seconds =
+      Number.isFinite(entry.time) && entry.time >= 0
+        ? (entry.time / 1000).toFixed(2)
+        : undefined;
+    const label = seconds
+      ? `${isInView ? "Entered" : "Left"} viewport at ${seconds}s`
+      : isInView
+        ? "Entered viewport"
+        : "Left viewport";
+    setEvents((prev) => [...prev, label]);
   }, effectOptions);
 
   if (error) {
@@ -152,12 +135,6 @@ function UseOnInViewRender({ trigger = "enter", ...rest }: Props) {
 
 export const Basic: Story = {
   args: {},
-};
-
-export const LeaveTrigger: Story = {
-  args: {
-    trigger: "leave",
-  },
 };
 
 export const TriggerOnce: Story = {

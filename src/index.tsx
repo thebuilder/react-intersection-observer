@@ -14,14 +14,10 @@ export type ObserverInstanceCallback = (
   entry: IntersectionObserverEntry,
 ) => void;
 
-export type IntersectionChangeCleanup = (
-  entry?: IntersectionObserverEntry,
-) => void;
-
 export type IntersectionChangeEffect<TElement extends Element = Element> = (
-  entry: IntersectionObserverEntry,
-  unobserve: () => void,
-) => void | IntersectionChangeCleanup;
+  inView: boolean,
+  entry: IntersectionObserverEntry & { target: TElement },
+) => void;
 
 interface RenderProps {
   inView: boolean;
@@ -94,20 +90,7 @@ export type InViewHookResponse = [
   entry?: IntersectionObserverEntry;
 };
 
-export interface IntersectionEffectOptions
-  extends Pick<
-    IntersectionOptions,
-    | "threshold"
-    | "root"
-    | "rootMargin"
-    | "trackVisibility"
-    | "delay"
-    | "triggerOnce"
-    | "skip"
-  > {
-  /**
-   * Trigger the callback when the element either enters (`enter`) or leaves (`leave`) the viewport.
-   * @default "enter"
-   */
-  trigger?: "enter" | "leave";
-}
+export type IntersectionEffectOptions = Omit<
+  IntersectionOptions,
+  "onChange" | "fallbackInView" | "initialInView"
+>;

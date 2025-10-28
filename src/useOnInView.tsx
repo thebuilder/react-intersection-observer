@@ -29,14 +29,12 @@ const useSyncEffect =
  * import { useOnInView } from 'react-intersection-observer';
  *
  * const Component = () => {
- *   const inViewRef = useOnInView((entry) => {
- *     console.log(`Element is in view`, entry?.target);
- *     // Optional: cleanup function:
- *     return () => {
- *       console.log('Element moved out of view or unmounted');
- *     };
- *   }, {
- *     threshold: 0,
+ *   const inViewRef = useOnInView((inView, entry) => {
+ *     if (inView) {
+ *       console.log("Element is in view", entry.target);
+ *     } else {
+ *       console.log("Element left view", entry.target);
+ *     }
  *   });
  *
  *   return (
@@ -57,14 +55,11 @@ export const useOnInView = <TElement extends Element>(
     delay,
     triggerOnce,
     skip,
-    trigger,
   }: IntersectionEffectOptions = {},
 ) => {
   const onIntersectionChangeRef = React.useRef(onIntersectionChange);
   const observedElementRef = React.useRef<TElement | null>(null);
   const observerCleanupRef = React.useRef<(() => void) | undefined>(undefined);
-  const callbackCleanupRef =
-    React.useRef<ReturnType<IntersectionChangeEffect<TElement>>>(undefined);
 
   useSyncEffect(() => {
     onIntersectionChangeRef.current = onIntersectionChange;
@@ -79,10 +74,6 @@ export const useOnInView = <TElement extends Element>(
         if (observerCleanupRef.current) {
           const cleanup = observerCleanupRef.current;
           observerCleanupRef.current = undefined;
-          cleanup();
-        } else if (callbackCleanupRef.current) {
-          const cleanup = callbackCleanupRef.current;
-          callbackCleanupRef.current = undefined;
           cleanup();
         }
       };
@@ -100,33 +91,17 @@ export const useOnInView = <TElement extends Element>(
       cleanupExisting();
 
       observedElementRef.current = element;
-      const intersectionsStateTrigger = trigger !== "leave";
       let destroyed = false;
 
       const destroyObserver = observe(
         element,
         (inView, entry) => {
-          if (callbackCleanupRef.current) {
-            const cleanup = callbackCleanupRef.current;
-            callbackCleanupRef.current = undefined;
-            cleanup(entry);
-            if (triggerOnce) {
-              stopObserving();
-              return;
-            }
-          }
-
-          if (inView === intersectionsStateTrigger) {
-            const nextCleanup = onIntersectionChangeRef.current(
-              entry,
-              stopObserving,
-            );
-            callbackCleanupRef.current =
-              typeof nextCleanup === "function" ? nextCleanup : undefined;
-
-            if (triggerOnce && !callbackCleanupRef.current) {
-              stopObserving();
-            }
+          onIntersectionChangeRef.current(
+            inView,
+            entry as IntersectionObserverEntry & { target: TElement },
+          );
+          if (triggerOnce && inView) {
+            stopObserving();
           }
         },
         {
@@ -145,9 +120,6 @@ export const useOnInView = <TElement extends Element>(
         destroyed = true;
         destroyObserver();
         observedElementRef.current = null;
-        const cleanup = callbackCleanupRef.current;
-        callbackCleanupRef.current = undefined;
-        cleanup?.();
         observerCleanupRef.current = undefined;
       }
 
@@ -163,7 +135,6 @@ export const useOnInView = <TElement extends Element>(
       delay,
       triggerOnce,
       skip,
-      trigger,
     ],
   );
 };

@@ -90,21 +90,19 @@ const inViewRef = useOnInView(
 
 The `useOnInView` hook provides a more direct alternative to `useInView`. It
 takes a callback function and returns a ref that you can assign to the DOM
-element you want to monitor. When the element enters the viewport, your callback
-will be triggered.
+element you want to monitor. Whenever the element enters or leaves the viewport,
+your callback will be triggered with the latest in-view state.
 
 Key differences from `useInView`:
 - **No re-renders** - This hook doesn't update any state, making it ideal for
   performance-critical scenarios
 - **Direct element access** - Your callback receives the actual
   IntersectionObserverEntry with the `target` element
-- **Optional cleanup** - Return a function from your callback to run when the
-  element leaves the viewport
+- **Boolean-first callback** - The callback receives the current `inView`
+  boolean as the first argument, matching the `onChange` signature from
+  `useInView`
 - **Similar options** - Accepts all the same [options](#options) as `useInView`
   except `onChange`, `initialInView`, and `fallbackInView`
-
-The `trigger` option allows to listen for the element entering the viewport or
-leaving the viewport. The default is `enter`.
 
 ```jsx
 import React from "react";
@@ -112,20 +110,21 @@ import { useOnInView } from "react-intersection-observer";
 
 const Component = () => {
   // Track when element appears without causing re-renders
-  const trackingRef = useOnInView((entry) => {
-    // Element is in view - perhaps log an impression
-    console.log("Element appeared in view", entry.target);
-    
-    // Return optional cleanup function
-    return () => {
-      console.log("Element left view");
-    };
-  }, {
-    /* Optional options */
-    threshold: 0.5,
-    trigger: "enter",
-    triggerOnce: true,
-  });
+  const trackingRef = useOnInView(
+    (inView, entry) => {
+      if (inView) {
+        // Element is in view - perhaps log an impression
+        console.log("Element appeared in view", entry.target);
+      } else {
+        console.log("Element left view", entry.target);
+      }
+    },
+    {
+      /* Optional options */
+      threshold: 0.5,
+      triggerOnce: true,
+    },
+  );
 
   return (
     <div ref={trackingRef}>
@@ -210,11 +209,7 @@ Provide these as the options argument in the `useInView` hook or as props on the
 | **fallbackInView**     | `boolean`                 | `undefined` | If the `IntersectionObserver` API isn't available in the client, the default behavior is to throw an Error. You can set a specific fallback behavior, and the `inView` value will be set to this instead of failing. To set a global default, you can set it with the `defaultFallbackInView()` |
 
 `useOnInView` accepts the same options as `useInView` except `onChange`,
-`initialInView`, and `fallbackInView`, and adds the following configuration:
-
-| Name        | Type                  | Default   | Description                                                                                                                                  |
-| ----------- | --------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| **trigger** | `"enter"` or `"leave"` | `"enter"` | Decide whether the callback runs when the element enters (`"enter"`) or leaves (`"leave"`) the viewport.                                    |
+`initialInView`, and `fallbackInView`.
 
 ### InView Props
 

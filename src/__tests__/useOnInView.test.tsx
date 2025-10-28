@@ -15,16 +15,12 @@ const OnInViewChangedComponent = ({
   const [callCount, setCallCount] = useState(0);
   const [cleanupCount, setCleanupCount] = useState(0);
 
-  const inViewRef = useOnInView((entry) => {
-    setInView(entry.isIntersecting);
+  const inViewRef = useOnInView((isInView) => {
+    setInView(isInView);
     setCallCount((prev) => prev + 1);
-    // Return cleanup function
-    return (cleanupEntry) => {
+    if (!isInView) {
       setCleanupCount((prev) => prev + 1);
-      if (cleanupEntry) {
-        setInView(false);
-      }
-    };
+    }
   }, options);
 
   return (
@@ -52,9 +48,8 @@ const LazyOnInViewChangedComponent = ({
     setIsLoading(false);
   }, []);
 
-  const inViewRef = useOnInView((entry) => {
-    setInView(entry ? entry.isIntersecting : false);
-    return () => setInView(false);
+  const inViewRef = useOnInView((isInView) => {
+    setInView(isInView);
   }, options);
 
   if (isLoading) return <div>Loading</div>;
@@ -97,19 +92,16 @@ const ThresholdTriggerComponent = ({
   const [lastRatio, setLastRatio] = useState<number | null>(null);
   const [triggeredThresholds, setTriggeredThresholds] = useState<number[]>([]);
 
-  const inViewRef = useOnInView((entry) => {
+  const inViewRef = useOnInView((isInView, entry) => {
     setTriggerCount((prev) => prev + 1);
     setLastRatio(entry.intersectionRatio);
 
-    // Add this ratio to our list of triggered thresholds
-    setTriggeredThresholds((prev) => [...prev, entry.intersectionRatio]);
-
-    return (exitEntry) => {
+    if (isInView) {
+      // Add this ratio to our list of triggered thresholds
+      setTriggeredThresholds((prev) => [...prev, entry.intersectionRatio]);
+    } else {
       setCleanupCount((prev) => prev + 1);
-      if (exitEntry) {
-        setLastRatio(exitEntry.intersectionRatio);
-      }
-    };
+    }
   }, options);
 
   return (
@@ -187,42 +179,6 @@ test("should respect threshold values", () => {
   expect(wrapper.getAttribute("data-inview")).toBe("true");
 });
 
-test("should call callback with trigger: leave", () => {
-  const { getByTestId } = render(
-    <OnInViewChangedComponent options={{ trigger: "leave" }} />,
-  );
-  const wrapper = getByTestId("wrapper");
-
-  mockAllIsIntersecting(false);
-  // Should call callback
-  expect(wrapper.getAttribute("data-call-count")).toBe("1");
-
-  mockAllIsIntersecting(true);
-  // Should call cleanup
-  expect(wrapper.getAttribute("data-cleanup-count")).toBe("1");
-});
-
-test("should call callback with trigger: leave and triggerOnce is true", () => {
-  const { getByTestId } = render(
-    <OnInViewChangedComponent
-      options={{ trigger: "leave", triggerOnce: true }}
-    />,
-  );
-  const wrapper = getByTestId("wrapper");
-
-  mockAllIsIntersecting(true);
-  // the callback should not be called as it is triggered on leave
-  expect(wrapper.getAttribute("data-call-count")).toBe("0");
-
-  mockAllIsIntersecting(false);
-  // Should call callback
-  expect(wrapper.getAttribute("data-call-count")).toBe("1");
-
-  mockAllIsIntersecting(true);
-  // Should call cleanup
-  expect(wrapper.getAttribute("data-cleanup-count")).toBe("1");
-});
-
 test("should respect triggerOnce option", () => {
   const { getByTestId } = render(
     <>
@@ -239,7 +195,7 @@ test("should respect triggerOnce option", () => {
   mockAllIsIntersecting(false);
   expect(wrapper.getAttribute("data-cleanup-count")).toBe("1");
   mockAllIsIntersecting(true);
-  expect(wrapper.getAttribute("data-call-count")).toBe("2");
+  expect(wrapper.getAttribute("data-call-count")).toBe("3");
   expect(wrapperTriggerOnce.getAttribute("data-call-count")).toBe("1");
 });
 
@@ -272,10 +228,11 @@ test("should handle unmounting properly", () => {
 test("should handle ref changes", () => {
   const { rerender, getByTestId } = render(<OnInViewChangedComponent />);
   mockAllIsIntersecting(true);
+  mockAllIsIntersecting(false);
 
   rerender(<OnInViewChangedComponent unmount />);
 
-  // Component should clean up when ref is removed
+  // Component should register the element leaving view before ref removal
   const wrapper = getByTestId("wrapper");
   expect(wrapper.getAttribute("data-cleanup-count")).toBe("1");
 
@@ -294,9 +251,8 @@ const MergeRefsComponent = ({
 }) => {
   const [inView, setInView] = useState(false);
 
-  const inViewRef = useOnInView((entry) => {
-    setInView(entry ? entry.isIntersecting : false);
-    return () => setInView(false);
+  const inViewRef = useOnInView((isInView) => {
+    setInView(isInView);
   }, options);
 
   const setRef = useCallback(
@@ -327,19 +283,16 @@ const MultipleCallbacksComponent = ({
   const [inView2, setInView2] = useState(false);
   const [inView3, setInView3] = useState(false);
 
-  const ref1 = useOnInView((entry) => {
-    setInView1(entry ? entry.isIntersecting : false);
-    return () => setInView1(false);
+  const ref1 = useOnInView((isInView) => {
+    setInView1(isInView);
   }, options);
 
-  const ref2 = useOnInView((entry) => {
-    setInView2(entry ? entry.isIntersecting : false);
-    return () => setInView2(false);
+  const ref2 = useOnInView((isInView) => {
+    setInView2(isInView);
   }, options);
 
-  const ref3 = useOnInView((entry) => {
-    setInView3(entry ? entry.isIntersecting : false);
-    return () => setInView3(false);
+  const ref3 = useOnInView((isInView) => {
+    setInView3(isInView);
   });
 
   const mergedRefs = useCallback(
@@ -383,9 +336,8 @@ test("should pass the element to the callback", () => {
   let capturedElement: Element | undefined;
 
   const ElementTestComponent = () => {
-    const inViewRef = useOnInView((entry) => {
+    const inViewRef = useOnInView((_, entry) => {
       capturedElement = entry.target;
-      return undefined;
     });
 
     return <div data-testid="element-test" ref={inViewRef} />;
@@ -415,18 +367,20 @@ test("should track which threshold triggered the visibility change", () => {
 
   // Go out of view
   mockAllIsIntersecting(0);
+  expect(element.getAttribute("data-trigger-count")).toBe("2");
 
   // Trigger at exactly the second threshold (0.5)
   mockAllIsIntersecting(0.5);
-  expect(element.getAttribute("data-trigger-count")).toBe("2");
+  expect(element.getAttribute("data-trigger-count")).toBe("3");
   expect(element.getAttribute("data-last-ratio")).toBe("0.50");
 
   // Go out of view
   mockAllIsIntersecting(0);
+  expect(element.getAttribute("data-trigger-count")).toBe("4");
 
   // Trigger at exactly the third threshold (0.75)
   mockAllIsIntersecting(0.75);
-  expect(element.getAttribute("data-trigger-count")).toBe("3");
+  expect(element.getAttribute("data-trigger-count")).toBe("5");
   expect(element.getAttribute("data-last-ratio")).toBe("0.75");
 
   // Check all triggered thresholds were recorded
@@ -459,157 +413,16 @@ test("should track thresholds when crossing multiple in a single update", () => 
   // Go out of view
   mockAllIsIntersecting(0);
   expect(element.getAttribute("data-cleanup-count")).toBe("1");
+  expect(element.getAttribute("data-trigger-count")).toBe("2");
 
   // Change to 0.5 (crosses 0.2, 0.4 thresholds)
   mockAllIsIntersecting(0.5);
-  expect(element.getAttribute("data-trigger-count")).toBe("2");
+  expect(element.getAttribute("data-trigger-count")).toBe("3");
   expect(element.getAttribute("data-last-ratio")).toBe("0.40");
 
   // Jump to full visibility - should cleanup the 0.5 callback
   mockAllIsIntersecting(1.0);
-  expect(element.getAttribute("data-trigger-count")).toBe("3");
-  expect(element.getAttribute("data-cleanup-count")).toBe("2");
+  expect(element.getAttribute("data-trigger-count")).toBe("4");
+  expect(element.getAttribute("data-cleanup-count")).toBe("1");
   expect(element.getAttribute("data-last-ratio")).toBe("0.80");
-});
-
-test("should track thresholds when trigger is set to leave", () => {
-  // Using multiple specific thresholds with trigger: leave
-  const { getByTestId } = render(
-    <ThresholdTriggerComponent
-      options={{
-        threshold: [0.25, 0.5, 0.75],
-        trigger: "leave",
-      }}
-    />,
-  );
-  const element = getByTestId("threshold-trigger");
-
-  // Make element 30% visible - above first threshold, should call cleanup
-  mockAllIsIntersecting(0);
-  expect(element.getAttribute("data-trigger-count")).toBe("1");
-  expect(element.getAttribute("data-last-ratio")).toBe("0.00");
-});
-
-test("should allow destroying the observer after custom condition is met", () => {
-  // Component that stops observing after a specific number of views
-  const DestroyAfterCountComponent = ({ maxViewCount = 2 }) => {
-    const [viewCount, setViewCount] = useState(0);
-    const [inView, setInView] = useState(false);
-    const [observerDestroyed, setObserverDestroyed] = useState(false);
-
-    const inViewRef = useOnInView((entry, destroyObserver) => {
-      setInView(entry.isIntersecting);
-
-      // Increment view count when element comes into view
-      if (entry.isIntersecting) {
-        const newCount = viewCount + 1;
-        setViewCount(newCount);
-
-        // If we've reached the max view count, destroy the observer
-        if (newCount >= maxViewCount) {
-          destroyObserver();
-          setObserverDestroyed(true);
-        }
-      }
-
-      return () => {
-        setInView(false);
-      };
-    });
-
-    return (
-      <div
-        data-testid="destroy-test"
-        ref={inViewRef}
-        data-inview={inView.toString()}
-        data-view-count={viewCount}
-        data-observer-destroyed={observerDestroyed.toString()}
-      >
-        Destroy after {maxViewCount} views
-      </div>
-    );
-  };
-
-  const { getByTestId } = render(<DestroyAfterCountComponent />);
-  const wrapper = getByTestId("destroy-test");
-  const instance = intersectionMockInstance(wrapper);
-
-  // Initially not in view
-  expect(wrapper.getAttribute("data-view-count")).toBe("0");
-  expect(wrapper.getAttribute("data-observer-destroyed")).toBe("false");
-
-  // First view
-  mockAllIsIntersecting(true);
-  expect(wrapper.getAttribute("data-inview")).toBe("true");
-  expect(wrapper.getAttribute("data-view-count")).toBe("1");
-  expect(wrapper.getAttribute("data-observer-destroyed")).toBe("false");
-
-  // Back out of view
-  mockAllIsIntersecting(false);
-  expect(wrapper.getAttribute("data-inview")).toBe("false");
-
-  // Second view - should hit max count and destroy observer
-  mockAllIsIntersecting(true);
-  expect(wrapper.getAttribute("data-inview")).toBe("true");
-  expect(wrapper.getAttribute("data-view-count")).toBe("2");
-  expect(wrapper.getAttribute("data-observer-destroyed")).toBe("true");
-
-  // Verify unobserve was called when destroying the observer
-  expect(instance.unobserve).toHaveBeenCalledWith(wrapper);
-
-  // Additional intersection changes should have no effect since observer is destroyed
-  mockAllIsIntersecting(false);
-  mockAllIsIntersecting(true);
-  expect(wrapper.getAttribute("data-view-count")).toBe("2"); // Count should not increase
-});
-
-test("should allow destroying the observer immediately on first visibility", () => {
-  // This is useful for one-time animations or effects that should only run once
-  const DestroyImmediatelyComponent = () => {
-    const [hasBeenVisible, setHasBeenVisible] = useState(false);
-    const [observerDestroyed, setObserverDestroyed] = useState(false);
-
-    const inViewRef = useOnInView((entry, destroyObserver) => {
-      if (entry.isIntersecting) {
-        setHasBeenVisible(true);
-        destroyObserver();
-        setObserverDestroyed(true);
-      }
-
-      return undefined;
-    });
-
-    return (
-      <div
-        data-testid="destroy-immediate"
-        ref={inViewRef}
-        data-has-been-visible={hasBeenVisible.toString()}
-        data-observer-destroyed={observerDestroyed.toString()}
-      >
-        Destroy immediately
-      </div>
-    );
-  };
-
-  const { getByTestId } = render(<DestroyImmediatelyComponent />);
-  const wrapper = getByTestId("destroy-immediate");
-
-  // Initially not visible
-  expect(wrapper.getAttribute("data-has-been-visible")).toBe("false");
-  expect(wrapper.getAttribute("data-observer-destroyed")).toBe("false");
-
-  // Trigger visibility
-  mockAllIsIntersecting(true);
-
-  // Should have been marked as visible and destroyed
-  expect(wrapper.getAttribute("data-has-been-visible")).toBe("true");
-  expect(wrapper.getAttribute("data-observer-destroyed")).toBe("true");
-
-  // Additional intersection changes should have no effect
-  mockAllIsIntersecting(false);
-  mockAllIsIntersecting(true);
-
-  // State should remain the same
-  expect(wrapper.getAttribute("data-has-been-visible")).toBe("true");
-  expect(wrapper.getAttribute("data-observer-destroyed")).toBe("true");
 });
