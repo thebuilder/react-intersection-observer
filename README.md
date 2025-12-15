@@ -4,6 +4,7 @@
 [![Test][test-image]][test-url]
 [![License][license-image]][license-url]
 [![Downloads][downloads-image]][downloads-url]
+![npm package minimized gzipped size](https://img.shields.io/bundlejs/size/react-intersection-observer?exports=InView%2C%20useOnInView%2C%20useInView&externals=react&format=both)
 
 A React implementation of the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) 
 to tell you when an element enters or leaves the viewport. Contains [Hooks](#useinview-hook), [render props](#render-props), and [plain children](#plain-children) implementations.
@@ -21,7 +22,8 @@ to tell you when an element enters or leaves the viewport. Contains [Hooks](#use
   [Jest](https://jestjs.io/) or [Vitest](https://vitest.dev/)
 - 🌳 **Tree-shakeable** - Only include the parts you use
 - 💥 **Tiny bundle** - Around **~1.15kB** for `useInView` and **~1.6kB** for
-  `<InView>`
+  `<InView>` ![useInView](https://img.shields.io/bundlejs/size/react-intersection-observer?exports=useInView&externals=react&format=both&label=useInView) ![InView](https://img.shields.io/bundlejs/size/react-intersection-observer?exports=InView&externals=react&format=both&label=InView)
+ ![useOnInView](https://img.shields.io/bundlejs/size/react-intersection-observer?exports=useOnInView&externals=react&format=both&label=useOnInView)
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/thebuilder/react-intersection-observer)
 
