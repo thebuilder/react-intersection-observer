@@ -15,27 +15,27 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@tailwindcss/postcss": "^4.1.16",
-    "framer-motion": "^12.23.24",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
+    "@tailwindcss/postcss": "^4.1.18",
+    "framer-motion": "^12.23.26",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "react-intersection-observer": "workspace:*",
-    "tailwindcss": "^4.1.16"
+    "tailwindcss": "^4.1.18"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.1",
+    "@biomejs/biome": "^2.3.10",
     "@mdx-js/react": "^3.1.1",
-    "@storybook/addon-docs": "9.1.15",
-    "@storybook/addon-vitest": "9.1.15",
-    "@storybook/builder-vite": "9.1.15",
-    "@storybook/react": "9.1.15",
-    "@storybook/react-vite": "9.1.15",
-    "@types/react": "^19.2.2",
-    "@types/react-dom": "^19.2.2",
-    "@vitejs/plugin-react": "^5.1.0",
+    "@storybook/addon-docs": "10.1.10",
+    "@storybook/addon-vitest": "10.1.10",
+    "@storybook/builder-vite": "10.1.10",
+    "@storybook/react": "10.1.10",
+    "@storybook/react-vite": "10.1.10",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
     "postcss": "^8.5.6",
-    "storybook": "9.1.15",
+    "storybook": "10.1.10",
     "typescript": "^5.9.3",
-    "vite": "^7.1.12"
+    "vite": "^7.3.0"
   }
 }
