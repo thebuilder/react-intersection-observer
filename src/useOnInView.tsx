@@ -4,6 +4,7 @@ import type {
   IntersectionEffectOptions,
 } from "./index";
 import { observe } from "./observe";
+import { supportsRefCleanup } from "./reactVersion";
 
 const useSyncEffect =
   (
@@ -55,18 +56,21 @@ export const useOnInView = <TElement extends Element>(
     delay,
     triggerOnce,
     skip,
+    initialInView,
+    fallbackInView,
   }: IntersectionEffectOptions = {},
 ) => {
   const onIntersectionChangeRef = React.useRef(onIntersectionChange);
+  const initialInViewValue = initialInView ? true : undefined;
   const observedElementRef = React.useRef<TElement | null>(null);
   const observerCleanupRef = React.useRef<(() => void) | undefined>(undefined);
-  const lastInViewRef = React.useRef<boolean | undefined>(undefined);
+  const lastInViewRef = React.useRef<boolean | undefined>(initialInViewValue);
 
   useSyncEffect(() => {
     onIntersectionChangeRef.current = onIntersectionChange;
   }, [onIntersectionChange]);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Threshold arrays are normalized inside the callback
+  // biome-ignore lint/correctness/useExhaustiveDependencies: threshold array handled inside
   return React.useCallback(
     (element: TElement | undefined | null) => {
       // React <19 never calls ref callbacks with `null` during unmount, so we
@@ -80,19 +84,20 @@ export const useOnInView = <TElement extends Element>(
       };
 
       if (element === observedElementRef.current) {
-        return observerCleanupRef.current;
+        return supportsRefCleanup ? observerCleanupRef.current : undefined;
       }
 
       if (!element || skip) {
         cleanupExisting();
         observedElementRef.current = null;
-        lastInViewRef.current = undefined;
-        return;
+        lastInViewRef.current = initialInViewValue;
+        return undefined;
       }
 
       cleanupExisting();
 
       observedElementRef.current = element;
+      lastInViewRef.current = initialInViewValue;
       let destroyed = false;
 
       const destroyObserver = observe(
@@ -121,6 +126,7 @@ export const useOnInView = <TElement extends Element>(
           trackVisibility,
           delay,
         } as IntersectionObserverInit,
+        fallbackInView,
       );
 
       function stopObserving() {
@@ -136,7 +142,7 @@ export const useOnInView = <TElement extends Element>(
 
       observerCleanupRef.current = stopObserving;
 
-      return observerCleanupRef.current;
+      return supportsRefCleanup ? observerCleanupRef.current : undefined;
     },
     [
       Array.isArray(threshold) ? threshold.toString() : threshold,
@@ -146,6 +152,8 @@ export const useOnInView = <TElement extends Element>(
       delay,
       triggerOnce,
       skip,
+      initialInViewValue,
+      fallbackInView,
     ],
   );
 };
