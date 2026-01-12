@@ -9,7 +9,7 @@ const useSyncEffect =
   ("useInsertionEffect" in React
     ? // @ts-ignore useInsertionEffect is only available in React 18+
       React.useInsertionEffect
-    : null) ??
+    : undefined) ??
   React.useLayoutEffect ??
   React.useEffect;
 
