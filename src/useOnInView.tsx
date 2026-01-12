@@ -6,11 +6,10 @@ import type {
 import { observe } from "./observe";
 
 const useSyncEffect =
-  (
-    React as typeof React & {
-      useInsertionEffect?: typeof React.useEffect;
-    }
-  ).useInsertionEffect ??
+  ("useInsertionEffect" in React
+    ? // @ts-ignore useInsertionEffect is only available in React 18+
+      React.useInsertionEffect
+    : null) ??
   React.useLayoutEffect ??
   React.useEffect;
 
