@@ -5,13 +5,12 @@ import type {
 } from "./index";
 import { observe } from "./observe";
 
-const useSyncEffect =
-  ("useInsertionEffect" in React
-    ? // @ts-ignore useInsertionEffect is only available in React 18+
-      React.useInsertionEffect
-    : undefined) ??
+const useSyncEffect = (("useInsertionEffect" in React
+  ? (React as typeof React & { useInsertionEffect: typeof React.useEffect })
+      .useInsertionEffect
+  : undefined) ??
   React.useLayoutEffect ??
-  React.useEffect;
+  React.useEffect) as typeof React.useEffect;
 
 /**
  * React Hooks make it easy to monitor when elements come into and leave view. Call
