@@ -215,8 +215,7 @@ Provide these as the options argument in the `useInView` hook or as props on the
 | **initialInView**      | `boolean`                 | `false`     | Set the initial value of the `inView` boolean. This can be used if you expect the element to be in the viewport to start with, and you want to trigger something when it leaves.                                                                                                                |
 | **fallbackInView**     | `boolean`                 | `undefined` | If the `IntersectionObserver` API isn't available in the client, the default behavior is to throw an Error. You can set a specific fallback behavior, and the `inView` value will be set to this instead of failing. To set a global default, you can set it with the `defaultFallbackInView()` |
 
-`useOnInView` accepts the same options as `useInView` except `onChange`,
-`initialInView`, and `fallbackInView`.
+`useOnInView` accepts the same options as `useInView` except `onChange`.
 
 ### InView Props
 

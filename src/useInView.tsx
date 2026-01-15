@@ -1,6 +1,7 @@
 import * as React from "react";
 import type { IntersectionOptions, InViewHookResponse } from "./index";
-import { observe } from "./observe";
+import { supportsRefCleanup } from "./reactVersion";
+import { useOnInView } from "./useOnInView";
 
 type State = {
   inView: boolean;
@@ -33,116 +34,61 @@ type State = {
  * };
  * ```
  */
-export function useInView({
-  threshold,
-  delay,
-  trackVisibility,
-  rootMargin,
-  root,
-  triggerOnce,
-  skip,
-  initialInView,
-  fallbackInView,
-  onChange,
-}: IntersectionOptions = {}): InViewHookResponse {
-  const [ref, setRef] = React.useState<Element | null>(null);
-  const callback = React.useRef<IntersectionOptions["onChange"]>(onChange);
-  const lastInViewRef = React.useRef<boolean | undefined>(initialInView);
+export function useInView(
+  options: IntersectionOptions = {},
+): InViewHookResponse {
   const [state, setState] = React.useState<State>({
-    inView: !!initialInView,
+    inView: !!options.initialInView,
     entry: undefined,
   });
+  const optionsRef = React.useRef(options);
+  optionsRef.current = options;
+  const entryTargetRef = React.useRef<Element | undefined>(undefined);
 
-  // Store the onChange callback in a `ref`, so we can access the latest instance
-  // inside the `useEffect`, but without triggering a rerender.
-  callback.current = onChange;
+  const inViewRef = useOnInView((inView, entry) => {
+    entryTargetRef.current = entry.target;
+    setState({ inView, entry });
+    if (optionsRef.current.onChange) {
+      optionsRef.current.onChange(inView, entry);
+    }
+  }, options);
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: threshold is not correctly detected as a dependency
-  React.useEffect(
-    () => {
-      if (lastInViewRef.current === undefined) {
-        lastInViewRef.current = initialInView;
-      }
-      // Ensure we have node ref, and that we shouldn't skip observing
-      if (skip || !ref) return;
-
-      let unobserve: (() => void) | undefined;
-      unobserve = observe(
-        ref,
-        (inView, entry) => {
-          const previousInView = lastInViewRef.current;
-          lastInViewRef.current = inView;
-
-          // Ignore the very first `false` notification so consumers only hear about actual state changes.
-          if (previousInView === undefined && !inView) {
-            return;
-          }
-
+  const refCallback = React.useCallback(
+    (node: Element | null) => {
+      const resetIfNeeded = () => {
+        const {
+          skip,
+          triggerOnce,
+          initialInView: latestInitialInView,
+        } = optionsRef.current;
+        if (!skip && !triggerOnce && entryTargetRef.current) {
           setState({
-            inView,
-            entry,
+            inView: !!latestInitialInView,
+            entry: undefined,
           });
-          if (callback.current) callback.current(inView, entry);
-
-          if (entry.isIntersecting && triggerOnce && unobserve) {
-            // If it should only trigger once, unobserve the element after it's inView
-            unobserve();
-            unobserve = undefined;
-          }
-        },
-        {
-          root,
-          rootMargin,
-          threshold,
-          // @ts-expect-error
-          trackVisibility,
-          delay,
-        },
-        fallbackInView,
-      );
-
-      return () => {
-        if (unobserve) {
-          unobserve();
+          entryTargetRef.current = undefined;
         }
       };
+      const cleanup = inViewRef(node);
+
+      if (!node) {
+        resetIfNeeded();
+        return;
+      }
+
+      if (!supportsRefCleanup) {
+        return;
+      }
+
+      return () => {
+        cleanup?.();
+        resetIfNeeded();
+      };
     },
-    // We break the rule here, because we aren't including the actual `threshold` variable
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      // If the threshold is an array, convert it to a string, so it won't change between renders.
-      Array.isArray(threshold) ? threshold.toString() : threshold,
-      ref,
-      root,
-      rootMargin,
-      triggerOnce,
-      skip,
-      trackVisibility,
-      fallbackInView,
-      delay,
-    ],
+    [inViewRef],
   );
 
-  const entryTarget = state.entry?.target;
-  const previousEntryTarget = React.useRef<Element | undefined>(undefined);
-  if (
-    !ref &&
-    entryTarget &&
-    !triggerOnce &&
-    !skip &&
-    previousEntryTarget.current !== entryTarget
-  ) {
-    // If we don't have a node ref, then reset the state (unless the hook is set to only `triggerOnce` or `skip`)
-    // This ensures we correctly reflect the current state - If you aren't observing anything, then nothing is inView
-    previousEntryTarget.current = entryTarget;
-    setState({
-      inView: !!initialInView,
-      entry: undefined,
-    });
-    lastInViewRef.current = initialInView;
-  }
-
-  const result = [setRef, state.inView, state.entry] as InViewHookResponse;
+  const result = [refCallback, state.inView, state.entry] as InViewHookResponse;
 
   // Support object destructuring, by adding the specific values.
   result.ref = result[0];

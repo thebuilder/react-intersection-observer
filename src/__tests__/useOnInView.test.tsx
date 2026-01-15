@@ -1,9 +1,11 @@
 import { render } from "@testing-library/react";
-import { useCallback, useEffect, useState } from "react";
+import * as React from "react";
 import type { IntersectionEffectOptions } from "..";
+import { supportsRefCleanup } from "../reactVersion";
 import { intersectionMockInstance, mockAllIsIntersecting } from "../test-utils";
 import { useOnInView } from "../useOnInView";
 
+const { useCallback, useEffect, useState } = React;
 const OnInViewChangedComponent = ({
   options,
   unmount,
@@ -309,6 +311,9 @@ const MultipleCallbacksComponent = ({
   const mergedRefs = useCallback(
     (node: Element | null) => {
       const cleanup = [ref1(node), ref2(node), ref3(node)];
+      if (!supportsRefCleanup) {
+        return;
+      }
       return () =>
         cleanup.forEach((fn) => {
           fn?.();
