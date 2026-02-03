@@ -82,7 +82,8 @@ function createObserver(options: IntersectionObserverInit) {
           entry.isVisible = inView;
         }
 
-        elements.get(entry.target)?.forEach((callback) => {
+        // Copy the callbacks array before iterating to prevent issues when callbacks are removed during iteration (e.g., when using triggerOnce)
+        [...(elements.get(entry.target) ?? [])].forEach((callback) => {
           callback(inView, entry);
         });
       });
