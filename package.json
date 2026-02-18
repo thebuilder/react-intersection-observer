@@ -1,6 +1,6 @@
 {
   "name": "react-intersection-observer",
-  "version": "10.0.2",
+  "version": "10.0.3",
   "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
   "type": "commonjs",
   "source": "src/index.tsx",
