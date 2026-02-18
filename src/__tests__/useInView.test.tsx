@@ -398,3 +398,42 @@ test("should restore the browser IntersectionObserver", () => {
   expect(window.IntersectionObserver).toBeDefined();
   expect(vi.isMockFunction(window.IntersectionObserver)).toBe(false);
 });
+
+test("should trigger all hooks when using triggerOnce with merged refs", () => {
+  const MultipleHooksWithTriggerOnce = () => {
+    const [ref1, inView1] = useInView({ triggerOnce: true });
+    const [ref2, inView2] = useInView({ triggerOnce: true });
+    const [ref3, inView3] = useInView({ triggerOnce: true });
+
+    const setRefs = useCallback(
+      (node: Element | null) => {
+        ref1(node);
+        ref2(node);
+        ref3(node);
+      },
+      [ref1, ref2, ref3],
+    );
+
+    return (
+      <div ref={setRefs}>
+        <div data-testid="item-1" data-inview={inView1.toString()}>
+          {inView1.toString()}
+        </div>
+        <div data-testid="item-2" data-inview={inView2.toString()}>
+          {inView2.toString()}
+        </div>
+        <div data-testid="item-3" data-inview={inView3.toString()}>
+          {inView3.toString()}
+        </div>
+      </div>
+    );
+  };
+
+  const { getByTestId } = render(<MultipleHooksWithTriggerOnce />);
+
+  mockAllIsIntersecting(true);
+
+  expect(getByTestId("item-1").getAttribute("data-inview")).toBe("true");
+  expect(getByTestId("item-2").getAttribute("data-inview")).toBe("true");
+  expect(getByTestId("item-3").getAttribute("data-inview")).toBe("true");
+});
