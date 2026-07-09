@@ -1,20 +1,20 @@
 name: Publish Pull Requests
-on: [push, pull_request]
+on:
+  pull_request:
 
 jobs:
   pr-package:
     runs-on: ubuntu-latest
     steps:
-      - run: npm install --global corepack@latest
+      - uses: actions/checkout@v7
       - run: corepack enable
-      - uses: actions/checkout@v4
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: "pnpm"
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
       - name: Build
         run: pnpm build
       - name: Publish preview package

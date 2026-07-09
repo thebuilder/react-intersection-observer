@@ -1,22 +1,25 @@
 name: Test
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
     steps:
-      - run: npm install --global corepack@latest
+      - uses: actions/checkout@v7
       - run: corepack enable
-      - uses: actions/checkout@v4
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: "pnpm"
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
       - name: Install playwright
         run: pnpm exec playwright install
       - name: Lint
@@ -39,16 +42,15 @@ jobs:
           - 19
           - latest
     steps:
-      - run: npm install --global corepack@latest
+      - uses: actions/checkout@v7
       - run: corepack enable
-      - uses: actions/checkout@v4
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
           cache: "pnpm"
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
       - name: Install legacy testing-library
         if: ${{  startsWith(matrix.react, '17') }}
         run: pnpm add -D @testing-library/react@12.1.4
