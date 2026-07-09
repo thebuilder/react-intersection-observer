@@ -37,7 +37,6 @@ test("should convert options to id", () => {
   expect(
     optionsToId({
       threshold: 0,
-      // @ts-expect-error
       trackVisibility: true,
       delay: 500,
     }),
@@ -49,7 +48,8 @@ test("should convert options to id", () => {
   ).toMatchInlineSnapshot(`"threshold_0"`);
   expect(
     optionsToId({
+      scrollMargin: "10px 20px",
       threshold: [0, 0.5, 1],
     }),
-  ).toMatchInlineSnapshot(`"threshold_0,0.5,1"`);
+  ).toMatchInlineSnapshot(`"scrollMargin_10px 20px,threshold_0,0.5,1"`);
 });

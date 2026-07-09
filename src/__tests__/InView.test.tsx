@@ -124,6 +124,16 @@ test("Should recreate observer when rootMargin change", () => {
   expect(instance.unobserve).toHaveBeenCalled();
 });
 
+test("Should recreate observer when scrollMargin change", () => {
+  const { container, rerender } = render(<InView>Inner</InView>);
+  mockAllIsIntersecting(true);
+  const instance = intersectionMockInstance(container.children[0]);
+  vi.spyOn(instance, "unobserve");
+
+  rerender(<InView scrollMargin="10px">Inner</InView>);
+  expect(instance.unobserve).toHaveBeenCalled();
+});
+
 test("Should unobserve when triggerOnce comes into view", () => {
   const { container } = render(<InView triggerOnce>Inner</InView>);
   mockAllIsIntersecting(false);

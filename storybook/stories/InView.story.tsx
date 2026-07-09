@@ -62,9 +62,16 @@ export const Basic: Story = {
   },
 };
 
-export const WithRootMarginexport: Story = {
+export const WithRootMargin: Story = {
   args: {
     rootMargin: "25px 0px",
+    threshold: 0,
+  },
+};
+
+export const WithScrollMargin: Story = {
+  args: {
+    scrollMargin: "25px",
     threshold: 0,
   },
 };

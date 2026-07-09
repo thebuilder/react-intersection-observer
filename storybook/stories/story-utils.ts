@@ -13,6 +13,12 @@ export const argTypes: ArgTypes<IntersectionOptions> = {
       "Margin around the root. Can have values similar to the CSS margin property, e.g. `10px 20px 30px 40px` (top, right, bottom, left).",
     defaultValue: "0px",
   },
+  scrollMargin: {
+    control: { type: "text" },
+    description:
+      "Margin around nested scroll containers that clip the target, including the root if it is a scroll container.",
+    defaultValue: "0px",
+  },
   threshold: {
     control: {
       type: "range",
