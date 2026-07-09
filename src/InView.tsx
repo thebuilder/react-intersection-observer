@@ -194,6 +194,7 @@ export class InView extends React.Component<
       threshold,
       root,
       rootMargin,
+      scrollMargin,
       onChange,
       skip,
       trackVisibility,
