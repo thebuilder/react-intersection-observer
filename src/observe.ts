@@ -1,4 +1,7 @@
-import type { ObserverInstanceCallback } from "./index";
+import type {
+  IntersectionObserverInitWithOptions,
+  ObserverInstanceCallback,
+} from "./index";
 
 const observerMap = new Map<
   string,
@@ -28,7 +31,7 @@ export function defaultFallbackInView(inView: boolean | undefined) {
  * Generate a unique ID for the root element
  * @param root
  */
-function getRootId(root: IntersectionObserverInit["root"]) {
+function getRootId(root: IntersectionObserverInitWithOptions["root"]) {
   if (!root) return "0";
   if (RootIds.has(root)) return RootIds.get(root);
   rootId += 1;
@@ -41,23 +44,24 @@ function getRootId(root: IntersectionObserverInit["root"]) {
  * Ensures we can reuse the same observer when observing elements with the same options.
  * @param options
  */
-export function optionsToId(options: IntersectionObserverInit) {
+export function optionsToId(options: IntersectionObserverInitWithOptions) {
   return Object.keys(options)
     .sort()
     .filter(
-      (key) => options[key as keyof IntersectionObserverInit] !== undefined,
+      (key) =>
+        options[key as keyof IntersectionObserverInitWithOptions] !== undefined,
     )
     .map((key) => {
       return `${key}_${
         key === "root"
           ? getRootId(options.root)
-          : options[key as keyof IntersectionObserverInit]
+          : options[key as keyof IntersectionObserverInitWithOptions]
       }`;
     })
     .toString();
 }
 
-function createObserver(options: IntersectionObserverInit) {
+function createObserver(options: IntersectionObserverInitWithOptions) {
   // Create a unique ID for this observer instance, based on the root, root margin and threshold.
   const id = optionsToId(options);
   let instance = observerMap.get(id);
@@ -118,7 +122,7 @@ function createObserver(options: IntersectionObserverInit) {
 export function observe(
   element: Element,
   callback: ObserverInstanceCallback,
-  options: IntersectionObserverInit = {},
+  options: IntersectionObserverInitWithOptions = {},
   fallbackInView = unsupportedValue,
 ) {
   if (

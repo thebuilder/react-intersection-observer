@@ -88,6 +88,7 @@ export class InView extends React.Component<
     // If a IntersectionObserver option changed, reinit the observer
     if (
       prevProps.rootMargin !== this.props.rootMargin ||
+      prevProps.scrollMargin !== this.props.scrollMargin ||
       prevProps.root !== this.props.root ||
       prevProps.threshold !== this.props.threshold ||
       prevProps.skip !== this.props.skip ||
@@ -109,6 +110,7 @@ export class InView extends React.Component<
       threshold,
       root,
       rootMargin,
+      scrollMargin,
       trackVisibility,
       delay,
       fallbackInView,
@@ -124,7 +126,7 @@ export class InView extends React.Component<
         threshold,
         root,
         rootMargin,
-        // @ts-expect-error
+        scrollMargin,
         trackVisibility,
         delay,
       },
@@ -192,6 +194,7 @@ export class InView extends React.Component<
       threshold,
       root,
       rootMargin,
+      scrollMargin,
       onChange,
       skip,
       trackVisibility,

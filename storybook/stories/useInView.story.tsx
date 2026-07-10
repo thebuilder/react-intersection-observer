@@ -109,6 +109,12 @@ export const WithRootMargin: Story = {
   },
 };
 
+export const WithScrollMargin: Story = {
+  args: {
+    scrollMargin: "25px",
+  },
+};
+
 export const TallerThanViewport: Story = {
   args: {
     style: { minHeight: "150vh" },

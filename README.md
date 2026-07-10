@@ -206,6 +206,7 @@ Provide these as the options argument in the `useInView` hook or as props on the
 | ---------------------- | ------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **root**               | `Element`                 | `document`  | The Intersection Observer interface's read-only root property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target. If the root is `null`, then the bounds of the actual document viewport are used.  |
 | **rootMargin**         | `string`                  | `'0px'`     | Margin around the root. Can have values similar to the CSS margin property, e.g. `"10px 20px 30px 40px"` (top, right, bottom, left). Also supports percentages, to check if an element intersects with the center of the viewport for example `"-50% 0% -50% 0%"`.                              |
+| **scrollMargin**       | `string`                  | `'0px'`     | Margin around nested scroll containers that clip the target. Can have values similar to the CSS margin property, e.g. `"10px 20px 30px 40px"` (top, right, bottom, left). Unlike `rootMargin`, this grows or shrinks every scroll container's clipping rectangle within the root, including the root itself if it is a scroll container.                              |
 | **threshold**          | `number` or `number[]`    | `0`         | Number between `0` and `1` indicating the percentage that should be visible before triggering. Can also be an array of numbers, to create multiple trigger points.                                                                                                                              |
 | **onChange**           | `(inView, entry) => void` | `undefined` | Call this function whenever the in view state changes. It will receive the `inView` boolean, alongside the current `IntersectionObserverEntry`.                                                                                                                                                 |
 | **trackVisibility** 🧪 | `boolean`                 | `false`     | A boolean indicating whether this Intersection Observer will track visibility changes on the target.                                                                                                                                                                                            |
@@ -298,9 +299,14 @@ When using `rootMargin`, the margin gets added to the current `root` - If your
 application is running inside a `<iframe>`, or you have defined a custom `root`
 this will not be the current viewport.
 
+If the target is clipped by a scrollable container inside the `root`, use
+`scrollMargin` to change when intersections are calculated for that nested
+scroll container.
+
 You can read more about this on these links:
 
 - [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API#The_intersection_root_and_root_margin)
+- [IntersectionObserver scrollMargin](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserver/scrollMargin)
 - [w3c/IntersectionObserver: rootMargin ignored within iframe](https://github.com/w3c/IntersectionObserver/issues/283#issuecomment-507397917)
 - [w3c/IntersectionObserver: Cannot track intersection with an iframe's viewport](https://github.com/w3c/IntersectionObserver/issues/372)
 - [w3c/Support iframe viewport tracking](https://github.com/w3c/IntersectionObserver/pull/465)

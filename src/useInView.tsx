@@ -38,6 +38,7 @@ export function useInView({
   delay,
   trackVisibility,
   rootMargin,
+  scrollMargin,
   root,
   triggerOnce,
   skip,
@@ -93,8 +94,8 @@ export function useInView({
         {
           root,
           rootMargin,
+          scrollMargin,
           threshold,
-          // @ts-expect-error
           trackVisibility,
           delay,
         },
@@ -115,6 +116,7 @@ export function useInView({
       ref,
       root,
       rootMargin,
+      scrollMargin,
       triggerOnce,
       skip,
       trackVisibility,

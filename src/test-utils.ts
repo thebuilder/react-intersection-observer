@@ -1,6 +1,10 @@
 import * as React from "react";
 import * as DeprecatedReactTestUtils from "react-dom/test-utils";
 
+type IntersectionObserverWithScrollMargin = IntersectionObserver & {
+  scrollMargin: string;
+};
+
 type Item = {
   callback: IntersectionObserverCallback;
   elements: Set<Element>;
@@ -121,12 +125,13 @@ export function setupIntersectionMocking(mockFn: typeof vi.fn) {
       elements: new Set<Element>(),
       created: Date.now(),
     };
-    const instance: IntersectionObserver = {
+    const instance: IntersectionObserverWithScrollMargin = {
       thresholds: Array.isArray(options.threshold)
         ? options.threshold
         : [options.threshold ?? 0],
       root: options.root ?? null,
       rootMargin: options.rootMargin ?? "",
+      scrollMargin: options.scrollMargin ?? "",
       observe: mockFn((element: Element) => {
         item.elements.add(element);
       }),

@@ -9,6 +9,15 @@ export { useOnInView } from "./useOnInView";
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
+export type IntersectionObserverInitWithOptions = IntersectionObserverInit & {
+  /** Margin around nested scroll containers that clip the target, including the root if it is a scroll container. */
+  scrollMargin?: string;
+  /** IntersectionObserver v2 - Track the actual visibility of the element */
+  trackVisibility?: boolean;
+  /** IntersectionObserver v2 - Set a minimum delay between notifications */
+  delay?: number;
+};
+
 export type ObserverInstanceCallback = (
   inView: boolean,
   entry: IntersectionObserverEntry,
@@ -26,11 +35,14 @@ interface RenderProps {
   ref: React.RefObject<any> | ((node?: Element | null) => void);
 }
 
-export interface IntersectionOptions extends IntersectionObserverInit {
+export interface IntersectionOptions
+  extends IntersectionObserverInitWithOptions {
   /** The IntersectionObserver interface's read-only `root` property identifies the Element or Document whose bounds are treated as the bounding box of the viewport for the element which is the observer's target. If the `root` is null, then the bounds of the actual document viewport are used.*/
   root?: Element | Document | null;
   /** Margin around the root. Can have values similar to the CSS margin property, e.g. `10px 20px 30px 40px` (top, right, bottom, left). */
   rootMargin?: string;
+  /** Margin around nested scroll containers that clips the target, including the root if it is a scroll container. */
+  scrollMargin?: string;
   /** Number between `0` and `1` indicating the percentage that should be visible before triggering. Can also be an `array` of numbers, to create multiple trigger points. */
   threshold?: number | number[];
   /** Only trigger the inView callback once */

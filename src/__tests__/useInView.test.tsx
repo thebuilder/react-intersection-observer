@@ -57,6 +57,16 @@ test("should create a hook with array threshold", () => {
   expect(instance.observe).toHaveBeenCalledWith(wrapper);
 });
 
+test("should create a hook with scrollMargin", () => {
+  const { getByTestId } = render(
+    <HookComponent options={{ scrollMargin: "10px" }} />,
+  );
+  const wrapper = getByTestId("wrapper");
+  const instance = intersectionMockInstance(wrapper);
+
+  expect(instance).toHaveProperty("scrollMargin", "10px");
+});
+
 test("should create a lazy hook", () => {
   const { getByTestId } = render(<LazyHookComponent />);
   const wrapper = getByTestId("wrapper");
