@@ -5,7 +5,11 @@ import { observe } from "./observe";
 const useSyncEffect =
   Reflect.get(React, "useInsertionEffect") || React.useLayoutEffect;
 
-const canUseRefCleanup = React.version.startsWith("19.");
+export function supportsRefCleanup(version: string | undefined) {
+  return version?.startsWith("19.") || false;
+}
+
+const canUseRefCleanup = supportsRefCleanup(React.version);
 
 type ObserverCallback<TElement extends Element> = (
   inView: boolean,
