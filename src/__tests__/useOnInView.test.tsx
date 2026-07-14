@@ -1,6 +1,6 @@
-import { render } from "@testing-library/react";
-import { useCallback, useEffect, useState } from "react";
-import type { IntersectionEffectOptions } from "..";
+import { render, screen } from "@testing-library/react";
+import { Profiler, StrictMode, useCallback, useEffect, useState } from "react";
+import type { IntersectionChangeEffect, IntersectionEffectOptions } from "..";
 import { supportsRefCleanup } from "../refCleanupSupport";
 import { intersectionMockInstance, mockAllIsIntersecting } from "../test-utils";
 import { useOnInView } from "../useOnInView";
@@ -125,6 +125,33 @@ const RefLifecycleComponent = ({ attached }: { attached: boolean }) => {
   return attached ? <div data-testid="ref-lifecycle" ref={inViewRef} /> : null;
 };
 
+const observerInstances = () =>
+  vi
+    .mocked(window.IntersectionObserver)
+    .mock.results.map((result) => result.value as IntersectionObserver);
+
+const UseOnInViewLifecycleProbe = ({
+  onChange,
+  onRender,
+  options,
+  target = "a",
+}: {
+  onChange?: IntersectionChangeEffect<Element>;
+  onRender?: () => void;
+  options?: IntersectionEffectOptions;
+  target?: "a" | "b" | null;
+}) => {
+  onRender?.();
+  const ref = useOnInView(onChange ?? (() => {}), options);
+
+  return (
+    <>
+      <div data-testid="on-inview-a" ref={target === "a" ? ref : undefined} />
+      <div data-testid="on-inview-b" ref={target === "b" ? ref : undefined} />
+    </>
+  );
+};
+
 test.each([
   ["19.0.0", true],
   ["19.0.0-rc.1", true],
@@ -185,6 +212,10 @@ test("should ignore initial false intersection", () => {
 
   mockAllIsIntersecting(true);
   expect(wrapper.getAttribute("data-call-count")).toBe("1");
+
+  mockAllIsIntersecting(false);
+  expect(wrapper.getAttribute("data-inview")).toBe("false");
+  expect(wrapper.getAttribute("data-call-count")).toBe("2");
 });
 
 test("should call cleanup when element leaves view", () => {
@@ -291,6 +322,7 @@ test("should clean up each ref attachment without React diagnostics", () => {
     rerender(<RefLifecycleComponent attached={false} />);
     expect(firstObserver.unobserve).toHaveBeenCalledTimes(1);
     expect(firstObserver.unobserve).toHaveBeenCalledWith(firstElement);
+    expect(firstObserver.disconnect).toHaveBeenCalledTimes(1);
 
     rerender(<RefLifecycleComponent attached />);
     const secondElement = getByTestId("ref-lifecycle");
@@ -299,6 +331,7 @@ test("should clean up each ref attachment without React diagnostics", () => {
     unmount();
     expect(secondObserver.unobserve).toHaveBeenCalledTimes(1);
     expect(secondObserver.unobserve).toHaveBeenCalledWith(secondElement);
+    expect(secondObserver.disconnect).toHaveBeenCalledTimes(1);
     expect(errorSpy).not.toHaveBeenCalled();
     expect(warnSpy).not.toHaveBeenCalled();
   } finally {
@@ -330,11 +363,19 @@ const MergeRefsComponent = ({
 };
 
 test("should handle merged refs", () => {
-  const { rerender, getByTestId } = render(<MergeRefsComponent />);
+  const { rerender, getByTestId, unmount } = render(<MergeRefsComponent />);
+  const element = getByTestId("inview");
+  const observer = intersectionMockInstance(element);
   mockAllIsIntersecting(true);
   rerender(<MergeRefsComponent />);
 
-  expect(getByTestId("inview").getAttribute("data-inview")).toBe("true");
+  expect(element.getAttribute("data-inview")).toBe("true");
+  expect(observer.observe).toHaveBeenCalledTimes(1);
+  expect(observer.unobserve).not.toHaveBeenCalled();
+
+  unmount();
+  expect(observer.unobserve).toHaveBeenCalledTimes(1);
+  expect(observer.disconnect).toHaveBeenCalledTimes(1);
 });
 
 // Test multiple callbacks on the same element
@@ -491,4 +532,155 @@ test("should track thresholds when crossing multiple in a single update", () => 
   expect(element.getAttribute("data-trigger-count")).toBe("4");
   expect(element.getAttribute("data-cleanup-count")).toBe("1");
   expect(element.getAttribute("data-last-ratio")).toBe("0.80");
+});
+
+test("mounting useOnInView does not cause a hook-owned rerender", () => {
+  const onRender = vi.fn();
+  const onCommit = vi.fn();
+
+  render(
+    <Profiler id="useOnInView" onRender={onCommit}>
+      <UseOnInViewLifecycleProbe onRender={onRender} />
+    </Profiler>,
+  );
+
+  expect(onRender).toHaveBeenCalledTimes(1);
+  expect(onCommit).toHaveBeenCalledTimes(1);
+  expect(window.IntersectionObserver).toHaveBeenCalledTimes(1);
+});
+
+test("useOnInView uses the latest callback without re-observing", () => {
+  const firstOnChange = vi.fn();
+  const secondOnChange = vi.fn();
+  const { rerender } = render(
+    <UseOnInViewLifecycleProbe onChange={firstOnChange} />,
+  );
+  const target = screen.getByTestId("on-inview-a");
+  const observer = intersectionMockInstance(target);
+
+  mockAllIsIntersecting(true);
+  rerender(<UseOnInViewLifecycleProbe onChange={secondOnChange} />);
+  mockAllIsIntersecting(false);
+
+  expect(firstOnChange).toHaveBeenCalledTimes(1);
+  expect(firstOnChange).toHaveBeenLastCalledWith(
+    true,
+    expect.objectContaining({ target }),
+  );
+  expect(secondOnChange).toHaveBeenCalledTimes(1);
+  expect(secondOnChange).toHaveBeenLastCalledWith(
+    false,
+    expect.objectContaining({ target }),
+  );
+  expect(window.IntersectionObserver).toHaveBeenCalledTimes(1);
+  expect(observer.observe).toHaveBeenCalledTimes(1);
+  expect(observer.unobserve).not.toHaveBeenCalled();
+});
+
+test("useOnInView only replaces its observer when options change", () => {
+  const { rerender } = render(
+    <UseOnInViewLifecycleProbe options={{ threshold: [0.25, 0.75] }} />,
+  );
+  const target = screen.getByTestId("on-inview-a");
+  const firstObserver = intersectionMockInstance(target);
+
+  rerender(<UseOnInViewLifecycleProbe options={{ threshold: [0.25, 0.75] }} />);
+  expect(window.IntersectionObserver).toHaveBeenCalledTimes(1);
+  expect(firstObserver.observe).toHaveBeenCalledTimes(1);
+  expect(firstObserver.unobserve).not.toHaveBeenCalled();
+
+  rerender(<UseOnInViewLifecycleProbe options={{ threshold: 0.5 }} />);
+  const secondObserver = intersectionMockInstance(target);
+  expect(firstObserver.unobserve).toHaveBeenCalledTimes(1);
+  expect(firstObserver.disconnect).toHaveBeenCalledTimes(1);
+  expect(secondObserver).not.toBe(firstObserver);
+  expect(secondObserver.observe).toHaveBeenCalledTimes(1);
+  expect(secondObserver.observe).toHaveBeenCalledWith(target);
+  expect(window.IntersectionObserver).toHaveBeenCalledTimes(2);
+});
+
+test("useOnInView target replacement cleans each attachment exactly once", () => {
+  const { rerender, unmount } = render(
+    <UseOnInViewLifecycleProbe target="a" />,
+  );
+  const targetA = screen.getByTestId("on-inview-a");
+  const targetB = screen.getByTestId("on-inview-b");
+  const firstObserver = intersectionMockInstance(targetA);
+
+  rerender(<UseOnInViewLifecycleProbe target="b" />);
+  const secondObserver = intersectionMockInstance(targetB);
+  expect(firstObserver.unobserve).toHaveBeenCalledTimes(1);
+  expect(firstObserver.unobserve).toHaveBeenCalledWith(targetA);
+  expect(firstObserver.disconnect).toHaveBeenCalledTimes(1);
+  expect(secondObserver.observe).toHaveBeenCalledTimes(1);
+  expect(secondObserver.observe).toHaveBeenCalledWith(targetB);
+
+  unmount();
+  expect(secondObserver.unobserve).toHaveBeenCalledTimes(1);
+  expect(secondObserver.unobserve).toHaveBeenCalledWith(targetB);
+  expect(secondObserver.disconnect).toHaveBeenCalledTimes(1);
+});
+
+test("useOnInView skip cleanup stays idempotent", () => {
+  const { rerender, unmount } = render(
+    <UseOnInViewLifecycleProbe options={{ skip: false }} />,
+  );
+  const target = screen.getByTestId("on-inview-a");
+  const observer = intersectionMockInstance(target);
+
+  rerender(<UseOnInViewLifecycleProbe options={{ skip: true }} />);
+  rerender(<UseOnInViewLifecycleProbe options={{ skip: true }} />);
+  unmount();
+
+  expect(observer.unobserve).toHaveBeenCalledTimes(1);
+  expect(observer.unobserve).toHaveBeenCalledWith(target);
+  expect(observer.disconnect).toHaveBeenCalledTimes(1);
+  expect(window.IntersectionObserver).toHaveBeenCalledTimes(1);
+});
+
+test("useOnInView triggerOnce cleanup stays idempotent", () => {
+  const onChange = vi.fn();
+  const { unmount } = render(
+    <UseOnInViewLifecycleProbe
+      onChange={onChange}
+      options={{ triggerOnce: true }}
+    />,
+  );
+  const target = screen.getByTestId("on-inview-a");
+  const observer = intersectionMockInstance(target);
+
+  mockAllIsIntersecting(true);
+  unmount();
+
+  expect(onChange).toHaveBeenCalledTimes(1);
+  expect(observer.unobserve).toHaveBeenCalledTimes(1);
+  expect(observer.unobserve).toHaveBeenCalledWith(target);
+  expect(observer.disconnect).toHaveBeenCalledTimes(1);
+});
+
+test("useOnInView Strict Mode leaves no observer or React diagnostic", () => {
+  const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+  const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+  try {
+    const { unmount } = render(
+      <StrictMode>
+        <UseOnInViewLifecycleProbe />
+      </StrictMode>,
+    );
+
+    unmount();
+
+    expect(observerInstances().length).toBeGreaterThan(0);
+    for (const observer of observerInstances()) {
+      expect(observer.observe).toHaveBeenCalledTimes(1);
+      expect(observer.unobserve).toHaveBeenCalledTimes(1);
+      expect(observer.disconnect).toHaveBeenCalledTimes(1);
+    }
+    expect(errorSpy).not.toHaveBeenCalled();
+    expect(warnSpy).not.toHaveBeenCalled();
+  } finally {
+    errorSpy.mockRestore();
+    warnSpy.mockRestore();
+  }
 });
