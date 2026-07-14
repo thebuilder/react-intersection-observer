@@ -47,7 +47,7 @@ export const useOnInView = <TElement extends Element>(
     triggerOnce,
     skip,
   }: IntersectionEffectOptions = {},
-) => {
+): ((element: TElement | undefined | null) => (() => void) | undefined) => {
   return useIntersectionObserverRef<TElement>(
     (inView, entry, previousInView) => {
       // Ignore the very first `false` notification so consumers only hear about actual state changes.
@@ -67,5 +67,5 @@ export const useOnInView = <TElement extends Element>(
       triggerOnce,
       skip,
     },
-  ) as (element: TElement | undefined | null) => (() => void) | undefined;
+  );
 };
