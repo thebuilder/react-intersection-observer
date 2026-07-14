@@ -1,6 +1,7 @@
 import { render } from "@testing-library/react";
 import { useCallback, useEffect, useState } from "react";
 import type { IntersectionEffectOptions } from "..";
+import { supportsRefCleanup } from "../refCleanupSupport";
 import { intersectionMockInstance, mockAllIsIntersecting } from "../test-utils";
 import { useOnInView } from "../useOnInView";
 
@@ -117,6 +118,28 @@ const ThresholdTriggerComponent = ({
     </div>
   );
 };
+
+const RefLifecycleComponent = ({ attached }: { attached: boolean }) => {
+  const inViewRef = useOnInView(() => {});
+
+  return attached ? <div data-testid="ref-lifecycle" ref={inViewRef} /> : null;
+};
+
+test.each([
+  ["19.0.0", true],
+  ["19.0.0-rc.1", true],
+  ["19.0.0-experimental-abcdef", true],
+  ["20.1.0", false],
+  ["18.3.1", false],
+  ["17.0.2", false],
+  [undefined, false],
+  ["unknown", false],
+  ["19unknown", false],
+  ["19", false],
+  ["v19.0.0", false],
+])("detects ref cleanup support for React version %s", (version, expected) => {
+  expect(supportsRefCleanup(version)).toBe(expected);
+});
 
 test("should create a hook with useOnInView", () => {
   const { getByTestId } = render(<OnInViewChangedComponent />);
@@ -254,6 +277,36 @@ test("should handle ref changes", () => {
   expect(wrapper.getAttribute("data-inview")).toBe("true");
 });
 
+test("should clean up each ref attachment without React diagnostics", () => {
+  const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+  const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+  try {
+    const { getByTestId, rerender, unmount } = render(
+      <RefLifecycleComponent attached />,
+    );
+    const firstElement = getByTestId("ref-lifecycle");
+    const firstObserver = intersectionMockInstance(firstElement);
+
+    rerender(<RefLifecycleComponent attached={false} />);
+    expect(firstObserver.unobserve).toHaveBeenCalledTimes(1);
+    expect(firstObserver.unobserve).toHaveBeenCalledWith(firstElement);
+
+    rerender(<RefLifecycleComponent attached />);
+    const secondElement = getByTestId("ref-lifecycle");
+    const secondObserver = intersectionMockInstance(secondElement);
+
+    unmount();
+    expect(secondObserver.unobserve).toHaveBeenCalledTimes(1);
+    expect(secondObserver.unobserve).toHaveBeenCalledWith(secondElement);
+    expect(errorSpy).not.toHaveBeenCalled();
+    expect(warnSpy).not.toHaveBeenCalled();
+  } finally {
+    errorSpy.mockRestore();
+    warnSpy.mockRestore();
+  }
+});
+
 // Test for merging refs
 const MergeRefsComponent = ({
   options,
@@ -309,6 +362,8 @@ const MultipleCallbacksComponent = ({
   const mergedRefs = useCallback(
     (node: Element | null) => {
       const cleanup = [ref1(node), ref2(node), ref3(node)];
+      if (cleanup.every((fn) => !fn)) return;
+
       return () =>
         cleanup.forEach((fn) => {
           fn?.();

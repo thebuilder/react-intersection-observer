@@ -60,6 +60,11 @@ jobs:
         run: pnpm add -D react@${{ matrix.react }} react-dom@${{ matrix.react }}
       - name: Validate types
         run: pnpm tsc
+      - name: Build package
+        run: pnpm build
+      - name: Test packed package
+        if: ${{ matrix.react != 'latest' }}
+        run: pnpm run compat:packed -- ${{ matrix.react }}
       - name: Run test
         run: |
           pnpm exec playwright install
