@@ -5,6 +5,11 @@ import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
 
+type RepositoryPackage = {
+  packageManager: string;
+  devDependencies: Record<string, string>;
+};
+
 const exec = promisify(execFile);
 const repositoryRoot = resolve(
   dirname(fileURLToPath(import.meta.url)),
@@ -13,15 +18,22 @@ const repositoryRoot = resolve(
 const fixtureRoot = join(repositoryRoot, "fixtures/react-compat");
 const repositoryPackage = JSON.parse(
   await readFile(join(repositoryRoot, "package.json"), "utf8"),
-);
+) as RepositoryPackage;
 const versions = {
-  17: "17.0.2",
-  18: "18.3.1",
-  19: "19.2.3",
-};
+  "17": "17.0.2",
+  "18": "18.3.1",
+  "19": "19.2.3",
+} as const;
+
+type ReactMajor = keyof typeof versions;
+
+function isReactMajor(value: string | undefined): value is ReactMajor {
+  return value !== undefined && value in versions;
+}
+
 const major = process.argv.slice(2).find((argument) => argument !== "--");
 
-if (!(major in versions)) {
+if (!isReactMajor(major)) {
   throw new Error("Usage: pnpm run compat:packed -- 17|18|19");
 }
 
@@ -34,11 +46,16 @@ try {
   await mkdir(packDirectory);
 
   const { stdout } = await exec(
-    "corepack",
-    ["pnpm", "pack", "--pack-destination", packDirectory],
+    "pnpm",
+    ["pack", "--pack-destination", packDirectory],
     { cwd: repositoryRoot },
   );
   const tarballName = stdout.trim().split("\n").at(-1);
+
+  if (!tarballName) {
+    throw new Error("pnpm pack did not return a tarball path");
+  }
+
   const tarballPath = join(packDirectory, basename(tarballName));
 
   await writeFile(
@@ -63,8 +80,8 @@ try {
     )}\n`,
   );
 
-  await exec("corepack", ["pnpm", "install"], { cwd: packageDirectory });
-  await exec("corepack", ["pnpm", "build"], { cwd: packageDirectory });
+  await exec("pnpm", ["install"], { cwd: packageDirectory });
+  await exec("pnpm", ["build"], { cwd: packageDirectory });
 
   console.log(`React ${major} packed build passed`);
 } finally {

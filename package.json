@@ -44,7 +44,7 @@
   "scripts": {
     "prebuild": "rm -rf dist lib",
     "build": "tsup && mkdir dist/esm && cp dist/index.mjs dist/esm/index.js",
-    "compat:packed": "node scripts/compat/packed.mjs",
+    "compat:packed": "node scripts/compat/packed.mts",
     "postbuild": "attw --pack && publint && size-limit",
     "dev": "run-p dev:*",
     "dev:package": "tsup src/index.tsx --watch",
