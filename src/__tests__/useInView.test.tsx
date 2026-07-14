@@ -136,6 +136,16 @@ test("should create a hook with initialInView", () => {
   getByText("false");
 });
 
+test("should not react to initialInView changes before the first notification", () => {
+  const onChange = vi.fn();
+  const { rerender } = render(<HookComponent options={{ onChange }} />);
+
+  rerender(<HookComponent options={{ initialInView: true, onChange }} />);
+  mockAllIsIntersecting(false);
+
+  expect(onChange).not.toHaveBeenCalled();
+});
+
 test("should trigger a hook leaving view", () => {
   const { getByText } = render(<HookComponent />);
   mockAllIsIntersecting(true);

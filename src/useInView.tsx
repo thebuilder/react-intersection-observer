@@ -54,7 +54,7 @@ export function useInView({
 
   const observerRef = useIntersectionObserverRef<Element>(
     (inView, entry) => {
-      const previousInView = lastInViewRef.current ?? initialInView;
+      const previousInView = lastInViewRef.current;
       lastInViewRef.current = inView;
 
       // Ignore the very first `false` notification so consumers only hear about actual state changes.
