@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import React, { useCallback } from "react";
 import { defaultFallbackInView, type IntersectionOptions } from "../index";
 import {
@@ -139,12 +139,12 @@ test("should respect the threshold before triggering once", () => {
     time: performance.now(),
   });
 
-  React.act(() => callback([createEntry(0.25)], instance));
+  act(() => callback([createEntry(0.25)], instance));
 
   getByText("false");
   expect(instance.unobserve).not.toHaveBeenCalled();
 
-  React.act(() => callback([createEntry(0.5)], instance));
+  act(() => callback([createEntry(0.5)], instance));
 
   getByText("true");
   expect(instance.unobserve).toHaveBeenCalledTimes(1);
