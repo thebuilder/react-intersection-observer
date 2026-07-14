@@ -542,7 +542,7 @@ test("should trigger all hooks when using triggerOnce with merged refs", () => {
   expect(getByTestId("item-3").getAttribute("data-inview")).toBe("true");
 });
 
-test("baseline: mounting useInView commits once more after storing the target", () => {
+test("mounting useInView does not cause an attachment rerender", () => {
   const onRender = vi.fn();
   const onCommit = vi.fn();
 
@@ -552,9 +552,8 @@ test("baseline: mounting useInView commits once more after storing the target", 
     </React.Profiler>,
   );
 
-  // Plan 006 is expected to remove the target-state render and update this baseline.
-  expect(onRender).toHaveBeenCalledTimes(2);
-  expect(onCommit).toHaveBeenCalledTimes(2);
+  expect(onRender).toHaveBeenCalledTimes(1);
+  expect(onCommit).toHaveBeenCalledTimes(1);
   expect(window.IntersectionObserver).toHaveBeenCalledTimes(1);
 });
 
