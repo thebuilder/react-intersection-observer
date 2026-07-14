@@ -4,6 +4,7 @@ import type {
   IntersectionEffectOptions,
 } from "./index";
 import { observe } from "./observe";
+import { supportsRefCleanup } from "./refCleanupSupport";
 
 const useSyncEffect = ((Reflect.get(React, "useInsertionEffect") as
   | typeof React.useEffect
@@ -11,10 +12,7 @@ const useSyncEffect = ((Reflect.get(React, "useInsertionEffect") as
   React.useLayoutEffect ??
   React.useEffect) as typeof React.useEffect;
 
-const supportsRefCleanup = (() => {
-  const majorVersion = Number.parseInt(React.version.split(".")[0], 10);
-  return Number.isInteger(majorVersion) && majorVersion >= 19;
-})();
+const canUseRefCleanup = supportsRefCleanup(React.version);
 
 /**
  * React Hooks make it easy to monitor when elements come into and leave view. Call
@@ -83,7 +81,7 @@ export const useOnInView = <TElement extends Element>(
       };
 
       if (element === observedElementRef.current) {
-        return supportsRefCleanup ? observerCleanupRef.current : undefined;
+        return canUseRefCleanup ? observerCleanupRef.current : undefined;
       }
 
       if (!element || skip) {
@@ -140,7 +138,7 @@ export const useOnInView = <TElement extends Element>(
 
       observerCleanupRef.current = stopObserving;
 
-      return supportsRefCleanup ? observerCleanupRef.current : undefined;
+      return canUseRefCleanup ? observerCleanupRef.current : undefined;
     },
     [
       Array.isArray(threshold) ? threshold.toString() : threshold,

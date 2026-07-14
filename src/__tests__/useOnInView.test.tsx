@@ -1,6 +1,7 @@
 import { render } from "@testing-library/react";
 import { useCallback, useEffect, useState } from "react";
 import type { IntersectionEffectOptions } from "..";
+import { supportsRefCleanup } from "../refCleanupSupport";
 import { intersectionMockInstance, mockAllIsIntersecting } from "../test-utils";
 import { useOnInView } from "../useOnInView";
 
@@ -123,6 +124,22 @@ const RefLifecycleComponent = ({ attached }: { attached: boolean }) => {
 
   return attached ? <div data-testid="ref-lifecycle" ref={inViewRef} /> : null;
 };
+
+test.each([
+  ["19.0.0", true],
+  ["19.0.0-rc.1", true],
+  ["19.0.0-experimental-abcdef", true],
+  ["20.1.0", false],
+  ["18.3.1", false],
+  ["17.0.2", false],
+  [undefined, false],
+  ["unknown", false],
+  ["19unknown", false],
+  ["19", false],
+  ["v19.0.0", false],
+])("detects ref cleanup support for React version %s", (version, expected) => {
+  expect(supportsRefCleanup(version)).toBe(expected);
+});
 
 test("should create a hook with useOnInView", () => {
   const { getByTestId } = render(<OnInViewChangedComponent />);
