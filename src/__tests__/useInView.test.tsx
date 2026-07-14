@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { act, render, screen } from "@testing-library/react";
 import React, { useCallback } from "react";
 import { defaultFallbackInView, type IntersectionOptions } from "../index";
 import {
@@ -116,6 +116,38 @@ test("should respect trigger once", () => {
   mockAllIsIntersecting(false);
 
   getByText("true");
+});
+
+test("should respect the threshold before triggering once", () => {
+  const { getByTestId, getByText } = render(
+    <HookComponent
+      options={{ initialInView: true, threshold: 0.5, triggerOnce: true }}
+    />,
+  );
+  const wrapper = getByTestId("wrapper");
+  const instance = intersectionMockInstance(wrapper);
+  const callback = vi.mocked(window.IntersectionObserver).mock.calls[0][0];
+  const createEntry = (
+    intersectionRatio: number,
+  ): IntersectionObserverEntry => ({
+    boundingClientRect: wrapper.getBoundingClientRect(),
+    intersectionRatio,
+    intersectionRect: wrapper.getBoundingClientRect(),
+    isIntersecting: true,
+    rootBounds: null,
+    target: wrapper,
+    time: performance.now(),
+  });
+
+  act(() => callback([createEntry(0.25)], instance));
+
+  getByText("false");
+  expect(instance.unobserve).not.toHaveBeenCalled();
+
+  act(() => callback([createEntry(0.5)], instance));
+
+  getByText("true");
+  expect(instance.unobserve).toHaveBeenCalledTimes(1);
 });
 
 test("should trigger onChange", () => {

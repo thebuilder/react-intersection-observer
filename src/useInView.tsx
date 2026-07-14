@@ -85,7 +85,7 @@ export function useInView({
           });
           if (callback.current) callback.current(inView, entry);
 
-          if (entry.isIntersecting && triggerOnce && unobserve) {
+          if (inView && triggerOnce && unobserve) {
             // If it should only trigger once, unobserve the element after it's inView
             unobserve();
             unobserve = undefined;
