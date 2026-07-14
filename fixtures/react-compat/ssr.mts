@@ -1,8 +1,10 @@
 import { createRequire } from "node:module";
 import { createElement } from "react";
-import { useInView } from "react-intersection-observer";
 
 const { renderToString } = createRequire(import.meta.url)("react-dom/server");
+// The package is installed only after this fixture is copied to the packed consumer.
+const packageName = "react-intersection-observer";
+const { useInView } = (await import(packageName)) as typeof import("../../src");
 
 const errors: string[] = [];
 const originalError = console.error;
