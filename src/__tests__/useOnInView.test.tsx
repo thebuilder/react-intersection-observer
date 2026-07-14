@@ -362,6 +362,8 @@ const MultipleCallbacksComponent = ({
   const mergedRefs = useCallback(
     (node: Element | null) => {
       const cleanup = [ref1(node), ref2(node), ref3(node)];
+      if (cleanup.every((fn) => !fn)) return;
+
       return () =>
         cleanup.forEach((fn) => {
           fn?.();
