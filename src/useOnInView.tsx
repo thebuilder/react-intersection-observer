@@ -67,5 +67,5 @@ export const useOnInView = <TElement extends Element>(
       triggerOnce,
       skip,
     },
-  );
+  ) as (element: TElement | undefined | null) => (() => void) | undefined;
 };
