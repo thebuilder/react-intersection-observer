@@ -156,7 +156,11 @@ export function observe(
   callbacks.push(callback);
   observer.observe(element);
 
+  let unobserved = false;
   return function unobserve() {
+    if (unobserved) return;
+    unobserved = true;
+
     // Remove the callback from the callback list
     callbacks.splice(callbacks.indexOf(callback), 1);
 

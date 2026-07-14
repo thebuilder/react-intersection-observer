@@ -19,6 +19,32 @@ test("should be able to use observe", () => {
   );
 });
 
+test("should only clean up each observer callback once", () => {
+  const element = document.createElement("div");
+  const firstCallback = vi.fn();
+  const secondCallback = vi.fn();
+  const firstCleanup = observe(element, firstCallback, { threshold: 0.1 });
+  const secondCleanup = observe(element, secondCallback, { threshold: 0.1 });
+  const observer = intersectionMockInstance(element);
+
+  firstCleanup();
+  firstCleanup();
+  mockIsIntersecting(element, true);
+
+  expect(firstCallback).not.toHaveBeenCalled();
+  expect(secondCallback).toHaveBeenCalledTimes(1);
+  expect(observer.unobserve).not.toHaveBeenCalled();
+
+  secondCleanup();
+  expect(observer.unobserve).toHaveBeenCalledTimes(1);
+  expect(observer.unobserve).toHaveBeenCalledWith(element);
+  expect(observer.disconnect).toHaveBeenCalledTimes(1);
+
+  secondCleanup();
+  expect(observer.unobserve).toHaveBeenCalledTimes(1);
+  expect(observer.disconnect).toHaveBeenCalledTimes(1);
+});
+
 test("should convert options to id", () => {
   expect(
     optionsToId({
