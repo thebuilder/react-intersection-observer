@@ -118,6 +118,12 @@ const ThresholdTriggerComponent = ({
   );
 };
 
+const RefLifecycleComponent = ({ attached }: { attached: boolean }) => {
+  const inViewRef = useOnInView(() => {});
+
+  return attached ? <div data-testid="ref-lifecycle" ref={inViewRef} /> : null;
+};
+
 test("should create a hook with useOnInView", () => {
   const { getByTestId } = render(<OnInViewChangedComponent />);
   const wrapper = getByTestId("wrapper");
@@ -252,6 +258,36 @@ test("should handle ref changes", () => {
   mockAllIsIntersecting(true);
 
   expect(wrapper.getAttribute("data-inview")).toBe("true");
+});
+
+test("should clean up each ref attachment without React diagnostics", () => {
+  const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
+  const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+  try {
+    const { getByTestId, rerender, unmount } = render(
+      <RefLifecycleComponent attached />,
+    );
+    const firstElement = getByTestId("ref-lifecycle");
+    const firstObserver = intersectionMockInstance(firstElement);
+
+    rerender(<RefLifecycleComponent attached={false} />);
+    expect(firstObserver.unobserve).toHaveBeenCalledTimes(1);
+    expect(firstObserver.unobserve).toHaveBeenCalledWith(firstElement);
+
+    rerender(<RefLifecycleComponent attached />);
+    const secondElement = getByTestId("ref-lifecycle");
+    const secondObserver = intersectionMockInstance(secondElement);
+
+    unmount();
+    expect(secondObserver.unobserve).toHaveBeenCalledTimes(1);
+    expect(secondObserver.unobserve).toHaveBeenCalledWith(secondElement);
+    expect(errorSpy).not.toHaveBeenCalled();
+    expect(warnSpy).not.toHaveBeenCalled();
+  } finally {
+    errorSpy.mockRestore();
+    warnSpy.mockRestore();
+  }
 });
 
 // Test for merging refs

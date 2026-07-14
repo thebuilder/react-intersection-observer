@@ -60,6 +60,10 @@ jobs:
         run: pnpm add -D react@${{ matrix.react }} react-dom@${{ matrix.react }}
       - name: Validate types
         run: pnpm tsc
+      - name: Build package
+        run: pnpm build
+      - name: Test packed package
+        run: pnpm run compat:packed -- $(node -p "require('react/package.json').version.split('.')[0]")
       - name: Run test
         run: |
           pnpm exec playwright install
