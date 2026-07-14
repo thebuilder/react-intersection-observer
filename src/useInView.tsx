@@ -54,10 +54,7 @@ export function useInView({
 
   const observerRef = useIntersectionObserverRef<Element>(
     (inView, entry) => {
-      if (lastInViewRef.current === undefined) {
-        lastInViewRef.current = initialInView;
-      }
-      const previousInView = lastInViewRef.current;
+      const previousInView = lastInViewRef.current ?? initialInView;
       lastInViewRef.current = inView;
 
       // Ignore the very first `false` notification so consumers only hear about actual state changes.
@@ -81,43 +78,27 @@ export function useInView({
     },
   );
 
-  const refState = React.useRef<
-    [boolean, boolean, ((node?: Element | null) => void) | null]
-  >([false, false, null]);
+  const refState = React.useRef<Element | false | null>(null);
 
   const setRef = React.useCallback(
     function setRef(node?: Element | null) {
-      const refStateValue = refState.current;
-      if (!node && refStateValue[2] !== setRef) return;
-
-      if (node) {
-        refStateValue[0] = !skip;
-        refStateValue[1] = false;
-        refStateValue[2] = setRef;
-      } else {
-        refStateValue[1] = refStateValue[0];
-        refStateValue[0] = false;
-        refStateValue[2] = null;
-      }
+      if (node) refState.current = node;
+      else if (refState.current) refState.current = false;
 
       const cleanup = observerRef(node);
       if (!cleanup) return;
 
       return () => {
         cleanup();
-        if (refStateValue[2] === setRef) {
-          refStateValue[1] = refStateValue[0];
-          refStateValue[0] = false;
-          refStateValue[2] = null;
-        }
+        if (refState.current === node) refState.current = false;
       };
     },
-    [observerRef, skip],
+    [observerRef],
   );
 
   React.useLayoutEffect(() => {
-    if (!refState.current[1]) return;
-    refState.current[1] = false;
+    if (refState.current !== false) return;
+    refState.current = null;
     if (triggerOnce || skip) return;
 
     setState({ inView: !!initialInView, entry: undefined });
