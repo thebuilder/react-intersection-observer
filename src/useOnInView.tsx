@@ -5,12 +5,16 @@ import type {
 } from "./index";
 import { observe } from "./observe";
 
-const useSyncEffect = (("useInsertionEffect" in React
-  ? (React as typeof React & { useInsertionEffect: typeof React.useEffect })
-      .useInsertionEffect
-  : undefined) ??
+const useSyncEffect = ((Reflect.get(React, "useInsertionEffect") as
+  | typeof React.useEffect
+  | undefined) ??
   React.useLayoutEffect ??
   React.useEffect) as typeof React.useEffect;
+
+const supportsRefCleanup = (() => {
+  const majorVersion = Number.parseInt(React.version.split(".")[0], 10);
+  return Number.isInteger(majorVersion) && majorVersion >= 19;
+})();
 
 /**
  * React Hooks make it easy to monitor when elements come into and leave view. Call
@@ -68,8 +72,8 @@ export const useOnInView = <TElement extends Element>(
   // biome-ignore lint/correctness/useExhaustiveDependencies: Threshold arrays are normalized inside the callback
   return React.useCallback(
     (element: TElement | undefined | null) => {
-      // React <19 never calls ref callbacks with `null` during unmount, so we
-      // eagerly tear down existing observers manually whenever the target changes.
+      // React 17 and 18 call callback refs with `null` instead of invoking a
+      // returned cleanup, so eagerly tear down whenever the target changes.
       const cleanupExisting = () => {
         if (observerCleanupRef.current) {
           const cleanup = observerCleanupRef.current;
@@ -79,7 +83,7 @@ export const useOnInView = <TElement extends Element>(
       };
 
       if (element === observedElementRef.current) {
-        return observerCleanupRef.current;
+        return supportsRefCleanup ? observerCleanupRef.current : undefined;
       }
 
       if (!element || skip) {
@@ -136,7 +140,7 @@ export const useOnInView = <TElement extends Element>(
 
       observerCleanupRef.current = stopObserving;
 
-      return observerCleanupRef.current;
+      return supportsRefCleanup ? observerCleanupRef.current : undefined;
     },
     [
       Array.isArray(threshold) ? threshold.toString() : threshold,
