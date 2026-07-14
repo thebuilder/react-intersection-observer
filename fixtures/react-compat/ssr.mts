@@ -4,9 +4,10 @@ import { useInView } from "react-intersection-observer";
 
 const { renderToString } = createRequire(import.meta.url)("react-dom/server");
 
-const errors = [];
+const errors: string[] = [];
 const originalError = console.error;
-console.error = (...arguments_) => errors.push(arguments_.join(" "));
+console.error = (...arguments_: unknown[]) =>
+  errors.push(arguments_.map(String).join(" "));
 
 try {
   function CompatibilityFixture() {

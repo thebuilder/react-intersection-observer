@@ -82,7 +82,7 @@ try {
 
   await exec("pnpm", ["install"], { cwd: packageDirectory });
   await exec("pnpm", ["build"], { cwd: packageDirectory });
-  await exec("node", ["ssr.mjs"], { cwd: packageDirectory });
+  await exec("node", ["ssr.mts"], { cwd: packageDirectory });
 
   console.log(`React ${major} packed build and SSR passed`);
 } finally {
