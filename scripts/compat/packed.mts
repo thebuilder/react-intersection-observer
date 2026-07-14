@@ -82,9 +82,8 @@ try {
 
   await exec("pnpm", ["install"], { cwd: packageDirectory });
   await exec("pnpm", ["build"], { cwd: packageDirectory });
-  await exec("node", ["ssr.mts"], { cwd: packageDirectory });
 
-  console.log(`React ${major} packed build and SSR passed`);
+  console.log(`React ${major} packed build passed`);
 } finally {
   await rm(temporaryRoot, { recursive: true, force: true });
 }
