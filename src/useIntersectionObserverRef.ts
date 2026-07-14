@@ -2,8 +2,11 @@ import * as React from "react";
 import type { IntersectionObserverInitWithOptions } from "./index";
 import { observe } from "./observe";
 
+export const useIsomorphicLayoutEffect =
+  typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
+
 const useSyncEffect =
-  Reflect.get(React, "useInsertionEffect") || React.useLayoutEffect;
+  Reflect.get(React, "useInsertionEffect") || useIsomorphicLayoutEffect;
 
 export function supportsRefCleanup(version: string | undefined) {
   return version?.startsWith("19.") || false;

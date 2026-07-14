@@ -107,7 +107,7 @@
       "path": "dist/index.mjs",
       "name": "useOnInView",
       "import": "{ useOnInView }",
-      "limit": "1.1 kB"
+      "limit": "1.12 kB"
     },
     {
       "path": "dist/index.mjs",
