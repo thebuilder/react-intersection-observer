@@ -63,7 +63,8 @@ jobs:
       - name: Build package
         run: pnpm build
       - name: Test packed package
-        run: pnpm run compat:packed -- $(node -p "require('react/package.json').version.split('.')[0]")
+        if: ${{ matrix.react != 'latest' }}
+        run: pnpm run compat:packed -- ${{ matrix.react }}
       - name: Run test
         run: |
           pnpm exec playwright install
