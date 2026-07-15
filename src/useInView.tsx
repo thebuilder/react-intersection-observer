@@ -1,9 +1,9 @@
 import * as React from "react";
 import type { IntersectionOptions, InViewHookResponse } from "./index";
-import {
-  useIntersectionObserverRef,
-  useIsomorphicLayoutEffect,
-} from "./useIntersectionObserverRef";
+import { useIntersectionObserverRef } from "./useIntersectionObserverRef";
+
+const useIsomorphicLayoutEffect =
+  typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
 
 type State = {
   inView: boolean;

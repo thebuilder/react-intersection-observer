@@ -2,9 +2,6 @@ import * as React from "react";
 import type { IntersectionObserverInitWithOptions } from "./index";
 import { observe } from "./observe";
 
-export const useIsomorphicLayoutEffect =
-  typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
-
 const useInsertionEffect = Reflect.get(React, "useInsertionEffect") as
   | typeof React.useEffect
   | undefined;
