@@ -481,6 +481,37 @@ test("should handle fallback if unsupported", () => {
   );
 });
 
+test("should use the latest onChange when fallback reattaches synchronously", () => {
+  destroyIntersectionMocking();
+  // @ts-expect-error
+  window.IntersectionObserver = undefined;
+  const firstOnChange = vi.fn();
+  const secondOnChange = vi.fn();
+  const { rerender } = render(
+    <HookComponent
+      options={{
+        fallbackInView: true,
+        onChange: firstOnChange,
+        threshold: 0,
+      }}
+    />,
+  );
+  firstOnChange.mockClear();
+
+  rerender(
+    <HookComponent
+      options={{
+        fallbackInView: true,
+        onChange: secondOnChange,
+        threshold: 1,
+      }}
+    />,
+  );
+
+  expect(firstOnChange).not.toHaveBeenCalled();
+  expect(secondOnChange).toHaveBeenCalledOnce();
+});
+
 test("should handle defaultFallbackInView if unsupported", () => {
   destroyIntersectionMocking();
   // @ts-expect-error

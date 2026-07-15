@@ -5,8 +5,10 @@ import { observe } from "./observe";
 export const useIsomorphicLayoutEffect =
   typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
 
-const useSyncEffect =
-  Reflect.get(React, "useInsertionEffect") || useIsomorphicLayoutEffect;
+const useInsertionEffect = Reflect.get(React, "useInsertionEffect") as
+  | typeof React.useEffect
+  | undefined;
+const useSyncEffect = useInsertionEffect ?? React.useEffect;
 
 export function supportsRefCleanup(version: string | undefined) {
   return version?.startsWith("19.") || false;
@@ -26,6 +28,16 @@ type ObserverRefOptions = IntersectionObserverInitWithOptions & {
   triggerOnce?: boolean;
 };
 
+type ObserverRefCallback<TElement extends Element> = (
+  element: TElement | undefined | null,
+) => (() => void) | undefined;
+
+type ObserverState<TElement extends Element> = {
+  node: TElement | null;
+  stop: (() => void) | undefined;
+  owner: ObserverRefCallback<TElement> | null;
+};
+
 export function useIntersectionObserverRef<TElement extends Element>(
   onIntersectionChange: ObserverCallback<TElement>,
   {
@@ -41,13 +53,17 @@ export function useIntersectionObserverRef<TElement extends Element>(
   }: ObserverRefOptions,
 ) {
   const onIntersectionChangeRef = React.useRef(onIntersectionChange);
-  const observerStateRef = React.useRef<
-    [
-      TElement | null,
-      (() => void) | undefined,
-      ((element?: TElement | null) => void) | null,
-    ]
-  >([null, undefined, null]);
+  const observerStateRef = React.useRef<ObserverState<TElement>>({
+    node: null,
+    stop: undefined,
+    owner: null,
+  });
+
+  // React 17 has no effect that runs before callback refs attach. Keep its
+  // synchronous fallback behavior compatible by publishing during render.
+  if (!useInsertionEffect) {
+    onIntersectionChangeRef.current = onIntersectionChange;
+  }
 
   useSyncEffect(() => {
     onIntersectionChangeRef.current = onIntersectionChange;
@@ -58,27 +74,27 @@ export function useIntersectionObserverRef<TElement extends Element>(
     function setRef(element: TElement | undefined | null) {
       const observerState = observerStateRef.current;
 
-      if (!element && observerState[2] !== setRef) {
+      if (!element && observerState.owner !== setRef) {
         return;
       }
 
-      if (element === observerState[0]) {
-        observerState[2] = setRef;
-        return canUseRefCleanup ? observerState[1] : undefined;
+      if (element === observerState.node) {
+        observerState.owner = setRef;
+        return canUseRefCleanup ? observerState.stop : undefined;
       }
 
-      const cleanup = observerState[1];
-      observerState[1] = undefined;
+      const cleanup = observerState.stop;
+      observerState.stop = undefined;
       cleanup?.();
 
       if (!element || skip) {
-        observerState[0] = null;
-        observerState[2] = element ? setRef : null;
+        observerState.node = null;
+        observerState.owner = element ? setRef : null;
         return;
       }
 
-      observerState[0] = element;
-      observerState[2] = setRef;
+      observerState.node = element;
+      observerState.owner = setRef;
 
       let destroyObserver: (() => void) | undefined;
       let previousInView: boolean | undefined;
@@ -86,13 +102,13 @@ export function useIntersectionObserverRef<TElement extends Element>(
       function stopObserving() {
         destroyObserver?.();
 
-        if (observerState[1] === stopObserving) {
-          observerState[0] = null;
-          observerState[1] = undefined;
+        if (observerState.stop === stopObserving) {
+          observerState.node = null;
+          observerState.stop = undefined;
         }
       }
 
-      observerState[1] = stopObserving;
+      observerState.stop = stopObserving;
       destroyObserver = observe(
         element,
         (inView, entry) => {
@@ -115,9 +131,9 @@ export function useIntersectionObserverRef<TElement extends Element>(
         fallbackInView,
       );
 
-      if (observerState[1] !== stopObserving) destroyObserver();
+      if (observerState.stop !== stopObserving) destroyObserver();
 
-      return canUseRefCleanup ? observerState[1] : undefined;
+      return canUseRefCleanup ? observerState.stop : undefined;
     },
     [
       Array.isArray(threshold) ? threshold.toString() : threshold,

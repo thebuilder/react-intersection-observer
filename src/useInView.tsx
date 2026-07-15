@@ -10,6 +10,11 @@ type State = {
   entry?: IntersectionObserverEntry;
 };
 
+type RefState = {
+  node: Element | null;
+  reset: boolean;
+};
+
 /**
  * React Hooks make it easy to monitor the `inView` state of your components. Call
  * the `useInView` hook with the (optional) [options](#options) you need. It will
@@ -81,27 +86,38 @@ export function useInView({
     },
   );
 
-  const refState = React.useRef<Element | false | null>(null);
+  const refState = React.useRef<RefState>({
+    node: null,
+    reset: false,
+  });
 
   const setRef = React.useCallback(
     function setRef(node?: Element | null) {
-      if (node) refState.current = node;
-      else if (refState.current) refState.current = false;
+      if (node) {
+        refState.current.node = node;
+        refState.current.reset = false;
+      } else if (refState.current.node) {
+        refState.current.node = null;
+        refState.current.reset = true;
+      }
 
       const cleanup = observerRef(node);
       if (!cleanup) return;
 
       return () => {
         cleanup();
-        if (refState.current === node) refState.current = false;
+        if (refState.current.node === node) {
+          refState.current.node = null;
+          refState.current.reset = true;
+        }
       };
     },
     [observerRef],
   );
 
   useIsomorphicLayoutEffect(() => {
-    if (refState.current !== false) return;
-    refState.current = null;
+    if (!refState.current.reset) return;
+    refState.current.reset = false;
     if (triggerOnce || skip) return;
 
     setState({ inView: !!initialInView, entry: undefined });
