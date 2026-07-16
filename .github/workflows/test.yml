@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - developer
   pull_request:
 
 jobs:
@@ -27,14 +28,14 @@ jobs:
       - name: Test
         run: pnpm vitest --coverage
         env:
-          CI: true
+          CI: false
       - name: Build
         run: pnpm build
 
   test_matrix:
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         react:
           - 17
