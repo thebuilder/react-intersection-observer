@@ -6,14 +6,31 @@ export default defineConfig({
     include: ["@vitest/coverage-istanbul", "react", "react-dom/test-utils"],
   },
   test: {
-    environment: "node",
     globals: true,
-    browser: {
-      enabled: true,
-      provider: playwright(),
-      headless: true,
-      instances: [{ browser: "chromium" }],
-    },
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: "node",
+          environment: "node",
+          include: ["src/**/*.ssr.test.ts"],
+        },
+      },
+      {
+        extends: true,
+        test: {
+          name: "browser",
+          include: ["src/**/*.test.{ts,tsx}"],
+          exclude: ["src/**/*.ssr.test.ts"],
+          browser: {
+            enabled: true,
+            provider: playwright(),
+            headless: true,
+            instances: [{ browser: "chromium" }],
+          },
+        },
+      },
+    ],
     coverage: {
       provider: "istanbul",
       include: ["src/**"],

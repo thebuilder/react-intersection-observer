@@ -1,10 +1,18 @@
 import * as React from "react";
 import type { IntersectionOptions, InViewHookResponse } from "./index";
-import { observe } from "./observe";
+import { useIntersectionObserverRef } from "./useIntersectionObserverRef";
+
+const useIsomorphicLayoutEffect =
+  typeof window === "undefined" ? React.useEffect : React.useLayoutEffect;
 
 type State = {
   inView: boolean;
   entry?: IntersectionObserverEntry;
+};
+
+type RefState = {
+  node: Element | null;
+  reset: boolean;
 };
 
 /**
@@ -46,103 +54,75 @@ export function useInView({
   fallbackInView,
   onChange,
 }: IntersectionOptions = {}): InViewHookResponse {
-  const [ref, setRef] = React.useState<Element | null>(null);
-  const callback = React.useRef<IntersectionOptions["onChange"]>(onChange);
   const lastInViewRef = React.useRef<boolean | undefined>(initialInView);
   const [state, setState] = React.useState<State>({
     inView: !!initialInView,
     entry: undefined,
   });
 
-  // Store the onChange callback in a `ref`, so we can access the latest instance
-  // inside the `useEffect`, but without triggering a rerender.
-  callback.current = onChange;
+  const observerRef = useIntersectionObserverRef<Element>(
+    (inView, entry) => {
+      const previousInView = lastInViewRef.current;
+      lastInViewRef.current = inView;
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: threshold is not correctly detected as a dependency
-  React.useEffect(
-    () => {
-      if (lastInViewRef.current === undefined) {
-        lastInViewRef.current = initialInView;
+      // Ignore the very first `false` notification so consumers only hear about actual state changes.
+      if (previousInView === undefined && !inView) {
+        return;
       }
-      // Ensure we have node ref, and that we shouldn't skip observing
-      if (skip || !ref) return;
 
-      let unobserve: (() => void) | undefined;
-      unobserve = observe(
-        ref,
-        (inView, entry) => {
-          const previousInView = lastInViewRef.current;
-          lastInViewRef.current = inView;
-
-          // Ignore the very first `false` notification so consumers only hear about actual state changes.
-          if (previousInView === undefined && !inView) {
-            return;
-          }
-
-          setState({
-            inView,
-            entry,
-          });
-          if (callback.current) callback.current(inView, entry);
-
-          if (inView && triggerOnce && unobserve) {
-            // If it should only trigger once, unobserve the element after it's inView
-            unobserve();
-            unobserve = undefined;
-          }
-        },
-        {
-          root,
-          rootMargin,
-          scrollMargin,
-          threshold,
-          trackVisibility,
-          delay,
-        },
-        fallbackInView,
-      );
-
-      return () => {
-        if (unobserve) {
-          unobserve();
-        }
-      };
+      setState({ inView, entry });
+      onChange?.(inView, entry);
     },
-    // We break the rule here, because we aren't including the actual `threshold` variable
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      // If the threshold is an array, convert it to a string, so it won't change between renders.
-      Array.isArray(threshold) ? threshold.toString() : threshold,
-      ref,
+    {
+      threshold,
       root,
       rootMargin,
       scrollMargin,
-      triggerOnce,
-      skip,
       trackVisibility,
-      fallbackInView,
       delay,
-    ],
+      fallbackInView,
+      skip,
+      triggerOnce,
+    },
   );
 
-  const entryTarget = state.entry?.target;
-  const previousEntryTarget = React.useRef<Element | undefined>(undefined);
-  if (
-    !ref &&
-    entryTarget &&
-    !triggerOnce &&
-    !skip &&
-    previousEntryTarget.current !== entryTarget
-  ) {
-    // If we don't have a node ref, then reset the state (unless the hook is set to only `triggerOnce` or `skip`)
-    // This ensures we correctly reflect the current state - If you aren't observing anything, then nothing is inView
-    previousEntryTarget.current = entryTarget;
-    setState({
-      inView: !!initialInView,
-      entry: undefined,
-    });
+  const refState = React.useRef<RefState>({
+    node: null,
+    reset: false,
+  });
+
+  const setRef = React.useCallback(
+    function setRef(node?: Element | null) {
+      if (node) {
+        refState.current.node = node;
+        refState.current.reset = false;
+      } else if (refState.current.node) {
+        refState.current.node = null;
+        refState.current.reset = true;
+      }
+
+      const cleanup = observerRef(node);
+      if (!cleanup) return;
+
+      return () => {
+        cleanup();
+        if (refState.current.node === node) {
+          refState.current.node = null;
+          refState.current.reset = true;
+        }
+      };
+    },
+    [observerRef],
+  );
+
+  useIsomorphicLayoutEffect(() => {
+    if (!refState.current.reset) return;
+    refState.current.reset = false;
+    if (triggerOnce || skip) return;
+
+    setState({ inView: !!initialInView, entry: undefined });
     lastInViewRef.current = initialInView;
-  }
+  });
 
   const result = [setRef, state.inView, state.entry] as InViewHookResponse;
 

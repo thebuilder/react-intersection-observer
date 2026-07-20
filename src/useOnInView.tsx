@@ -1,18 +1,8 @@
-import * as React from "react";
 import type {
   IntersectionChangeEffect,
   IntersectionEffectOptions,
 } from "./index";
-import { observe } from "./observe";
-import { supportsRefCleanup } from "./refCleanupSupport";
-
-const useSyncEffect = ((Reflect.get(React, "useInsertionEffect") as
-  | typeof React.useEffect
-  | undefined) ??
-  React.useLayoutEffect ??
-  React.useEffect) as typeof React.useEffect;
-
-const canUseRefCleanup = supportsRefCleanup(React.version);
+import { useIntersectionObserverRef } from "./useIntersectionObserverRef";
 
 /**
  * React Hooks make it easy to monitor when elements come into and leave view. Call
@@ -57,91 +47,18 @@ export const useOnInView = <TElement extends Element>(
     triggerOnce,
     skip,
   }: IntersectionEffectOptions = {},
-) => {
-  const onIntersectionChangeRef = React.useRef(onIntersectionChange);
-  const observedElementRef = React.useRef<TElement | null>(null);
-  const observerCleanupRef = React.useRef<(() => void) | undefined>(undefined);
-  const lastInViewRef = React.useRef<boolean | undefined>(undefined);
-
-  useSyncEffect(() => {
-    onIntersectionChangeRef.current = onIntersectionChange;
-  }, [onIntersectionChange]);
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Threshold arrays are normalized inside the callback
-  return React.useCallback(
-    (element: TElement | undefined | null) => {
-      // React 17 and 18 call callback refs with `null` instead of invoking a
-      // returned cleanup, so eagerly tear down whenever the target changes.
-      const cleanupExisting = () => {
-        if (observerCleanupRef.current) {
-          const cleanup = observerCleanupRef.current;
-          observerCleanupRef.current = undefined;
-          cleanup();
-        }
-      };
-
-      if (element === observedElementRef.current) {
-        return canUseRefCleanup ? observerCleanupRef.current : undefined;
-      }
-
-      if (!element || skip) {
-        cleanupExisting();
-        observedElementRef.current = null;
-        lastInViewRef.current = undefined;
+): ((element: TElement | undefined | null) => (() => void) | undefined) => {
+  return useIntersectionObserverRef<TElement>(
+    (inView, entry, previousInView) => {
+      // Ignore the very first `false` notification so consumers only hear about actual state changes.
+      if (previousInView === undefined && !inView) {
         return;
       }
 
-      cleanupExisting();
-
-      observedElementRef.current = element;
-      let destroyed = false;
-
-      const destroyObserver = observe(
-        element,
-        (inView, entry) => {
-          const previousInView = lastInViewRef.current;
-          lastInViewRef.current = inView;
-
-          // Ignore the very first `false` notification so consumers only hear about actual state changes.
-          if (previousInView === undefined && !inView) {
-            return;
-          }
-
-          onIntersectionChangeRef.current(
-            inView,
-            entry as IntersectionObserverEntry & { target: TElement },
-          );
-          if (triggerOnce && inView) {
-            stopObserving();
-          }
-        },
-        {
-          threshold,
-          root,
-          rootMargin,
-          scrollMargin,
-          trackVisibility,
-          delay,
-        } as IntersectionObserverInit,
-      );
-
-      function stopObserving() {
-        // Centralized teardown so both manual destroys and React ref updates share
-        // the same cleanup path (needed for React versions that never call the ref with `null`).
-        if (destroyed) return;
-        destroyed = true;
-        destroyObserver();
-        observedElementRef.current = null;
-        observerCleanupRef.current = undefined;
-        lastInViewRef.current = undefined;
-      }
-
-      observerCleanupRef.current = stopObserving;
-
-      return canUseRefCleanup ? observerCleanupRef.current : undefined;
+      onIntersectionChange(inView, entry);
     },
-    [
-      Array.isArray(threshold) ? threshold.toString() : threshold,
+    {
+      threshold,
       root,
       rootMargin,
       scrollMargin,
@@ -149,6 +66,6 @@ export const useOnInView = <TElement extends Element>(
       delay,
       triggerOnce,
       skip,
-    ],
+    },
   );
 };

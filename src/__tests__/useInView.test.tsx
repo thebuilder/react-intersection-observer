@@ -136,6 +136,16 @@ test("should create a hook with initialInView", () => {
   getByText("false");
 });
 
+test("should not react to initialInView changes before the first notification", () => {
+  const onChange = vi.fn();
+  const { rerender } = render(<HookComponent options={{ onChange }} />);
+
+  rerender(<HookComponent options={{ initialInView: true, onChange }} />);
+  mockAllIsIntersecting(false);
+
+  expect(onChange).not.toHaveBeenCalled();
+});
+
 test("should trigger a hook leaving view", () => {
   const { getByText } = render(<HookComponent />);
   mockAllIsIntersecting(true);
@@ -471,6 +481,37 @@ test("should handle fallback if unsupported", () => {
   );
 });
 
+test("should use the latest onChange when fallback reattaches synchronously", () => {
+  destroyIntersectionMocking();
+  // @ts-expect-error
+  window.IntersectionObserver = undefined;
+  const firstOnChange = vi.fn();
+  const secondOnChange = vi.fn();
+  const { rerender } = render(
+    <HookComponent
+      options={{
+        fallbackInView: true,
+        onChange: firstOnChange,
+        threshold: 0,
+      }}
+    />,
+  );
+  firstOnChange.mockClear();
+
+  rerender(
+    <HookComponent
+      options={{
+        fallbackInView: true,
+        onChange: secondOnChange,
+        threshold: 1,
+      }}
+    />,
+  );
+
+  expect(firstOnChange).not.toHaveBeenCalled();
+  expect(secondOnChange).toHaveBeenCalledOnce();
+});
+
 test("should handle defaultFallbackInView if unsupported", () => {
   destroyIntersectionMocking();
   // @ts-expect-error
@@ -542,7 +583,7 @@ test("should trigger all hooks when using triggerOnce with merged refs", () => {
   expect(getByTestId("item-3").getAttribute("data-inview")).toBe("true");
 });
 
-test("baseline: mounting useInView commits once more after storing the target", () => {
+test("mounting useInView does not cause an attachment rerender", () => {
   const onRender = vi.fn();
   const onCommit = vi.fn();
 
@@ -552,9 +593,8 @@ test("baseline: mounting useInView commits once more after storing the target", 
     </React.Profiler>,
   );
 
-  // Plan 006 is expected to remove the target-state render and update this baseline.
-  expect(onRender).toHaveBeenCalledTimes(2);
-  expect(onCommit).toHaveBeenCalledTimes(2);
+  expect(onRender).toHaveBeenCalledTimes(1);
+  expect(onCommit).toHaveBeenCalledTimes(1);
   expect(window.IntersectionObserver).toHaveBeenCalledTimes(1);
 });
 

@@ -1,8 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { Profiler, StrictMode, useCallback, useEffect, useState } from "react";
 import type { IntersectionChangeEffect, IntersectionEffectOptions } from "..";
-import { supportsRefCleanup } from "../refCleanupSupport";
 import { intersectionMockInstance, mockAllIsIntersecting } from "../test-utils";
+import { supportsRefCleanup } from "../useIntersectionObserverRef";
 import { useOnInView } from "../useOnInView";
 
 const OnInViewChangedComponent = ({
