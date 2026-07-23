@@ -5,6 +5,7 @@ on:
 jobs:
   pr-package:
     runs-on: ubuntu-latest
+             matrix
     steps:
       - uses: actions/checkout@v7
       - run: corepack enable
