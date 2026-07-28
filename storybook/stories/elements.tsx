@@ -236,7 +236,11 @@ export function ThresholdMarker({
 
 export function EntryDetails({ options }: { options?: IntersectionOptions }) {
   if (!options || !Object.keys(options).length) return null;
-  const value = stringifyOptions(options);
+  const value = JSON.stringify(
+    { ...options, root: options.root ? "Element" : undefined },
+    null,
+    2,
+  );
   if (value === "{}") return null;
 
   return (
@@ -244,11 +248,6 @@ export function EntryDetails({ options }: { options?: IntersectionOptions }) {
       <code>{value}</code>
     </pre>
   );
-}
-
-function stringifyOptions(options: IntersectionOptions) {
-  const root = options.root ? "Element" : undefined;
-  return JSON.stringify({ ...options, root }, null, 2);
 }
 
 type RootProps = {

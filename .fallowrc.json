@@ -25,8 +25,7 @@
     "stale-suppressions": "error"
   },
   "duplicates": {
-    "minOccurrences": 2,
-    "threshold": 0
+    "minOccurrences": 2
   },
   "health": {
     "maxCyclomatic": 20,
@@ -36,9 +35,22 @@
     "coverage": "coverage/coverage-final.json",
     "thresholdOverrides": [
       {
-        "files": ["storybook/stories/**/*.tsx"],
-        "maxCrap": 60,
-        "reason": "Interactive Storybook demos are intentionally excluded from unit coverage; retain the default structural complexity limits while allowing their estimated CRAP score."
+        "files": ["storybook/stories/elements.tsx"],
+        "functions": ["EntryDetails", "ScrollWrapper"],
+        "maxCrap": 31,
+        "reason": "Interactive Storybook demos are intentionally excluded from unit coverage; retain the default structural complexity limits while allowing these two estimated CRAP scores."
+      },
+      {
+        "files": ["storybook/stories/useInView.story.tsx"],
+        "functions": ["HooksRender"],
+        "maxCrap": 43,
+        "reason": "This interactive Storybook demo is intentionally excluded from unit coverage; retain the default structural complexity limits while allowing its estimated CRAP score."
+      },
+      {
+        "files": ["storybook/stories/useOnInView.story.tsx"],
+        "functions": ["UseOnInViewRender"],
+        "maxCrap": 43,
+        "reason": "This interactive Storybook demo is intentionally excluded from unit coverage; retain the default structural complexity limits while allowing its estimated CRAP score."
       }
     ],
     "suggestInlineSuppression": false
