@@ -1,0 +1,59 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  "entry": [
+    "fixtures/react-compat/rsbuild.config.mjs",
+    "storybook/stories/**/*.mdx"
+  ],
+  "ignoreDependencies": [
+    "@rsbuild/core",
+    "@rsbuild/plugin-react",
+    "@size-limit/preset-small-lib"
+  ],
+  "ignoreUnresolvedImports": [
+    "storybook/actions",
+    "storybook/manager-api",
+    "storybook/theming"
+  ],
+  "rules": {
+    "unused-files": "error",
+    "unused-exports": "error",
+    "unused-dependencies": "error",
+    "unused-dev-dependencies": "error",
+    "dev-dependencies-in-production": "error",
+    "unresolved-imports": "error",
+    "unlisted-dependencies": "error",
+    "circular-dependencies": "error",
+    "stale-suppressions": "error"
+  },
+  "duplicates": {
+    "minOccurrences": 2
+  },
+  "health": {
+    "maxCyclomatic": 20,
+    "maxCognitive": 15,
+    "maxCrap": 30,
+    "maxUnitSize": 60,
+    "coverage": "coverage/coverage-final.json",
+    "thresholdOverrides": [
+      {
+        "files": ["storybook/stories/elements.tsx"],
+        "functions": ["EntryDetails", "ScrollWrapper"],
+        "maxCrap": 31,
+        "reason": "Interactive Storybook demos are intentionally excluded from unit coverage; retain the default structural complexity limits while allowing these two estimated CRAP scores."
+      },
+      {
+        "files": ["storybook/stories/useInView.story.tsx"],
+        "functions": ["HooksRender"],
+        "maxCrap": 43,
+        "reason": "This interactive Storybook demo is intentionally excluded from unit coverage; retain the default structural complexity limits while allowing its estimated CRAP score."
+      },
+      {
+        "files": ["storybook/stories/useOnInView.story.tsx"],
+        "functions": ["UseOnInViewRender"],
+        "maxCrap": 57,
+        "reason": "This interactive Storybook demo is intentionally excluded from unit coverage; retain the default structural complexity limits while allowing its measured CRAP score of 56."
+      }
+    ],
+    "suggestInlineSuppression": false
+  }
+}

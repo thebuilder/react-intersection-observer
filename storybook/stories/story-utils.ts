@@ -63,7 +63,7 @@ export const argTypes: ArgTypes<IntersectionOptions> = {
   },
 };
 
-export function getRoot(options: IntersectionOptions) {
+function getRoot(options: IntersectionOptions) {
   if (options.rootMargin && !options.root && window.self !== window.top) {
     return document as unknown as Element;
   }

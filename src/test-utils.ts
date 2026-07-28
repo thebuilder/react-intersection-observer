@@ -152,6 +152,7 @@ export function setupIntersectionMocking(mockFn: typeof vi.fn) {
 
 /**
  * Reset the IntersectionObserver mock to its initial state, and clear all the elements being observed.
+ * @public
  */
 export function resetIntersectionMocking() {
   if (
