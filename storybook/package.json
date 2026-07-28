@@ -24,7 +24,6 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.3.10",
-    "@mdx-js/react": "^3.1.1",
     "@storybook/addon-docs": "10.1.10",
     "@storybook/addon-vitest": "10.1.10",
     "@storybook/builder-vite": "10.1.10",

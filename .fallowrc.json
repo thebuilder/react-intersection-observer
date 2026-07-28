@@ -1,0 +1,46 @@
+{
+  "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
+  "entry": [
+    "fixtures/react-compat/rsbuild.config.mjs",
+    "storybook/stories/**/*.mdx"
+  ],
+  "ignoreDependencies": [
+    "@rsbuild/core",
+    "@rsbuild/plugin-react",
+    "@size-limit/preset-small-lib"
+  ],
+  "ignoreUnresolvedImports": [
+    "storybook/actions",
+    "storybook/manager-api",
+    "storybook/theming"
+  ],
+  "rules": {
+    "unused-files": "error",
+    "unused-exports": "error",
+    "unused-dependencies": "error",
+    "unused-dev-dependencies": "error",
+    "unresolved-imports": "error",
+    "unlisted-dependencies": "error",
+    "circular-dependencies": "error",
+    "stale-suppressions": "error"
+  },
+  "duplicates": {
+    "minOccurrences": 2,
+    "threshold": 0
+  },
+  "health": {
+    "maxCyclomatic": 20,
+    "maxCognitive": 15,
+    "maxCrap": 30,
+    "maxUnitSize": 60,
+    "coverage": "coverage/coverage-final.json",
+    "thresholdOverrides": [
+      {
+        "files": ["storybook/stories/**/*.tsx"],
+        "maxCrap": 60,
+        "reason": "Interactive Storybook demos are intentionally excluded from unit coverage; retain the default structural complexity limits while allowing their estimated CRAP score."
+      }
+    ],
+    "suggestInlineSuppression": false
+  }
+}

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   type IntersectionEffectOptions,
   type IntersectionOptions,
@@ -20,6 +20,60 @@ import { argTypes, useValidateOptions } from "./story-utils";
 type Props = IntersectionEffectOptions;
 
 type Story = StoryObj<Props>;
+
+function getOptionsKey(options: IntersectionEffectOptions | undefined) {
+  if (!options) return "disabled";
+
+  const { threshold, rootMargin, trackVisibility, delay, triggerOnce, skip } =
+    options;
+
+  return JSON.stringify({
+    threshold,
+    rootMargin,
+    trackVisibility,
+    delay,
+    triggerOnce,
+    skip,
+  });
+}
+
+function getEventLabel(isInView: boolean, time: number) {
+  const action = isInView ? "Entered" : "Left";
+  if (!Number.isFinite(time)) return `${action} viewport`;
+  if (time < 0) return `${action} viewport`;
+  return `${action} viewport at ${(time / 1000).toFixed(2)}s`;
+}
+
+function EventLog({ events }: { events: string[] }) {
+  return (
+    <div className="mt-6 w-full max-w-md text-left">
+      <h3 className="mb-2 text-lg font-semibold text-white">Event log</h3>
+      <div className="max-h-48 overflow-y-auto rounded-md bg-gray-900 bg-opacity-40 p-3 text-sm">
+        {events.length === 0 ? (
+          <p className="text-gray-200">
+            Scroll this element in and out of view to trigger the callback.
+          </p>
+        ) : (
+          <ul className="space-y-2 text-purple-100">
+            {events.map((event, index) => (
+              <li key={`${event}-${index.toString()}`}>{event}</li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function SkippedObserverMessage({ skip }: { skip: boolean | undefined }) {
+  if (!skip) return null;
+
+  return (
+    <p className="mt-4 text-sm text-yellow-200">
+      Observing is currently skipped. Toggle `skip` off to monitor the element.
+    </p>
+  );
+}
 
 const meta = {
   title: "useOnInView Hook",
@@ -54,25 +108,7 @@ function UseOnInViewRender(rest: Props) {
   const [inView, setInView] = useState(false);
   const [events, setEvents] = useState<string[]>([]);
 
-  const optionsKey = useMemo(
-    () =>
-      JSON.stringify({
-        threshold: effectOptions?.threshold,
-        rootMargin: effectOptions?.rootMargin,
-        trackVisibility: effectOptions?.trackVisibility,
-        delay: effectOptions?.delay,
-        triggerOnce: effectOptions?.triggerOnce,
-        skip: effectOptions?.skip,
-      }),
-    [
-      effectOptions?.delay,
-      effectOptions?.rootMargin,
-      effectOptions?.skip,
-      effectOptions?.threshold,
-      effectOptions?.trackVisibility,
-      effectOptions?.triggerOnce,
-    ],
-  );
+  const optionsKey = getOptionsKey(effectOptions);
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: reset when options change
   useEffect(() => {
@@ -82,16 +118,7 @@ function UseOnInViewRender(rest: Props) {
 
   const ref = useOnInView((isInView, entry) => {
     setInView(isInView);
-    const seconds =
-      Number.isFinite(entry.time) && entry.time >= 0
-        ? (entry.time / 1000).toFixed(2)
-        : undefined;
-    const label = seconds
-      ? `${isInView ? "Entered" : "Left"} viewport at ${seconds}s`
-      : isInView
-        ? "Entered viewport"
-        : "Left viewport";
-    setEvents((prev) => [...prev, label]);
+    setEvents((prev) => [...prev, getEventLabel(isInView, entry.time)]);
   }, effectOptions);
 
   if (error) {
@@ -104,28 +131,8 @@ function UseOnInViewRender(rest: Props) {
       <InViewBlock ref={ref} inView={inView}>
         <InViewIcon inView={inView} />
         <EntryDetails options={effectOptions} />
-        <div className="mt-6 w-full max-w-md text-left">
-          <h3 className="mb-2 text-lg font-semibold text-white">Event log</h3>
-          <div className="max-h-48 overflow-y-auto rounded-md bg-gray-900 bg-opacity-40 p-3 text-sm">
-            {events.length === 0 ? (
-              <p className="text-gray-200">
-                Scroll this element in and out of view to trigger the callback.
-              </p>
-            ) : (
-              <ul className="space-y-2 text-purple-100">
-                {events.map((event, index) => (
-                  <li key={`${event}-${index.toString()}`}>{event}</li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </div>
-        {effectOptions?.skip ? (
-          <p className="mt-4 text-sm text-yellow-200">
-            Observing is currently skipped. Toggle `skip` off to monitor the
-            element.
-          </p>
-        ) : null}
+        <EventLog events={events} />
+        <SkippedObserverMessage skip={effectOptions?.skip} />
       </InViewBlock>
       <ThresholdMarker threshold={effectOptions?.threshold} />
       <RootMargin rootMargin={effectOptions?.rootMargin} />

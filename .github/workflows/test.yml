@@ -12,6 +12,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - run: corepack enable
       - name: Setup Node.js
         uses: actions/setup-node@v6
@@ -28,6 +30,9 @@ jobs:
         run: pnpm vitest --coverage
         env:
           CI: true
+      - name: Fallow audit
+        if: github.event_name == 'pull_request'
+        run: pnpm fallow audit --base "origin/${{ github.base_ref }}"
       - name: Build
         run: pnpm build
 
