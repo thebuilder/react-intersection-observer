@@ -65,16 +65,6 @@ function EventLog({ events }: { events: string[] }) {
   );
 }
 
-function SkippedObserverMessage({ skip }: { skip: boolean | undefined }) {
-  if (!skip) return null;
-
-  return (
-    <p className="mt-4 text-sm text-yellow-200">
-      Observing is currently skipped. Toggle `skip` off to monitor the element.
-    </p>
-  );
-}
-
 const meta = {
   title: "useOnInView Hook",
   parameters: {
@@ -132,7 +122,12 @@ function UseOnInViewRender(rest: Props) {
         <InViewIcon inView={inView} />
         <EntryDetails options={effectOptions} />
         <EventLog events={events} />
-        <SkippedObserverMessage skip={effectOptions?.skip} />
+        {effectOptions?.skip ? (
+          <p className="mt-4 text-sm text-yellow-200">
+            Observing is currently skipped. Toggle `skip` off to monitor the
+            element.
+          </p>
+        ) : null}
       </InViewBlock>
       <ThresholdMarker threshold={effectOptions?.threshold} />
       <RootMargin rootMargin={effectOptions?.rootMargin} />
