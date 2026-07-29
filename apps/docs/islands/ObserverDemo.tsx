@@ -81,13 +81,15 @@ function LiveObserverDemo() {
             background:
               "color-mix(in srgb, var(--color-foreground) 3%, transparent)",
             alignSelf: "stretch",
-            minBlockSize: "19rem",
+            blockSize: "27rem",
             border:
               "1px solid color-mix(in srgb, var(--color-foreground) 18%, transparent)",
             borderRadius: "0.75rem",
             overflowY: "auto",
             padding: "0.75rem",
           }}
+          // biome-ignore lint/a11y/noNoninteractiveTabindex: A labelled custom scroll viewport needs keyboard focus.
+          tabIndex={0}
         >
           <div
             style={{
@@ -219,7 +221,6 @@ function LiveObserverDemo() {
         </section>
 
         <aside
-          aria-live="polite"
           style={{
             alignContent: "start",
             background:
@@ -273,7 +274,7 @@ function LiveObserverDemo() {
                   }}
                   type="button"
                 >
-                  {value === 0 ? "0%" : `${value * 100}%`}
+                  {value === 0 ? "Any" : `${value * 100}%`}
                 </button>
               ))}
             </div>
@@ -289,6 +290,8 @@ function LiveObserverDemo() {
               Live result
             </div>
             <div
+              aria-atomic="true"
+              aria-live="polite"
               style={{
                 alignItems: "center",
                 display: "flex",

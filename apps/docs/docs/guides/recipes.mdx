@@ -127,22 +127,24 @@ export function Impression({ id, record }: ImpressionProps) {
 
 <ObserverDemo recipe="impression" />
 
-The package ignores the initial `false` notification, so this callback records the first accepted enter transition. Keep the identifier stable and decide whether `triggerOnce` matches your analytics definition of an impression.
+The package ignores the initial `false` notification, so this callback records the first accepted enter transition. Keep the identifier stable and decide whether `triggerOnce` matches your analytics definition of an impression. An intersection does not prove that content was meaningfully viewed: add a minimum-duration rule when your definition requires time in view, and evaluate [Observer v2](/guides/intersection-observer-v2) when covered or visually compromised content matters.
 
 ## Infinite scrolling
 
 Observe a sentinel at the end of a list, guard requests while loading, and keep an explicit fallback action for keyboard and assistive-technology users:
 
 ```tsx
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useState, type Key, type ReactNode } from "react";
 import { useInView } from "react-intersection-observer";
 
 type Page<T> = { items: T[]; hasNextPage: boolean };
 
 export function InfiniteList<T>({
+  getKey,
   loadPage,
   renderItem,
 }: {
+  getKey: (item: T) => Key;
   loadPage: (skip: number) => Promise<Page<T>>;
   renderItem: (item: T) => ReactNode;
 }) {
@@ -200,7 +202,10 @@ export function InfiniteList<T>({
 
   return (
     <>
-      <ul>{items.map((item, index) => <li key={index}>{renderItem(item)}</li>)}</ul>
+      <ul>{items.map((item) => <li key={getKey(item)}>{renderItem(item)}</li>)}</ul>
+      <p aria-live="polite">
+        {loading ? "Loading more items…" : error ? "Could not load more items." : ""}
+      </p>
       {error ? <button onClick={() => void loadMore()}>Try again</button> : null}
       {hasNextPage ? (
         <>

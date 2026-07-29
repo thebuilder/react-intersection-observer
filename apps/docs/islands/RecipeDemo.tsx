@@ -250,6 +250,8 @@ function InfiniteListDemo() {
         aria-label="Scrollable result list"
         ref={setRoot}
         style={{ ...viewportStyle, height: "13.5rem" }}
+        // biome-ignore lint/a11y/noNoninteractiveTabindex: A labelled custom scroll viewport needs keyboard focus.
+        tabIndex={0}
       >
         <ol
           style={{
@@ -352,6 +354,8 @@ function ScrollViewport({
       aria-label="Scrollable recipe demonstration"
       ref={setRoot}
       style={viewportStyle}
+      // biome-ignore lint/a11y/noNoninteractiveTabindex: A labelled custom scroll viewport needs keyboard focus.
+      tabIndex={0}
     >
       {children}
     </section>
