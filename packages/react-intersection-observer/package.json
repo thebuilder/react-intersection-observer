@@ -84,14 +84,6 @@
       "@semantic-release/github"
     ]
   },
-  "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
-  },
-  "lint-staged": {
-    "*.{js,json,css,md,ts,tsx}": [
-      "biome check --fix --no-errors-on-unmatched --files-ignore-unknown=true"
-    ]
-  },
   "size-limit": [
     {
       "path": "dist/index.mjs",
@@ -124,7 +116,6 @@
   },
   "devDependencies": {
     "@arethetypeswrong/cli": "^0.18.2",
-    "@biomejs/biome": "^2.3.10",
     "@rsbuild/core": "1.5.13",
     "@rsbuild/plugin-react": "1.4.2",
     "@size-limit/preset-small-lib": "^12.0.0",
@@ -137,14 +128,12 @@
     "@vitest/browser-playwright": "^4.0.16",
     "@vitest/coverage-istanbul": "^4.0.16",
     "bumpp": "^10.3.2",
-    "lint-staged": "^16.2.7",
     "microbundle": "^0.15.1",
     "npm-run-all": "^4.1.5",
     "playwright": "^1.57.0",
     "publint": "^0.3.16",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
-    "simple-git-hooks": "^2.13.1",
     "size-limit": "^12.0.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",

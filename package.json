@@ -30,7 +30,18 @@
     }
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.3.10",
     "fallow": "3.10.0",
+    "lint-staged": "^16.2.7",
+    "simple-git-hooks": "^2.13.1",
     "turbo": "^2.10.7"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm exec lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,json,css,md,ts,tsx}": [
+      "biome check --fix --no-errors-on-unmatched --files-ignore-unknown=true"
+    ]
   }
 }
