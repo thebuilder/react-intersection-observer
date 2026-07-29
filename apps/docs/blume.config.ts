@@ -6,6 +6,9 @@ export default defineConfig({
   title: "React Intersection Observer",
   description:
     "A lightweight React implementation of the Intersection Observer API.",
+  logo: {
+    image: "/logo.svg",
+  },
   github: {
     owner: "thebuilder",
     repo: "react-intersection-observer",

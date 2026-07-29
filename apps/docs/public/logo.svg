@@ -6,16 +6,10 @@
       <stop offset="1" stop-color="#22d3ee" />
     </linearGradient>
   </defs>
-  <style>
-    .viewport { stroke: #17121f; }
-    @media (prefers-color-scheme: dark) {
-      .viewport { stroke: #f5f3ff; }
-    }
-  </style>
   <path
-    class="viewport"
     d="M7 28V15C7 10.6 10.6 7 15 7H27M37 7H49C53.4 7 57 10.6 57 15V23M7 37V49C7 53.4 10.6 57 15 57H23"
     fill="none"
+    stroke="currentColor"
     stroke-linecap="round"
     stroke-width="4"
   />

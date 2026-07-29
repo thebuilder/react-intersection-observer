@@ -32,6 +32,13 @@ function LiveObserverDemo() {
         overflow: "hidden",
       }}
     >
+      <style>{`
+        @container (max-width: 31rem) {
+          .observer-demo-controls {
+            order: -1;
+          }
+        }
+      `}</style>
       <div
         style={{
           alignItems: "center",
@@ -86,7 +93,9 @@ function LiveObserverDemo() {
       </div>
 
       <div
+        className="observer-demo-workspace"
         style={{
+          containerType: "inline-size",
           display: "grid",
           gap: "1rem",
           gridTemplateColumns:
@@ -96,6 +105,7 @@ function LiveObserverDemo() {
       >
         <section
           aria-label="Scrollable feed. Scroll to reveal the feature card."
+          className="observer-demo-feed"
           ref={setRoot}
           style={{
             background:
@@ -239,6 +249,7 @@ function LiveObserverDemo() {
 
         <aside
           aria-live="polite"
+          className="observer-demo-controls"
           style={{
             alignContent: "start",
             background:
