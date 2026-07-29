@@ -32,7 +32,7 @@ jobs:
           CI: true
       - name: Fallow audit
         if: github.event_name == 'pull_request'
-        run: pnpm fallow audit --base "origin/${{ github.base_ref }}"
+        run: pnpm fallow audit --base "origin/${{ github.base_ref }}" --coverage packages/react-intersection-observer/coverage/coverage-final.json
       - name: Build
         run: pnpm build:all
 

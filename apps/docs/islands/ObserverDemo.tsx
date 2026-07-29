@@ -247,35 +247,12 @@ function LiveObserverDemo() {
               style={{ display: "flex", gap: "0.4rem", marginTop: "0.5rem" }}
             >
               {thresholds.map((value) => (
-                <button
-                  aria-pressed={threshold === value}
-                  aria-label={`Trigger when ${value === 0 ? "any part" : `${value * 100}%`} of the card is visible`}
+                <ThresholdButton
                   key={value}
-                  onClick={() => setThreshold(value)}
-                  style={{
-                    background:
-                      threshold === value
-                        ? "var(--blume-action)"
-                        : "var(--color-background)",
-                    border:
-                      threshold === value
-                        ? "1px solid color-mix(in srgb, var(--blume-action) 72%, var(--color-foreground))"
-                        : "1px solid color-mix(in srgb, var(--color-foreground) 24%, transparent)",
-                    borderRadius: "0.4rem",
-                    color:
-                      threshold === value
-                        ? "var(--blume-action-foreground)"
-                        : "var(--color-foreground)",
-                    cursor: "pointer",
-                    flex: 1,
-                    font: "inherit",
-                    fontWeight: threshold === value ? 700 : 500,
-                    padding: "0.55rem 0.2rem",
-                  }}
-                  type="button"
-                >
-                  {value === 0 ? "Any" : `${value * 100}%`}
-                </button>
+                  onSelect={setThreshold}
+                  selected={threshold === value}
+                  value={value}
+                />
               ))}
             </div>
           </div>
@@ -371,6 +348,44 @@ function LiveObserverDemo() {
         </aside>
       </div>
     </section>
+  );
+}
+
+function ThresholdButton({
+  onSelect,
+  selected,
+  value,
+}: {
+  onSelect: (value: (typeof thresholds)[number]) => void;
+  selected: boolean;
+  value: (typeof thresholds)[number];
+}) {
+  return (
+    <button
+      aria-label={`Trigger when ${value === 0 ? "any part" : `${value * 100}%`} of the card is visible`}
+      aria-pressed={selected}
+      onClick={() => onSelect(value)}
+      style={{
+        background: selected
+          ? "var(--blume-action)"
+          : "var(--color-background)",
+        border: selected
+          ? "1px solid color-mix(in srgb, var(--blume-action) 72%, var(--color-foreground))"
+          : "1px solid color-mix(in srgb, var(--color-foreground) 24%, transparent)",
+        borderRadius: "0.4rem",
+        color: selected
+          ? "var(--blume-action-foreground)"
+          : "var(--color-foreground)",
+        cursor: "pointer",
+        flex: 1,
+        font: "inherit",
+        fontWeight: selected ? 700 : 500,
+        padding: "0.55rem 0.2rem",
+      }}
+      type="button"
+    >
+      {value === 0 ? "Any" : `${value * 100}%`}
+    </button>
   );
 }
 

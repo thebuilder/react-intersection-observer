@@ -6,8 +6,6 @@ import {
 } from "react";
 import { useInView, useOnInView } from "react-intersection-observer";
 
-export const client = "load";
-
 export type Recipe = "lazy-image" | "reveal" | "impression" | "infinite-list";
 
 export default function RecipeDemo({ recipe }: { recipe: Recipe }) {

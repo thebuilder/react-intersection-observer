@@ -1,8 +1,13 @@
 {
   "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
   "entry": [
-    "fixtures/react-compat/rsbuild.config.mjs",
-    "storybook/stories/**/*.mdx"
+    "apps/docs/blume.config.ts",
+    "apps/docs/components.ts",
+    "apps/docs/docs/**/*.mdx",
+    "apps/docs/docs/**/meta.ts",
+    "apps/docs/islands/ObserverDemo.tsx",
+    "apps/storybook/stories/**/*.mdx",
+    "packages/react-intersection-observer/fixtures/react-compat/rsbuild.config.mjs"
   ],
   "ignoreDependencies": [
     "@rsbuild/core",
@@ -33,25 +38,69 @@
     "maxCognitive": 15,
     "maxCrap": 30,
     "maxUnitSize": 60,
-    "coverage": "coverage/coverage-final.json",
+    "coverage": "packages/react-intersection-observer/coverage/coverage-final.json",
     "thresholdOverrides": [
       {
-        "files": ["storybook/stories/elements.tsx"],
+        "files": ["apps/storybook/stories/elements.tsx"],
         "functions": ["EntryDetails", "ScrollWrapper"],
         "maxCrap": 31,
         "reason": "Interactive Storybook demos are intentionally excluded from unit coverage; retain the default structural complexity limits while allowing these two estimated CRAP scores."
       },
       {
-        "files": ["storybook/stories/useInView.story.tsx"],
+        "files": ["apps/storybook/stories/useInView.story.tsx"],
         "functions": ["HooksRender"],
         "maxCrap": 43,
         "reason": "This interactive Storybook demo is intentionally excluded from unit coverage; retain the default structural complexity limits while allowing its estimated CRAP score."
       },
       {
-        "files": ["storybook/stories/useOnInView.story.tsx"],
+        "files": ["apps/storybook/stories/useOnInView.story.tsx"],
         "functions": ["UseOnInViewRender"],
         "maxCrap": 57,
         "reason": "This interactive Storybook demo is intentionally excluded from unit coverage; retain the default structural complexity limits while allowing its measured CRAP score of 56."
+      },
+      {
+        "files": ["apps/docs/components/Logo.astro"],
+        "functions": ["<template>"],
+        "maxCrap": 157,
+        "reason": "The documentation logo has template-only conditional rendering and no unit-test harness; retain the default complexity limits while allowing its estimated CRAP score of 156."
+      },
+      {
+        "files": ["apps/docs/islands/ObserverDemo.tsx"],
+        "functions": ["LiveObserverDemo"],
+        "maxCognitive": 23,
+        "maxCrap": 421,
+        "reason": "The interactive docs demo deliberately combines the selected threshold, observer result, and visible custom-root feed in one copyable example; it has no unit-test harness, so retain explicit complexity and CRAP ceilings for this single renderer."
+      },
+      {
+        "files": ["apps/docs/islands/ObserverDemo.tsx"],
+        "functions": ["ThresholdButton"],
+        "maxCrap": 57,
+        "reason": "The threshold-button renderer is part of the interactive documentation example and has no unit-test harness; retain its estimated CRAP score without relaxing the file globally."
+      },
+      {
+        "files": ["apps/docs/islands/RecipeDemo.tsx"],
+        "functions": ["LazyImageDemo"],
+        "maxCrap": 91,
+        "reason": "This interactive lazy-image recipe is exercised in the documentation site rather than a unit-test harness; retain its estimated CRAP score without relaxing the file globally."
+      },
+      {
+        "files": ["apps/docs/islands/RecipeDemo.tsx"],
+        "functions": ["RevealDemo"],
+        "maxCrap": 183,
+        "reason": "This interactive reveal recipe is exercised in the documentation site rather than a unit-test harness; retain its estimated CRAP score without relaxing the file globally."
+      },
+      {
+        "files": ["apps/docs/islands/RecipeDemo.tsx"],
+        "functions": ["InfiniteListDemo"],
+        "maxCognitive": 20,
+        "maxCrap": 111,
+        "reason": "This interactive infinite-list recipe combines retry and loading state in one visible example and has no unit-test harness; retain its measured complexity without relaxing the file globally."
+      },
+      {
+        "files": ["apps/docs/islands/RecipeDemo.tsx"],
+        "functions": ["RecipeDemo", "DemoStatus"],
+        "maxCrap": 31,
+        "reason": "These small recipe-dispatch and status renderers are exercised in the documentation site rather than a unit-test harness; retain their estimated CRAP scores without relaxing the file globally."
       }
     ],
     "suggestInlineSuppression": false
