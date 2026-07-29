@@ -31,38 +31,10 @@ function LiveObserverDemo() {
         overflow: "hidden",
       }}
     >
-      <div
-        style={{
-          alignItems: "center",
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "0.75rem",
-          justifyContent: "space-between",
-          padding: "1rem 1rem 0",
-        }}
-      >
-        <div>
-          <strong style={{ fontSize: "1.125rem" }}>
-            See when an element becomes visible
-          </strong>
-        </div>
-        <button
-          onClick={() => root?.scrollTo({ behavior: "smooth", top: 0 })}
-          style={{
-            background:
-              "color-mix(in srgb, var(--color-foreground) 9%, transparent)",
-            border:
-              "1px solid color-mix(in srgb, var(--color-foreground) 24%, transparent)",
-            borderRadius: "999px",
-            color: "var(--color-foreground)",
-            cursor: "pointer",
-            font: "inherit",
-            padding: "0.45rem 0.75rem",
-          }}
-          type="button"
-        >
-          ↺ Start over
-        </button>
+      <div style={{ padding: "1rem 1rem 0" }}>
+        <strong style={{ fontSize: "1.125rem" }}>
+          See when an element becomes visible
+        </strong>
       </div>
 
       <div
@@ -76,6 +48,7 @@ function LiveObserverDemo() {
       >
         <section
           aria-label="Scrollable feed. Scroll to reveal the feature card."
+          className="observer-demo-feed"
           ref={setRoot}
           style={{
             background:
@@ -347,6 +320,14 @@ function LiveObserverDemo() {
           </div>
         </aside>
       </div>
+
+      <style>{`
+        @media (max-width: 42rem) {
+          .observer-demo-feed {
+            block-size: 18rem !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }
