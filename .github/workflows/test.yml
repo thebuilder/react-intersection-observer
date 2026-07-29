@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Install playwright
-        run: pnpm exec playwright install
+        run: pnpm --filter react-intersection-observer exec playwright install
       - name: Lint
         run: pnpm biome ci .
       - name: Test
@@ -72,5 +72,5 @@ jobs:
         run: pnpm --filter react-intersection-observer run compat:packed -- ${{ matrix.react }}
       - name: Run test
         run: |
-          pnpm exec playwright install
-          pnpm test
+          pnpm --filter react-intersection-observer exec playwright install
+          pnpm --filter react-intersection-observer test

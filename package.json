@@ -5,7 +5,7 @@
   "scripts": {
     "build": "pnpm --filter react-intersection-observer build",
     "build:all": "pnpm build && pnpm --filter storybook build && pnpm --filter docs build",
-    "build:docs": "pnpm --filter docs build",
+    "build:docs": "pnpm build && pnpm --filter docs build",
     "build:storybook": "pnpm build && pnpm --filter storybook build",
     "compat:packed": "pnpm --filter react-intersection-observer compat:packed",
     "dev": "pnpm --parallel --filter react-intersection-observer --filter storybook --filter docs dev",
