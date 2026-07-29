@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>React Intersection Observer</title>
+  <defs>
+    <linearGradient id="target" x1="24" y1="24" x2="52" y2="52" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8b5cf6" />
+      <stop offset="1" stop-color="#22d3ee" />
+    </linearGradient>
+  </defs>
+  <style>
+    .surface { fill: #faf9ff; }
+    .viewport { stroke: #17121f; }
+    @media (prefers-color-scheme: dark) {
+      .surface { fill: #121019; }
+      .viewport { stroke: #f5f3ff; }
+    }
+  </style>
+  <rect class="surface" x="4" y="4" width="56" height="56" rx="18" />
+  <rect class="viewport" x="13" y="13" width="29" height="29" rx="8" fill="none" stroke-width="5" />
+  <rect x="25" y="25" width="27" height="27" rx="8" fill="url(#target)" />
+</svg>
