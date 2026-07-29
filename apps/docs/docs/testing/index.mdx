@@ -1,0 +1,37 @@
+---
+title: Testing
+description: Choose the test surface that matches the behavior you need to prove.
+sidebar:
+  order: 1
+---
+
+Intersection Observer tests fall into two categories. Pick the boundary first, then use the focused guide for that kind of test.
+
+<CardGroup cols={2}>
+  <Card title="Browser Mode" href="/testing/browser-mode" icon="monitor">
+    Verify real scrolling, layout, viewport geometry, and browser integration.
+  </Card>
+  <Card title="Mock intersections" href="/testing/mocking-intersections" icon="sliders-horizontal">
+    Drive predictable enter, leave, and threshold transitions with test utilities.
+  </Card>
+</CardGroup>
+
+## Quick decision
+
+| You need to prove… | Start here |
+| --- | --- |
+| Actual scrolling, geometry, or native observer behavior | [Browser Mode](/testing/browser-mode) |
+| A deterministic callback, state transition, or threshold branch in Vitest or Jest | [Mock intersections](/testing/mocking-intersections) |
+
+Browser Mode and the package mock are complementary. Browser Mode verifies browser integration; the mock creates deterministic observer signals. Keep a native browser test free of a global mock setup.
+
+## Organize a mixed suite
+
+Keep each test boundary in its own named project so the DOM mock never leaks into native browser tests:
+
+| Behavior | Project | Typical files | Setup |
+| --- | --- | --- | --- |
+| Real scrolling, layout, and native observer delivery | `browser` | `*.browser.test.tsx` | Vitest Browser Mode; no global test utilities. |
+| Deterministic callbacks and thresholds | `dom` | `*.dom.test.tsx` | `happy-dom` or `jsdom` plus `test-utils`. |
+
+The Browser Mode and mock setup guides show the project-specific configuration.

@@ -1,0 +1,103 @@
+questions:
+  - id: install-and-observe-element
+    question: How do I install the package and observe an element?
+    expected:
+      - Install the react-intersection-observer package.
+      - Import and call useInView.
+      - Attach the returned ref to the element that should be observed.
+      - inView changes when the element crosses the configured threshold.
+      - entry is undefined until an observer notification has been accepted.
+    routes:
+      - /
+
+  - id: choose-public-api
+    question: Which API should I use for state, effects, or component composition?
+    expected:
+      - Use useInView when visibility affects rendered React state.
+      - Use useOnInView for callbacks such as analytics or prefetching without a hook-owned state update.
+      - Use InView when render props or a generated wrapper fit the composition.
+    routes:
+      - /api/core-apis
+
+  - id: configure-visibility-trigger
+    question: How can I control when an element counts as visible?
+    expected:
+      - threshold sets the visible ratio required for inView to become true.
+      - rootMargin expands or contracts the root bounds so work can start earlier or later.
+      - scrollMargin adjusts clipping across nested scroll containers.
+    routes:
+      - /api/configuration
+
+  - id: observe-inside-scroll-container
+    question: How do I observe an element inside a custom scroll container?
+    expected:
+      - The viewport is the default root.
+      - Pass the ancestor scroll container as root.
+      - The root must be an ancestor of the observed target.
+      - Keep the root in state so the hook receives it after React assigns the element.
+    routes:
+      - /api/configuration
+
+  - id: stop-or-pause-observation
+    question: How do I stop after the first view or pause observation?
+    expected:
+      - triggerOnce stops observing after the first accepted true transition.
+      - skip temporarily disables observation while preserving the current state.
+      - onChange is available on useInView and InView.
+      - Use useOnInView when a callback is the only result needed and no hook-owned state update is wanted.
+    routes:
+      - /api/configuration
+
+  - id: deploy-ssr-app-safely
+    question: What should I decide before deploying an SSR app?
+    expected:
+      - initialInView controls the state rendered before the first observer notification.
+      - initialInView does not create an observer or guarantee that the target is visible.
+      - Hydration attaches the observer after the browser takes over.
+      - A client without IntersectionObserver throws unless a fallback is configured.
+      - fallbackInView sets a local fallback, while defaultFallbackInView sets a global policy.
+    routes:
+      - /guides/ssr
+
+  - id: enable-observer-v2
+    question: How do I detect whether intersecting content is actually visible?
+    expected:
+      - Enable trackVisibility and read entry.isVisible.
+      - Set delay to at least 100 milliseconds.
+      - Observer v2 support is narrower than the original Intersection Observer API.
+      - When isVisible is unsupported, the package approximates it with the calculated intersection state.
+      - Real occlusion must be verified in a supported browser.
+    routes:
+      - /guides/intersection-observer-v2
+
+  - id: test-native-browser-behavior
+    question: How should I test real scrolling and observer behavior?
+    expected:
+      - Use Vitest Browser Mode when behavior depends on real layout, scrolling, focus, or native IntersectionObserver delivery.
+      - Run browser tests in a Chromium project and keep them separate from DOM-emulated tests that use the package mock.
+      - Native IntersectionObserver delivery is asynchronous, so assertions should wait for the update.
+      - Do not load react-intersection-observer/test-utils globally in the Browser Mode project because it replaces the native API.
+    routes:
+      - /testing/browser-mode
+
+  - id: mock-intersection-transitions
+    question: How do I test intersection transitions deterministically?
+    expected:
+      - Import utilities from react-intersection-observer/test-utils in a DOM-capable test environment.
+      - Use mockAllIsIntersecting or mockIsIntersecting to deliver controlled observer entries.
+      - Boolean values simulate entering or leaving, while numbers cross configured thresholds.
+      - The mock tests callbacks and state transitions but does not prove physical layout or native browser geometry.
+      - Reset observed elements and mock calls between tests.
+    routes:
+      - /testing/mocking-intersections
+
+  - id: build-accessible-infinite-scroll
+    question: How do I build accessible infinite scrolling?
+    expected:
+      - Observe a sentinel at the end of the list.
+      - Use skip while loading, after the last page, or on error to prevent duplicate requests.
+      - rootMargin can begin loading before the sentinel reaches the viewport.
+      - Keep a manual Load more action for keyboard and assistive-technology users.
+      - Provide a retry boundary instead of making scrolling the only way to fetch content.
+    routes:
+      - /guides/recipes

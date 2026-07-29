@@ -1,0 +1,158 @@
+{
+  "name": "react-intersection-observer",
+  "version": "10.1.0",
+  "description": "Monitor if a component is inside the viewport, using IntersectionObserver API",
+  "type": "commonjs",
+  "source": "src/index.tsx",
+  "main": "dist/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    "./test-utils": {
+      "import": {
+        "types": "./test-utils/index.d.mts",
+        "default": "./test-utils/index.mjs"
+      },
+      "require": {
+        "types": "./test-utils/index.d.ts",
+        "default": "./test-utils/index.js"
+      }
+    },
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "test-utils"
+  ],
+  "author": "Daniel Schmidt",
+  "license": "MIT",
+  "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thebuilder/react-intersection-observer.git"
+  },
+  "packageManager": "pnpm@10.5.2+sha512.da9dc28cd3ff40d0592188235ab25d3202add8a207afbedc682220e4a0029ffbff4562102b9e6e46b4e3f9e8bd53e6d05de48544b0c57d4b0179e22c76d1199b",
+  "scripts": {
+    "prebuild": "rm -rf dist lib",
+    "build": "tsup && mkdir dist/esm && cp dist/index.mjs dist/esm/index.js",
+    "compat:packed": "node compat/packed.mts",
+    "postbuild": "npm_config_cache=.npm-cache attw --pack && publint && size-limit",
+    "dev": "run-p dev:*",
+    "dev:package": "tsup src/index.tsx --watch",
+    "release": "bumpp && npm publish",
+    "preview": "pnpx pkg-pr-new publish --no-template",
+    "lint": "biome check .",
+    "version": "pnpm build",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit",
+    "prepack": "node scripts/package-metadata.mjs stage",
+    "postpack": "node scripts/package-metadata.mjs clean"
+  },
+  "keywords": [
+    "react",
+    "component",
+    "hooks",
+    "viewport",
+    "intersection",
+    "observer",
+    "lazy load",
+    "inview",
+    "useInView",
+    "useIntersectionObserver"
+  ],
+  "release": {
+    "branches": [
+      "main",
+      {
+        "name": "beta",
+        "prerelease": true
+      }
+    ],
+    "plugins": [
+      "@semantic-release/commit-analyzer",
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/npm",
+      "@semantic-release/github"
+    ]
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,json,css,md,ts,tsx}": [
+      "biome check --fix --no-errors-on-unmatched --files-ignore-unknown=true"
+    ]
+  },
+  "size-limit": [
+    {
+      "path": "dist/index.mjs",
+      "name": "InView",
+      "import": "{ InView }",
+      "limit": "1.5 kB"
+    },
+    {
+      "path": "dist/index.mjs",
+      "name": "useInView",
+      "import": "{ useInView }",
+      "limit": "1.36 kB"
+    },
+    {
+      "path": "dist/index.mjs",
+      "name": "useOnInView",
+      "import": "{ useOnInView }",
+      "limit": "1.12 kB"
+    },
+    {
+      "path": "dist/index.mjs",
+      "name": "observe",
+      "import": "{ observe }",
+      "limit": "0.9 kB"
+    }
+  ],
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "^0.18.2",
+    "@biomejs/biome": "^2.3.10",
+    "@rsbuild/core": "1.5.13",
+    "@rsbuild/plugin-react": "1.4.2",
+    "@size-limit/preset-small-lib": "^12.0.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.1",
+    "@types/node": "^25.0.3",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "@vitest/browser-playwright": "^4.0.16",
+    "@vitest/coverage-istanbul": "^4.0.16",
+    "bumpp": "^10.3.2",
+    "lint-staged": "^16.2.7",
+    "microbundle": "^0.15.1",
+    "npm-run-all": "^4.1.5",
+    "playwright": "^1.57.0",
+    "publint": "^0.3.16",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "simple-git-hooks": "^2.13.1",
+    "size-limit": "^12.0.0",
+    "tsup": "^8.5.1",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16"
+  },
+  "peerDependenciesMeta": {
+    "react-dom": {
+      "optional": true
+    }
+  }
+}

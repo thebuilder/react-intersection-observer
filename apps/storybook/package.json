@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "storybook dev -p 9000",
     "build": "storybook build",
-    "lint": "biome lint ."
+    "lint": "biome lint .",
+    "pretypecheck": "pnpm --filter react-intersection-observer build",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "Daniel Schmidt",

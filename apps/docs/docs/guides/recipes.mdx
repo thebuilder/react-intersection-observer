@@ -1,0 +1,220 @@
+---
+title: Recipes
+description: Complete visibility-aware React patterns built with react-intersection-observer.
+---
+
+Each recipe starts with the problem it solves, shows a complete component, and calls out the boundary that is easiest to miss. For the API details behind the examples, see [Core APIs](/api/core-apis) and [Configuration](/api/configuration).
+
+## Lazy image loading
+
+:::tip[Prefer native lazy loading]
+Add the `loading="lazy"` attribute to ordinary image elements. It lets the browser decide when to defer image loading without any observer code.
+:::
+
+Use the observer when you need an explicit preload margin, a custom placeholder, or a component-level loading transition.
+
+```tsx
+import { useInView } from "react-intersection-observer";
+
+type LazyImageProps = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+};
+
+export function LazyImage({ src, alt, width, height }: LazyImageProps) {
+  const { ref, inView } = useInView({
+    rootMargin: "200px 0px",
+    triggerOnce: true,
+  });
+
+  return (
+    <div ref={ref} style={{ aspectRatio: `${width} / ${height}` }}>
+      {inView ? (
+        <img src={src} alt={alt} width={width} height={height} />
+      ) : (
+        <div aria-hidden="true" className="image-placeholder" />
+      )}
+    </div>
+  );
+}
+```
+
+<ObserverDemo recipe="lazy-image" />
+
+Reserve the image's space with dimensions or an aspect ratio. Otherwise the image can shift the page after it loads, and the observer may repeatedly encounter a moving target.
+
+## Scroll-triggered animation
+
+Keep the animation in CSS and use `triggerOnce` when the reveal should happen only once:
+
+```tsx
+import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
+
+export function Reveal({ children }: { children: React.ReactNode }) {
+  const [enhanced, setEnhanced] = useState(false);
+  const { ref, inView } = useInView({
+    fallbackInView: true,
+    threshold: 0.2,
+    triggerOnce: true,
+  });
+
+  useEffect(() => {
+    setEnhanced("IntersectionObserver" in window);
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={enhanced && !inView ? "reveal reveal-pending" : "reveal"}
+    >
+      {children}
+    </div>
+  );
+}
+```
+
+```css
+.reveal {
+  opacity: 1;
+  transform: none;
+  transition: opacity 250ms ease, transform 250ms ease;
+}
+
+.reveal-pending {
+  opacity: 0;
+  transform: translateY(1rem);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+```
+
+<ObserverDemo recipe="reveal" />
+
+The baseline remains visible until the browser can enhance it, and `fallbackInView: true` keeps it visible when observation is unavailable. Do not make the animation the only way to discover important content; reduced-motion users see it immediately.
+
+## Track an impression
+
+Use `useOnInView` when the result is an effect and a state update is unnecessary:
+
+```tsx
+import { useOnInView } from "react-intersection-observer";
+
+type ImpressionProps = {
+  id: string;
+  record: (id: string) => void;
+};
+
+export function Impression({ id, record }: ImpressionProps) {
+  const ref = useOnInView(
+    (inView) => {
+      if (inView) record(id);
+    },
+    { threshold: 0.5, triggerOnce: true },
+  );
+
+  return <article ref={ref}>Tracked content</article>;
+}
+```
+
+<ObserverDemo recipe="impression" />
+
+The package ignores the initial `false` notification, so this callback records the first accepted enter transition. Keep the identifier stable and decide whether `triggerOnce` matches your analytics definition of an impression.
+
+## Infinite scrolling
+
+Observe a sentinel at the end of a list, guard requests while loading, and keep an explicit fallback action for keyboard and assistive-technology users:
+
+```tsx
+import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useInView } from "react-intersection-observer";
+
+type Page<T> = { items: T[]; hasNextPage: boolean };
+
+export function InfiniteList<T>({
+  loadPage,
+  renderItem,
+}: {
+  loadPage: (skip: number) => Promise<Page<T>>;
+  renderItem: (item: T) => ReactNode;
+}) {
+  const [items, setItems] = useState<T[]>([]);
+  const [hasNextPage, setHasNextPage] = useState(true);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const loadMore = useCallback(async () => {
+    if (loading || !hasNextPage) return;
+
+    setLoading(true);
+    setError(null);
+    try {
+      const page = await loadPage(items.length);
+      setItems((current) => [...current, ...page.items]);
+      setHasNextPage(page.hasNextPage);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause : new Error("Unable to load"));
+    } finally {
+      setLoading(false);
+    }
+  }, [hasNextPage, items.length, loadPage, loading]);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    void loadPage(0)
+      .then((page) => {
+        if (cancelled) return;
+        setItems(page.items);
+        setHasNextPage(page.hasNextPage);
+      })
+      .catch((cause) => {
+        if (!cancelled) {
+          setError(cause instanceof Error ? cause : new Error("Unable to load"));
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [loadPage]);
+
+  const { ref } = useInView({
+    rootMargin: "400px 0px",
+    skip: loading || !hasNextPage || error !== null,
+    onChange: (inView) => {
+      if (inView) void loadMore();
+    },
+  });
+
+  return (
+    <>
+      <ul>{items.map((item, index) => <li key={index}>{renderItem(item)}</li>)}</ul>
+      {error ? <button onClick={() => void loadMore()}>Try again</button> : null}
+      {hasNextPage ? (
+        <>
+          <div ref={ref} aria-hidden="true" />
+          <button disabled={loading} onClick={() => void loadMore()}>
+            {loading ? "Loading…" : "Load more"}
+          </button>
+        </>
+      ) : null}
+    </>
+  );
+}
+```
+
+<ObserverDemo recipe="infinite-list" />
+
+Start with `loading: true` so the sentinel cannot race the first request. After that, the `skip` guard prevents duplicate requests. `rootMargin` can begin loading before the sentinel reaches the viewport; tune its `400px` value to the network and item size. The `items.length` value is the next page's `skip`; use the pagination contract your API expects. Always keep a manual “Load more” path and retry boundary rather than making scrolling the only way to fetch content.

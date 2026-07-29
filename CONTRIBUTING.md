@@ -3,13 +3,12 @@
 Welcome to `react-intersection-observer`! I'm thrilled that you're interested in
 contributing. Here are some guidelines to help you get started.
 
-The codebase is written in TypeScript, and split into two packages using PNPM
-workspaces:
+The codebase is written in TypeScript and uses PNPM workspaces:
 
-- `react-intersection-observer` - The main package, which contains the
-  `useInView` hook and the `InView` component.
-- `storybook` - A Storybook project that is used to develop and test the
-  `react-intersection-observer` package.
+- `packages/react-intersection-observer` - The published package, which contains
+  the `useInView` hook and the `InView` component.
+- `apps/storybook` - The Storybook project used to develop and test the package.
+- `apps/docs` - The Blume documentation site.
 
 ## Development
 
@@ -20,11 +19,13 @@ the dependencies using [PNPM](https://pnpm.io/):
 pnpm install
 ```
 
-Then you can start the Storybook development server with the `dev` task:
+Then you can start the development surfaces with the `dev` task:
 
 ```shell
 pnpm dev
 ```
+
+Use `pnpm dev:storybook` or `pnpm dev:docs` to start one surface at a time.
 
 ## Semantic Versioning
 
@@ -79,8 +80,15 @@ submitting your pull request.
 Please ensure that your changes are covered by tests, and that all tests pass
 before submitting your pull request.
 
-You can run the tests with the `test` task:
+You can run the package tests with the `test` task. Component tests run in
+Vitest Browser Mode with Playwright; SSR tests run in a separate Node project.
 
 ```shell
 pnpm test
+```
+
+Build every published and documentation surface with:
+
+```shell
+pnpm build:all
 ```

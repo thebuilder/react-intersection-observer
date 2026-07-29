@@ -1,0 +1,108 @@
+---
+title: Observer options
+description: Decide when observation should trigger, where it should happen, and how long it should run.
+---
+
+Most components need one of three decisions: **when** an element counts as visible, **where** to observe it, and **what happens after the first notification**. Start there; the full option reference is at the end.
+
+## Choose when it counts as visible
+
+Use `threshold` when the amount of visible content matters. A threshold of `0.5` means the target must be at least half visible before `inView` becomes true:
+
+```tsx
+useInView({ threshold: 0.5 });
+```
+
+Use `rootMargin` to start earlier or later than the target's actual edge. This is useful for preloading:
+
+```tsx
+useInView({
+  rootMargin: "200px 0px",
+  triggerOnce: true,
+});
+```
+
+`scrollMargin` changes the clipping rectangles of nested scroll containers. Use it when the target is clipped by scrollers inside the root, rather than to adjust the viewport itself.
+
+Test real layout, scrolling, and geometry in [Vitest Browser Mode](/testing/browser-mode). Use a deterministic mock to cross a configured threshold without relying on layout; see [Mock intersections](/testing/mocking-intersections).
+
+## Choose where to observe
+
+For a custom scroll container, start with these rules: the viewport is the default root; pass the ancestor scroll container as `root`; and ensure that root is an ancestor of the observed target. Keep the root in state so the hook receives it after React assigns the element. Omit `root` (or leave it as `null`) to observe relative to the browser viewport, then give a custom root a bounded scrolling area:
+
+```tsx
+import { useState } from "react";
+import { useInView } from "react-intersection-observer";
+
+export function ScrollArea() {
+  const [root, setRoot] = useState<HTMLDivElement | null>(null);
+  const { ref, inView } = useInView({ root });
+
+  return (
+    <div
+      ref={setRoot}
+      style={{ blockSize: 240, overflowY: "auto" }}
+    >
+      <div style={{ blockSize: 220 }} />
+      <article ref={ref}>
+        {inView ? "Visible in this container" : "Waiting"}
+      </article>
+      <div style={{ blockSize: 220 }} />
+    </div>
+  );
+}
+```
+
+The root must be an ancestor of the target. `scrollMargin` is not a substitute for `rootMargin`: it expands or contracts the clipping rectangles of **nested** scroll containers inside the root. Use it when an inner scroller clips the target, for example `useInView({ root, scrollMargin: "80px 0px" })`. Invalid margin syntax, invalid thresholds, iframes, and custom roots can all change what the browser considers visible.
+
+## Stop, pause, or choose a callback API
+
+For lifecycle configuration, decide both when to stop and what result you need: use `triggerOnce` to stop observing after the first accepted `true` transition, or `skip` to temporarily disable observation while preserving the current state. onChange is available on useInView and InView when state and a callback are both needed. Use [`useOnInView`](/api/core-apis#useoninview) when a callback is the only result needed and no hook-owned state update is wanted.
+
+Use `triggerOnce` for work that only needs the first accepted enter event, such as loading an image or recording a one-time impression. Use `skip` to temporarily stop observing while preserving the current state.
+
+```tsx
+const { ref, inView } = useInView({
+  triggerOnce: true,
+  skip: isSaving,
+  onChange(nextInView, entry) {
+    console.log(nextInView, entry.target);
+  },
+});
+```
+
+`onChange` runs alongside the `useInView` or `InView` state update. The callback-only alternative is [`useOnInView`](/api/core-apis#useoninview).
+
+## Initial, server, and unsupported-client state
+
+`initialInView` sets the state before an observer reports. `fallbackInView` sets a value only when the client lacks `IntersectionObserver`; a global policy is available through `defaultFallbackInView`.
+
+Those choices affect server rendering and unsupported browsers, so keep the policy in [SSR and fallbacks](/guides/ssr) rather than scattering it through routine component configuration.
+
+## Experimental: distinguish visibility from intersection
+
+Most applications only need `inView`: the target intersects the root. Set `trackVisibility: true` when you instead need Observer v2's `entry.isVisible` field, which can account for an intersecting target being visually compromised. Pair it with a `delay` of at least `100` milliseconds:
+
+```tsx
+useInView({ trackVisibility: true, delay: 100 });
+```
+
+This is experimental and has narrower browser support than the original API. Read [Observer v2](/guides/intersection-observer-v2) before using `isVisible` for viewability or occlusion decisions.
+
+## Option reference
+
+Observation options work with all three APIs. `onChange`, `initialInView`, and `fallbackInView` are only available with `useInView` and `<InView>`.
+
+| Option | Default | Purpose |
+| --- | --- | --- |
+| `root` | `null` | The viewport or an ancestor scroll container. |
+| `rootMargin` | `"0px"` | Expand or contract the root bounds. |
+| `scrollMargin` | `"0px"` | Adjust clipping across nested scroll containers. |
+| `threshold` | `0` | A number or array of ratios from `0` to `1`. |
+| `triggerOnce` | `false` | Stop observing after the first accepted enter transition. |
+| `skip` | `false` | Disable observation while preserving the current state. |
+| `onChange` | `undefined` | Run `(inView, entry)` after an accepted transition. |
+| `initialInView` | `false` | Set initial state before observer delivery. |
+| `fallbackInView` | `undefined` | Set state when the API is unavailable. |
+| `trackVisibility` | `false` | **Experimental.** Request `entry.isVisible`, beyond geometric intersection, in browsers supporting Observer v2. |
+| `delay` | `undefined` | Minimum delay between v2 visibility notifications. Only use with `trackVisibility`; it must be at least `100`ms. |

@@ -1,0 +1,91 @@
+---
+title: Browser Mode
+description: Use Vitest Browser Mode to test real scrolling, layout, focus, and native Intersection Observer behavior.
+---
+
+Vitest Browser Mode runs your component test in a real browser—not a simulated DOM. That gives the test real viewport geometry, CSS layout, scrolling, focus, and the browser's own `IntersectionObserver` implementation.
+
+Use it when the browser itself is part of the behavior you need to prove: an element enters a scroll container, a `rootMargin` starts work early, a layout change moves a target, or the native observer delivers an update. Browser Mode is the preferred integration test layer for those cases.
+
+## Keep Browser Mode separate from mocked DOM tests
+
+Run Browser Mode tests in a Chromium browser project. Keep them separate from `happy-dom` or `jsdom` tests that load `react-intersection-observer/test-utils`; the native browser observer must remain available to prove scrolling, layout, and observer delivery.
+
+## Install and configure Browser Mode
+
+Install Vitest's Playwright provider, the React renderer, and a browser:
+
+```bash
+pnpm add -D vitest vitest-browser-react @vitest/browser-playwright playwright
+pnpm exec playwright install chromium
+```
+
+Configure the Browser Mode test files and provider. Keep the `include` pattern narrow so these tests are clearly separate from the rest of a test suite:
+
+```ts
+// vitest.config.ts
+import { playwright } from "@vitest/browser-playwright";
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  test: {
+    include: ["src/**/*.browser.test.{ts,tsx}"],
+    browser: {
+      enabled: true,
+      provider: playwright(),
+      instances: [{ browser: "chromium" }],
+    },
+  },
+});
+```
+
+Run the browser tests with your normal Vitest command. For CI, add `headless: true` inside `browser`; Vitest otherwise opens its browser UI during local development.
+
+If the repository also has deterministic DOM tests, add Browser Mode as one named project. The [testing overview](/testing) shows how to choose the right layer; its project layout is intentionally kept out of this page.
+
+## Test a real scroll transition
+
+Use [Vitest's React Browser API](https://vitest.dev/api/browser/react) to render React components and make retriable assertions in the browser. This example proves both sides of the interaction: the target begins outside the viewport, then becomes visible only after native scrolling changes the real layout.
+
+```tsx
+import { render } from "vitest-browser-react";
+import { expect, test } from "vitest";
+import { useInView } from "react-intersection-observer";
+
+function RevealOnScroll() {
+  const [ref, inView] = useInView();
+
+  return (
+    <div ref={ref} data-inview={inView} style={{ height: 200 }}>
+      Observed target
+    </div>
+  );
+}
+
+test("updates when the target scrolls into the viewport", async () => {
+  const screen = render(
+    <>
+      <div style={{ height: window.innerHeight }} />
+      <RevealOnScroll />
+      <div style={{ height: window.innerHeight }} />
+    </>,
+  );
+
+  const target = screen.getByText("Observed target");
+
+  await expect.element(target).toHaveAttribute("data-inview", "false");
+
+  window.scrollTo(0, window.innerHeight);
+
+  // Native IntersectionObserver delivery follows the scroll asynchronously.
+  await expect.element(target).toHaveAttribute("data-inview", "true");
+});
+```
+
+`expect.element` retries in the browser, so the final assertion waits for the observer callback instead of relying on arbitrary timers.
+
+## Keep the native observer native
+
+Do not import `react-intersection-observer/test-utils` in Browser Mode setup. Its mock replaces the browser API, so the test would no longer prove scrolling, layout, or native observer delivery.
+
+For a callback or threshold branch that does not need physical geometry, use [mock intersections](/testing/mocking-intersections). That guide covers `happy-dom`, `jsdom`, Jest, Vitest, and the mock's automatic or manual setup.

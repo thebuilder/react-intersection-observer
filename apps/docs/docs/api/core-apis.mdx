@@ -1,0 +1,155 @@
+---
+title: Core APIs
+description: Choose and use the three React APIs for observing elements.
+---
+
+`react-intersection-observer` exposes two hooks and one component. They all use the same observer options, but they express visibility in different ways.
+
+| API | Use it when | What it returns |
+| --- | --- | --- |
+| `useInView` | Visibility affects rendered output. | A callback `ref`, `inView`, and the latest `entry`. |
+| `useOnInView` | You need an effect without a hook-owned state update. | A callback `ref` and your `(inView, entry)` callback. |
+| `<InView>` | Render props or a wrapper component fit the composition. | Render-prop fields, or a generated wrapper for plain children. |
+
+When `initialInView` is omitted, all three APIs ignore the observer's initial `false` notification. Supplying `initialInView`—including `false`—defines the initial state and allows the first matching notification through. Later enter and leave transitions report both `true` and `false`.
+
+## Common configuration choices
+
+- [Load or reveal once](/api/configuration#stop-pause-or-choose-a-callback-api) with `triggerOnce`.
+- [Start work before the target reaches the viewport](/api/configuration#choose-when-it-counts-as-visible) with `rootMargin`.
+- [Require a meaningful amount of content to be visible](/api/configuration#choose-when-it-counts-as-visible) with `threshold`.
+- [Observe inside a scrolling container](/api/configuration#choose-where-to-observe) with `root`.
+- Use [`useOnInView`](#useoninview) for analytics or prefetching that should not create a hook-owned re-render.
+
+## `useInView`
+
+Use `useInView` when visibility belongs in React state:
+
+```tsx
+import { useInView } from "react-intersection-observer";
+
+export function ArticleSection() {
+  const { ref, inView, entry } = useInView({
+    threshold: 0.5,
+    triggerOnce: true,
+  });
+
+  return (
+    <section ref={ref} aria-busy={!inView}>
+      <h2>{inView ? "Reading now" : "Not visible yet"}</h2>
+      <small>
+        {entry ? `Ratio: ${entry.intersectionRatio}` : "Waiting for the observer"}
+      </small>
+    </section>
+  );
+}
+```
+
+The hook supports both object and tuple destructuring:
+
+```tsx
+const { ref, inView, entry } = useInView();
+const [ref, inView, entry] = useInView();
+```
+
+`entry` is `undefined` until an observer notification has been accepted. It is the latest [`IntersectionObserverEntry`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry), so use it for details such as `intersectionRatio`, `boundingClientRect`, or `target`.
+
+### `onChange`
+
+`useInView` can call `onChange` alongside its state update:
+
+```tsx
+const { ref, inView } = useInView({
+  onChange(nextInView, entry) {
+    console.log(entry.target, nextInView);
+  },
+});
+```
+
+Use `useOnInView` when the callback is the primary result and you do not need the state update.
+
+## `useOnInView`
+
+`useOnInView` returns a ref callback and does not update component state when visibility changes. It is a good fit for analytics, logging, prefetching, or other effects that should not cause a render:
+
+```tsx
+import { useOnInView } from "react-intersection-observer";
+
+export function TrackedCard({ id }: { id: string }) {
+  const ref = useOnInView(
+    (inView, entry) => {
+      if (inView) {
+        analytics.track("card_visible", { id, target: entry.target });
+      }
+    },
+    { threshold: 0.5, triggerOnce: true },
+  );
+
+  return <article ref={ref}>Card {id}</article>;
+}
+```
+
+The callback receives `(inView, entry)`. `useOnInView` accepts observer options that affect observation, including `root`, `rootMargin`, `scrollMargin`, `threshold`, `triggerOnce`, `skip`, `trackVisibility`, and `delay`. It does not accept `onChange`, `initialInView`, or `fallbackInView`.
+
+## `<InView>`
+
+Use render props when the component should receive the ref and visibility state directly:
+
+```tsx
+import { InView } from "react-intersection-observer";
+
+export function RevealCard() {
+  return (
+    <InView threshold={0.2} triggerOnce>
+      {({ ref, inView, entry }) => (
+        <article ref={ref} className={inView ? "card visible" : "card"}>
+          <h2>Card</h2>
+          <p>{entry ? "The observer has reported" : "Waiting"}</p>
+        </article>
+      )}
+    </InView>
+  );
+}
+```
+
+Render-prop fields are `{ ref, inView, entry }`. The `ref` must be attached to the element you want to observe.
+
+### Plain children
+
+Plain children are always rendered. In this form `<InView>` creates a wrapper element, forwards additional HTML props to that wrapper, and observes it:
+
+```tsx
+<InView as="section" className="article" onChange={handleChange}>
+  <h2>Always-rendered content</h2>
+</InView>
+```
+
+Use `as` to keep the generated wrapper semantic. Plain-child mode does not support ref forwarding; use render props or `useInView` when you need direct control of the observed element or a custom component ref.
+
+## Low-level `observe`
+
+The three APIs above are the React surface. When you already own a DOM element outside React rendering, use the low-level `observe` function and always keep its cleanup function:
+
+```ts
+import { observe } from "react-intersection-observer";
+
+const stop = observe(
+  element,
+  (inView, entry) => {
+    console.log(inView, entry.intersectionRatio);
+  },
+  { threshold: 0.5 },
+);
+
+// Call this when the element is no longer relevant.
+stop();
+```
+
+## Shared behavior
+
+- `triggerOnce` stops observing after the first accepted `true` transition.
+- `skip` disables observation while preserving the current state.
+- When an observed node is removed and later replaced, the hook resets to `initialInView` unless `triggerOnce` or `skip` prevents that reset.
+- The latest `entry` may be `undefined` before the first accepted notification or after an observed node is reset.
+
+See [Configuration](/api/configuration) for every option and [Testing](/testing) for deterministic observer transitions.

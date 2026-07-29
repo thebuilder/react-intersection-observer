@@ -1,0 +1,57 @@
+---
+title: SSR and fallbacks
+description: Separate server-rendered state, unsupported browsers, hydration, and application fallback policy.
+---
+
+Intersection Observer is only available in a browser. Server rendering and an unsupported client are related situations, but they are not identical:
+
+- **Server rendering** needs markup before a browser exists. `initialInView` does not create an observer or guarantee that the target is visible.
+- **Hydration** attaches the observer after the browser takes over. The first client notification can change the state.
+- **Unsupported clients** have a browser environment but no `IntersectionObserver` implementation. A client without IntersectionObserver throws unless a fallback is configured.
+- **Fallback scope** is deliberate: fallbackInView is the local fallback and defaultFallbackInView is the global policy.
+
+## Before deploy: initial state, hydration, and fallbacks
+
+Decide the initial render, hydration, and fallback policy as a set. `initialInView` controls the state rendered before the first observer notification; it does not create an observer or guarantee that the target is visible. Hydration attaches the observer after the browser takes over, so the first client notification can change the rendered state. A client without `IntersectionObserver` throws unless a fallback is configured. `fallbackInView` sets a local fallback, while `defaultFallbackInView` sets a global policy.
+
+## Choose the initial policy
+
+Use `initialInView` when you know how a component should render before the first observer notification:
+
+```tsx
+const { ref, inView } = useInView({
+  initialInView: true,
+});
+```
+
+This is useful when above-the-fold content should begin in its visible state. It only controls the pre-observer render; it does not create an observer or guarantee that the target is visible.
+
+## Fallback for unsupported clients
+
+If the observer API is unavailable, the default behavior is to throw. Set a local fallback when the policy belongs to one component:
+
+```tsx
+const { ref, inView } = useInView({
+  fallbackInView: false,
+});
+```
+
+Set a global policy when the whole application should behave consistently:
+
+```ts
+import { defaultFallbackInView } from "react-intersection-observer";
+
+defaultFallbackInView(false);
+```
+
+Use `true` when content should be treated as visible even without observation. Use `false` when visibility should remain conservative and lazy work must not start automatically. Whichever value you choose, make sure the resulting behavior is safe for every observer in the application; a global fallback affects all instances that do not provide their own value.
+
+fallbackInView is the local fallback for one hook or component. defaultFallbackInView is the global policy for every instance that does not provide its own fallback.
+
+## Hydration considerations
+
+Hydration attaches the observer after the browser takes over. `initialInView` only controls the pre-observer render: it does not create an observer or guarantee the target is visible. A client without IntersectionObserver throws unless a fallback is configured.
+
+Avoid using an observer fallback as a substitute for a loading strategy. If the server renders hidden content and the client immediately renders visible content, reserve layout space and keep the change accessible. For images, provide dimensions and consider native `loading="lazy"`; for important content, ensure it remains available when observation is unavailable.
+
+`entry` is `undefined` until an accepted observer notification exists. Do not read geometry from it during the server render.
