@@ -27,7 +27,7 @@ jobs:
       - name: Lint
         run: pnpm biome ci .
       - name: Test
-        run: pnpm --filter react-intersection-observer vitest --coverage
+        run: pnpm --filter react-intersection-observer exec vitest --coverage
         env:
           CI: true
       - name: Fallow audit
