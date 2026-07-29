@@ -63,7 +63,7 @@ function RevealOnScroll() {
 }
 
 test("updates when the target scrolls into the viewport", async () => {
-  const screen = render(
+  const screen = await render(
     <>
       <div style={{ height: window.innerHeight }} />
       <RevealOnScroll />

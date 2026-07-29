@@ -15,7 +15,6 @@ function LiveObserverDemo() {
   const [threshold, setThreshold] = useState<(typeof thresholds)[number]>(0.5);
   const { entry, inView, ref } = useInView({
     root,
-    rootMargin: "0px 0px -16px",
     threshold,
   });
   const ratio = entry?.intersectionRatio.toFixed(2) ?? "—";
@@ -32,13 +31,6 @@ function LiveObserverDemo() {
         overflow: "hidden",
       }}
     >
-      <style>{`
-        @container (max-width: 31rem) {
-          .observer-demo-controls {
-            order: -1;
-          }
-        }
-      `}</style>
       <div
         style={{
           alignItems: "center",
@@ -50,28 +42,9 @@ function LiveObserverDemo() {
         }}
       >
         <div>
-          <div
-            style={{
-              color: "var(--blume-accent)",
-              fontSize: "0.75rem",
-              fontWeight: 700,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-            }}
-          >
-            Live observer signal
-          </div>
           <strong style={{ fontSize: "1.125rem" }}>
-            Reveal a rich card as it enters the feed
+            See when an element becomes visible
           </strong>
-          <p
-            style={{
-              color: "var(--color-muted-foreground)",
-              margin: "0.35rem 0 0",
-            }}
-          >
-            1. Choose a trigger point. 2. Scroll the feed.
-          </p>
         </div>
         <button
           onClick={() => root?.scrollTo({ behavior: "smooth", top: 0 })}
@@ -93,9 +66,7 @@ function LiveObserverDemo() {
       </div>
 
       <div
-        className="observer-demo-workspace"
         style={{
-          containerType: "inline-size",
           display: "grid",
           gap: "1rem",
           gridTemplateColumns:
@@ -105,12 +76,12 @@ function LiveObserverDemo() {
       >
         <section
           aria-label="Scrollable feed. Scroll to reveal the feature card."
-          className="observer-demo-feed"
           ref={setRoot}
           style={{
             background:
               "color-mix(in srgb, var(--color-foreground) 3%, transparent)",
-            blockSize: "19rem",
+            alignSelf: "stretch",
+            minBlockSize: "19rem",
             border:
               "1px solid color-mix(in srgb, var(--color-foreground) 18%, transparent)",
             borderRadius: "0.75rem",
@@ -132,7 +103,7 @@ function LiveObserverDemo() {
               padding: "0.5rem 0.6rem",
             }}
           >
-            Step 2 · Scroll this feed to reveal the card ↓
+            Step 2 · Scroll this panel to reveal the observed card ↓
           </div>
           <FeedTeaser label="Design systems that travel" tone="warm" />
           <FeedTeaser label="A quiet note on shipping" tone="cool" />
@@ -249,7 +220,6 @@ function LiveObserverDemo() {
 
         <aside
           aria-live="polite"
-          className="observer-demo-controls"
           style={{
             alignContent: "start",
             background:
@@ -259,6 +229,7 @@ function LiveObserverDemo() {
             borderRadius: "0.75rem",
             display: "grid",
             gap: "1rem",
+            order: -1,
             padding: "1rem",
           }}
         >
@@ -354,6 +325,45 @@ function LiveObserverDemo() {
             <Signal label="intersectionRatio" value={ratio} />
             <Signal label="trigger" value={`threshold ${threshold}`} />
             <Signal label="target" value="feature card" />
+          </div>
+
+          <div
+            style={{
+              borderTop:
+                "1px solid color-mix(in srgb, var(--color-foreground) 18%, transparent)",
+              display: "grid",
+              gap: "0.45rem",
+              paddingTop: "0.85rem",
+            }}
+          >
+            <span
+              style={{
+                color: "var(--color-muted-foreground)",
+                fontSize: "0.75rem",
+              }}
+            >
+              Hook setup
+            </span>
+            <code
+              style={{
+                background: "var(--color-background)",
+                border:
+                  "1px solid color-mix(in srgb, var(--color-foreground) 14%, transparent)",
+                borderRadius: "0.4rem",
+                fontSize: "0.75rem",
+                padding: "0.55rem 0.6rem",
+              }}
+            >
+              {`useInView({ root, threshold: ${threshold} })`}
+            </code>
+            <span
+              style={{
+                color: "var(--color-muted-foreground)",
+                fontSize: "0.75rem",
+              }}
+            >
+              The feed panel is this demo&apos;s custom root.
+            </span>
           </div>
         </aside>
       </div>

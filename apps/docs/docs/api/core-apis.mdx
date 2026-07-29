@@ -3,7 +3,7 @@ title: Core APIs
 description: Choose and use the three React APIs for observing elements.
 ---
 
-`react-intersection-observer` exposes two hooks and one component. They all use the same observer options, but they express visibility in different ways.
+`react-intersection-observer`'s primary React surface consists of two hooks and one component. They all use the same observer options, but they express visibility in different ways.
 
 | API | Use it when | What it returns |
 | --- | --- | --- |
@@ -11,7 +11,9 @@ description: Choose and use the three React APIs for observing elements.
 | `useOnInView` | You need an effect without a hook-owned state update. | A callback `ref` and your `(inView, entry)` callback. |
 | `<InView>` | Render props or a wrapper component fit the composition. | Render-prop fields, or a generated wrapper for plain children. |
 
-When `initialInView` is omitted, all three APIs ignore the observer's initial `false` notification. Supplying `initialInView`—including `false`—defines the initial state and allows the first matching notification through. Later enter and leave transitions report both `true` and `false`.
+> **Initial notification:** By default, the APIs suppress the observer's first `false` result. `initialInView` sets the starting state and changes how that first notification is handled. Later enter and leave transitions report both `true` and `false`.
+
+The package also exposes a low-level [`observe`](#low-level-observe) function for code that already owns a DOM element.
 
 ## Common configuration choices
 
@@ -29,19 +31,9 @@ Use `useInView` when visibility belongs in React state:
 import { useInView } from "react-intersection-observer";
 
 export function ArticleSection() {
-  const { ref, inView, entry } = useInView({
-    threshold: 0.5,
-    triggerOnce: true,
-  });
+  const { ref, inView } = useInView();
 
-  return (
-    <section ref={ref} aria-busy={!inView}>
-      <h2>{inView ? "Reading now" : "Not visible yet"}</h2>
-      <small>
-        {entry ? `Ratio: ${entry.intersectionRatio}` : "Waiting for the observer"}
-      </small>
-    </section>
-  );
+  return <section ref={ref}>{inView ? "In view" : "Waiting"}</section>;
 }
 ```
 
@@ -52,7 +44,7 @@ const { ref, inView, entry } = useInView();
 const [ref, inView, entry] = useInView();
 ```
 
-`entry` is `undefined` until an observer notification has been accepted. It is the latest [`IntersectionObserverEntry`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry), so use it for details such as `intersectionRatio`, `boundingClientRect`, or `target`.
+`entry` is `undefined` until an observer notification has been accepted. It is the latest [`IntersectionObserverEntry`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry), so use it for details such as `intersectionRatio`, `boundingClientRect`, or `target` when the UI needs geometry.
 
 ### `onChange`
 

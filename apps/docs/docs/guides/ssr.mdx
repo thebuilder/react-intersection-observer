@@ -3,16 +3,7 @@ title: SSR and fallbacks
 description: Separate server-rendered state, unsupported browsers, hydration, and application fallback policy.
 ---
 
-Intersection Observer is only available in a browser. Server rendering and an unsupported client are related situations, but they are not identical:
-
-- **Server rendering** needs markup before a browser exists. `initialInView` does not create an observer or guarantee that the target is visible.
-- **Hydration** attaches the observer after the browser takes over. The first client notification can change the state.
-- **Unsupported clients** have a browser environment but no `IntersectionObserver` implementation. A client without IntersectionObserver throws unless a fallback is configured.
-- **Fallback scope** is deliberate: fallbackInView is the local fallback and defaultFallbackInView is the global policy.
-
-## Before deploy: initial state, hydration, and fallbacks
-
-Decide the initial render, hydration, and fallback policy as a set. `initialInView` controls the state rendered before the first observer notification; it does not create an observer or guarantee that the target is visible. Hydration attaches the observer after the browser takes over, so the first client notification can change the rendered state. A client without `IntersectionObserver` throws unless a fallback is configured. `fallbackInView` sets a local fallback, while `defaultFallbackInView` sets a global policy.
+Intersection Observer is only available in a browser. Decide the server-rendered state, what may change after hydration, and how unsupported clients should behave together. `initialInView` controls the pre-observer render; it does not create an observer or guarantee that the target is visible. Hydration attaches the observer after the browser takes over, and a client without `IntersectionObserver` throws unless a fallback is configured. Use `fallbackInView` for one instance and `defaultFallbackInView` as an application-wide policy.
 
 ## Choose the initial policy
 

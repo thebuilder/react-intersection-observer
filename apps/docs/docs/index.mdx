@@ -8,12 +8,12 @@ sidebar:
 ---
 
 <p class="text-lg text-muted-foreground">
-  <a href="https://github.com/thebuilder/react-intersection-observer" rel="noreferrer" target="_blank">react-intersection-observer</a> turns the native browser API into a small React primitive for state, effects, and component composition.
+  A React implementation of the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API">Intersection Observer API</a> that tells you when an element enters or leaves the viewport. Use <a href="/api/core-apis#useinview">hooks</a> for React state or effects, or <a href="/api/core-apis#inview">&lt;InView&gt;</a> for render props and plain children.
 </p>
 
 [Try the live demo ↓](#see-it-work)
 
-## Start with one hook
+## Start simple
 
 ```package-install
 react-intersection-observer
@@ -29,43 +29,36 @@ export function Section() {
 }
 ```
 
-Attach `ref` to an element and use `inView` in the render. By default, the browser viewport is the root and any intersection changes the state. Configure a threshold, margin, or custom root when that default is not enough.
+Attach `ref` to an element and use `inView` in the render. By default, the browser viewport is the root and any intersection changes the state. Configure a threshold, margin, or custom root only when that default is not enough.
 
 When you need geometry, `entry` is the latest observer result; it is `undefined` until the browser accepts a notification.
 
 ## See it work
 
-Change the threshold, then scroll the small viewport. This is the same `useInView` contract as the example above: a ref goes on the target, and visibility becomes React state.
+The basic hook above uses the browser viewport. This demo adds a custom scroll root and a threshold so you can see how options change the same `inView` state.
 
 <ObserverDemo />
 
-## Choose the shape that fits
+## Choose an API
 
-<CardGroup cols={3}>
-  <Card title="Observe UI state" href="/api/core-apis#useinview" icon="eye">
-    Use `useInView` when visibility changes what the component renders.
-  </Card>
-  <Card title="Run a side effect" href="/api/core-apis#useoninview" icon="zap">
-    Use `useOnInView` for impressions, prefetching, and analytics without a hook-owned re-render.
-  </Card>
-  <Card title="Use a component" href="/api/core-apis#inview" icon="component">
-    Use `<InView>` when a render prop or wrapper is the clearest composition.
-  </Card>
-</CardGroup>
+| When you need to | Use | Why |
+| --- | --- | --- |
+| Change what a component renders | [`useInView`](/api/core-apis#useinview) | Returns a `ref`, `inView`, and the latest `entry`. |
+| Run an impression, prefetch, or analytics callback | [`useOnInView`](/api/core-apis#useoninview) | Calls your callback without a hook-owned state update. |
+| Keep observation close to render props or a wrapper | [`<InView>`](/api/core-apis#inview) | Provides render props and supports plain children. |
+
+## Built for production React
+
+
+- **Native and efficient.** Familiar browser options and shared observer instances keep many observed elements inexpensive.
+- **Typed and composable.** Hooks, components, options, and observer entries are typed without another package.
+- **Testable at the right layer.** Use deterministic utilities for transitions and [Browser Mode](/testing/browser-mode) for real browser behavior.
+- **Focused exports.** Tree shaking keeps the client footprint limited to the APIs you import.
 
 ## Common next steps
 
-<CardGroup cols={2}>
-  <Card title="Tune when it triggers" href="/api/configuration#choose-when-it-counts-as-visible" icon="sliders-horizontal">
-    Set a threshold, preload with `rootMargin`, or account for nested scrollers.
-  </Card>
-  <Card title="Build a common pattern" href="/guides/recipes" icon="sparkles">
-    Lazy-load images, reveal content, track impressions, or paginate a list.
-  </Card>
-  <Card title="Test the behavior" href="/testing" icon="check">
-    Use Browser Mode for real browser behavior and mocks for deterministic transitions.
-  </Card>
-  <Card title="Handle SSR and fallbacks" href="/guides/ssr" icon="server">
-    Choose initial and unsupported-client behavior deliberately.
-  </Card>
-</CardGroup>
+- [**Core APIs**](/api/core-apis) — learn the full contracts and return values.
+- [**Observer options**](/api/configuration) — tune thresholds, margins, and scroll containers.
+- [**Recipes**](/guides/recipes) — build lazy loading, reveals, impressions, and infinite lists.
+
+For verification, see [Testing](/testing); for server-rendered apps, see [SSR and fallbacks](/guides/ssr).
