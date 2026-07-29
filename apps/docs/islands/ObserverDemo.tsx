@@ -84,6 +84,8 @@ function LiveObserverDemo() {
           <FeedTeaser label="A quiet note on shipping" tone="cool" />
           <FeedTeaser label="Small details, deliberately timed" tone="warm" />
           <FeedTeaser label="A scroll worth observing" tone="cool" />
+          <FeedTeaser label="A detail worth loading" tone="warm" />
+          <FeedTeaser label="One more thing to notice" tone="cool" />
 
           <article
             ref={ref}
@@ -191,6 +193,8 @@ function LiveObserverDemo() {
           </article>
 
           <FeedTeaser label="Where interaction begins" tone="cool" />
+          <FeedTeaser label="A follow-up for the reader" tone="warm" />
+          <FeedTeaser label="The next item is already waiting" tone="cool" />
         </section>
 
         <aside
