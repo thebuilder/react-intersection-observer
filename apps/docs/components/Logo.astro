@@ -1,4 +1,6 @@
 ---
+import mobileLogoSvg from "./logo-text.svg?raw";
+
 interface LogoData {
   alt: string;
   dark?: string;
@@ -22,14 +24,17 @@ const logoDark = logo?.dark ?? logo?.light;
 ---
 
 <a
-  class="inline-flex min-w-0 items-center gap-2 font-semibold text-base text-foreground"
+  aria-label={brandText}
+  class="inline-flex items-center font-semibold text-base text-foreground"
+  data-docs-logo
   href={brandHref}
 >
   {
     logoSvg && (
       <span
         aria-hidden="true"
-        class="hidden h-5 shrink-0 items-center md:inline-flex [&>svg]:h-5 [&>svg]:w-auto"
+        class="hidden h-8 shrink-0 items-center md:inline-flex [&>svg]:h-8 [&>svg]:w-auto"
+        data-docs-logo-graphic
         set:html={logoSvg}
       />
     )
@@ -38,14 +43,24 @@ const logoDark = logo?.dark ?? logo?.light;
     !logoSvg &&
       logoLight &&
       (logoLight === logoDark ? (
-        <img alt={logo?.alt ?? ""} class="hidden h-5 w-auto md:block" src={logoLight} />
+        <img alt={logo?.alt ?? ""} class="hidden h-8 w-auto md:block" src={logoLight} />
       ) : (
         <>
-          <img alt={logo?.alt ?? ""} class="hidden h-5 w-auto dark:hidden md:block" src={logoLight} />
-          <img alt={logo?.alt ?? ""} class="hidden h-5 w-auto dark:md:block" src={logoDark} />
+          <img alt={logo?.alt ?? ""} class="hidden h-8 w-auto dark:hidden md:block" src={logoLight} />
+          <img alt={logo?.alt ?? ""} class="hidden h-8 w-auto dark:md:block" src={logoDark} />
         </>
       ))
   }
-  {brandText && <span class="hidden truncate md:inline">{brandText}</span>}
-  <span class="truncate md:hidden">Intersection Observer</span>
+  {
+    logoSvg ? (
+      <span
+        aria-hidden="true"
+        class="hidden h-8 shrink-0 items-center md:hidden [&>svg]:h-8 [&>svg]:w-auto"
+        data-docs-logo-mobile
+        set:html={mobileLogoSvg}
+      />
+    ) : (
+      <span class="whitespace-nowrap md:hidden">{brandText}</span>
+    )
+  }
 </a>
