@@ -23,18 +23,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       - name: Install playwright
-        run: pnpm exec playwright install
+        run: pnpm --filter react-intersection-observer exec playwright install
       - name: Lint
         run: pnpm biome ci .
       - name: Test
-        run: pnpm vitest --coverage
+        run: pnpm --filter react-intersection-observer exec vitest --coverage
         env:
           CI: true
       - name: Fallow audit
         if: github.event_name == 'pull_request'
-        run: pnpm fallow audit --base "origin/${{ github.base_ref }}"
+        run: pnpm fallow audit --base "origin/${{ github.base_ref }}" --coverage packages/react-intersection-observer/coverage/coverage-final.json
       - name: Build
-        run: pnpm build
+        run: pnpm build:all
 
   test_matrix:
     runs-on: ubuntu-latest
@@ -58,19 +58,19 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Install legacy testing-library
         if: ${{  startsWith(matrix.react, '17') }}
-        run: pnpm add -D @testing-library/react@12.1.4
+        run: pnpm --filter react-intersection-observer add -D @testing-library/react@12.1.4
       - name: Install React types
-        run: pnpm add -D @types/react@${{ matrix.react }} @types/react-dom@${{ matrix.react }}
+        run: pnpm --filter react-intersection-observer add -D @types/react@${{ matrix.react }} @types/react-dom@${{ matrix.react }}
       - name: Install ${{ matrix.react }}
-        run: pnpm add -D react@${{ matrix.react }} react-dom@${{ matrix.react }}
+        run: pnpm --filter react-intersection-observer add -D react@${{ matrix.react }} react-dom@${{ matrix.react }}
       - name: Validate types
-        run: pnpm tsc
+        run: pnpm --filter react-intersection-observer typecheck
       - name: Build package
         run: pnpm build
       - name: Test packed package
         if: ${{ matrix.react != 'latest' }}
-        run: pnpm run compat:packed -- ${{ matrix.react }}
+        run: pnpm --filter react-intersection-observer run compat:packed -- ${{ matrix.react }}
       - name: Run test
         run: |
-          pnpm exec playwright install
-          pnpm test
+          pnpm --filter react-intersection-observer exec playwright install
+          pnpm --filter react-intersection-observer test

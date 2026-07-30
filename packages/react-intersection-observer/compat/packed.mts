@@ -11,13 +11,10 @@ type RepositoryPackage = {
 };
 
 const exec = promisify(execFile);
-const repositoryRoot = resolve(
-  dirname(fileURLToPath(import.meta.url)),
-  "../..",
-);
-const fixtureRoot = join(repositoryRoot, "fixtures/react-compat");
+const packageRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const fixtureRoot = join(packageRoot, "fixtures/react-compat");
 const repositoryPackage = JSON.parse(
-  await readFile(join(repositoryRoot, "package.json"), "utf8"),
+  await readFile(join(packageRoot, "package.json"), "utf8"),
 ) as RepositoryPackage;
 const versions = {
   "17": "17.0.2",
@@ -48,7 +45,7 @@ try {
   const { stdout } = await exec(
     "pnpm",
     ["pack", "--pack-destination", packDirectory],
-    { cwd: repositoryRoot },
+    { cwd: packageRoot },
   );
   const tarballName = stdout.trim().split("\n").at(-1);
 

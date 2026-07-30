@@ -18,4 +18,4 @@ jobs:
       - name: Build
         run: pnpm build
       - name: Publish preview package
-        run: pnpx pkg-pr-new publish --no-template
+        run: pnpm --filter react-intersection-observer preview

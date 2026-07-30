@@ -18,5 +18,5 @@
     "listEmittedFiles": true,
     "noEmit": true
   },
-  "exclude": ["dist", "storybook"]
+  "exclude": ["dist", "lib", "test-utils"]
 }

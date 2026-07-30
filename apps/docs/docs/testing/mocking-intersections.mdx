@@ -1,0 +1,123 @@
+---
+title: Mock intersections
+description: Drive deterministic observer callbacks and thresholds in Vitest, Jest, or another DOM-capable test runner.
+---
+
+Use `react-intersection-observer/test-utils` when the assertion is about a callback, state transition, or threshold branch—not physical layout. The utilities replace `window.IntersectionObserver`, remember the elements each mock observer is watching, and let a helper deliver controlled entries to the registered callback. The mocks exercise observer callbacks as well as state transitions.
+
+## Set up the mock
+
+Importing `test-utils` in a DOM test environment can set up the mock automatically. When the module finds global `beforeEach`, `afterEach`, and either `vi` or `jest`, it registers hooks: the `beforeEach` hook installs the observer mock with that runner's `fn`, and the `afterEach` hook clears mock calls and observed elements. Observed elements are reset between tests, not only mock calls. Put the import in a test setup file so every relevant test gets the same lifecycle.
+
+Install one DOM emulator for deterministic tests first. `happy-dom` is often faster; `jsdom` may be a better fit for an existing suite. Neither proves layout, scrolling, or native observer delivery.
+
+```bash
+pnpm add -D happy-dom
+# or: pnpm add -D jsdom
+```
+
+<CodeGroup>
+
+```ts Vitest
+// vitest.config.ts
+import { defineConfig } from "vitest/config";
+
+export default defineConfig({
+  test: {
+    globals: true,
+    environment: "happy-dom", // "jsdom" works too
+    setupFiles: ["./test/setup.ts"],
+  },
+});
+
+// test/setup.ts
+import "react-intersection-observer/test-utils";
+```
+
+```js Jest + jsdom
+// jest.config.js
+module.exports = {
+  testEnvironment: "jsdom",
+  setupFilesAfterEnv: ["react-intersection-observer/test-utils"],
+};
+```
+
+</CodeGroup>
+
+The mock is runner-agnostic: Jest is not coupled to `jsdom`, and Vitest can use either `jsdom` or `happy-dom`. In a mixed Vitest suite, isolate this setup in a `dom` project; do not inherit it into [Browser Mode](/testing/browser-mode) tests.
+
+### Manual setup without globals
+
+If your runner does not expose global test APIs—or you intentionally use imported APIs—register the lifecycle yourself. `setupIntersectionMocking` accepts the runner's mock factory; `resetIntersectionMocking` clears it after every test.
+
+<CodeGroup>
+
+```ts Vitest
+import { afterEach, beforeEach, vi } from "vitest";
+import {
+  resetIntersectionMocking,
+  setupIntersectionMocking,
+} from "react-intersection-observer/test-utils";
+
+beforeEach(() => setupIntersectionMocking(vi.fn));
+afterEach(resetIntersectionMocking);
+```
+
+```ts Jest
+import { afterEach, beforeEach, jest } from "@jest/globals";
+import {
+  resetIntersectionMocking,
+  setupIntersectionMocking,
+} from "react-intersection-observer/test-utils";
+
+beforeEach(() => setupIntersectionMocking(jest.fn));
+afterEach(resetIntersectionMocking);
+```
+
+</CodeGroup>
+
+## Drive a transition
+
+With either setup above in place, import a helper in the test and trigger the observer state you need:
+
+```tsx
+import { render } from "@testing-library/react";
+import { expect, test, vi } from "vitest";
+import { useOnInView } from "react-intersection-observer";
+import { mockAllIsIntersecting } from "react-intersection-observer/test-utils";
+
+function Probe({ onSeen }: { onSeen: (inView: boolean) => void }) {
+  const ref = useOnInView((inView) => onSeen(inView));
+  return <div ref={ref}>Observed</div>;
+}
+
+test("ignores the initial false notification", () => {
+  const onSeen = vi.fn();
+  render(<Probe onSeen={onSeen} />);
+
+  mockAllIsIntersecting(false);
+  expect(onSeen).not.toHaveBeenCalled();
+
+  mockAllIsIntersecting(true);
+  expect(onSeen).toHaveBeenCalledWith(true);
+});
+```
+
+Pass a boolean to enter or leave. A numeric value selects the configured thresholds the observer has crossed; it is not a physical layout ratio. The mock reports the highest crossed observer threshold as `entry.intersectionRatio`, so assert threshold behavior rather than raw geometry or an arbitrary percentage.
+
+Use the same deterministic transition examples in Vitest and Jest. Reach for [Browser Mode](/testing/browser-mode) when a test must prove real browser behavior.
+
+## Utilities
+
+| Utility | Use |
+| --- | --- |
+| `mockAllIsIntersecting(value)` | Trigger every observed element. |
+| `mockIsIntersecting(element, value)` | Trigger one observed element. |
+| `intersectionMockInstance(element)` | Inspect the mock observer for an element. |
+| `setupIntersectionMocking(mockFn)` | Install the mock yourself with `vi.fn`, `jest.fn`, or a compatible factory. |
+| `resetIntersectionMocking()` | Clear observed elements and mock calls between tests. |
+| `destroyIntersectionMocking()` | Restore the native observer after mocking it. |
+
+:::note
+The mock can exercise a `trackVisibility` fallback branch, but cannot prove actual v2 occlusion. Treat that API as experimental and verify it in a supported browser if your product depends on it.
+:::

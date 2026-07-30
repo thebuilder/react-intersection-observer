@@ -1,0 +1,53 @@
+---
+title: Observer v2
+description: Use trackVisibility only when intersection alone is insufficient and you accept narrower browser support.
+sidebar:
+  label: Observer v2
+  badge: Experimental
+---
+
+Most applications should use the standard `inView` signal. Intersection Observer v2 adds `trackVisibility` and `entry.isVisible` for specialised viewability cases where an intersecting element may be covered or visually compromised.
+
+## Enable visibility tracking
+
+Set `trackVisibility: true` and a `delay` of at least `100` milliseconds:
+
+```tsx
+import { useOnInView } from "react-intersection-observer";
+
+declare global {
+  interface IntersectionObserverEntry {
+    isVisible?: boolean;
+  }
+}
+
+export function Viewability({ onSeen }: { onSeen: () => void }) {
+  const ref = useOnInView(
+    (inView, entry) => {
+      if (inView && entry.isVisible === true) onSeen();
+    },
+    {
+      trackVisibility: true,
+      delay: 100,
+      threshold: 0.5,
+      triggerOnce: true,
+    },
+  );
+
+  return <div ref={ref}>Measured content</div>;
+}
+```
+
+`isVisible` is not yet part of TypeScript's standard `IntersectionObserverEntry` declaration, so add the augmentation once in application types before reading it. The option is available on all three public APIs. With `useOnInView`, inspect `entry.isVisible` inside the callback; with `<InView>`, inspect it from the render-prop `entry` or `onChange` callback.
+
+## Support and fallback behavior
+
+Support for v2 is narrower than support for the original Intersection Observer API. When the browser exposes Intersection Observer but does not provide `isVisible`, this package falls back to v1 behavior and sets `entry.isVisible` to the calculated intersection state. Treat that value as an approximation in unsupported browsers.
+
+If the entire `IntersectionObserver` API is unavailable, use `fallbackInView` or `defaultFallbackInView` as described in [Configuration](/api/configuration). These are separate concerns: v2 fallback covers a missing visibility field, while `fallbackInView` covers a missing observer API.
+
+## Test it deliberately
+
+Use a real browser when verifying geometry, clipping, or actual occlusion. The package mock can exercise the v1 fallback branch, but it cannot simulate an intersecting element being covered. For deterministic callback and threshold tests, assert the application behavior you need rather than actual occlusion.
+
+Keep the minimum delay explicit in shared configuration so a future browser or package update does not silently make the observer invalid. The package mock can exercise your callback branch, but it cannot prove real occlusion.

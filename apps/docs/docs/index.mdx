@@ -1,0 +1,64 @@
+---
+title: Overview
+seo:
+  description: React hooks and components that tell you when an element enters or leaves the viewport or a scroll container.
+sidebar:
+  label: Overview
+  order: 0
+---
+
+<p class="text-lg text-muted-foreground">
+  A React implementation of the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API">Intersection Observer API</a> that tells you when an element enters or leaves the viewport. Use <a href="/api/core-apis#useinview">hooks</a> for React state or effects, or <a href="/api/core-apis#inview">&lt;InView&gt;</a> for render props and plain children.
+</p>
+
+Use it to [lazy-load content](/guides/recipes#lazy-image-loading), trigger [scroll-based animations](/guides/recipes#scroll-triggered-animation), [track impressions](/guides/recipes#track-an-impression), prefetch data, highlight visible sections, and [load more results](/guides/recipes#infinite-scrolling).
+
+## Start simple
+
+```package-install
+react-intersection-observer
+```
+
+```tsx
+import { useInView } from "react-intersection-observer";
+
+export function Section() {
+  const { ref, inView } = useInView();
+
+  return <section ref={ref}>{inView ? "In view" : "Waiting"}</section>;
+}
+```
+
+Attach `ref` to an element and use `inView` in the render. By default, the browser viewport is the root and any intersection changes the state. Configure a threshold, margin, or custom root only when that default is not enough.
+
+When you need geometry, `entry` is the latest observer result; it is `undefined` until the browser accepts a notification.
+
+## Choose an API
+
+| When you need to | Use | Why |
+| --- | --- | --- |
+| Change what a component renders | [`useInView`](/api/core-apis#useinview) | Returns a `ref`, `inView`, and the latest `entry`. |
+| Run an impression, prefetch, or analytics callback | [`useOnInView`](/api/core-apis#useoninview) | Calls your callback without a hook-owned state update. |
+| Keep observation close to render props or a wrapper | [`<InView>`](/api/core-apis#inview) | Provides render props and supports plain children. |
+
+## See it work
+
+The basic hook above uses the browser viewport. This demo adds a custom scroll root and a threshold so you can see how options change the same `inView` state.
+
+<ObserverDemo />
+
+## Built for production React
+
+
+- **Native and efficient.** Familiar browser options and shared observer instances keep many observed elements inexpensive.
+- **Typed and composable.** Hooks, components, options, and observer entries are typed without another package.
+- **Testable at the right layer.** Use deterministic utilities for transitions and [Browser Mode](/testing/browser-mode) for real browser behavior.
+- **Focused exports.** Tree shaking keeps the client footprint limited to the APIs you import.
+
+## Common next steps
+
+- [**Core APIs**](/api/core-apis) — learn the full contracts and return values.
+- [**Observer options**](/api/configuration) — tune thresholds, margins, and scroll containers.
+- [**Recipes**](/guides/recipes) — build lazy loading, reveals, impressions, and infinite lists.
+
+For verification, see [Testing](/testing); for server-rendered apps, see [SSR and fallbacks](/guides/ssr).

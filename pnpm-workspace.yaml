@@ -1,6 +1,6 @@
 packages:
-  - storybook
-  - .
+  - apps/*
+  - packages/*
 onlyBuiltDependencies:
   - '@biomejs/biome'
   - esbuild

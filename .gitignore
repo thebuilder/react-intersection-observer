@@ -1,5 +1,8 @@
 .vscode
 .cache
+.turbo
+.blume
+.npm-cache
 node_modules
 reports
 example
@@ -21,3 +24,7 @@ test-utils.js
 test-utils.d.ts
 __screenshots__
 .fallow/
+.turbo
+.blume
+.npm-cache
+.blume-verify/

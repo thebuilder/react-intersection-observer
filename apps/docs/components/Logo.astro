@@ -1,0 +1,51 @@
+---
+interface LogoData {
+  alt: string;
+  dark?: string;
+  href: string;
+  light?: string;
+  svg?: string;
+  text?: string;
+}
+
+interface Props {
+  logo?: LogoData | null;
+  site: { title: string };
+}
+
+const { logo, site } = Astro.props;
+const brandHref = logo?.href ?? "/";
+const brandText = logo?.text ?? site.title;
+const logoSvg = logo?.svg;
+const logoLight = logo?.light;
+const logoDark = logo?.dark ?? logo?.light;
+---
+
+<a
+  class="inline-flex min-w-0 items-center gap-2 font-semibold text-base text-foreground"
+  href={brandHref}
+>
+  {
+    logoSvg && (
+      <span
+        aria-hidden="true"
+        class="hidden h-5 shrink-0 items-center md:inline-flex [&>svg]:h-5 [&>svg]:w-auto"
+        set:html={logoSvg}
+      />
+    )
+  }
+  {
+    !logoSvg &&
+      logoLight &&
+      (logoLight === logoDark ? (
+        <img alt={logo?.alt ?? ""} class="hidden h-5 w-auto md:block" src={logoLight} />
+      ) : (
+        <>
+          <img alt={logo?.alt ?? ""} class="hidden h-5 w-auto dark:hidden md:block" src={logoLight} />
+          <img alt={logo?.alt ?? ""} class="hidden h-5 w-auto dark:md:block" src={logoDark} />
+        </>
+      ))
+  }
+  {brandText && <span class="hidden truncate md:inline">{brandText}</span>}
+  <span class="truncate md:hidden">Intersection Observer</span>
+</a>

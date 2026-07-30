@@ -1,0 +1,20 @@
+{
+  "name": "docs",
+  "private": true,
+  "scripts": {
+    "dev": "blume dev",
+    "build": "ASTRO_TELEMETRY_DISABLED=1 blume build",
+    "lint": "biome check .",
+    "typecheck": "ASTRO_TELEMETRY_DISABLED=1 blume check",
+    "validate": "ASTRO_TELEMETRY_DISABLED=1 blume validate"
+  },
+  "dependencies": {
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-intersection-observer": "workspace:*"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.10",
+    "blume": "latest"
+  }
+}
