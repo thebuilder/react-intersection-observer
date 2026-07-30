@@ -7,7 +7,7 @@ export default defineConfig({
   description:
     "A lightweight React implementation of the Intersection Observer API.",
   logo: {
-    image: "/logo.svg",
+    image: "/logo-horizontal.svg",
   },
   analytics: {
     vercel: true,

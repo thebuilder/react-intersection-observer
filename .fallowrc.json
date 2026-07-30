@@ -3,6 +3,7 @@
   "entry": [
     "apps/docs/blume.config.ts",
     "apps/docs/components.ts",
+    "apps/docs/theme.css",
     "apps/docs/docs/**/*.mdx",
     "apps/docs/docs/**/meta.ts",
     "apps/docs/islands/ObserverDemo.tsx",

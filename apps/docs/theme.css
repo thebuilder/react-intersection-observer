@@ -1,0 +1,19 @@
+@media (max-width: 29.999rem) {
+  [data-blume-header] > .flex.items-center.gap-2 {
+    display: none;
+  }
+
+  [data-docs-logo] {
+    flex: none;
+  }
+
+  [data-docs-logo-mobile] {
+    display: inline-flex;
+  }
+}
+
+@media (min-width: 30rem) and (max-width: 47.999rem) {
+  [data-docs-logo-graphic] {
+    display: inline-flex;
+  }
+}
