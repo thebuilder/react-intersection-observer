@@ -13,7 +13,7 @@
     "pretty": true,
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "downlevelIteration": true,
+    "ignoreDeprecations": "6.0",
     "skipLibCheck": true,
     "listEmittedFiles": true,
     "noEmit": true
