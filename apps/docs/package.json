@@ -9,12 +9,12 @@
     "validate": "ASTRO_TELEMETRY_DISABLED=1 blume validate"
   },
   "dependencies": {
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "react-intersection-observer": "workspace:*"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.10",
-    "blume": "latest"
+    "@biomejs/biome": "^2.5.6",
+    "blume": "^1.2.1"
   }
 }
