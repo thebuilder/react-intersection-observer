@@ -24,8 +24,7 @@ to tell you when an element enters or leaves the viewport. Contains [Hooks](#use
   [Jest](https://jestjs.io/) or [Vitest](https://vitest.dev/)
 - 🌳 **Tree-shakeable** - Only include the parts you use
 - 💥 **Tiny bundle** - Around **~1.15kB** for `useInView` and **~1.6kB** for
-  `<InView>` ![useInView](https://img.shields.io/bundlejs/size/react-intersection-observer?exports=useInView&externals=react&format=both&label=useInView) ![InView](https://img.shields.io/bundlejs/size/react-intersection-observer?exports=InView&externals=react&format=both&label=InView)
- ![useOnInView](https://img.shields.io/bundlejs/size/react-intersection-observer?exports=useOnInView&externals=react&format=both&label=useOnInView)
+  `<InView>`
 
 [![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/thebuilder/react-intersection-observer)
 
