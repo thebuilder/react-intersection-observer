@@ -1,10 +1,12 @@
 import { addons } from "storybook/manager-api";
-import { themes } from "storybook/theming";
+import docsLogo from "../../docs/public/logo-horizontal.svg";
+import { storybookTheme } from "./theme";
 
 addons.setConfig({
   theme: {
-    ...themes.dark,
-    brandTitle: "React IntersectionObserver",
-    brandUrl: "https://github.com/thebuilder/react-intersection-observer",
+    ...storybookTheme,
+    brandImage: docsLogo,
+    brandTitle: "React Intersection Observer",
+    brandUrl: "https://react-intersection-observer.vercel.app/",
   },
 });

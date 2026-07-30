@@ -1,14 +1,12 @@
-import { themes } from "storybook/theming";
+import { storybookTheme } from "./theme";
 import "../styles.css";
 
 export const parameters = {
   controls: {
     expanded: true,
   },
-  theme: {
-    ...themes.dark,
-  },
+  theme: storybookTheme,
   docs: {
-    theme: themes.dark,
+    theme: storybookTheme,
   },
 };
