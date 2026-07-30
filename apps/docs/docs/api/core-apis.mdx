@@ -11,7 +11,9 @@ description: Choose and use the three React APIs for observing elements.
 | `useOnInView` | You need an effect without a hook-owned state update. | A callback `ref` and your `(inView, entry)` callback. |
 | `<InView>` | Render props or a wrapper component fit the composition. | Render-prop fields, or a generated wrapper for plain children. |
 
-> **Initial notification:** By default, the APIs suppress the observer's first `false` result. `initialInView` sets the starting state and changes how that first notification is handled. Later enter and leave transitions report both `true` and `false`.
+:::note[Initial notification]
+By default, the APIs suppress the observer's first `false` result. `initialInView` sets the starting state and changes how that first notification is handled. Later enter and leave transitions report both `true` and `false`.
+:::
 
 The package also exposes a low-level [`observe`](#low-level-observe) function for code that already owns a DOM element.
 
