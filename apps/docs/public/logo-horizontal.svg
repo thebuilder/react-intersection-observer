@@ -4,6 +4,11 @@
   <style>
     path[stroke="#000"] { stroke: currentColor; }
     path[fill="#1a1a1a"] { fill: currentColor; }
+
+    @media (prefers-color-scheme: dark) {
+      path[stroke="#000"] { stroke: #f5f3ff; }
+      path[fill="#1a1a1a"] { fill: #f5f3ff; }
+    }
   </style>
   <path stroke="#000" stroke-linecap="round" stroke-width="4" d="M5.25 21v-9.75c0-3.3 2.7-6 6-6h9m7.5 0h9c3.3 0 6 2.7 6 6v6m-37.5 10.5v9c0 3.3 2.7 6 6 6h6"/>
   <path fill="url(#a)" d="M37.5 22.5h-9a6 6 0 0 0-6 6v9a6 6 0 0 0 6 6h9a6 6 0 0 0 6-6v-9a6 6 0 0 0-6-6"/>

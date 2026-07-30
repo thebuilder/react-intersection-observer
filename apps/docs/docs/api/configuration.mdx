@@ -55,7 +55,9 @@ export function ScrollArea() {
 
 The root must be an ancestor of the target. `scrollMargin` is not a substitute for `rootMargin`: it expands or contracts the clipping rectangles of **nested** scroll containers inside the root. Use it when an inner scroller clips the target, for example `useInView({ root, scrollMargin: "80px 0px" })`. Invalid margin syntax, invalid thresholds, iframes, and custom roots can all change what the browser considers visible.
 
-> **Verify configuration:** Test real layout, scrolling, and geometry in [Vitest Browser Mode](/testing/browser-mode). Use a deterministic mock to cross a configured threshold without relying on layout; see [Mock intersections](/testing/mocking-intersections).
+:::note[Verify configuration]
+Test real layout, scrolling, and geometry in [Vitest Browser Mode](/testing/browser-mode). Use a deterministic mock to cross a configured threshold without relying on layout; see [Mock intersections](/testing/mocking-intersections).
+:::
 
 ## Stop, pause, or choose a callback API
 

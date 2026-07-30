@@ -12,6 +12,14 @@
   }
 }
 
+[data-docs-logo] path[stroke="#000"] {
+  stroke: currentColor;
+}
+
+[data-docs-logo] path[fill="#1a1a1a"] {
+  fill: currentColor;
+}
+
 @media (min-width: 30rem) and (max-width: 47.999rem) {
   [data-docs-logo-graphic] {
     display: inline-flex;
