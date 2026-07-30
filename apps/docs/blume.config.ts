@@ -9,6 +9,9 @@ export default defineConfig({
   logo: {
     image: "/logo.svg",
   },
+  analytics: {
+    vercel: true,
+  },
   github: {
     owner: "thebuilder",
     repo: "react-intersection-observer",
