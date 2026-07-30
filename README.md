@@ -1,9 +1,11 @@
-# react-intersection-observer
+<h1>
+  <img src="apps/docs/public/logo-horizontal.svg" alt="React Intersection Observer" width="290" />
+</h1>
 
-[![Version Badge][npm-version-svg]][package-url]
-[![Test][test-image]][test-url]
-[![License][license-image]][license-url]
-[![Downloads][downloads-image]][downloads-url]
+[![Version Badge](https://img.shields.io/npm/v/react-intersection-observer.svg)](https://npmjs.org/package/react-intersection-observer)
+[![Test](https://github.com/thebuilder/react-intersection-observer/workflows/Test/badge.svg)](https://github.com/thebuilder/react-intersection-observer/actions?query=workflow%3ATest)
+[![License](http://img.shields.io/npm/l/react-intersection-observer.svg)](LICENSE)
+[![Downloads](http://img.shields.io/npm/dm/react-intersection-observer.svg)](http://npm-stat.com/charts.html?package=react-intersection-observer)
 ![npm package minimized gzipped size](https://img.shields.io/bundlejs/size/react-intersection-observer?exports=InView%2C%20useOnInView%2C%20useInView&externals=react&format=both)
 
 A React implementation of the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API) 
@@ -259,9 +261,9 @@ extend the `IntersectionObserverEntry` with the `isVisible` boolean.
 The `IntersectionObserver` itself is just a simple but powerful tool. Here's a
 few ideas for how you can use it.
 
-- [Lazy image load](docs/Recipes.md#lazy-image-load)
-- [Trigger animations](docs/Recipes.md#trigger-animations)
-- [Track impressions](docs/Recipes.md#track-impressions) _(Google Analytics, Tag
+- [Lazy image load](apps/docs/docs/guides/recipes.mdx#lazy-image-loading)
+- [Trigger animations](apps/docs/docs/guides/recipes.mdx#scroll-triggered-animation)
+- [Track impressions](apps/docs/docs/guides/recipes.mdx#track-an-impression) _(Google Analytics, Tag
   Manager, etc.)_
 
 ## FAQ
@@ -375,7 +377,7 @@ globally, alongside either `jest.fn` or `vi.fn`.
 
 See the instructions for [Vitest](#vitest). You should be able to use a similar
 setup/reset code, adapted to the testing library you are using. Failing that,
-copy the code from [test-utils.ts][test-utils-url], and make your own version.
+copy the code from [test-utils.ts](packages/react-intersection-observer/src/test-utils.ts), and make your own version.
 
 ### Fallback Behavior
 
@@ -574,13 +576,3 @@ order to destroy the observer again.
 > You most likely won't need this, but it can be useful if you
 > need to handle IntersectionObservers outside React, or need full control over
 > how instances are created.
-
-[package-url]: https://npmjs.org/package/react-intersection-observer
-[npm-version-svg]: https://img.shields.io/npm/v/react-intersection-observer.svg
-[license-image]: http://img.shields.io/npm/l/react-intersection-observer.svg
-[license-url]: LICENSE
-[downloads-image]: http://img.shields.io/npm/dm/react-intersection-observer.svg
-[downloads-url]: http://npm-stat.com/charts.html?package=react-intersection-observer
-[test-image]: https://github.com/thebuilder/react-intersection-observer/workflows/Test/badge.svg
-[test-url]: https://github.com/thebuilder/react-intersection-observer/actions?query=workflow%3ATest
-[test-utils-url]: https://github.com/thebuilder/react-intersection-observer/blob/master/src/test-utils.ts
