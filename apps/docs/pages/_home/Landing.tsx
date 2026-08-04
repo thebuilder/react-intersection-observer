@@ -13,11 +13,30 @@ import {
   useSectionSignal,
 } from "./primitives";
 
-export const client = "load";
-
 const REPO = "https://github.com/thebuilder/react-intersection-observer";
 const NPM = "https://www.npmjs.com/package/react-intersection-observer";
 const DOCS = "/overview";
+
+/** The primary "Read the docs" + "GitHub" pair, shared by the hero and CTA. */
+function DocsAndGithub() {
+  return (
+    <>
+      <a className="rio-btn rio-btn--primary" href={DOCS}>
+        Read the docs
+        <Icon name="arrow" size={18} />
+      </a>
+      <a
+        className="rio-btn rio-btn--ghost"
+        href={REPO}
+        rel="noreferrer"
+        target="_blank"
+      >
+        <Icon name="github" size={18} />
+        GitHub
+      </a>
+    </>
+  );
+}
 
 /* ================================================================== */
 /* Root                                                                */
@@ -61,19 +80,7 @@ function Hero() {
           <InstallCommand />
 
           <div className="rio-cta">
-            <a className="rio-btn rio-btn--primary" href={DOCS}>
-              Read the docs
-              <Icon name="arrow" size={18} />
-            </a>
-            <a
-              className="rio-btn rio-btn--ghost"
-              href={REPO}
-              rel="noreferrer"
-              target="_blank"
-            >
-              <Icon name="github" size={18} />
-              GitHub
-            </a>
+            <DocsAndGithub />
           </div>
 
           <ul className="rio-meta">
@@ -277,15 +284,17 @@ function RevealBand() {
       <div className="rio-grid">
         {FEATURES.map((feature, i) => (
           <Reveal
-            className="rio-feature"
+            className="rio-feature-cell"
             delay={(i % 3) * 80}
             key={feature.title}
           >
-            <span className="rio-feature__icon">
-              <Icon name={feature.icon} size={22} />
-            </span>
-            <h3 className="rio-feature__title">{feature.title}</h3>
-            <p className="rio-feature__body">{feature.body}</p>
+            <article className="rio-feature">
+              <span className="rio-feature__icon">
+                <Icon name={feature.icon} size={22} />
+              </span>
+              <h3 className="rio-feature__title">{feature.title}</h3>
+              <p className="rio-feature__body">{feature.body}</p>
+            </article>
           </Reveal>
         ))}
       </div>
@@ -398,13 +407,14 @@ const API_STEPS: ApiStep[] = [
   },
 ];
 
-function ApiScrollspy() {
-  const ref = useSectionSignal("apis", "Three APIs");
+/**
+ * Scrollspy state for the API panel: `setRatio` tracks each step's visibility
+ * and picks the most-visible one; `select` pins a step manually until the next
+ * real scroll (250ms+ later) hands control back.
+ */
+function useScrollspy(count: number) {
   const [active, setActive] = useState(0);
-  const ratios = useRef<number[]>(API_STEPS.map(() => 0));
-  // Timestamp of the last manual pick. While set, scroll position does not
-  // override the choice; a genuine scroll (250ms+ later) clears it and hands
-  // control back to the scrollspy.
+  const ratios = useRef<number[]>(Array.from({ length: count }, () => 0));
   const lockedAt = useRef(0);
 
   const setRatio = useCallback((index: number, ratio: number) => {
@@ -436,6 +446,12 @@ function ApiScrollspy() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  return { active, select, setRatio };
+}
+
+function ApiScrollspy() {
+  const ref = useSectionSignal("apis", "Three APIs");
+  const { active, select, setRatio } = useScrollspy(API_STEPS.length);
   const current = API_STEPS[active];
 
   return (
@@ -663,19 +679,7 @@ function ClosingCta() {
         </p>
         <InstallCommand />
         <div className="rio-cta rio-cta--center">
-          <a className="rio-btn rio-btn--primary" href={DOCS}>
-            Read the docs
-            <Icon name="arrow" size={18} />
-          </a>
-          <a
-            className="rio-btn rio-btn--ghost"
-            href={REPO}
-            rel="noreferrer"
-            target="_blank"
-          >
-            <Icon name="github" size={18} />
-            GitHub
-          </a>
+          <DocsAndGithub />
           <a
             className="rio-btn rio-btn--ghost"
             href={NPM}

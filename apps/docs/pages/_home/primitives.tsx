@@ -14,13 +14,6 @@ import { useInView } from "react-intersection-observer";
 /* Environment hooks                                                    */
 /* ------------------------------------------------------------------ */
 
-/** True only after the component has mounted on the client. */
-export function useHydrated(): boolean {
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => setHydrated(true), []);
-  return hydrated;
-}
-
 /** Tracks the user's reduced-motion preference, live. */
 export function usePrefersReducedMotion(): boolean {
   const [reduced, setReduced] = useState(false);
@@ -63,10 +56,30 @@ export function useObserver(): ObserverApi {
 
 const SECTION_THRESHOLDS = [0, 0.15, 0.3, 0.45, 0.6, 0.75, 0.9, 1];
 
-export function ObserverProvider({ children }: { children: ReactNode }) {
-  const store = useRef(
-    new Map<string, { label: string; ratio: number; inView: boolean }>(),
+type SectionState = { label: string; ratio: number; inView: boolean };
+
+/** The section with the highest intersection ratio, or null when empty. */
+function mostVisible(sections: Iterable<SectionState>): SectionState | null {
+  let best: SectionState | null = null;
+  for (const value of sections) {
+    if (!best || value.ratio > best.ratio) {
+      best = value;
+    }
+  }
+  return best;
+}
+
+/** True when the winner is close enough that no re-render is worthwhile. */
+function sameActive(prev: Snapshot, next: SectionState): boolean {
+  return (
+    prev.activeLabel === next.label &&
+    prev.inView === next.inView &&
+    Math.abs(prev.ratio - next.ratio) < 0.02
   );
+}
+
+export function ObserverProvider({ children }: { children: ReactNode }) {
+  const store = useRef(new Map<string, SectionState>());
   const logged = useRef(new Set<string>());
   const [snapshot, setSnapshot] = useState<Snapshot>({
     activeLabel: "Hero",
@@ -78,31 +91,20 @@ export function ObserverProvider({ children }: { children: ReactNode }) {
   const report = useCallback(
     (id: string, label: string, ratio: number, inView: boolean) => {
       store.current.set(id, { label, ratio, inView });
-      let best: { label: string; ratio: number; inView: boolean } | null = null;
-      for (const value of store.current.values()) {
-        if (!best || value.ratio > best.ratio) {
-          best = value;
-        }
-      }
-      if (!best) {
+      const winner = mostVisible(store.current.values());
+      if (!winner) {
         return;
       }
-      const winner = best;
-      setSnapshot((prev) => {
-        if (
-          prev.activeLabel === winner.label &&
-          prev.inView === winner.inView &&
-          Math.abs(prev.ratio - winner.ratio) < 0.02
-        ) {
-          return prev;
-        }
-        return {
-          ...prev,
-          activeLabel: winner.label,
-          ratio: winner.ratio,
-          inView: winner.inView,
-        };
-      });
+      setSnapshot((prev) =>
+        sameActive(prev, winner)
+          ? prev
+          : {
+              ...prev,
+              activeLabel: winner.label,
+              ratio: winner.ratio,
+              inView: winner.inView,
+            },
+      );
     },
     [],
   );
@@ -144,9 +146,14 @@ export function useSectionSignal(id: string, label: string) {
 
 /**
  * Reveals its children as they scroll into view, using `useInView` itself.
- * The base (server-rendered, no-JS, reduced-motion) state is fully visible —
- * the hidden-until-seen state is only ever applied after hydration, so
- * crawlers and reduced-motion readers lose nothing.
+ *
+ * Elements start hidden (opacity 0) *before first paint*: the inline head
+ * script in `index.astro` sets `data-rio-js` on `<html>` when JS is available
+ * and motion is allowed, and the `:root[data-rio-js] .rio-reveal` rule in
+ * `home.css` does the hiding. This island only ever adds `is-visible` once an
+ * element enters view, so the motion is one-way (hidden to visible, never a
+ * fade-out). With no JS, no `data-rio-js`, or reduced motion, nothing is
+ * hidden, so crawlers and reduced-motion readers see everything.
  */
 export function Reveal({
   children,
@@ -161,28 +168,25 @@ export function Reveal({
   className?: string;
   style?: CSSProperties;
 }) {
-  const reduced = usePrefersReducedMotion();
-  const hydrated = useHydrated();
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.18,
     rootMargin: "0px 0px -12% 0px",
   });
-  const animate = hydrated && !reduced;
-  const hidden = animate && !inView;
+  const classes = ["rio-reveal", inView ? "is-visible" : "", className ?? ""]
+    .filter(Boolean)
+    .join(" ");
   return (
     <div
-      className={className}
+      className={classes}
       ref={ref}
-      style={{
-        opacity: hidden ? 0 : 1,
-        transform: hidden ? `translateY(${y}px)` : "none",
-        transition: animate
-          ? `opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`
-          : undefined,
-        willChange: animate ? "opacity, transform" : undefined,
-        ...style,
-      }}
+      style={
+        {
+          "--rio-reveal-delay": `${delay}ms`,
+          "--rio-reveal-y": `${y}px`,
+          ...style,
+        } as CSSProperties
+      }
     >
       {children}
     </div>

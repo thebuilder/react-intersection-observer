@@ -7,18 +7,21 @@
     "apps/docs/docs/**/*.mdx",
     "apps/docs/docs/**/meta.ts",
     "apps/docs/islands/ObserverDemo.tsx",
+    "apps/docs/pages/**/*.astro",
     "apps/storybook/stories/**/*.mdx",
     "packages/react-intersection-observer/fixtures/react-compat/rsbuild.config.mjs"
   ],
   "ignoreDependencies": [
     "@rsbuild/core",
     "@rsbuild/plugin-react",
-    "@size-limit/preset-small-lib"
+    "@size-limit/preset-small-lib",
+    "blume:data"
   ],
   "ignoreUnresolvedImports": [
     "storybook/actions",
     "storybook/manager-api",
-    "storybook/theming"
+    "storybook/theming",
+    "blume:data"
   ],
   "rules": {
     "unused-files": "error",

@@ -108,6 +108,25 @@
   white-space: nowrap;
 }
 
+/* Scroll reveal. Elements are hidden (opacity 0) only when the inline head
+   script in index.astro has set `data-rio-js` — i.e. JS is present and motion
+   is allowed — so they start hidden before first paint and never fade out.
+   With no JS or reduced motion the flag is absent and content stays visible.
+   The island adds `is-visible` as each element enters the viewport. */
+:root[data-rio-js] .rio-reveal {
+  opacity: 0;
+  transform: translateY(var(--rio-reveal-y, 22px));
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1) var(--rio-reveal-delay, 0ms),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1) var(--rio-reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+:root[data-rio-js] .rio-reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
 /* ------------------------------------------------------------- */
 /* Hero                                                           */
 /* ------------------------------------------------------------- */
@@ -550,7 +569,14 @@
   gap: 1rem;
 }
 
+/* Reveal wrapper for each card: keeps the reveal transition off the card
+   itself, so the card's own hover transition is never clobbered. */
+.rio-feature-cell {
+  display: flex;
+}
+
 .rio-feature {
+  flex: 1;
   padding: 1.4rem;
   border-radius: 14px;
   border: 1px solid var(--rio-line);

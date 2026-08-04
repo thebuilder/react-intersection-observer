@@ -25,6 +25,20 @@ const { config } = data;
     description: config.description,
   }}
 >
+  <!--
+    Arm scroll-reveal before first paint: flag the page so `.rio-reveal`
+    elements start hidden (opacity 0) only when JS is present and motion is
+    allowed. With no JS or reduced motion the flag is never set and all content
+    stays visible. Runs before the island below it is painted.
+  -->
+  <script is:inline>
+    if (
+      !window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      document.documentElement.setAttribute("data-rio-js", "");
+    }
+  </script>
+
   <Landing client:load />
 
   <footer class="rio-footer" slot="footer">
