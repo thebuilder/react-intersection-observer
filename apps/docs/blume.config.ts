@@ -8,6 +8,9 @@ export default defineConfig({
     "A lightweight React implementation of the Intersection Observer API.",
   logo: {
     image: "/logo-horizontal.svg",
+    // The horizontal mark already carries the wordmark, so hide the extra text
+    // label the header would otherwise render beside it (empty string = hidden).
+    text: "",
   },
   analytics: {
     vercel: true,
@@ -31,7 +34,7 @@ export default defineConfig({
   },
   navigation: {
     tabs: [
-      { label: "Docs", path: "/" },
+      { label: "Docs", path: "/", href: "/overview" },
       { label: "Changelog", path: "/changelog", href: "/changelog" },
     ],
   },

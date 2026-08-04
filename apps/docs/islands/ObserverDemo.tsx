@@ -17,7 +17,7 @@ function LiveObserverDemo() {
     root,
     threshold,
   });
-  const ratio = entry?.intersectionRatio.toFixed(2) ?? "—";
+  const ratio = entry?.intersectionRatio.toFixed(2) ?? "n/a";
 
   return (
     <section

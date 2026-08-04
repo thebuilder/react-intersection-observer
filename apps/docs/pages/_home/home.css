@@ -1,0 +1,1188 @@
+/* ============================================================== */
+/* Landing page — React Intersection Observer                     */
+/* Page chrome follows Blume's theme; code + instrument panels are */
+/* a deliberate dark instrument surface in both color modes.       */
+/* ============================================================== */
+
+.rio-home {
+  --rio-accent: var(--blume-accent);
+  --rio-fg: var(--color-foreground);
+  --rio-muted: var(--color-muted-foreground);
+  --rio-line: color-mix(in srgb, var(--color-foreground) 12%, transparent);
+  --rio-line-2: color-mix(in srgb, var(--color-foreground) 22%, transparent);
+  --rio-surface: color-mix(in srgb, var(--color-foreground) 3.5%, transparent);
+  --rio-surface-2: color-mix(in srgb, var(--color-foreground) 7%, transparent);
+  --rio-panel: #0d0d15;
+  --rio-panel-2: #14141f;
+  --rio-panel-fg: #ece9f8;
+  --rio-panel-muted: #a6a3be;
+  --rio-panel-line: color-mix(in srgb, #a78bfa 24%, transparent);
+  --rio-violet: #a78bfa;
+  --rio-emerald: #34d399;
+  --rio-focal: linear-gradient(135deg, #241f47 0%, #16294a 100%);
+  --rio-mono: var(
+    --blume-font-mono,
+    ui-monospace,
+    SFMono-Regular,
+    "SF Mono",
+    Menlo,
+    monospace
+  );
+  --rio-max: 68rem;
+
+  color: var(--rio-fg);
+  overflow-x: clip;
+}
+
+.rio-home ::selection {
+  background: color-mix(in srgb, var(--rio-accent) 32%, transparent);
+  color: var(--rio-fg);
+}
+
+.rio-home :focus-visible {
+  outline: 2px solid var(--rio-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ------------------------------------------------------------- */
+/* Layout primitives                                              */
+/* ------------------------------------------------------------- */
+
+.rio-section {
+  max-width: var(--rio-max);
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+  padding-block: clamp(3.25rem, 6vw, 5.5rem);
+}
+
+.rio-head {
+  max-width: 44rem;
+  margin-bottom: clamp(2rem, 4vw, 3.25rem);
+}
+
+.rio-h1 {
+  font-family: var(--blume-font-display, var(--blume-font-body, inherit));
+  font-size: clamp(2.4rem, 6vw, 4.15rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 640;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.rio-h2 {
+  font-family: var(--blume-font-display, var(--blume-font-body, inherit));
+  font-size: clamp(1.75rem, 3.6vw, 2.6rem);
+  line-height: 1.06;
+  letter-spacing: -0.03em;
+  font-weight: 620;
+  margin: 0 0 1rem;
+  text-wrap: balance;
+}
+
+.rio-lead {
+  max-width: 34rem;
+  margin: 1.4rem 0 0;
+  font-size: clamp(1.05rem, 1.4vw, 1.24rem);
+  line-height: 1.62;
+  color: var(--rio-muted);
+}
+
+.rio-subhead {
+  max-width: 42rem;
+  margin: 0;
+  font-size: clamp(1rem, 1.3vw, 1.14rem);
+  line-height: 1.62;
+  color: var(--rio-muted);
+}
+
+.rio-inline {
+  font-family: var(--rio-mono);
+  font-size: 0.82em;
+  padding: 0.08em 0.3em;
+  margin-inline: 0.12em;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--rio-accent) 13%, transparent);
+  color: color-mix(in srgb, var(--rio-accent) 70%, var(--rio-fg));
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------- */
+/* Hero                                                           */
+/* ------------------------------------------------------------- */
+
+.rio-hero {
+  position: relative;
+  padding-block: clamp(3.5rem, 8vw, 6.5rem) clamp(3rem, 6vw, 5rem);
+}
+
+.rio-hero::before {
+  content: "";
+  position: absolute;
+  inset: -10% -20% auto -20%;
+  height: 60%;
+  background: radial-gradient(
+    52% 60% at 72% 0%,
+    color-mix(in srgb, var(--rio-accent) 20%, transparent),
+    transparent 72%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.rio-hero__grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+}
+
+.rio-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 2rem;
+}
+
+.rio-cta--center {
+  justify-content: center;
+}
+
+.rio-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.15rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.96rem;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition:
+    transform 0.16s ease,
+    background 0.16s ease,
+    border-color 0.16s ease;
+}
+
+.rio-btn:hover {
+  transform: translateY(-1px);
+}
+
+.rio-btn--primary {
+  background: var(--rio-accent);
+  color: var(--blume-accent-foreground, #10101a);
+  box-shadow: 0 8px 24px -12px
+    color-mix(in srgb, var(--rio-accent) 80%, transparent);
+}
+
+.rio-btn--primary:hover {
+  background: color-mix(in srgb, var(--rio-accent) 88%, white);
+}
+
+.rio-btn--ghost {
+  background: var(--rio-surface);
+  border-color: var(--rio-line-2);
+  color: var(--rio-fg);
+}
+
+.rio-btn--ghost:hover {
+  border-color: color-mix(in srgb, var(--rio-accent) 55%, var(--rio-line-2));
+  background: var(--rio-surface-2);
+}
+
+.rio-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 2rem 0 0;
+  padding: 0;
+}
+
+.rio-chip {
+  font-family: var(--rio-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.01em;
+  padding: 0.32rem 0.6rem;
+  border-radius: 999px;
+  border: 1px solid var(--rio-line);
+  color: var(--rio-muted);
+  background: var(--rio-surface);
+}
+
+/* Install command ------------------------------------------------ */
+
+.rio-install {
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 30rem;
+  border: 1px solid var(--rio-panel-line);
+  border-radius: 12px;
+  background: var(--rio-panel);
+  overflow: hidden;
+}
+
+.rio-install__tabs {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.4rem 0.4rem 0;
+}
+
+.rio-install__tab {
+  font-family: var(--rio-mono);
+  font-size: 0.76rem;
+  padding: 0.35rem 0.7rem;
+  border: none;
+  background: transparent;
+  color: var(--rio-panel-muted);
+  border-radius: 7px 7px 0 0;
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    background 0.15s ease;
+}
+
+.rio-install__tab[data-active="true"] {
+  color: var(--rio-panel-fg);
+  background: var(--rio-panel-2);
+}
+
+.rio-install__tab:hover {
+  color: var(--rio-panel-fg);
+}
+
+.rio-install__row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 0.7rem 0.7rem 0.9rem;
+  border-top: 1px solid color-mix(in srgb, #ffffff 6%, transparent);
+}
+
+.rio-install__cmd {
+  flex: 1;
+  font-family: var(--rio-mono);
+  font-size: 0.85rem;
+  color: var(--rio-panel-fg);
+  white-space: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.rio-install__cmd::-webkit-scrollbar {
+  display: none;
+}
+
+.rio-install__prompt {
+  color: var(--rio-violet);
+  user-select: none;
+  margin-right: 0.35rem;
+}
+
+.rio-install__copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  flex: none;
+  border-radius: 8px;
+  border: 1px solid color-mix(in srgb, #ffffff 10%, transparent);
+  background: var(--rio-panel-2);
+  color: var(--rio-panel-muted);
+  cursor: pointer;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.rio-install__copy:hover {
+  color: var(--rio-panel-fg);
+  border-color: var(--rio-panel-line);
+}
+
+.rio-install__copy[data-copied="true"] {
+  color: var(--rio-emerald);
+  border-color: color-mix(in srgb, var(--rio-emerald) 45%, transparent);
+}
+
+.rio-scrollcue {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+  font-family: var(--rio-mono);
+  font-size: 0.78rem;
+  color: color-mix(in srgb, var(--rio-fg) 55%, transparent);
+}
+
+.rio-scrollcue svg {
+  animation: rio-nudge 1.8s ease-in-out infinite;
+}
+
+@keyframes rio-nudge {
+  0%,
+  100% {
+    transform: rotate(90deg) translateX(0);
+  }
+  50% {
+    transform: rotate(90deg) translateX(4px);
+  }
+}
+
+/* Instrument ----------------------------------------------------- */
+
+.rio-instrument {
+  border: 1px solid var(--rio-panel-line);
+  border-radius: 16px;
+  background:
+    radial-gradient(
+      120% 80% at 100% 0%,
+      color-mix(in srgb, var(--rio-violet) 12%, transparent),
+      transparent 60%
+    ),
+    var(--rio-panel);
+  padding: 1.1rem;
+  box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.7);
+  color: var(--rio-panel-fg);
+}
+
+.rio-instrument__head {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--rio-mono);
+  font-size: 0.78rem;
+  color: var(--rio-panel-muted);
+  margin-bottom: 0.9rem;
+}
+
+.rio-instrument__dot,
+.rio-hud__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--rio-panel-muted) 60%, transparent);
+  flex: none;
+}
+
+.rio-instrument__dot[data-live="true"],
+.rio-hud__dot[data-live="true"] {
+  background: var(--rio-emerald);
+  box-shadow: 0 0 0 0 color-mix(in srgb, var(--rio-emerald) 70%, transparent);
+  animation: rio-ping 1.8s ease-out infinite;
+}
+
+@keyframes rio-ping {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--rio-emerald) 55%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 6px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+.rio-instrument__badge {
+  margin-left: auto;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.45rem;
+  border-radius: 5px;
+  border: 1px solid var(--rio-panel-line);
+  color: var(--rio-violet);
+}
+
+.rio-instrument__stage {
+  position: relative;
+  height: 8.5rem;
+  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, #ffffff 8%, transparent);
+  background:
+    linear-gradient(color-mix(in srgb, #ffffff 3%, transparent), transparent),
+    #0a0a11;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.rio-instrument__scan {
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--rio-violet),
+    transparent
+  );
+  opacity: 0.7;
+  animation: rio-scan 3.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes rio-scan {
+  0%,
+  100% {
+    transform: translateY(0.6rem);
+    opacity: 0.15;
+  }
+  50% {
+    transform: translateY(6.6rem);
+    opacity: 0.75;
+  }
+}
+
+.rio-instrument__threshold {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 58%;
+  border-top: 1px dashed color-mix(in srgb, var(--rio-violet) 55%, transparent);
+}
+
+.rio-instrument__threshold span {
+  position: absolute;
+  right: 0.5rem;
+  top: -1.5rem;
+  font-family: var(--rio-mono);
+  font-size: 0.62rem;
+  color: color-mix(in srgb, var(--rio-violet) 80%, white);
+}
+
+.rio-instrument__target {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 0.8rem;
+  border-radius: 9px;
+  font-family: var(--rio-mono);
+  font-size: 0.78rem;
+  border: 1px solid color-mix(in srgb, var(--rio-violet) 45%, transparent);
+  background: var(--rio-focal);
+  color: #f4f2ff;
+  transition:
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.rio-instrument__target[data-in="true"] {
+  border-color: color-mix(in srgb, var(--rio-violet) 75%, transparent);
+  box-shadow: 0 0 24px -4px
+    color-mix(in srgb, var(--rio-violet) 60%, transparent);
+}
+
+.rio-instrument__readout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem 1rem;
+  margin: 0 0 0.9rem;
+}
+
+.rio-readout {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-family: var(--rio-mono);
+  font-size: 0.76rem;
+  border-bottom: 1px solid color-mix(in srgb, #ffffff 6%, transparent);
+  padding-bottom: 0.3rem;
+}
+
+.rio-readout dt {
+  color: var(--rio-panel-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rio-readout dd {
+  margin: 0;
+  color: var(--rio-panel-fg);
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.rio-readout dd[data-tone="on"] {
+  color: var(--rio-emerald);
+}
+.rio-readout dd[data-tone="off"] {
+  color: color-mix(in srgb, var(--rio-panel-muted) 85%, white);
+}
+
+.rio-instrument__bar,
+.rio-hud__bar {
+  height: 5px;
+  border-radius: 999px;
+  background: color-mix(in srgb, #ffffff 8%, transparent);
+  overflow: hidden;
+}
+
+.rio-instrument__bar span,
+.rio-hud__bar span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--rio-violet), #6ea8fe);
+  transform-origin: left;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ------------------------------------------------------------- */
+/* Feature grid                                                   */
+/* ------------------------------------------------------------- */
+
+.rio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  gap: 1rem;
+}
+
+.rio-feature {
+  padding: 1.4rem;
+  border-radius: 14px;
+  border: 1px solid var(--rio-line);
+  background: var(--rio-surface);
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.rio-feature:hover {
+  border-color: color-mix(in srgb, var(--rio-accent) 45%, var(--rio-line));
+  background: var(--rio-surface-2);
+  transform: translateY(-2px);
+}
+
+.rio-feature__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  color: color-mix(in srgb, var(--rio-accent) 78%, var(--rio-fg));
+  background: color-mix(in srgb, var(--rio-accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--rio-accent) 24%, transparent);
+}
+
+.rio-feature__title {
+  font-size: 1.06rem;
+  font-weight: 640;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.4rem;
+}
+
+.rio-feature__body {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--rio-muted);
+}
+
+.rio-band__note {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  margin-top: 1.75rem;
+  font-size: 0.9rem;
+  color: var(--rio-muted);
+}
+
+.rio-band__note svg {
+  color: var(--rio-accent);
+  flex: none;
+}
+
+/* ------------------------------------------------------------- */
+/* API scrollspy                                                  */
+/* ------------------------------------------------------------- */
+
+.rio-spy__layout {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+  align-items: start;
+}
+
+.rio-spy__sticky {
+  position: sticky;
+  top: 6rem;
+}
+
+.rio-spy__steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.rio-step-item {
+  list-style: none;
+}
+
+.rio-step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 1rem;
+  width: 100%;
+  padding: 1.4rem;
+  border-radius: 14px;
+  border: 1px solid var(--rio-line);
+  background: var(--rio-surface);
+  opacity: 0.62;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  transition:
+    opacity 0.3s ease,
+    border-color 0.3s ease,
+    background 0.3s ease,
+    transform 0.2s ease;
+}
+
+.rio-step:hover:not([data-active="true"]) {
+  opacity: 0.85;
+  border-color: color-mix(in srgb, var(--rio-accent) 30%, var(--rio-line));
+}
+
+.rio-step[data-active="true"] {
+  opacity: 1;
+  border-color: color-mix(in srgb, var(--rio-accent) 55%, var(--rio-line));
+  background: var(--rio-surface-2);
+}
+
+.rio-step__marker {
+  display: flex;
+  justify-content: center;
+  padding-top: 0.4rem;
+}
+
+.rio-step__marker span {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 999px;
+  border: 2px solid var(--rio-line-2);
+  transition:
+    border-color 0.3s ease,
+    background 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.rio-step[data-active="true"] .rio-step__marker span {
+  border-color: var(--rio-accent);
+  background: var(--rio-accent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--rio-accent) 22%, transparent);
+}
+
+.rio-step__body {
+  display: block;
+}
+
+.rio-step__name {
+  display: block;
+  font-family: var(--rio-mono);
+  font-size: 1.02rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--rio-fg);
+}
+
+.rio-step__sig {
+  display: block;
+  font-family: var(--rio-mono);
+  font-size: 0.76rem;
+  color: color-mix(in srgb, var(--rio-accent) 70%, var(--rio-fg));
+  margin: 0.2rem 0 0.7rem;
+}
+
+.rio-step__blurb {
+  display: block;
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: var(--rio-muted);
+}
+
+.rio-step__code {
+  display: none;
+  margin-top: 1rem;
+}
+
+/* ------------------------------------------------------------- */
+/* Code panel                                                     */
+/* ------------------------------------------------------------- */
+
+.rio-code {
+  border-radius: 12px;
+  border: 1px solid var(--rio-panel-line);
+  background: var(--rio-panel);
+  overflow: hidden;
+}
+
+.rio-code__label {
+  font-family: var(--rio-mono);
+  font-size: 0.72rem;
+  color: var(--rio-panel-muted);
+  padding: 0.55rem 0.9rem;
+  border-bottom: 1px solid color-mix(in srgb, #ffffff 6%, transparent);
+  background: var(--rio-panel-2);
+}
+
+.rio-code__pre {
+  margin: 0;
+  padding: 1rem 1.1rem;
+  overflow-x: auto;
+  font-family: var(--rio-mono);
+  font-size: 0.82rem;
+  line-height: 1.65;
+  color: #d7d4e6;
+  tab-size: 2;
+}
+
+.rio-code__line {
+  display: block;
+  white-space: pre;
+}
+
+.rio-code__pre::-webkit-scrollbar {
+  height: 8px;
+}
+.rio-code__pre::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, #ffffff 14%, transparent);
+  border-radius: 999px;
+}
+
+/* ------------------------------------------------------------- */
+/* Impression strip                                               */
+/* ------------------------------------------------------------- */
+
+.rio-impr__layout {
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: start;
+}
+
+.rio-impr__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
+  gap: 0.75rem;
+}
+
+.rio-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.9rem;
+  min-height: 5.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--rio-line);
+  background: var(--rio-surface);
+  overflow: hidden;
+  transition:
+    border-color 0.4s ease,
+    background 0.4s ease,
+    transform 0.4s ease;
+}
+
+.rio-tile[data-logged="true"] {
+  border-color: color-mix(in srgb, var(--rio-emerald) 50%, transparent);
+  background: var(--rio-focal);
+  color: #f2f1ff;
+}
+
+.rio-tile__id {
+  font-family: var(--rio-mono);
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.rio-tile__state {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--rio-mono);
+  font-size: 0.72rem;
+  color: var(--rio-muted);
+  margin-top: auto;
+}
+
+.rio-tile[data-logged="true"] .rio-tile__state {
+  color: var(--rio-emerald);
+}
+
+.rio-tile__index {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.7rem;
+  font-family: var(--rio-mono);
+  font-size: 0.72rem;
+  color: color-mix(in srgb, var(--rio-fg) 32%, transparent);
+}
+
+.rio-tile[data-logged="true"] .rio-tile__index {
+  color: color-mix(in srgb, #ffffff 45%, transparent);
+}
+
+.rio-impr__panel {
+  position: sticky;
+  top: 6rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.rio-counter {
+  padding: 1.4rem;
+  border-radius: 14px;
+  border: 1px solid var(--rio-line);
+  background: var(--rio-surface);
+  text-align: center;
+}
+
+.rio-counter__num {
+  display: block;
+  font-family: var(--blume-font-display, inherit);
+  font-size: 3.4rem;
+  line-height: 1;
+  font-weight: 680;
+  letter-spacing: -0.03em;
+  color: var(--rio-fg);
+  font-variant-numeric: tabular-nums;
+}
+
+.rio-counter__label {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--rio-mono);
+  font-size: 0.78rem;
+  color: var(--rio-muted);
+}
+
+/* ------------------------------------------------------------- */
+/* Playground                                                     */
+/* ------------------------------------------------------------- */
+
+.rio-play .observer-demo-feed {
+  scrollbar-width: thin;
+}
+
+/* ------------------------------------------------------------- */
+/* Closing                                                        */
+/* ------------------------------------------------------------- */
+
+.rio-closing {
+  position: relative;
+  text-align: center;
+}
+
+.rio-closing::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--rio-line-2),
+    transparent
+  );
+}
+
+.rio-closing__inner {
+  max-width: 40rem;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rio-closing__title {
+  margin-top: 0;
+}
+.rio-closing__lead {
+  margin-bottom: 0.5rem;
+}
+.rio-closing .rio-install {
+  margin-inline: auto;
+}
+
+.rio-closing__test {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 2rem;
+  font-size: 0.9rem;
+  color: var(--rio-muted);
+}
+
+.rio-closing__test svg {
+  color: var(--rio-accent);
+  flex: none;
+}
+.rio-closing__test a {
+  color: var(--rio-fg);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* ------------------------------------------------------------- */
+/* Floating HUD                                                   */
+/* ------------------------------------------------------------- */
+
+.rio-hud {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 40;
+  width: 12.5rem;
+  padding: 0.85rem 0.95rem;
+  border-radius: 12px;
+  border: 1px solid var(--rio-panel-line);
+  background: color-mix(in srgb, var(--rio-panel) 88%, transparent);
+  backdrop-filter: blur(10px);
+  color: var(--rio-panel-fg);
+  box-shadow: 0 20px 40px -20px rgb(0 0 0 / 0.7);
+  pointer-events: none;
+  display: grid;
+  gap: 0.5rem;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+}
+
+.rio-hud[data-hidden="true"] {
+  opacity: 0;
+  transform: translateY(0.75rem);
+}
+
+.rio-hud__head {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--rio-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--rio-panel-muted);
+}
+
+.rio-hud__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-family: var(--rio-mono);
+  font-size: 0.76rem;
+}
+
+.rio-hud__key {
+  color: var(--rio-panel-muted);
+}
+.rio-hud__val {
+  color: var(--rio-panel-fg);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  max-width: 7rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ------------------------------------------------------------- */
+/* Footer                                                         */
+/* ------------------------------------------------------------- */
+
+.rio-footer {
+  border-top: 1px solid
+    var(
+      --rio-line,
+      color-mix(in srgb, var(--color-foreground) 12%, transparent)
+    );
+  margin-top: 2rem;
+}
+
+.rio-footer__inner {
+  max-width: 68rem;
+  margin-inline: auto;
+  padding: 2.5rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 2rem;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.rio-footer__brand {
+  display: grid;
+  gap: 0.2rem;
+}
+.rio-footer__brand strong {
+  font-size: 0.95rem;
+  letter-spacing: -0.01em;
+}
+.rio-footer__brand span {
+  font-size: 0.82rem;
+  color: var(--color-muted-foreground);
+}
+
+.rio-footer__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.1rem;
+}
+
+.rio-footer__nav a {
+  font-size: 0.88rem;
+  color: var(--color-muted-foreground);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.rio-footer__nav a:hover {
+  color: var(--color-foreground);
+}
+
+/* ------------------------------------------------------------- */
+/* Responsive                                                     */
+/* ------------------------------------------------------------- */
+
+@media (max-width: 56rem) {
+  .rio-hero__grid {
+    grid-template-columns: 1fr;
+  }
+  .rio-hero__visual {
+    max-width: 30rem;
+  }
+  .rio-spy__layout {
+    grid-template-columns: 1fr;
+  }
+  .rio-spy__sticky {
+    display: none;
+  }
+  .rio-step__code {
+    display: block;
+  }
+  .rio-impr__layout {
+    grid-template-columns: 1fr;
+  }
+  .rio-impr__panel {
+    position: static;
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 34rem) {
+  .rio-hud {
+    display: none;
+  }
+  .rio-impr__panel {
+    grid-template-columns: 1fr;
+  }
+  .rio-impr__grid {
+    grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+  }
+
+  /* Closing CTA: the primary action spans the row, GitHub and npm share the
+     row below it, so three actions never wrap into a ragged 2 + 1. The hero's
+     two buttons keep their default side-by-side flow. */
+  .rio-cta--center {
+    flex-wrap: wrap;
+  }
+  .rio-cta--center .rio-btn {
+    justify-content: center;
+  }
+  .rio-cta--center .rio-btn--primary {
+    flex: 1 1 100%;
+  }
+  .rio-cta--center .rio-btn--ghost {
+    flex: 1 1 0;
+  }
+}
+
+/* ------------------------------------------------------------- */
+/* Reduced motion                                                 */
+/* ------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .rio-home *,
+  .rio-hud * {
+    /* biome-ignore lint/complexity/noImportantStyles: must beat the inline transition/animation the Reveal island sets */
+    animation: none !important;
+    /* biome-ignore lint/complexity/noImportantStyles: must beat the inline transition the Reveal island sets */
+    transition: none !important;
+  }
+}
+
+/* ------------------------------------------------------------- */
+/* Landing header: match the docs logo scale (the default        */
+/* PageLayout logo renders smaller than the docs override).      */
+/* home.css only loads on the landing route, so this is scoped.  */
+/* ------------------------------------------------------------- */
+
+[data-blume-header] a[href="/"] {
+  flex: none;
+}
+
+[data-blume-header] a[href="/"] > span {
+  height: 2rem;
+  flex: none;
+}
+
+[data-blume-header] a[href="/"] svg {
+  height: 2rem;
+  width: auto;
+}
+
+/* The inlined logo colors itself from prefers-color-scheme (the OS), which
+     fights the site's data-theme toggle and leaves the wordmark near-white on a
+     light page. Force currentColor so the mark follows the toggled theme. */
+[data-blume-header] a[href="/"] svg path[stroke="#000"] {
+  stroke: currentColor;
+}
+
+[data-blume-header] a[href="/"] svg path[fill="#1a1a1a"] {
+  fill: currentColor;
+}
+
+/* Mobile: drop the bracket mark and show only the wordmark, matching the docs
+     header. The wordmark starts at x=64 of the 290-unit viewBox, so shift that
+     icon gutter out of view and clip to the remaining 226 units. */
+@media (max-width: 30rem) {
+  [data-blume-header] a[href="/"] > span {
+    height: 2rem;
+    width: calc(2rem * 226 / 48);
+    overflow: hidden;
+  }
+
+  [data-blume-header] a[href="/"] svg {
+    height: 2rem;
+    margin-left: calc(2rem * -64 / 48);
+  }
+
+  [data-blume-header] a[href="/"] svg path[stroke="#000"],
+  [data-blume-header] a[href="/"] svg path[fill="url(#a)"] {
+    display: none;
+  }
+}

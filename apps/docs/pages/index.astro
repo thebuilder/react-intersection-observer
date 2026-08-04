@@ -1,0 +1,46 @@
+---
+import data from "blume:data";
+import PageLayout from "blume/components/layout/PageLayout.astro";
+import Landing from "./_home/Landing.tsx";
+import "./_home/home.css";
+
+const { config } = data;
+---
+
+<PageLayout
+  site={{ title: config.title, description: config.description }}
+  logo={config.logo}
+  banner={config.banner}
+  analytics={config.analytics}
+  navigation={data.navigation}
+  favicon={config.favicon}
+  fontCssVars={data.fontCssVars}
+  themeMode={config.theme.mode}
+  searchEnabled={config.search?.enabled}
+  siteUrl={config.site}
+  ogEnabled={config.og?.enabled}
+  page={{
+    title:
+      "React Intersection Observer: tiny, typed viewport detection for React",
+    description: config.description,
+  }}
+>
+  <Landing client:load />
+
+  <footer class="rio-footer" slot="footer">
+    <div class="rio-footer__inner">
+      <div class="rio-footer__brand">
+        <strong>React Intersection Observer</strong>
+        <span>MIT licensed · built by thebuilder</span>
+      </div>
+      <nav class="rio-footer__nav" aria-label="Footer">
+        <a href="/overview">Docs</a>
+        <a href="/api/core-apis">API</a>
+        <a href="/guides/recipes">Recipes</a>
+        <a href="/changelog">Changelog</a>
+        <a href="https://github.com/thebuilder/react-intersection-observer" rel="noreferrer" target="_blank">GitHub</a>
+        <a href="https://www.npmjs.com/package/react-intersection-observer" rel="noreferrer" target="_blank">npm</a>
+      </nav>
+    </div>
+  </footer>
+</PageLayout>
