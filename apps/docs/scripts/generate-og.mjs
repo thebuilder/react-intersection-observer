@@ -180,19 +180,21 @@ async function main() {
     ],
   });
 
-  // The viewport boundary the element has crossed, and its label.
-  const boundary = container({
+  // The right edge of the card is the viewport boundary the element clips
+  // against; a soft violet seam marks it and a label names it.
+  const edgeSeam = container({
     style: {
-      backgroundColor: "rgb(167 139 250 / 0.4)",
-      height: 452,
-      left: 686,
+      backgroundImage:
+        "linear-gradient(180deg, transparent, rgb(167 139 250 / 0.55) 18%, rgb(167 139 250 / 0.55) 82%, transparent)",
+      bottom: 0,
       position: "absolute",
-      top: 89,
-      width: 2,
+      right: 0,
+      top: 0,
+      width: 3,
     },
   });
-  const boundaryLabel = container({
-    style: { left: 686, position: "absolute", top: 56 },
+  const viewportLabel = container({
+    style: { position: "absolute", right: 30, top: 40 },
     children: [
       text("viewport", {
         color: "rgb(200 188 245 / 0.9)",
@@ -215,13 +217,13 @@ async function main() {
       justifyContent: "center",
       overflow: "hidden",
       paddingLeft: 72,
-      paddingRight: 72,
+      paddingRight: 0,
       position: "relative",
       width: WIDTH,
     },
-    // Paint order: the element card, then the boundary line + label on top of
-    // it (so the line reads as the edge it crossed), then the message.
-    children: [observedElement(f.mono), boundary, boundaryLabel, message],
+    // The element clips the right edge; the seam + label mark that edge as the
+    // viewport boundary it is intersecting.
+    children: [observedElement(f.mono), edgeSeam, viewportLabel, message],
   });
 
   const png = await render(root, {
