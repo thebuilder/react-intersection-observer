@@ -19,6 +19,10 @@
   --rio-panel-line: color-mix(in srgb, #a78bfa 24%, transparent);
   --rio-violet: #a78bfa;
   --rio-emerald: #34d399;
+  /* Dedicated button violet: darker/more saturated than the theme accent so
+     white label text stays high-contrast in both light and dark modes. */
+  --rio-btn: oklch(0.56 0.18 290);
+  --rio-btn-hover: oklch(0.62 0.17 290);
   --rio-focal: linear-gradient(135deg, #241f47 0%, #16294a 100%);
   --rio-mono: var(
     --blume-font-mono,
@@ -191,14 +195,14 @@
 }
 
 .rio-btn--primary {
-  background: var(--rio-accent);
-  color: var(--blume-accent-foreground, #10101a);
+  background: var(--rio-btn);
+  color: #fff;
   box-shadow: 0 8px 24px -12px
-    color-mix(in srgb, var(--rio-accent) 80%, transparent);
+    color-mix(in srgb, var(--rio-btn) 70%, transparent);
 }
 
 .rio-btn--primary:hover {
-  background: color-mix(in srgb, var(--rio-accent) 88%, white);
+  background: var(--rio-btn-hover);
 }
 
 .rio-btn--ghost {

@@ -8,6 +8,7 @@
     "apps/docs/docs/**/meta.ts",
     "apps/docs/islands/ObserverDemo.tsx",
     "apps/docs/pages/**/*.astro",
+    "apps/docs/scripts/generate-og.mjs",
     "apps/storybook/stories/**/*.mdx",
     "packages/react-intersection-observer/fixtures/react-compat/rsbuild.config.mjs"
   ],
