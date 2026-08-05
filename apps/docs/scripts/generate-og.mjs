@@ -36,6 +36,13 @@ const ICON = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
 </svg>`;
 const ICON_URI = `data:image/svg+xml;base64,${Buffer.from(ICON).toString("base64")}`;
 
+// A crosshair for the "target" chip, echoing the page's instrument.
+const TARGET = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+  stroke="#c9b8ff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.6"/>
+  <path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/></svg>`;
+const TARGET_URI = `data:image/svg+xml;base64,${Buffer.from(TARGET).toString("base64")}`;
+
 async function loadFonts() {
   try {
     const subsets = await googleFonts([
@@ -94,6 +101,7 @@ function instrument(mono) {
       display: "flex",
       flexDirection: "column",
       gap: 22,
+      justifyContent: "space-between",
       padding: 32,
       width: 424,
     },
@@ -127,7 +135,7 @@ function instrument(mono) {
           }),
         ],
       }),
-      // Target chip on a viewport field with a threshold line
+      // Viewport field: a threshold line the target chip sits on.
       container({
         style: {
           alignItems: "center",
@@ -135,22 +143,48 @@ function instrument(mono) {
           border: `1px solid rgb(255 255 255 / 0.08)`,
           borderRadius: 14,
           display: "flex",
-          height: 150,
+          height: 152,
           justifyContent: "center",
+          overflow: "hidden",
           position: "relative",
         },
         children: [
           container({
             style: {
-              backgroundColor: "rgb(167 139 250 / 0.16)",
+              backgroundColor: "rgb(167 139 250 / 0.45)",
+              height: 1,
+              left: 0,
+              position: "absolute",
+              top: 97,
+              width: "100%",
+            },
+          }),
+          container({
+            style: { position: "absolute", right: 16, top: 74 },
+            children: [
+              text("threshold", {
+                color: "rgb(200 188 245 / 0.85)",
+                fontFamily: mono,
+                fontSize: 15,
+              }),
+            ],
+          }),
+          container({
+            style: {
+              alignItems: "center",
+              backgroundColor: "rgb(167 139 250 / 0.18)",
               border: `1px solid ${VLINE}`,
               borderRadius: 10,
+              display: "flex",
+              gap: 8,
               paddingBottom: 10,
-              paddingLeft: 16,
+              paddingLeft: 14,
               paddingRight: 16,
               paddingTop: 10,
+              position: "relative",
             },
             children: [
+              image({ src: TARGET_URI, width: 18, height: 18 }),
               text("Hero", { color: FG, fontFamily: mono, fontSize: 22 }),
             ],
           }),
@@ -158,25 +192,6 @@ function instrument(mono) {
       }),
       readout("intersectionRatio", "1.00", mono, FG),
       readout("inView", "true", mono, EMERALD),
-      // Full progress bar
-      container({
-        style: {
-          backgroundColor: "rgb(255 255 255 / 0.08)",
-          borderRadius: 999,
-          height: 8,
-          width: "100%",
-        },
-        children: [
-          container({
-            style: {
-              backgroundColor: VIOLET,
-              borderRadius: 999,
-              height: 8,
-              width: "100%",
-            },
-          }),
-        ],
-      }),
     ],
   });
 }
@@ -184,58 +199,64 @@ function instrument(mono) {
 async function main() {
   const f = await loadFonts();
 
-  const header = container({
-    style: { alignItems: "center", display: "flex", gap: 22 },
+  // Brand lockup anchors the top of the message column instead of floating
+  // alone as a header, so the left and right columns share a vertical extent.
+  const brand = container({
+    style: { alignItems: "center", display: "flex", gap: 18, marginBottom: 42 },
     children: [
-      image({ src: ICON_URI, width: 76, height: 76 }),
+      image({ src: ICON_URI, width: 60, height: 60 }),
       text("React Intersection Observer", {
         color: FG,
         fontFamily: f.display,
-        fontSize: 38,
+        fontSize: 30,
         fontWeight: 600,
         letterSpacing: "-0.01em",
       }),
     ],
   });
 
-  const copy = container({
+  const message = container({
     style: {
       display: "flex",
       flexDirection: "column",
-      flexGrow: 1,
-      maxWidth: 560,
-      paddingRight: 56,
+      maxWidth: 566,
+      paddingRight: 40,
     },
     children: [
+      brand,
       text("Know the moment an element meets the viewport.", {
         color: FG,
         fontFamily: f.display,
-        fontSize: 60,
+        fontSize: 58,
         fontWeight: 700,
         letterSpacing: "-0.03em",
-        lineHeight: 1.04,
+        lineHeight: 1.05,
       }),
       text(
         "A tiny, fully-typed React adapter for the Intersection Observer API.",
         {
           color: MUTED,
           fontFamily: f.body,
-          fontSize: 27,
+          fontSize: 26,
           lineHeight: 1.4,
-          marginTop: 28,
+          marginTop: 24,
+          maxWidth: 468,
         },
       ),
     ],
   });
 
-  const middle = container({
+  // The two-column band, centred as a unit so top and bottom margins match.
+  // `stretch` matches the instrument's height to the message column so their
+  // tops and bottoms align; the panel distributes its rows to fill.
+  const band = container({
     style: {
-      alignItems: "center",
+      alignItems: "stretch",
       display: "flex",
-      flexGrow: 1,
+      justifyContent: "space-between",
       width: "100%",
     },
-    children: [copy, instrument(f.mono)],
+    children: [message, instrument(f.mono)],
   });
 
   const root = container({
@@ -246,15 +267,13 @@ async function main() {
       color: FG,
       display: "flex",
       flexDirection: "column",
-      gap: 8,
       height: HEIGHT,
-      paddingBottom: 72,
+      justifyContent: "center",
       paddingLeft: 72,
       paddingRight: 72,
-      paddingTop: 68,
       width: WIDTH,
     },
-    children: [header, middle],
+    children: [band],
   });
 
   const png = await render(root, {
