@@ -6,7 +6,8 @@
     "build": "ASTRO_TELEMETRY_DISABLED=1 blume build",
     "lint": "biome check .",
     "typecheck": "ASTRO_TELEMETRY_DISABLED=1 blume check",
-    "validate": "ASTRO_TELEMETRY_DISABLED=1 blume validate"
+    "validate": "ASTRO_TELEMETRY_DISABLED=1 blume validate",
+    "og": "node scripts/generate-og.mjs"
   },
   "dependencies": {
     "react": "^19.2.8",
@@ -15,6 +16,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.6",
-    "blume": "^1.2.1"
+    "blume": "^1.2.1",
+    "takumi-js": "^2.5.4"
   }
 }
