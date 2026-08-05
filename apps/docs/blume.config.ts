@@ -45,6 +45,22 @@ export default defineConfig({
     },
     mode: "system",
   },
+  seo: {
+    // Brand the auto-generated per-page OG cards to the dark instrument look of
+    // the custom landing card, so every share image matches. `logo-og.svg` is
+    // the horizontal mark with currentColor strokes so Blume paints it in the
+    // light `foreground` on the dark background.
+    og: {
+      logo: "/logo-og.svg",
+      palette: {
+        accent: "oklch(0.76 0.12 290)",
+        background: "#0b0b12",
+        foreground: "#f5f3ff",
+        muted: "#a6a3be",
+        border: "rgb(255 255 255 / 0.1)",
+      },
+    },
+  },
   deployment: {
     output: "static",
   },
