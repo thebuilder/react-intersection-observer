@@ -318,20 +318,15 @@ export function Icon({
 }
 
 /* ------------------------------------------------------------------ */
-/* Code rendering — minimal, deliberate token colors on the dark panel */
+/* Code rendering — token kinds map to theme-aware colors in home.css   */
+/* (`.rio-tok--*`), so syntax stays readable in light and dark.         */
 /* ------------------------------------------------------------------ */
 
-const CODE_COLOR = {
-  t: "#d7d4e6", // plain text
-  k: "#c4b5fd", // keyword
-  f: "#a78bfa", // function / hook
-  s: "#8ee7a6", // string
-  c: "#948fb0", // comment
-  p: "#7cc7ff", // property / jsx attr
-} as const;
+// t: plain · k: keyword · f: function/hook · s: string · c: comment · p: prop
+type TokenKind = "t" | "k" | "f" | "s" | "c" | "p";
 
 /** A single token: [kind, value]. */
-export type Tk = [kind: keyof typeof CODE_COLOR, value: string];
+export type Tk = [kind: TokenKind, value: string];
 
 /** One line of code is a list of tokens. Convenience token builders: */
 export const c = {
@@ -365,9 +360,9 @@ export function Code({
               {line.length === 0 ? "​" : null}
               {line.map((token, j) => (
                 <span
+                  className={`rio-tok rio-tok--${token[0]}`}
                   // biome-ignore lint/suspicious/noArrayIndexKey: static tokens
                   key={j}
-                  style={{ color: CODE_COLOR[token[0]] }}
                 >
                   {token[1]}
                 </span>
