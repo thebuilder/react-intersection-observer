@@ -158,7 +158,7 @@ async function main() {
     style: { display: "flex", flexDirection: "column", maxWidth: 560 },
     children: [
       brand,
-      text("Know the moment an element meets the viewport.", {
+      text("Know when an element meets the viewport.", {
         color: FG,
         fontFamily: f.display,
         fontSize: 58,

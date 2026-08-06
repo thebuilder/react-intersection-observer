@@ -68,9 +68,7 @@ function Hero() {
     <header className="rio-section rio-hero" ref={ref}>
       <div className="rio-hero__grid">
         <div className="rio-hero__copy">
-          <h1 className="rio-h1">
-            Know the moment an element meets the viewport.
-          </h1>
+          <h1 className="rio-h1">Know when an element meets the viewport.</h1>
           <p className="rio-lead">
             A tiny, fully-typed React adapter for the Intersection Observer API.
             Reveal on scroll, lazy-load, track impressions, and build infinite

@@ -1,7 +1,9 @@
 /* ============================================================== */
 /* Landing page — React Intersection Observer                     */
-/* Page chrome follows Blume's theme; code + instrument panels are */
-/* a deliberate dark instrument surface in both color modes.       */
+/* Everything follows Blume's theme: chrome, panels, code, and     */
+/* instrument all adapt to light and dark. Tokens derive from the  */
+/* --color-* theme vars; the few that can't (code syntax, focal    */
+/* highlight) get an explicit dark override below.                 */
 /* ============================================================== */
 
 .rio-home {
@@ -12,18 +14,51 @@
   --rio-line-2: color-mix(in srgb, var(--color-foreground) 22%, transparent);
   --rio-surface: color-mix(in srgb, var(--color-foreground) 3.5%, transparent);
   --rio-surface-2: color-mix(in srgb, var(--color-foreground) 7%, transparent);
-  --rio-panel: #0d0d15;
-  --rio-panel-2: #14141f;
-  --rio-panel-fg: #ece9f8;
-  --rio-panel-muted: #a6a3be;
-  --rio-panel-line: color-mix(in srgb, #a78bfa 24%, transparent);
+
+  /* Panels: light surface in light mode, dark in dark, derived from theme. */
+  --rio-panel: color-mix(
+    in srgb,
+    var(--color-foreground) 4%,
+    var(--color-background)
+  );
+  --rio-panel-2: color-mix(
+    in srgb,
+    var(--color-foreground) 8%,
+    var(--color-background)
+  );
+  --rio-panel-inset: color-mix(
+    in srgb,
+    var(--color-foreground) 7%,
+    var(--color-background)
+  );
+  --rio-panel-fg: var(--color-foreground);
+  --rio-panel-muted: var(--color-muted-foreground);
+  --rio-panel-line: color-mix(in srgb, var(--rio-accent) 30%, transparent);
+  --rio-panel-hair: color-mix(in srgb, var(--color-foreground) 9%, transparent);
+
   --rio-violet: #a78bfa;
   --rio-emerald: #34d399;
   /* Dedicated button violet: darker/more saturated than the theme accent so
      white label text stays high-contrast in both light and dark modes. */
   --rio-btn: oklch(0.56 0.18 290);
   --rio-btn-hover: oklch(0.62 0.17 290);
-  --rio-focal: linear-gradient(135deg, #241f47 0%, #16294a 100%);
+
+  /* Focal highlight (target chip, logged tiles) and its text. */
+  --rio-focal: linear-gradient(
+    135deg,
+    color-mix(in srgb, #8b5cf6 16%, var(--color-background)),
+    color-mix(in srgb, #22d3ee 13%, var(--color-background))
+  );
+  --rio-focal-fg: var(--color-foreground);
+
+  /* Code syntax palette (light-mode values; dark overridden below). */
+  --rio-code-fg: #37324a;
+  --rio-code-k: #7c3aed;
+  --rio-code-f: #7c3aed;
+  --rio-code-s: #0f7a4d;
+  --rio-code-c: #86829a;
+  --rio-code-p: #0b6bb3;
+
   --rio-mono: var(
     --blume-font-mono,
     ui-monospace,
@@ -36,6 +71,18 @@
 
   color: var(--rio-fg);
   overflow-x: clip;
+}
+
+:root[data-theme="dark"] .rio-home {
+  --rio-panel-line: color-mix(in srgb, #a78bfa 24%, transparent);
+  --rio-focal: linear-gradient(135deg, #241f47 0%, #16294a 100%);
+  --rio-focal-fg: #f4f2ff;
+  --rio-code-fg: #d7d4e6;
+  --rio-code-k: #c4b5fd;
+  --rio-code-f: #a78bfa;
+  --rio-code-s: #8ee7a6;
+  --rio-code-c: #948fb0;
+  --rio-code-p: #7cc7ff;
 }
 
 .rio-home ::selection {
@@ -282,7 +329,7 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.7rem 0.7rem 0.7rem 0.9rem;
-  border-top: 1px solid color-mix(in srgb, #ffffff 6%, transparent);
+  border-top: 1px solid var(--rio-panel-hair);
 }
 
 .rio-install__cmd {
@@ -313,7 +360,7 @@
   height: 2.1rem;
   flex: none;
   border-radius: 8px;
-  border: 1px solid color-mix(in srgb, #ffffff 10%, transparent);
+  border: 1px solid var(--rio-panel-hair);
   background: var(--rio-panel-2);
   color: var(--rio-panel-muted);
   cursor: pointer;
@@ -428,10 +475,8 @@
   position: relative;
   height: 8.5rem;
   border-radius: 12px;
-  border: 1px solid color-mix(in srgb, #ffffff 8%, transparent);
-  background:
-    linear-gradient(color-mix(in srgb, #ffffff 3%, transparent), transparent),
-    #0a0a11;
+  border: 1px solid var(--rio-panel-hair);
+  background: var(--rio-panel-inset);
   overflow: hidden;
   margin-bottom: 1rem;
 }
@@ -476,7 +521,7 @@
   top: -1.5rem;
   font-family: var(--rio-mono);
   font-size: 0.62rem;
-  color: color-mix(in srgb, var(--rio-violet) 80%, white);
+  color: color-mix(in srgb, var(--rio-accent) 72%, var(--rio-panel-fg));
 }
 
 .rio-instrument__target {
@@ -493,7 +538,7 @@
   font-size: 0.78rem;
   border: 1px solid color-mix(in srgb, var(--rio-violet) 45%, transparent);
   background: var(--rio-focal);
-  color: #f4f2ff;
+  color: var(--rio-focal-fg);
   transition:
     box-shadow 0.3s ease,
     border-color 0.3s ease;
@@ -519,7 +564,7 @@
   gap: 0.5rem;
   font-family: var(--rio-mono);
   font-size: 0.76rem;
-  border-bottom: 1px solid color-mix(in srgb, #ffffff 6%, transparent);
+  border-bottom: 1px solid var(--rio-panel-hair);
   padding-bottom: 0.3rem;
 }
 
@@ -541,14 +586,14 @@
   color: var(--rio-emerald);
 }
 .rio-readout dd[data-tone="off"] {
-  color: color-mix(in srgb, var(--rio-panel-muted) 85%, white);
+  color: var(--rio-panel-muted);
 }
 
 .rio-instrument__bar,
 .rio-hud__bar {
   height: 5px;
   border-radius: 999px;
-  background: color-mix(in srgb, #ffffff 8%, transparent);
+  background: var(--rio-panel-hair);
   overflow: hidden;
 }
 
@@ -774,7 +819,7 @@
   font-size: 0.72rem;
   color: var(--rio-panel-muted);
   padding: 0.55rem 0.9rem;
-  border-bottom: 1px solid color-mix(in srgb, #ffffff 6%, transparent);
+  border-bottom: 1px solid var(--rio-panel-hair);
   background: var(--rio-panel-2);
 }
 
@@ -785,7 +830,7 @@
   font-family: var(--rio-mono);
   font-size: 0.82rem;
   line-height: 1.65;
-  color: #d7d4e6;
+  color: var(--rio-code-fg);
   tab-size: 2;
 }
 
@@ -798,8 +843,28 @@
   height: 8px;
 }
 .rio-code__pre::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, #ffffff 14%, transparent);
+  background: color-mix(in srgb, var(--color-foreground) 22%, transparent);
   border-radius: 999px;
+}
+
+/* Syntax token colors — theme-aware (values set on .rio-home + dark override). */
+.rio-tok--t {
+  color: var(--rio-code-fg);
+}
+.rio-tok--k {
+  color: var(--rio-code-k);
+}
+.rio-tok--f {
+  color: var(--rio-code-f);
+}
+.rio-tok--s {
+  color: var(--rio-code-s);
+}
+.rio-tok--c {
+  color: var(--rio-code-c);
+}
+.rio-tok--p {
+  color: var(--rio-code-p);
 }
 
 /* ------------------------------------------------------------- */
@@ -839,7 +904,7 @@
 .rio-tile[data-logged="true"] {
   border-color: color-mix(in srgb, var(--rio-emerald) 50%, transparent);
   background: var(--rio-focal);
-  color: #f2f1ff;
+  color: var(--rio-focal-fg);
 }
 
 .rio-tile__id {
@@ -872,7 +937,7 @@
 }
 
 .rio-tile[data-logged="true"] .rio-tile__index {
-  color: color-mix(in srgb, #ffffff 45%, transparent);
+  color: color-mix(in srgb, var(--rio-focal-fg) 55%, transparent);
 }
 
 .rio-impr__panel {
@@ -1075,6 +1140,18 @@
 .rio-footer__brand span {
   font-size: 0.82rem;
   color: var(--color-muted-foreground);
+}
+
+.rio-footer__brand a {
+  color: var(--color-foreground);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.rio-footer__brand a:hover {
+  color: var(--rio-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .rio-footer__nav {
