@@ -1142,6 +1142,18 @@
   color: var(--color-muted-foreground);
 }
 
+.rio-footer__brand a {
+  color: var(--color-foreground);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.rio-footer__brand a:hover {
+  color: var(--rio-accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .rio-footer__nav {
   display: flex;
   flex-wrap: wrap;
