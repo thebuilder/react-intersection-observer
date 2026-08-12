@@ -7,6 +7,6 @@ addons.setConfig({
     ...storybookTheme,
     brandImage: docsLogo,
     brandTitle: "React Intersection Observer",
-    brandUrl: "https://react-intersection-observer.vercel.app/",
+    brandUrl: "https://roi-storybook.thebuilder.dk/",
   },
 });
