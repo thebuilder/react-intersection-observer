@@ -5,7 +5,7 @@ import { storybookTheme } from "./theme";
 addons.setConfig({
   theme: {
     ...storybookTheme,
-    brandImage: docsLogo,
+    brandImage: `${docsLogo}#light`,
     brandTitle: "React Intersection Observer",
     brandUrl: "https://roi-storybook.thebuilder.dk/",
   },
