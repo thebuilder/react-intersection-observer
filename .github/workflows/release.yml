@@ -1,0 +1,78 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version bump"
+        type: choice
+        default: patch
+        options:
+          - patch
+          - minor
+          - major
+          - prepatch
+          - preminor
+          - premajor
+          - prerelease
+      tag:
+        description: "npm dist-tag"
+        type: string
+        default: latest
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Push the version commit/tag and create the GitHub release
+      id-token: write # Mint the OIDC token npm trusted publishing requires
+
+    defaults:
+      run:
+        working-directory: packages/react-intersection-observer
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - run: corepack enable
+        working-directory: .
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: "pnpm"
+          registry-url: "https://registry.npmjs.org"
+      - name: Update npm
+        # Trusted publishing requires npm 11.5.1 or newer
+        run: npm install -g npm@latest
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        working-directory: .
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+      - name: Bump version, commit and tag
+        run: pnpm exec bumpp ${{ inputs.version }} --yes
+      - name: Read version
+        id: version
+        run: echo "version=$(node -p "require('./package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Build
+        run: pnpm build
+        working-directory: .
+      - name: Publish to npm
+        # No NODE_AUTH_TOKEN: npm authenticates through the OIDC token, and
+        # provenance is attested automatically by trusted publishing.
+        run: npm publish --tag ${{ inputs.tag }}
+      - name: Create GitHub release
+        run: gh release create "v${{ steps.version.outputs.version }}" --generate-notes ${{ startsWith(inputs.version, 'pre') && '--prerelease' || '' }}
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}

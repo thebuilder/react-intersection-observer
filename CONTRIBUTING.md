@@ -50,13 +50,10 @@ Fork the repository and create a branch for your feature/bug fix.
 
 ### Commit Message Conventions
 
-- We use
-  [semantic-release](https://github.com/semantic-release/semantic-release) to
-  manage releases automatically. To ensure that releases are automatically
-  versioned correctly, we follow the
+- We follow the
   [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
-  Conventions. This means that your commit messages should have the following
-  format:
+  Conventions, so the generated release notes stay readable. This means that
+  your commit messages should have the following format:
 
 `<type>: <subject>`
 
@@ -92,3 +89,19 @@ Build every published and documentation surface with:
 ```shell
 pnpm build:all
 ```
+
+## Releasing
+
+Releases are published from CI with
+[npm trusted publishing](https://docs.npmjs.com/trusted-publishers), so no npm
+token exists anywhere and packages are published with provenance. There is no
+local publish step, and `npm publish` from a laptop will be rejected.
+
+To cut a release, a maintainer opens the **Actions** tab, selects the
+**Release** workflow and runs it from the branch to release:
+
+- `version` picks the bump (`patch`, `minor`, `major` or a `pre*` variant).
+- `tag` picks the npm dist-tag, `latest` by default. Use `beta` for prereleases.
+
+The workflow bumps the version, commits and tags it, builds the package,
+publishes it to npm, and creates a GitHub release with generated notes.
