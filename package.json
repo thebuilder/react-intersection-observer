@@ -13,7 +13,6 @@
     "dev:storybook": "pnpm --filter storybook dev",
     "docs:build": "pnpm --filter docs build",
     "lint": "pnpm --filter react-intersection-observer lint && pnpm --filter storybook lint && pnpm --filter docs lint",
-    "release": "pnpm --filter react-intersection-observer release",
     "test": "pnpm --filter react-intersection-observer test",
     "typecheck": "pnpm build && pnpm --filter react-intersection-observer typecheck && pnpm --filter storybook typecheck && pnpm --filter docs typecheck",
     "turbo:build": "turbo run build",

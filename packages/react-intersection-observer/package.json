@@ -48,7 +48,6 @@
     "postbuild": "npm_config_cache=.npm-cache attw --pack && publint && size-limit",
     "dev": "run-p dev:*",
     "dev:package": "tsup src/index.tsx --watch",
-    "release": "bumpp && npm publish",
     "preview": "pnpx pkg-pr-new publish --no-template",
     "lint": "biome check .",
     "version": "pnpm build",
@@ -69,21 +68,6 @@
     "useInView",
     "useIntersectionObserver"
   ],
-  "release": {
-    "branches": [
-      "main",
-      {
-        "name": "beta",
-        "prerelease": true
-      }
-    ],
-    "plugins": [
-      "@semantic-release/commit-analyzer",
-      "@semantic-release/release-notes-generator",
-      "@semantic-release/npm",
-      "@semantic-release/github"
-    ]
-  },
   "size-limit": [
     {
       "path": "dist/index.mjs",
