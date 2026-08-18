@@ -105,3 +105,8 @@ To cut a release, a maintainer opens the **Actions** tab, selects the
 
 The workflow bumps the version, commits and tags it, builds the package,
 publishes it to npm, and creates a GitHub release with generated notes.
+
+`main` is protected, so the version commit is pushed with a short-lived token
+minted from a GitHub App that is listed as a bypass actor on the branch
+ruleset. The app's id lives in the `RELEASE_APP_ID` variable and its private key
+in the `RELEASE_APP_KEY` secret.

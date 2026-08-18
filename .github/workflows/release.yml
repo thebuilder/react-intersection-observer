@@ -30,7 +30,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # Push the version commit/tag and create the GitHub release
+      contents: read # Everything that writes uses the GitHub App token below
       id-token: write # Mint the OIDC token npm trusted publishing requires
 
     defaults:
@@ -38,9 +38,20 @@ jobs:
         working-directory: packages/react-intersection-observer
 
     steps:
+      - name: Mint GitHub App token
+        # `main` is protected, and the GitHub Actions app cannot be a ruleset
+        # bypass actor on a user-owned repository. This app can, so the version
+        # commit is pushed with a short-lived token minted here and revoked
+        # when the job ends.
+        id: app-token
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.RELEASE_APP_ID }}
+          private-key: ${{ secrets.RELEASE_APP_KEY }}
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
+          token: ${{ steps.app-token.outputs.token }}
       - run: corepack enable
         working-directory: .
       - name: Setup Node.js
@@ -75,4 +86,4 @@ jobs:
         run: gh release create "v${{ steps.version.outputs.version }}" --generate-notes ${{ startsWith(inputs.version, 'pre') && '--prerelease' || '' }}
         working-directory: .
         env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
