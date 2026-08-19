@@ -91,6 +91,7 @@ export class InView extends React.Component<
       prevProps.scrollMargin !== this.props.scrollMargin ||
       prevProps.root !== this.props.root ||
       prevProps.threshold !== this.props.threshold ||
+      prevProps.triggerOnce !== this.props.triggerOnce ||
       prevProps.skip !== this.props.skip ||
       prevProps.trackVisibility !== this.props.trackVisibility ||
       prevProps.delay !== this.props.delay

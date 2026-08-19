@@ -144,6 +144,34 @@ test("Should unobserve when triggerOnce comes into view", () => {
   expect(instance.unobserve).toHaveBeenCalled();
 });
 
+test("Should resume observing when triggerOnce is disabled", () => {
+  const callback = vi.fn();
+  const { rerender } = render(
+    <InView triggerOnce onChange={callback}>
+      Inner
+    </InView>,
+  );
+
+  mockAllIsIntersecting(true);
+  expect(callback).toHaveBeenLastCalledWith(
+    true,
+    expect.objectContaining({ isIntersecting: true }),
+  );
+
+  rerender(
+    <InView triggerOnce={false} onChange={callback}>
+      Inner
+    </InView>,
+  );
+  callback.mockClear();
+  mockAllIsIntersecting(false);
+
+  expect(callback).toHaveBeenLastCalledWith(
+    false,
+    expect.objectContaining({ isIntersecting: false }),
+  );
+});
+
 test("Should unobserve when unmounted", () => {
   const { container, unmount } = render(<InView triggerOnce>Inner</InView>);
   const instance = intersectionMockInstance(container.children[0]);
