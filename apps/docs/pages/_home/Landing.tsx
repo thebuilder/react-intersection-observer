@@ -49,6 +49,7 @@ export default function Landing() {
         <Hero />
         <RevealBand />
         <ApiScrollspy />
+        <LazyStrip />
         <ImpressionStrip />
         <Playground />
         <ClosingCta />
@@ -70,9 +71,9 @@ function Hero() {
         <div className="rio-hero__copy">
           <h1 className="rio-h1">Know when an element meets the viewport.</h1>
           <p className="rio-lead">
-            A tiny, fully-typed React adapter for the Intersection Observer API.
-            Reveal on scroll, lazy-load, track impressions, and build infinite
-            lists with one hook and about a kilobyte.
+            Reveal on scroll, lazy-load images, track impressions, build
+            infinite lists. A tiny, fully-typed React adapter for the
+            Intersection Observer API, in about a kilobyte.
           </p>
 
           <InstallCommand />
@@ -536,6 +537,156 @@ function ApiStepCard({
       {/* Mobile: each step carries its own snippet (sticky panel is hidden). */}
       <Code className="rio-step__code" lines={step.code} />
     </li>
+  );
+}
+
+/* ================================================================== */
+/* Lazy strip: defer the work until the target is near                */
+/* ================================================================== */
+
+/* Stand-in artwork. Inline SVG keeps the demo self-contained, so a tile that
+   has not been reached yet costs nothing and the page pulls no extra files. */
+function art(from: string, to: string, seed: number) {
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120">` +
+    `<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">` +
+    `<stop offset="0" stop-color="${from}"/><stop offset="1" stop-color="${to}"/>` +
+    `</linearGradient></defs>` +
+    `<rect width="160" height="120" fill="url(#g)"/>` +
+    `<circle cx="${40 + seed * 17}" cy="${38 + seed * 9}" r="26" fill="#fff" opacity=".18"/>` +
+    `<circle cx="${118 - seed * 11}" cy="${86 - seed * 7}" r="34" fill="#000" opacity=".12"/>` +
+    `</svg>`;
+  return `data:image/svg+xml,${encodeURIComponent(svg)}`;
+}
+
+const PHOTOS = [
+  { id: "hero.jpg", src: art("#7c3aed", "#2563eb", 0) },
+  { id: "cover.jpg", src: art("#0ea5e9", "#14b8a6", 1) },
+  { id: "avatar.jpg", src: art("#f59e0b", "#ef4444", 2) },
+  { id: "chart.jpg", src: art("#10b981", "#0ea5e9", 3) },
+  { id: "banner.jpg", src: art("#8b5cf6", "#ec4899", 4) },
+  { id: "thumb.jpg", src: art("#6366f1", "#22d3ee", 5) },
+];
+
+function LazyStrip() {
+  const ref = useSectionSignal("lazy", "Lazy loading");
+  const [loaded, setLoaded] = useState<string[]>([]);
+  const markLoaded = useCallback((id: string) => {
+    setLoaded((current) => (current.includes(id) ? current : [...current, id]));
+  }, []);
+
+  return (
+    <section className="rio-section rio-lazy" ref={ref}>
+      <Reveal className="rio-head">
+        <h2 className="rio-h2">Load it just before it is needed.</h2>
+        <p className="rio-subhead">
+          Every tile below reserves its space, then mounts its{" "}
+          <code className="rio-inline">&lt;img&gt;</code> once the observer says
+          it is within 200px of the viewport. Nothing above the fold waits on
+          artwork that is still three screens away.
+        </p>
+      </Reveal>
+
+      <div className="rio-lazy__layout">
+        <div className="rio-lazy__grid">
+          {PHOTOS.map((photo, i) => (
+            <LazyTile
+              index={i}
+              key={photo.id}
+              onLoad={markLoaded}
+              photo={photo}
+            />
+          ))}
+        </div>
+
+        <aside className="rio-lazy__panel">
+          <div className="rio-counter">
+            <span className="rio-counter__num">
+              {loaded.length}
+              <span className="rio-counter__of">/{PHOTOS.length}</span>
+            </span>
+            <span className="rio-counter__label">images requested</span>
+          </div>
+          <Code
+            className="rio-lazy__code"
+            label="defer until near"
+            lines={[
+              [
+                c.k("const"),
+                c.t(" { ref, "),
+                c.t("inView"),
+                c.t(" } = "),
+                c.f("useInView"),
+                c.t("({"),
+              ],
+              [c.t("  rootMargin: "), c.s('"200px 0px"'), c.t(",")],
+              [c.t("  triggerOnce: "), c.k("true"), c.t(",")],
+              [c.t("});")],
+              [],
+              [c.c("// .frame holds the space either way")],
+              [c.t("<div ref={ref} className="), c.s('"frame"'), c.t(">")],
+              [c.t("  {inView ? <img src={src} /> : "), c.k("null"), c.t("}")],
+              [c.t("</div>")],
+            ]}
+          />
+        </aside>
+      </div>
+
+      <Reveal className="rio-band__note">
+        <Icon name="feather" size={16} />
+        <span>
+          Plain images want <code className="rio-inline">loading="lazy"</code>{" "}
+          instead. Reach for the observer when you need the preload margin, a
+          placeholder, or a transition.
+        </span>
+      </Reveal>
+    </section>
+  );
+}
+
+function LazyTile({
+  photo,
+  index,
+  onLoad,
+}: {
+  photo: { id: string; src: string };
+  index: number;
+  onLoad: (id: string) => void;
+}) {
+  const { ref, inView } = useInView({
+    rootMargin: "200px 0px",
+    triggerOnce: true,
+  });
+
+  useEffect(() => {
+    if (inView) onLoad(photo.id);
+  }, [inView, onLoad, photo.id]);
+
+  return (
+    <figure className="rio-shot" data-loaded={inView} ref={ref}>
+      <div className="rio-shot__frame">
+        {inView ? (
+          <img alt="" className="rio-shot__img" src={photo.src} />
+        ) : (
+          <span className="rio-shot__skeleton" />
+        )}
+      </div>
+      <figcaption className="rio-shot__meta">
+        <span className="rio-shot__name">{photo.id}</span>
+        <span className="rio-shot__state">
+          {inView ? (
+            <>
+              <Icon name="check" size={13} /> loaded
+            </>
+          ) : (
+            "deferred"
+          )}
+        </span>
+      </figcaption>
+      <span className="rio-shot__index" aria-hidden="true">
+        {String(index + 1).padStart(2, "0")}
+      </span>
+    </figure>
   );
 }
 

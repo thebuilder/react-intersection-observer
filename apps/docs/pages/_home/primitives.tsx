@@ -284,6 +284,14 @@ const ICON_PATHS: Record<string, ReactNode> = {
       <path d="M7 18v-8h3v6M10 12h1M13 18v-8h4v8M15 10v6" />
     </>
   ),
+  image: (
+    <>
+      <rect x="3" y="4" width="18" height="16" rx="2" />
+      <circle cx="8.5" cy="9.5" r="1.5" />
+      <path d="m4 17 4.5-4.5a2 2 0 0 1 2.8 0L15 16" />
+      <path d="m14 15 1.6-1.6a2 2 0 0 1 2.8 0L20 15" />
+    </>
+  ),
 };
 
 export function Icon({

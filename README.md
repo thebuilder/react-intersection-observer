@@ -9,7 +9,8 @@
 ![npm package minimized gzipped size](https://img.shields.io/bundlejs/size/react-intersection-observer?exports=InView%2C%20useOnInView%2C%20useInView&externals=react&format=both)
 
 A React implementation of the [Intersection Observer API](https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API)
-that tells you when an element enters or leaves the viewport. It ships
+that tells you when an element enters or leaves the viewport. Use it for scroll
+animations, lazy loading, impression tracking, and infinite scroll. It ships
 [hooks](#useinview-hook), [render props](#render-props), and
 [plain children](#plain-children).
 
