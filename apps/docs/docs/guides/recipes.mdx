@@ -3,15 +3,15 @@ title: Recipes
 description: Complete visibility-aware React patterns built with react-intersection-observer.
 ---
 
-Each recipe starts with the problem it solves, shows a complete component, and calls out the boundary that is easiest to miss. For the API details behind the examples, see [Core APIs](/api/core-apis) and [Configuration](/api/configuration).
+Each recipe states the problem, shows a complete component, and calls out the part that is easiest to get wrong. For the API details behind the examples, see [Core APIs](/api/core-apis) and [Configuration](/api/configuration).
 
 ## Lazy image loading
 
 :::tip[Prefer native lazy loading]
-Add the `loading="lazy"` attribute to ordinary image elements. It lets the browser decide when to defer image loading without any observer code.
+Add `loading="lazy"` to ordinary image elements and the browser defers loading for you, with no observer code.
 :::
 
-Use the observer when you need an explicit preload margin, a custom placeholder, or a component-level loading transition.
+Reach for the observer when you need a specific preload margin, a custom placeholder, or a loading transition on the component.
 
 ```tsx
 import { useInView } from "react-intersection-observer";
@@ -43,7 +43,7 @@ export function LazyImage({ src, alt, width, height }: LazyImageProps) {
 
 <ObserverDemo recipe="lazy-image" />
 
-Reserve the image's space with dimensions or an aspect ratio. Otherwise the image can shift the page after it loads, and the observer may repeatedly encounter a moving target.
+Reserve the image's space with dimensions or an aspect ratio. Without it the image shifts the page when it loads, and the observer keeps chasing a moving target.
 
 ## Scroll-triggered animation
 
@@ -99,7 +99,7 @@ export function Reveal({ children }: { children: React.ReactNode }) {
 
 <ObserverDemo recipe="reveal" />
 
-The baseline remains visible until the browser can enhance it, and `fallbackInView: true` keeps it visible when observation is unavailable. Do not make the animation the only way to discover important content; reduced-motion users see it immediately.
+The content stays visible until the observer takes over, and `fallbackInView: true` keeps it visible when observation never arrives. Never make the animation the only way to find important content. Reduced-motion users see it right away.
 
 ## Track an impression
 
@@ -127,11 +127,13 @@ export function Impression({ id, record }: ImpressionProps) {
 
 <ObserverDemo recipe="impression" />
 
-The package ignores the initial `false` notification, so this callback records the first accepted enter transition. Keep the identifier stable and decide whether `triggerOnce` matches your analytics definition of an impression. An intersection does not prove that content was meaningfully viewed: add a minimum-duration rule when your definition requires time in view, and evaluate [Observer v2](/guides/intersection-observer-v2) when covered or visually compromised content matters.
+The package ignores the initial `false` notification, so this callback records the first accepted enter transition. Keep the identifier stable, and check that `triggerOnce` matches what your analytics counts as an impression.
+
+An intersection does not prove anyone actually looked at the content. Add a minimum-duration rule if your definition requires time in view, and look at [Observer v2](/guides/intersection-observer-v2) if covered or filtered content matters to you.
 
 ## Infinite scrolling
 
-Observe a sentinel at the end of a list, guard requests while loading, and keep an explicit fallback action for keyboard and assistive-technology users:
+Observe a sentinel at the end of the list, guard requests while loading, and keep a real button for keyboard and assistive-technology users:
 
 ```tsx
 import { useCallback, useEffect, useState, type Key, type ReactNode } from "react";
@@ -222,4 +224,6 @@ export function InfiniteList<T>({
 
 <ObserverDemo recipe="infinite-list" />
 
-Start with `loading: true` so the sentinel cannot race the first request. After that, the `skip` guard prevents duplicate requests. `rootMargin` can begin loading before the sentinel reaches the viewport; tune its `400px` value to the network and item size. The `items.length` value is the next page's `skip`; use the pagination contract your API expects. Always keep a manual “Load more” path and retry boundary rather than making scrolling the only way to fetch content.
+Start with `loading: true` so the sentinel cannot race the first request. After that, the `skip` guard blocks duplicate requests. `rootMargin` starts the load before the sentinel reaches the viewport, so tune the `400px` value to your network and item size. This example sends `items.length` as the next page's `skip`; use whatever pagination your API expects.
+
+Keep the manual "Load more" button and the retry path. Scrolling should never be the only way to fetch content.

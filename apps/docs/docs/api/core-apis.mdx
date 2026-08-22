@@ -3,7 +3,7 @@ title: Core APIs
 description: Choose and use the three React APIs for observing elements.
 ---
 
-`react-intersection-observer`'s primary React surface consists of two hooks and one component. They all use the same observer options, but they express visibility in different ways.
+`react-intersection-observer` exports two hooks and one component. They take the same observer options and differ only in how they hand you the result.
 
 | API | Use it when | What it returns |
 | --- | --- | --- |
@@ -12,14 +12,14 @@ description: Choose and use the three React APIs for observing elements.
 | `<InView>` | Render props or a wrapper component fit the composition. | Render-prop fields, or a generated wrapper for plain children. |
 
 :::note[Initial notification]
-By default, the APIs suppress the observer's first `false` result. `initialInView` sets the starting state and changes how that first notification is handled. Later enter and leave transitions report both `true` and `false`.
+All three APIs suppress the observer's first `false` result. `initialInView` sets the starting state and changes how that first notification is handled. Every enter and leave transition after it reports both `true` and `false`.
 :::
 
-The package also exposes a low-level [`observe`](#low-level-observe) function for code that already owns a DOM element.
+There is also a low-level [`observe`](#low-level-observe) function for code that already owns a DOM element.
 
 ## Common configuration choices
 
-- [Load or reveal once](/api/configuration#stop-pause-or-choose-a-callback-api) with `triggerOnce`.
+- [Load or reveal once](/api/configuration#stop-or-pause-observation) with `triggerOnce`.
 - [Start work before the target reaches the viewport](/api/configuration#choose-when-it-counts-as-visible) with `rootMargin`.
 - [Require a meaningful amount of content to be visible](/api/configuration#choose-when-it-counts-as-visible) with `threshold`.
 - [Observe inside a scrolling container](/api/configuration#choose-where-to-observe) with `root`.
@@ -46,7 +46,7 @@ const { ref, inView, entry } = useInView();
 const [ref, inView, entry] = useInView();
 ```
 
-`entry` is `undefined` until an observer notification has been accepted. It is the latest [`IntersectionObserverEntry`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry), so use it for details such as `intersectionRatio`, `boundingClientRect`, or `target` when the UI needs geometry.
+`entry` is `undefined` until the first accepted notification. After that it is the latest [`IntersectionObserverEntry`](https://developer.mozilla.org/en-US/docs/Web/API/IntersectionObserverEntry), so read `intersectionRatio`, `boundingClientRect`, or `target` from it when the UI needs geometry.
 
 ### `onChange`
 
@@ -60,11 +60,11 @@ const { ref, inView } = useInView({
 });
 ```
 
-Use `useOnInView` when the callback is the primary result and you do not need the state update.
+Use `useOnInView` instead when the callback is the only result you need.
 
 ## `useOnInView`
 
-`useOnInView` returns a ref callback and does not update component state when visibility changes. It is a good fit for analytics, logging, prefetching, or other effects that should not cause a render:
+`useOnInView` returns a ref callback and never updates component state. Use it for analytics, logging, prefetching, and anything else that should not cause a render:
 
 ```tsx
 import { useOnInView } from "react-intersection-observer";
@@ -83,7 +83,7 @@ export function TrackedCard({ id }: { id: string }) {
 }
 ```
 
-The callback receives `(inView, entry)`. `useOnInView` accepts observer options that affect observation, including `root`, `rootMargin`, `scrollMargin`, `threshold`, `triggerOnce`, `skip`, `trackVisibility`, and `delay`. It does not accept `onChange`, `initialInView`, or `fallbackInView`.
+The callback receives `(inView, entry)`. `useOnInView` accepts the options that affect observation: `root`, `rootMargin`, `scrollMargin`, `threshold`, `triggerOnce`, `skip`, `trackVisibility`, and `delay`. It does not accept `onChange`, `initialInView`, or `fallbackInView`.
 
 ## `<InView>`
 
@@ -106,11 +106,11 @@ export function RevealCard() {
 }
 ```
 
-Render-prop fields are `{ ref, inView, entry }`. The `ref` must be attached to the element you want to observe.
+The render prop receives `{ ref, inView, entry }`. Attach the `ref` to the element you want to observe.
 
 ### Plain children
 
-Plain children are always rendered. In this form `<InView>` creates a wrapper element, forwards additional HTML props to that wrapper, and observes it:
+Plain children always render. In this form `<InView>` creates a wrapper element, forwards any extra HTML props to it, and observes it:
 
 ```tsx
 <InView as="section" className="article" onChange={handleChange}>
@@ -118,11 +118,11 @@ Plain children are always rendered. In this form `<InView>` creates a wrapper el
 </InView>
 ```
 
-Use `as` to keep the generated wrapper semantic. Plain-child mode does not support ref forwarding; use render props or `useInView` when you need direct control of the observed element or a custom component ref.
+Use `as` to keep the generated wrapper semantic. This form does not forward refs. Use render props or `useInView` when you need direct control of the observed element, or a ref on a custom component.
 
 ## Low-level `observe`
 
-The three APIs above are the React surface. When you already own a DOM element outside React rendering, use the low-level `observe` function and always keep its cleanup function:
+When you already own a DOM element outside React rendering, use the low-level `observe` function. Keep the cleanup function it returns:
 
 ```ts
 import { observe } from "react-intersection-observer";
@@ -143,7 +143,7 @@ stop();
 
 - `triggerOnce` stops observing after the first accepted `true` transition.
 - `skip` disables observation while preserving the current state.
-- When an observed node is removed and later replaced, the hook resets to `initialInView` unless `triggerOnce` or `skip` prevents that reset.
-- The latest `entry` may be `undefined` before the first accepted notification or after an observed node is reset.
+- When an observed node is removed and later replaced, the hook resets to `initialInView`, unless `triggerOnce` or `skip` prevents the reset.
+- `entry` is `undefined` before the first accepted notification, and again after an observed node resets.
 
 See [Configuration](/api/configuration) for every option and [Testing](/testing) for deterministic observer transitions.

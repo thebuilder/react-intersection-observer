@@ -13,7 +13,7 @@ sidebar:
 
 Use it to [lazy-load content](/guides/recipes#lazy-image-loading), trigger [scroll-based animations](/guides/recipes#scroll-triggered-animation), [track impressions](/guides/recipes#track-an-impression), prefetch data, highlight visible sections, and [load more results](/guides/recipes#infinite-scrolling).
 
-## Start simple
+## Install
 
 ```package-install
 react-intersection-observer
@@ -29,9 +29,9 @@ export function Section() {
 }
 ```
 
-Attach `ref` to an element and use `inView` in the render. By default, the browser viewport is the root and any intersection changes the state. Configure a threshold, margin, or custom root only when that default is not enough.
+Attach `ref` to an element and use `inView` in the render. The browser viewport is the root by default, and any intersection flips the state. Set a threshold, margin, or custom root when that default is not enough.
 
-When you need geometry, `entry` is the latest observer result; it is `undefined` until the browser accepts a notification.
+`entry` is the latest observer result, so read geometry from it. It stays `undefined` until the browser delivers the first accepted notification.
 
 ## Choose an API
 
@@ -41,24 +41,22 @@ When you need geometry, `entry` is the latest observer result; it is `undefined`
 | Run an impression, prefetch, or analytics callback | [`useOnInView`](/api/core-apis#useoninview) | Calls your callback without a hook-owned state update. |
 | Keep observation close to render props or a wrapper | [`<InView>`](/api/core-apis#inview) | Provides render props and supports plain children. |
 
-## See it work
+## Try it
 
-The basic hook above uses the browser viewport. This demo adds a custom scroll root and a threshold so you can see how options change the same `inView` state.
+The hook above uses the browser viewport. This demo adds a custom scroll root and a threshold, so you can see how options change the same `inView` state.
 
 <ObserverDemo />
 
-## Built for production React
+## What you get
 
+- **Shared observer instances.** Targets that use the same options share one `IntersectionObserver`, so observing hundreds of elements is cheap.
+- **Types in the package.** Hooks, components, options, and entries are typed. There is no `@types` package to install.
+- **Two test layers.** `react-intersection-observer/test-utils` drives deterministic transitions, and [Browser Mode](/testing/browser-mode) runs the browser's own observer.
+- **Separate entry points.** Import only `useInView` and the rest is tree shaken away, around 1.15kB gzipped.
 
-- **Native and efficient.** Familiar browser options and shared observer instances keep many observed elements inexpensive.
-- **Typed and composable.** Hooks, components, options, and observer entries are typed without another package.
-- **Testable at the right layer.** Use deterministic utilities for transitions and [Browser Mode](/testing/browser-mode) for real browser behavior.
-- **Focused exports.** Tree shaking keeps the client footprint limited to the APIs you import.
+## Where to go next
 
-## Common next steps
-
-- [**Core APIs**](/api/core-apis) — learn the full contracts and return values.
-- [**Observer options**](/api/configuration) — tune thresholds, margins, and scroll containers.
-- [**Recipes**](/guides/recipes) — build lazy loading, reveals, impressions, and infinite lists.
-
-For verification, see [Testing](/testing); for server-rendered apps, see [SSR and fallbacks](/guides/ssr).
+- [Core APIs](/api/core-apis) covers the full contracts and return values.
+- [Observer options](/api/configuration) covers thresholds, margins, and scroll containers.
+- [Recipes](/guides/recipes) builds lazy loading, reveals, impressions, and infinite lists.
+- [Testing](/testing) covers verification, and [SSR and fallbacks](/guides/ssr) covers server rendering.

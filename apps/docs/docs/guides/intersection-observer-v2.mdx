@@ -1,12 +1,12 @@
 ---
 title: Observer v2
-description: Use trackVisibility only when intersection alone is insufficient and you accept narrower browser support.
+description: Use trackVisibility only when intersection alone is not enough and you accept narrower browser support.
 sidebar:
   label: Observer v2
   badge: Experimental
 ---
 
-Most applications should use the standard `inView` signal. Intersection Observer v2 adds `trackVisibility` and `entry.isVisible` for specialised viewability cases where an intersecting element may be covered or visually compromised.
+Most applications should stick with the standard `inView` signal. Intersection Observer v2 adds `trackVisibility` and `entry.isVisible` for viewability cases where an intersecting element may be covered by something else or hidden behind a filter.
 
 ## Enable visibility tracking
 
@@ -38,16 +38,16 @@ export function Viewability({ onSeen }: { onSeen: () => void }) {
 }
 ```
 
-`isVisible` is not yet part of TypeScript's standard `IntersectionObserverEntry` declaration, so add the augmentation once in application types before reading it. The option is available on all three public APIs. With `useOnInView`, inspect `entry.isVisible` inside the callback; with `<InView>`, inspect it from the render-prop `entry` or `onChange` callback.
+`isVisible` is not in TypeScript's `IntersectionObserverEntry` declaration yet, so add the augmentation once in your application types before reading it. The option works with all three APIs. With `useOnInView`, read `entry.isVisible` inside the callback. With `<InView>`, read it from the render-prop `entry` or from `onChange`.
 
 ## Support and fallback behavior
 
-Support for v2 is narrower than support for the original Intersection Observer API. When the browser exposes Intersection Observer but does not provide `isVisible`, this package falls back to v1 behavior and sets `entry.isVisible` to the calculated intersection state. Treat that value as an approximation in unsupported browsers.
+Fewer browsers support v2 than the original API. When a browser has Intersection Observer but no `isVisible`, this package falls back to v1 and sets `entry.isVisible` to the calculated intersection state. Treat that value as an approximation there.
 
-If the entire `IntersectionObserver` API is unavailable, use `fallbackInView` or `defaultFallbackInView` as described in [Configuration](/api/configuration). These are separate concerns: v2 fallback covers a missing visibility field, while `fallbackInView` covers a missing observer API.
+Missing `isVisible` and a missing observer are separate problems. If the whole `IntersectionObserver` API is unavailable, use `fallbackInView` or `defaultFallbackInView` as described in [Configuration](/api/configuration).
 
 ## Test it deliberately
 
-Use a real browser when verifying geometry, clipping, or actual occlusion. The package mock can exercise the v1 fallback branch, but it cannot simulate an intersecting element being covered. For deterministic callback and threshold tests, assert the application behavior you need rather than actual occlusion.
+Verify geometry, clipping, and real occlusion in a real browser. The package mock can drive the v1 fallback branch and your callback, but it cannot cover one element with another, so it can never prove occlusion. In deterministic tests, assert the application behavior you need instead.
 
-Keep the minimum delay explicit in shared configuration so a future browser or package update does not silently make the observer invalid. The package mock can exercise your callback branch, but it cannot prove real occlusion.
+Keep the minimum `delay` in shared configuration so a future browser or package update cannot quietly make the observer invalid.
