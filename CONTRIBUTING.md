@@ -1,7 +1,7 @@
-# Contribution Guidelines
+# Contribution guidelines
 
-Welcome to `react-intersection-observer`! I'm thrilled that you're interested in
-contributing. Here are some guidelines to help you get started.
+Thanks for wanting to contribute to `react-intersection-observer`. Here's what
+you need to know to get started.
 
 The codebase is written in TypeScript and uses PNPM workspaces:
 
@@ -12,22 +12,22 @@ The codebase is written in TypeScript and uses PNPM workspaces:
 
 ## Development
 
-Start by forking the repository, and after cloning it locally you can install
-the dependencies using [PNPM](https://pnpm.io/):
+Fork the repository, clone it locally, and install the dependencies with
+[PNPM](https://pnpm.io/):
 
 ```shell
 pnpm install
 ```
 
-Then you can start the development surfaces with the `dev` task:
+Then start both apps with the `dev` task:
 
 ```shell
 pnpm dev
 ```
 
-Use `pnpm dev:storybook` or `pnpm dev:docs` to start one surface at a time.
+Use `pnpm dev:storybook` or `pnpm dev:docs` to start one at a time.
 
-## Semantic Versioning
+## Semantic versioning
 
 `react-intersection-observer` follows Semantic Versioning 2.0 as defined at
 http://semver.org. This means that releases will be numbered with the following
@@ -39,52 +39,47 @@ format:
 - Backwards-compatible enhancements will increment the minor version.
 - Bug fixes and documentation changes will increment the patch version.
 
-## Pull Request Process
+## Pull requests
 
-Fork the repository and create a branch for your feature/bug fix.
+Create a branch on your fork for the fix or feature, then:
 
-- Add tests for your feature/bug fix.
-- Ensure that all tests pass before submitting your pull request.
-- Update the README.md file if necessary.
-- Ensure that your commits follow the conventions outlined in the next section.
+- Add tests for the change.
+- Make sure all tests pass.
+- Update `README.md` if the change affects it.
+- Follow the commit conventions below.
 
-### Commit Message Conventions
+### Commit message conventions
 
-- We follow the
-  [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/)
-  Conventions, so the generated release notes stay readable. This means that
-  your commit messages should have the following format:
+Commits follow
+[Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/), so the
+generated release notes stay readable:
 
 `<type>: <subject>`
 
-Here's what each part of the commit message means:
+- `<type>` is the kind of change. Use `feat` for new features, `fix` for bug
+  fixes, `docs` for documentation, and `chore` for everything that doesn't touch
+  the code itself, such as dependency updates.
+- `<subject>` is a short description of the change.
 
-- `<type>`: The type of change that you're committing. Valid types include
-  `feat` for new features, `fix` for bug fixes, `docs` for documentation
-  changes, and `chore` for changes that don't affect the code itself (e.g.
-  updating dependencies).
-- `<subject>`: A short description of the change.
+### Code style and linting
 
-### Code Style and Linting
-
-`react-intersection-observer` uses [Biome](https://biomejs.dev/) for code
-formatting and linting. Please ensure that your changes are formatted with Biome before
-submitting your pull request.
+`react-intersection-observer` uses [Biome](https://biomejs.dev/) for formatting
+and linting. Format your changes with Biome before opening a pull request.
 
 ### Testing
 
 `react-intersection-observer` uses [Vitest](https://vitest.dev/) for testing.
-Please ensure that your changes are covered by tests, and that all tests pass
-before submitting your pull request.
+Cover your changes with tests, and make sure the whole suite passes before
+opening a pull request.
 
-You can run the package tests with the `test` task. Component tests run in
-Vitest Browser Mode with Playwright; SSR tests run in a separate Node project.
+Run the package tests with the `test` task. Component tests run in Vitest
+Browser Mode with Playwright, and SSR tests run in a separate Node project.
 
 ```shell
 pnpm test
 ```
 
-Build every published and documentation surface with:
+Build the package and both apps with:
 
 ```shell
 pnpm build:all
@@ -107,6 +102,6 @@ The workflow bumps the version, commits and tags it, builds the package,
 publishes it to npm, and creates a GitHub release with generated notes.
 
 `main` is protected, so the version commit is pushed with a short-lived token
-minted from a GitHub App that is listed as a bypass actor on the branch
-ruleset. The app's id lives in the `RELEASE_APP_ID` variable and its private key
-in the `RELEASE_APP_KEY` secret.
+minted from a GitHub App listed as a bypass actor on the branch ruleset. The
+app's id lives in the `RELEASE_APP_ID` variable, and its private key in the
+`RELEASE_APP_KEY` secret.

@@ -1,5 +1,5 @@
 /* ============================================================== */
-/* Landing page — React Intersection Observer                     */
+/* Landing page: React Intersection Observer                     */
 /* Everything follows Blume's theme: chrome, panels, code, and     */
 /* instrument all adapt to light and dark. Tokens derive from the  */
 /* --color-* theme vars; the few that can't (code syntax, focal    */
@@ -160,8 +160,9 @@
 }
 
 /* Scroll reveal. Elements are hidden (opacity 0) only when the inline head
-   script in index.astro has set `data-rio-js` — i.e. JS is present and motion
-   is allowed — so they start hidden before first paint and never fade out.
+   script in index.astro has set `data-rio-js`, meaning JS is present and
+   motion is allowed, so they start hidden before first paint and never fade
+   out.
    With no JS or reduced motion the flag is absent and content stays visible.
    The island adds `is-visible` as each element enters the viewport. */
 :root[data-rio-js] .rio-reveal {
@@ -847,7 +848,7 @@
   border-radius: 999px;
 }
 
-/* Syntax token colors — theme-aware (values set on .rio-home + dark override). */
+/* Syntax token colors, theme-aware (values set on .rio-home + dark override). */
 .rio-tok--t {
   color: var(--rio-code-fg);
 }
@@ -972,6 +973,154 @@
   font-family: var(--rio-mono);
   font-size: 0.78rem;
   color: var(--rio-muted);
+}
+
+.rio-counter__of {
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--rio-muted);
+}
+
+/* ------------------------------------------------------------- */
+/* Lazy strip                                                     */
+/* ------------------------------------------------------------- */
+
+.rio-lazy__layout {
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: start;
+}
+
+.rio-lazy__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.75rem;
+}
+
+.rio-shot {
+  position: relative;
+  margin: 0;
+  padding: 0.55rem;
+  border-radius: 12px;
+  border: 1px solid var(--rio-line);
+  background: var(--rio-surface);
+  transition:
+    border-color 0.4s ease,
+    background 0.4s ease;
+}
+
+.rio-shot[data-loaded="true"] {
+  border-color: color-mix(in srgb, var(--rio-emerald) 45%, transparent);
+}
+
+/* The frame reserves the tile's space before the image exists, so loading one
+   never shifts the rows below it. This is the part that is easy to skip. */
+.rio-shot__frame {
+  aspect-ratio: 4 / 3;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--rio-surface-2);
+}
+
+.rio-shot__img {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  animation: rio-shot-in 0.45s ease both;
+}
+
+@keyframes rio-shot-in {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* Placeholder shimmer. Held still for anyone who asked for reduced motion. */
+.rio-shot__skeleton {
+  display: block;
+  block-size: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    color-mix(in srgb, var(--rio-fg) 8%, transparent) 50%,
+    transparent 70%
+  );
+  background-size: 220% 100%;
+  animation: rio-shot-shimmer 1.6s linear infinite;
+}
+
+@keyframes rio-shot-shimmer {
+  from {
+    background-position: 120% 0;
+  }
+  to {
+    background-position: -120% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rio-shot__img {
+    animation: none;
+  }
+  .rio-shot__skeleton {
+    animation: none;
+  }
+}
+
+.rio-shot__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+  font-family: var(--rio-mono);
+  font-size: 0.72rem;
+}
+
+.rio-shot__name {
+  font-weight: 600;
+}
+
+.rio-shot__state {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--rio-muted);
+}
+
+.rio-shot[data-loaded="true"] .rio-shot__state {
+  color: var(--rio-emerald);
+}
+
+/* The badge sits over the frame, so it has to read against both the empty
+   placeholder (theme-coloured) and the loaded artwork (always dark enough
+   for white). Two states, not one colour that only works on one of them. */
+.rio-shot__index {
+  position: absolute;
+  top: 1rem;
+  right: 1.1rem;
+  font-family: var(--rio-mono);
+  font-size: 0.72rem;
+  color: color-mix(in srgb, var(--rio-fg) 45%, transparent);
+}
+
+.rio-shot[data-loaded="true"] .rio-shot__index {
+  color: color-mix(in srgb, #fff 75%, transparent);
+  text-shadow: 0 1px 3px rgb(0 0 0 / 0.45);
+}
+
+.rio-lazy__panel {
+  position: sticky;
+  top: 6rem;
+  display: grid;
+  gap: 1rem;
 }
 
 /* ------------------------------------------------------------- */
@@ -1191,10 +1340,12 @@
   .rio-step__code {
     display: block;
   }
-  .rio-impr__layout {
+  .rio-impr__layout,
+  .rio-lazy__layout {
     grid-template-columns: 1fr;
   }
-  .rio-impr__panel {
+  .rio-impr__panel,
+  .rio-lazy__panel {
     position: static;
     grid-template-columns: 1fr 1fr;
   }
@@ -1204,11 +1355,15 @@
   .rio-hud {
     display: none;
   }
-  .rio-impr__panel {
+  .rio-impr__panel,
+  .rio-lazy__panel {
     grid-template-columns: 1fr;
   }
   .rio-impr__grid {
     grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr));
+  }
+  .rio-lazy__grid {
+    grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr));
   }
 
   /* Closing CTA: the primary action spans the row, GitHub and npm share the
