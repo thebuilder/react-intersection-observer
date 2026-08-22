@@ -121,7 +121,7 @@ function InstallCommand() {
       setCopied(true);
       window.setTimeout(() => setCopied(false), 1600);
     } catch {
-      /* clipboard unavailable — no-op */
+      /* clipboard unavailable, no-op */
     }
   }, [command]);
 
@@ -164,7 +164,7 @@ function InstallCommand() {
   );
 }
 
-/** Live telemetry instrument — reflects the page's own observation. */
+/** Live telemetry instrument. Reflects the page's own observation. */
 function Instrument() {
   const { snapshot } = useObserver();
   const reduced = usePrefersReducedMotion();
@@ -224,7 +224,7 @@ function Readout({
 }
 
 /* ================================================================== */
-/* Reveal band — scroll-triggered animation                            */
+/* Reveal band: scroll-triggered animation                           */
 /* ================================================================== */
 
 type Feature = {
@@ -309,7 +309,7 @@ function RevealBand() {
 }
 
 /* ================================================================== */
-/* API scrollspy — three APIs, one observer                            */
+/* API scrollspy: three APIs, one observer                           */
 /* ================================================================== */
 
 type ApiStep = {
@@ -348,7 +348,7 @@ const API_STEPS: ApiStep[] = [
     name: "useOnInView",
     signature: "(inView, entry) => void",
     blurb:
-      "Run an effect without a hook-owned re-render. Ideal for analytics, prefetching, or logging.",
+      "Run an effect without a hook-owned re-render. Use it for analytics, prefetching, and logging.",
     code: [
       [c.k("const"), c.t(" ref = "), c.f("useOnInView"), c.t("(")],
       [c.t("  (inView, entry) => {")],
@@ -540,7 +540,7 @@ function ApiStepCard({
 }
 
 /* ================================================================== */
-/* Impression strip — fire once, when seen                             */
+/* Impression strip: fire once, when seen                            */
 /* ================================================================== */
 
 const TILES = [
@@ -637,7 +637,7 @@ function ImpressionTile({ id, index }: { id: string; index: number }) {
 }
 
 /* ================================================================== */
-/* Playground — the existing interactive demo                          */
+/* Playground: the existing interactive demo                         */
 /* ================================================================== */
 
 function Playground() {
@@ -668,7 +668,7 @@ function ClosingCta() {
     <section className="rio-section rio-closing" ref={ref}>
       <Reveal className="rio-closing__inner">
         <h2 className="rio-h2 rio-closing__title">
-          Add a kilobyte. Ship the viewport.
+          Add a kilobyte. Know what is on screen.
         </h2>
         <p className="rio-subhead rio-closing__lead">
           Install, attach a ref, and read{" "}
@@ -702,7 +702,7 @@ function ClosingCta() {
 }
 
 /* ================================================================== */
-/* Floating HUD — the page watching itself                             */
+/* Floating HUD: the page watching itself                            */
 /* ================================================================== */
 
 function Hud() {

@@ -5,7 +5,7 @@ import { githubReleaseChangelogSource } from "./sources/github-releases";
 export default defineConfig({
   title: "React Intersection Observer",
   description:
-    "A lightweight React implementation of the Intersection Observer API.",
+    "React hooks and components for the Intersection Observer API. Know when an element enters or leaves the viewport.",
   logo: {
     image: "/logo-horizontal.svg",
     // The horizontal mark already carries the wordmark, so hide the extra text

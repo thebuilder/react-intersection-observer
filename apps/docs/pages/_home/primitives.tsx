@@ -28,7 +28,7 @@ export function usePrefersReducedMotion(): boolean {
 }
 
 /* ------------------------------------------------------------------ */
-/* Observer telemetry context — the page watching itself               */
+/* Observer telemetry context: the page watching itself              */
 /* ------------------------------------------------------------------ */
 
 type Snapshot = {
@@ -141,7 +141,7 @@ export function useSectionSignal(id: string, label: string) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Reveal — the scroll-triggered entrance, driven by the library       */
+/* Reveal: the scroll-triggered entrance, driven by the library      */
 /* ------------------------------------------------------------------ */
 
 /**
@@ -194,7 +194,7 @@ export function Reveal({
 }
 
 /* ------------------------------------------------------------------ */
-/* Line icons — drawn, single stroke weight                            */
+/* Line icons: drawn, single stroke weight                           */
 /* ------------------------------------------------------------------ */
 
 const ICON_PATHS: Record<string, ReactNode> = {
@@ -318,7 +318,7 @@ export function Icon({
 }
 
 /* ------------------------------------------------------------------ */
-/* Code rendering — token kinds map to theme-aware colors in home.css   */
+/* Code rendering: token kinds map to theme-aware colors in home.css */
 /* (`.rio-tok--*`), so syntax stays readable in light and dark.         */
 /* ------------------------------------------------------------------ */
 
