@@ -133,10 +133,10 @@ An intersection does not prove anyone actually looked at the content. Add a mini
 
 ## Infinite scrolling
 
-Observe a sentinel at the end of the list, guard requests while loading, and keep a real button for keyboard and assistive-technology users:
+Observe a sentinel at the end of the list, guard requests while one is in flight, and keep a real button for keyboard and assistive-technology users:
 
 ```tsx
-import { useCallback, useEffect, useState, type Key, type ReactNode } from "react";
+import { useState, type Key, type ReactNode } from "react";
 import { useInView } from "react-intersection-observer";
 
 type Page<T> = { items: T[]; hasNextPage: boolean };
@@ -152,51 +152,25 @@ export function InfiniteList<T>({
 }) {
   const [items, setItems] = useState<T[]>([]);
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
 
-  const loadMore = useCallback(async () => {
-    if (loading || !hasNextPage) return;
+  async function loadMore() {
+    if (status === "loading" || !hasNextPage) return;
 
-    setLoading(true);
-    setError(null);
+    setStatus("loading");
     try {
       const page = await loadPage(items.length);
       setItems((current) => [...current, ...page.items]);
       setHasNextPage(page.hasNextPage);
-    } catch (cause) {
-      setError(cause instanceof Error ? cause : new Error("Unable to load"));
-    } finally {
-      setLoading(false);
+      setStatus("idle");
+    } catch {
+      setStatus("error");
     }
-  }, [hasNextPage, items.length, loadPage, loading]);
-
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    void loadPage(0)
-      .then((page) => {
-        if (cancelled) return;
-        setItems(page.items);
-        setHasNextPage(page.hasNextPage);
-      })
-      .catch((cause) => {
-        if (!cancelled) {
-          setError(cause instanceof Error ? cause : new Error("Unable to load"));
-        }
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [loadPage]);
+  }
 
   const { ref } = useInView({
     rootMargin: "400px 0px",
-    skip: loading || !hasNextPage || error !== null,
+    skip: status !== "idle" || !hasNextPage,
     onChange: (inView) => {
       if (inView) void loadMore();
     },
@@ -204,16 +178,22 @@ export function InfiniteList<T>({
 
   return (
     <>
-      <ul>{items.map((item) => <li key={getKey(item)}>{renderItem(item)}</li>)}</ul>
+      <ul>
+        {items.map((item) => (
+          <li key={getKey(item)}>{renderItem(item)}</li>
+        ))}
+      </ul>
+
       <p aria-live="polite">
-        {loading ? "Loading more items…" : error ? "Could not load more items." : ""}
+        {status === "loading" ? "Loading more items…" : null}
+        {status === "error" ? "Could not load more items." : null}
       </p>
-      {error ? <button onClick={() => void loadMore()}>Try again</button> : null}
+
       {hasNextPage ? (
         <>
           <div ref={ref} aria-hidden="true" />
-          <button disabled={loading} onClick={() => void loadMore()}>
-            {loading ? "Loading…" : "Load more"}
+          <button disabled={status === "loading"} onClick={() => void loadMore()}>
+            {status === "error" ? "Try again" : "Load more"}
           </button>
         </>
       ) : null}
@@ -224,6 +204,12 @@ export function InfiniteList<T>({
 
 <ObserverDemo recipe="infinite-list" />
 
-Start with `loading: true` so the sentinel cannot race the first request. After that, the `skip` guard blocks duplicate requests. `rootMargin` starts the load before the sentinel reaches the viewport, so tune the `400px` value to your network and item size. This example sends `items.length` as the next page's `skip`; use whatever pagination your API expects.
+There is no effect here, and that is the point. An empty list puts the sentinel inside the viewport, so the observer asks for the first page through the same path as every page after it. An effect for the first page would duplicate the fetch, the error handling, and the loading flag, then race the observer for the same request.
 
-Keep the manual "Load more" button and the retry path. Scrolling should never be the only way to fetch content.
+One `status` beats separate `loading` and `error` booleans: the component cannot be loading and failed at the same time, and the retry button reads its own label from it.
+
+`skip` does two jobs. It keeps a second request from starting while one is in flight, and because the hook drops and recreates the observer when `skip` flips back, it re-arms the sentinel. A page too short to push the sentinel out of view keeps loading until the viewport fills.
+
+`rootMargin` starts the request before the sentinel reaches the viewport. Tune the `400px` value to your network and item size. This example sends `items.length` as the next page's `skip`; use whatever pagination your API expects.
+
+Keep the button. It retries after an error, it is the only route for keyboard and assistive-technology users, and it is the guaranteed way forward if the observer never fires again. Scrolling should never be the only way to fetch content.
