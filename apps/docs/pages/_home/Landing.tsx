@@ -544,8 +544,7 @@ function ApiStepCard({
 /* Lazy strip: defer the work until the target is near                */
 /* ================================================================== */
 
-/* Stand-in artwork. Inline SVG keeps the demo self-contained, so a tile that
-   has not been reached yet costs nothing and the page pulls no extra files. */
+/* Stand-in artwork, inline so an unreached tile costs nothing. */
 function art(from: string, to: string, seed: number) {
   const svg =
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120">` +
@@ -570,10 +569,7 @@ const PHOTOS = [
 
 function LazyStrip() {
   const ref = useSectionSignal("lazy", "Lazy loading");
-  const [loaded, setLoaded] = useState<string[]>([]);
-  const markLoaded = useCallback((id: string) => {
-    setLoaded((current) => (current.includes(id) ? current : [...current, id]));
-  }, []);
+  const [loaded, setLoaded] = useState(0);
 
   return (
     <section className="rio-section rio-lazy" ref={ref}>
@@ -593,7 +589,7 @@ function LazyStrip() {
             <LazyTile
               index={i}
               key={photo.id}
-              onLoad={markLoaded}
+              onLoad={() => setLoaded((n) => n + 1)}
               photo={photo}
             />
           ))}
@@ -602,7 +598,7 @@ function LazyStrip() {
         <aside className="rio-lazy__panel">
           <div className="rio-counter">
             <span className="rio-counter__num">
-              {loaded.length}
+              {loaded}
               <span className="rio-counter__of">/{PHOTOS.length}</span>
             </span>
             <span className="rio-counter__label">images requested</span>
@@ -651,16 +647,15 @@ function LazyTile({
 }: {
   photo: { id: string; src: string };
   index: number;
-  onLoad: (id: string) => void;
+  onLoad: () => void;
 }) {
   const { ref, inView } = useInView({
     rootMargin: "200px 0px",
     triggerOnce: true,
+    onChange: (visible) => {
+      if (visible) onLoad();
+    },
   });
-
-  useEffect(() => {
-    if (inView) onLoad(photo.id);
-  }, [inView, onLoad, photo.id]);
 
   return (
     <figure className="rio-shot" data-loaded={inView} ref={ref}>

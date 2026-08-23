@@ -1014,8 +1014,8 @@
   border-color: color-mix(in srgb, var(--rio-emerald) 45%, transparent);
 }
 
-/* The frame reserves the tile's space before the image exists, so loading one
-   never shifts the rows below it. This is the part that is easy to skip. */
+/* Reserves the tile's space before the image exists, so loading one never
+   shifts the rows below it. */
 .rio-shot__frame {
   aspect-ratio: 4 / 3;
   border-radius: 8px;
@@ -1099,9 +1099,8 @@
   color: var(--rio-emerald);
 }
 
-/* The badge sits over the frame, so it has to read against both the empty
-   placeholder (theme-coloured) and the loaded artwork (always dark enough
-   for white). Two states, not one colour that only works on one of them. */
+/* The badge sits over the frame, so it needs one color for the theme-tinted
+   placeholder and another for the artwork it covers once loaded. */
 .rio-shot__index {
   position: absolute;
   top: 1rem;

@@ -154,25 +154,25 @@ export function InfiniteList<T>({
   const [hasNextPage, setHasNextPage] = useState(true);
   const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
 
-  async function loadMore() {
+  function loadMore() {
     if (status === "loading" || !hasNextPage) return;
 
     setStatus("loading");
-    try {
-      const page = await loadPage(items.length);
-      setItems((current) => [...current, ...page.items]);
-      setHasNextPage(page.hasNextPage);
-      setStatus("idle");
-    } catch {
-      setStatus("error");
-    }
+    loadPage(items.length).then(
+      (page) => {
+        setItems((current) => [...current, ...page.items]);
+        setHasNextPage(page.hasNextPage);
+        setStatus("idle");
+      },
+      () => setStatus("error"),
+    );
   }
 
   const { ref } = useInView({
     rootMargin: "400px 0px",
     skip: status !== "idle" || !hasNextPage,
     onChange: (inView) => {
-      if (inView) void loadMore();
+      if (inView) loadMore();
     },
   });
 
@@ -192,7 +192,7 @@ export function InfiniteList<T>({
       {hasNextPage ? (
         <>
           <div ref={ref} aria-hidden="true" />
-          <button disabled={status === "loading"} onClick={() => void loadMore()}>
+          <button disabled={status === "loading"} onClick={loadMore}>
             {status === "error" ? "Try again" : "Load more"}
           </button>
         </>
@@ -207,6 +207,8 @@ export function InfiniteList<T>({
 There is no effect here, and that is the point. An empty list puts the sentinel inside the viewport, so the observer asks for the first page through the same path as every page after it. An effect for the first page would duplicate the fetch, the error handling, and the loading flag, then race the observer for the same request.
 
 One `status` beats separate `loading` and `error` booleans: the component cannot be loading and failed at the same time, and the retry button reads its own label from it.
+
+`loadMore` is not `async`. Nothing awaits it, so returning a promise would only invite a caller to try. It starts the request and reports the outcome through state, which is what both the observer and the button want.
 
 `skip` does two jobs. It keeps a second request from starting while one is in flight, and because the hook drops and recreates the observer when `skip` flips back, it re-arms the sentinel. A page too short to push the sentinel out of view keeps loading until the viewport fills.
 
