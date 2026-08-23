@@ -136,7 +136,7 @@ An intersection does not prove anyone actually looked at the content. Add a mini
 Observe a sentinel at the end of the list, guard requests while one is in flight, and keep a real button for keyboard and assistive-technology users:
 
 ```tsx
-import { useState, type Key, type ReactNode } from "react";
+import { useState, useTransition, type Key, type ReactNode } from "react";
 import { useInView } from "react-intersection-observer";
 
 type Page<T> = { items: T[]; hasNextPage: boolean };
@@ -152,25 +152,27 @@ export function InfiniteList<T>({
 }) {
   const [items, setItems] = useState<T[]>([]);
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [status, setStatus] = useState<"idle" | "loading" | "error">("idle");
+  const [failed, setFailed] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   function loadMore() {
-    if (status === "loading" || !hasNextPage) return;
+    if (isPending || !hasNextPage) return;
 
-    setStatus("loading");
-    loadPage(items.length).then(
-      (page) => {
+    setFailed(false);
+    startTransition(async () => {
+      try {
+        const page = await loadPage(items.length);
         setItems((current) => [...current, ...page.items]);
         setHasNextPage(page.hasNextPage);
-        setStatus("idle");
-      },
-      () => setStatus("error"),
-    );
+      } catch {
+        setFailed(true);
+      }
+    });
   }
 
   const { ref } = useInView({
     rootMargin: "400px 0px",
-    skip: status !== "idle" || !hasNextPage,
+    skip: isPending || failed || !hasNextPage,
     onChange: (inView) => {
       if (inView) loadMore();
     },
@@ -185,15 +187,15 @@ export function InfiniteList<T>({
       </ul>
 
       <p aria-live="polite">
-        {status === "loading" ? "Loading more items…" : null}
-        {status === "error" ? "Could not load more items." : null}
+        {isPending ? "Loading more items…" : null}
+        {failed ? "Could not load more items." : null}
       </p>
 
       {hasNextPage ? (
         <>
           <div ref={ref} aria-hidden="true" />
-          <button disabled={status === "loading"} onClick={loadMore}>
-            {status === "error" ? "Try again" : "Load more"}
+          <button disabled={isPending} onClick={loadMore}>
+            {failed ? "Try again" : "Load more"}
           </button>
         </>
       ) : null}
@@ -204,11 +206,15 @@ export function InfiniteList<T>({
 
 <ObserverDemo recipe="infinite-list" />
 
-There is no effect here, and that is the point. An empty list puts the sentinel inside the viewport, so the observer asks for the first page through the same path as every page after it. An effect for the first page would duplicate the fetch, the error handling, and the loading flag, then race the observer for the same request.
+:::note[React 19]
+Passing an async function to `startTransition` needs React 19. On React 18, only the updates you schedule before the first `await` are part of the transition, so `isPending` clears too early. Track a `"idle" | "loading" | "error"` status yourself there.
+:::
 
-One `status` beats separate `loading` and `error` booleans: the component cannot be loading and failed at the same time, and the retry button reads its own label from it.
+There is no effect here, and that is the point. An empty list puts the sentinel inside the viewport, so the observer asks for the first page through the same path as every page after it. An effect for the first page would duplicate the fetch, the error handling, and the pending flag, then race the observer for the same request.
 
-`loadMore` is not `async`. Nothing awaits it, so returning a promise would only invite a caller to try. It starts the request and reports the outcome through state, which is what both the observer and the button want.
+`useTransition` owns that pending flag. React raises `isPending` when `startTransition` runs and lowers it when the awaited work settles, so there is no `setLoading(true)` to pair with a `setLoading(false)` on every exit path. `startTransition` also awaits the async function you hand it, so nothing floats. Marking the append as a transition is worth it on its own: re-rendering a list that has grown to hundreds of rows no longer blocks a click or a keystroke.
+
+A hand-rolled loading boolean is also less reliable here. When `loadPage` resolves from a warm cache without ever yielding, React can batch the update that sets the flag together with the one that clears it. The observer then never sees `skip` change, and the list stops after one page. `isPending` renders either way.
 
 `skip` does two jobs. It keeps a second request from starting while one is in flight, and because the hook drops and recreates the observer when `skip` flips back, it re-arms the sentinel. A page too short to push the sentinel out of view keeps loading until the viewport fills.
 
