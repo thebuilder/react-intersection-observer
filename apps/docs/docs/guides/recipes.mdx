@@ -133,7 +133,7 @@ An intersection does not prove anyone actually looked at the content. Add a mini
 
 ## Infinite scrolling
 
-Observe a sentinel at the end of the list, guard requests while one is in flight, and keep a real button for keyboard and assistive-technology users:
+Observe a sentinel at the end of the list, guard requests while one is in flight, and add a real button for keyboard and assistive-technology users:
 
 ```tsx
 import { useState, useTransition, type Key, type ReactNode } from "react";
@@ -216,4 +216,4 @@ The sentinel starts inside the viewport, so the observer loads the first page to
 
 `rootMargin` starts the request before the sentinel is visible. Tune `400px` to your network and item size, and send whatever page key your API expects instead of `items.length`.
 
-Keep the button. Scrolling should never be the only way to load more.
+Scrolling should never be the only way to load more.
