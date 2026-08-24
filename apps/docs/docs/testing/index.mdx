@@ -1,28 +1,28 @@
 ---
 title: Testing
-description: Choose the test surface that matches the behavior you need to prove.
+description: Choose the test layer that matches the behavior you need to prove.
 sidebar:
   order: 1
 ---
 
-Intersection Observer tests fall into two categories. Pick the boundary first, then use the focused guide for that kind of test.
+Intersection Observer tests fall into two groups. Pick the layer first, then follow the guide for that kind of test.
 
-## Choose a test boundary
+## Choose a test layer
 
 | You need to prove… | Start here |
 | --- | --- |
-| Actual scrolling, geometry, or native observer behavior | [Browser Mode](/testing/browser-mode) |
+| Real scrolling, geometry, or native observer behavior | [Browser Mode](/testing/browser-mode) |
 | A deterministic callback, state transition, or threshold branch in Vitest or Jest | [Mock intersections](/testing/mocking-intersections) |
 
-Browser Mode and the package mock are complementary. Browser Mode verifies browser integration; the mock creates deterministic observer signals. Keep a native browser test free of a global mock setup.
+The two work together. Browser Mode verifies browser integration, and the mock produces deterministic observer signals. Keep the global mock setup out of native browser tests.
 
 ## Organize a mixed suite
 
-Keep each test boundary in its own named project so the DOM mock never leaks into native browser tests:
+Give each layer its own named project so the DOM mock never leaks into native browser tests:
 
 | Behavior | Project | Typical files | Setup |
 | --- | --- | --- | --- |
-| Real scrolling, layout, and native observer delivery | `browser` | `*.browser.test.tsx` | Vitest Browser Mode; no global test utilities. |
+| Real scrolling, layout, and native observer delivery | `browser` | `*.browser.test.tsx` | Vitest Browser Mode, with no global test utilities. |
 | Deterministic callbacks and thresholds | `dom` | `*.dom.test.tsx` | `happy-dom` or `jsdom` plus `test-utils`. |
 
-The Browser Mode and mock setup guides show the project-specific configuration.
+Both guides show the configuration for their own project.

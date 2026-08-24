@@ -80,12 +80,12 @@ function LiveObserverDemo() {
           >
             Step 2 · Scroll this panel to reveal the observed card ↓
           </div>
-          <FeedTeaser label="Design systems that travel" tone="warm" />
-          <FeedTeaser label="A quiet note on shipping" tone="cool" />
-          <FeedTeaser label="Small details, deliberately timed" tone="warm" />
-          <FeedTeaser label="A scroll worth observing" tone="cool" />
-          <FeedTeaser label="A detail worth loading" tone="warm" />
-          <FeedTeaser label="One more thing to notice" tone="cool" />
+          <FeedTeaser label="Feed item 1" tone="warm" />
+          <FeedTeaser label="Feed item 2" tone="cool" />
+          <FeedTeaser label="Feed item 3" tone="warm" />
+          <FeedTeaser label="Feed item 4" tone="cool" />
+          <FeedTeaser label="Feed item 5" tone="warm" />
+          <FeedTeaser label="Feed item 6" tone="cool" />
 
           <article
             ref={ref}
@@ -192,9 +192,9 @@ function LiveObserverDemo() {
             </div>
           </article>
 
-          <FeedTeaser label="Where interaction begins" tone="cool" />
-          <FeedTeaser label="A follow-up for the reader" tone="warm" />
-          <FeedTeaser label="The next item is already waiting" tone="cool" />
+          <FeedTeaser label="Feed item 7" tone="cool" />
+          <FeedTeaser label="Feed item 8" tone="warm" />
+          <FeedTeaser label="Feed item 9" tone="cool" />
         </section>
 
         <aside

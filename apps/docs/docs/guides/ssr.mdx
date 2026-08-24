@@ -3,11 +3,11 @@ title: SSR and fallbacks
 description: Separate server-rendered state, unsupported browsers, hydration, and application fallback policy.
 ---
 
-Intersection Observer is only available in a browser. Decide the server-rendered state, what may change after hydration, and how unsupported clients should behave together. `initialInView` controls the pre-observer render; it does not create an observer or guarantee that the target is visible. Hydration attaches the observer after the browser takes over, and a client without `IntersectionObserver` throws unless a fallback is configured. Use `fallbackInView` for one instance and `defaultFallbackInView` as an application-wide policy.
+Intersection Observer only exists in a browser, so decide three things together: what the server renders, what may change after hydration, and how a client without the API should behave. `initialInView` covers the first, `fallbackInView` covers one component in the third, and `defaultFallbackInView` sets that policy for the whole application.
 
 ## Choose the initial policy
 
-Use `initialInView` when you know how a component should render before the first observer notification:
+Use `initialInView` when you already know how a component should render before the first observer notification:
 
 ```tsx
 const { ref, inView } = useInView({
@@ -15,11 +15,11 @@ const { ref, inView } = useInView({
 });
 ```
 
-This is useful when above-the-fold content should begin in its visible state. It only controls the pre-observer render; it does not create an observer or guarantee that the target is visible.
+This helps when above-the-fold content should start out visible. It only controls the render before the observer reports. It does not create an observer, and it does not guarantee the target is visible.
 
 ## Fallback for unsupported clients
 
-If the observer API is unavailable, the default behavior is to throw. Set a local fallback when the policy belongs to one component:
+If the observer API is missing, the default behavior is to throw. Set a local fallback when the decision belongs to one component:
 
 ```tsx
 const { ref, inView } = useInView({
@@ -35,14 +35,10 @@ import { defaultFallbackInView } from "react-intersection-observer";
 defaultFallbackInView(false);
 ```
 
-Use `true` when content should be treated as visible even without observation. Use `false` when visibility should remain conservative and lazy work must not start automatically. Whichever value you choose, make sure the resulting behavior is safe for every observer in the application; a global fallback affects all instances that do not provide their own value.
+Pick `true` when content should count as visible even without observation. Pick `false` when lazy work must not start on its own. Either way, check that the result is safe for every observer in the application, because a global fallback applies to every instance that does not set its own value.
 
-fallbackInView is the local fallback for one hook or component. defaultFallbackInView is the global policy for every instance that does not provide its own fallback.
+## Hydration
 
-## Hydration considerations
+Hydration attaches the observer once the browser takes over, so nothing is observed during the server render. `entry` is `undefined` until an accepted notification arrives, and reading geometry from it on the server will fail.
 
-Hydration attaches the observer after the browser takes over. `initialInView` only controls the pre-observer render: it does not create an observer or guarantee the target is visible. A client without IntersectionObserver throws unless a fallback is configured.
-
-Avoid using an observer fallback as a substitute for a loading strategy. If the server renders hidden content and the client immediately renders visible content, reserve layout space and keep the change accessible. For images, provide dimensions and consider native `loading="lazy"`; for important content, ensure it remains available when observation is unavailable.
-
-`entry` is `undefined` until an accepted observer notification exists. Do not read geometry from it during the server render.
+If the server renders hidden content and the client immediately renders it visible, reserve the layout space and keep the change accessible. Give images dimensions and consider native `loading="lazy"`. For content that matters, make sure it is still reachable when observation is unavailable.
