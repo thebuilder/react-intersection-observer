@@ -46,7 +46,7 @@ Fewer browsers support v2 than the original API. When a browser has Intersection
 
 Missing `isVisible` and a missing observer are separate problems. If the whole `IntersectionObserver` API is unavailable, use `fallbackInView` or `defaultFallbackInView` as described in [Configuration](/api/configuration).
 
-## Test it deliberately
+## Test it in a real browser
 
 Verify geometry, clipping, and real occlusion in a real browser. The package mock can drive the v1 fallback branch and your callback, but it cannot cover one element with another, so it can never prove occlusion. In deterministic tests, assert the application behavior you need instead.
 

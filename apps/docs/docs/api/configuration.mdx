@@ -53,7 +53,7 @@ export function ScrollArea() {
 }
 ```
 
-`scrollMargin` is not a substitute for `rootMargin`. It only affects nested scroll containers inside the root, as in `useInView({ root, scrollMargin: "80px 0px" })`. Watch out for the things that quietly change what the browser considers visible: invalid margin syntax, thresholds outside `0` to `1`, iframes, and custom roots.
+When an inner scroller clips the target, add `scrollMargin`, as in `useInView({ root, scrollMargin: "80px 0px" })`. Watch out for the things that quietly change what the browser considers visible: invalid margin syntax, thresholds outside `0` to `1`, iframes, and custom roots.
 
 :::note[Verify configuration]
 Test real layout, scrolling, and geometry in [Vitest Browser Mode](/testing/browser-mode). To cross a configured threshold without depending on layout, use a deterministic mock. See [Mock intersections](/testing/mocking-intersections).
