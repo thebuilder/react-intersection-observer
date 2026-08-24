@@ -103,7 +103,7 @@ test("ignores the initial false notification", () => {
 });
 ```
 
-Pass a boolean to enter or leave. A number selects which configured thresholds the observer has crossed. It is not a layout ratio: the mock reports the highest crossed threshold as `entry.intersectionRatio`. Assert threshold behavior, not raw geometry or an arbitrary percentage.
+Pass a boolean to enter or leave. A number selects which of the configured thresholds the observer has crossed, and the mock reports the highest crossed one as `entry.intersectionRatio`. Assert against the thresholds you configured.
 
 These examples work the same in Vitest and Jest. Switch to [Browser Mode](/testing/browser-mode) when a test has to prove real browser behavior.
 

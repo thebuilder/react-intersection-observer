@@ -41,4 +41,4 @@ Pick `true` when content should count as visible even without observation. Pick 
 
 Hydration attaches the observer once the browser takes over, so nothing is observed during the server render. `entry` is `undefined` until an accepted notification arrives, and reading geometry from it on the server will fail.
 
-A fallback is not a loading strategy. If the server renders hidden content and the client immediately renders it visible, reserve the layout space and keep the change accessible. Give images dimensions and consider native `loading="lazy"`. For content that matters, make sure it is still reachable when observation is unavailable.
+If the server renders hidden content and the client immediately renders it visible, reserve the layout space and keep the change accessible. Give images dimensions and consider native `loading="lazy"`. For content that matters, make sure it is still reachable when observation is unavailable.
