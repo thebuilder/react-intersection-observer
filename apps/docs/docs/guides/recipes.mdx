@@ -207,19 +207,13 @@ export function InfiniteList<T>({
 <ObserverDemo recipe="infinite-list" />
 
 :::note[React 19]
-Passing an async function to `startTransition` needs React 19. On React 18, only the updates you schedule before the first `await` are part of the transition, so `isPending` clears too early. Track a `"idle" | "loading" | "error"` status yourself there.
+Passing an async function to `startTransition` needs React 19. On React 18 `isPending` clears at the first `await`, so track a loading status yourself there.
 :::
 
-There is no effect here. An empty list puts the sentinel in the viewport, so the observer requests the first page the same way it requests every page after it. Add an effect for that first page and you get a second copy of the fetch and the error handling, racing the observer for the same request.
+The sentinel starts inside the viewport, so the observer loads the first page too.
 
-`useTransition` tracks the pending state for you. React sets `isPending` when `startTransition` runs and clears it once the awaited work settles, so there is no `setLoading(false)` to repeat on every exit path. `startTransition` also awaits the async function you give it, so there is no unawaited promise. The append becomes a transition as well, which lets a list of hundreds of rows re-render without blocking a click.
+`skip` stops a second request while one is in flight. It also re-arms the sentinel, because the hook drops and recreates the observer each time `skip` flips back, so a page too short to fill the viewport keeps loading.
 
-A hand-rolled loading boolean breaks in one specific case. When `loadPage` resolves from a warm cache, React can batch the update that sets the flag with the one that clears it. `skip` never changes, the observer never starts again, and the list stops after one page. `isPending` always produces a render.
+`rootMargin` starts the request before the sentinel is visible. Tune `400px` to your network and item size, and send whatever page key your API expects instead of `items.length`.
 
-The transition has no error channel, so the `try`/`catch` stays. Drop it and the throw reaches the nearest error boundary, which swaps the list for a fallback and takes every page already loaded with it. Catching here keeps the rows on screen and turns the button into a retry.
-
-`skip` does two jobs. It stops a second request while one is in flight. It also gets the sentinel watching again, because the hook drops the observer and creates a new one each time `skip` flips back. So a page too short to push the sentinel out of view keeps loading until the viewport fills.
-
-`rootMargin` starts the request before the sentinel reaches the viewport. Tune the `400px` value to your network and item size. This example sends `items.length` as the next page's `skip`; use whatever pagination your API expects.
-
-Keep the button. It is the retry after a failure, and it is the only route for keyboard and assistive-technology users. Scrolling should never be the only way to fetch content.
+Keep the button. Scrolling should never be the only way to load more.
