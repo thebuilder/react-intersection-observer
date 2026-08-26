@@ -144,6 +144,105 @@ test("Should unobserve when triggerOnce comes into view", () => {
   expect(instance.unobserve).toHaveBeenCalled();
 });
 
+test("Should resume observing when triggerOnce is disabled while in view", () => {
+  const callback = vi.fn();
+  const { container, rerender } = render(
+    <InView triggerOnce onChange={callback}>
+      Inner
+    </InView>,
+  );
+  const element = container.children[0];
+  const initialObserver = intersectionMockInstance(element);
+  vi.spyOn(initialObserver, "unobserve");
+
+  mockAllIsIntersecting(true);
+  expect(callback).toHaveBeenCalledTimes(1);
+  expect(callback).toHaveBeenNthCalledWith(
+    1,
+    true,
+    expect.objectContaining({ isIntersecting: true }),
+  );
+  expect(initialObserver.unobserve).toHaveBeenCalledWith(element);
+
+  callback.mockClear();
+  rerender(
+    <InView triggerOnce={false} onChange={callback}>
+      Inner
+    </InView>,
+  );
+  const resumedObserver = intersectionMockInstance(element);
+  expect(resumedObserver).not.toBe(initialObserver);
+
+  // A fresh observer reports the element's current state.
+  mockAllIsIntersecting(true);
+  expect(callback).toHaveBeenNthCalledWith(
+    1,
+    true,
+    expect.objectContaining({ isIntersecting: true }),
+  );
+
+  mockAllIsIntersecting(false);
+  expect(callback).toHaveBeenNthCalledWith(
+    2,
+    false,
+    expect.objectContaining({ isIntersecting: false }),
+  );
+
+  mockAllIsIntersecting(true);
+  expect(callback).toHaveBeenNthCalledWith(
+    3,
+    true,
+    expect.objectContaining({ isIntersecting: true }),
+  );
+  expect(callback).toHaveBeenCalledTimes(3);
+});
+
+test("Should stop observing when triggerOnce is enabled while in view", () => {
+  const callback = vi.fn();
+  const { container, rerender } = render(
+    <InView triggerOnce={false} onChange={callback}>
+      Inner
+    </InView>,
+  );
+  const element = container.children[0];
+  const initialObserver = intersectionMockInstance(element);
+  vi.spyOn(initialObserver, "unobserve");
+
+  mockAllIsIntersecting(true);
+  expect(callback).toHaveBeenCalledTimes(1);
+  expect(callback).toHaveBeenNthCalledWith(
+    1,
+    true,
+    expect.objectContaining({ isIntersecting: true }),
+  );
+
+  callback.mockClear();
+  rerender(
+    <InView triggerOnce onChange={callback}>
+      Inner
+    </InView>,
+  );
+  expect(initialObserver.unobserve).toHaveBeenCalledWith(element);
+
+  const triggerOnceObserver = intersectionMockInstance(element);
+  expect(triggerOnceObserver).not.toBe(initialObserver);
+  vi.spyOn(triggerOnceObserver, "unobserve");
+
+  // A fresh observer reports the element's current state before triggerOnce stops it.
+  mockAllIsIntersecting(true);
+  expect(callback).toHaveBeenCalledTimes(1);
+  expect(callback).toHaveBeenNthCalledWith(
+    1,
+    true,
+    expect.objectContaining({ isIntersecting: true }),
+  );
+  expect(triggerOnceObserver.unobserve).toHaveBeenCalledWith(element);
+
+  mockAllIsIntersecting(false);
+  mockAllIsIntersecting(true);
+  expect(callback).toHaveBeenCalledTimes(1);
+});
+
 test("Should unobserve when unmounted", () => {
   const { container, unmount } = render(<InView triggerOnce>Inner</InView>);
   const instance = intersectionMockInstance(container.children[0]);
