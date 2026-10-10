@@ -301,6 +301,30 @@ test("should render with fallback", () => {
   }).toThrow();
 });
 
+test("should update fallbackInView when the observer is unsupported", () => {
+  // @ts-expect-error Simulate a browser without IntersectionObserver.
+  window.IntersectionObserver = undefined;
+  const callback = vi.fn();
+  const { rerender } = render(
+    <InView fallbackInView={true} onChange={callback}>
+      {({ inView, ref }) => <div ref={ref}>{inView.toString()}</div>}
+    </InView>,
+  );
+  screen.getByText("true");
+
+  rerender(
+    <InView fallbackInView={false} onChange={callback}>
+      {({ inView, ref }) => <div ref={ref}>{inView.toString()}</div>}
+    </InView>,
+  );
+
+  screen.getByText("false");
+  expect(callback).toHaveBeenLastCalledWith(
+    false,
+    expect.objectContaining({ isIntersecting: false }),
+  );
+});
+
 test("should render with global fallback", () => {
   const cb = vi.fn();
   // @ts-expect-error
