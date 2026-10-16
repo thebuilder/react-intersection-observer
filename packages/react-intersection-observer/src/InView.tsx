@@ -94,7 +94,8 @@ export class InView extends React.Component<
       prevProps.triggerOnce !== this.props.triggerOnce ||
       prevProps.skip !== this.props.skip ||
       prevProps.trackVisibility !== this.props.trackVisibility ||
-      prevProps.delay !== this.props.delay
+      prevProps.delay !== this.props.delay ||
+      prevProps.fallbackInView !== this.props.fallbackInView
     ) {
       this.unobserve();
       this.observeNode();
