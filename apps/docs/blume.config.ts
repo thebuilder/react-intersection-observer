@@ -1,4 +1,6 @@
 import { defineConfig } from "blume";
+import { vercel } from "blume/analytics";
+import { custom, filesystem } from "blume/sources";
 
 import { githubReleaseChangelogSource } from "./sources/github-releases";
 
@@ -12,9 +14,7 @@ export default defineConfig({
     // label the header would otherwise render beside it (empty string = hidden).
     text: "",
   },
-  analytics: {
-    vercel: true,
-  },
+  analytics: [vercel()],
   github: {
     owner: "thebuilder",
     repo: "react-intersection-observer",
@@ -22,14 +22,13 @@ export default defineConfig({
   },
   content: {
     sources: [
-      { type: "filesystem", root: "docs" },
-      {
-        type: "custom",
-        source: githubReleaseChangelogSource({
+      filesystem({ root: "docs" }),
+      custom(
+        githubReleaseChangelogSource({
           owner: "thebuilder",
           repo: "react-intersection-observer",
         }),
-      },
+      ),
     ],
   },
   navigation: {
@@ -61,10 +60,7 @@ export default defineConfig({
       },
     },
   },
-  deployment: {
-    output: "static",
-  },
-  ai: {
+  agents: {
     llmsTxt: true,
   },
 });
