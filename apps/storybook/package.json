@@ -37,6 +37,6 @@
     "postcss": "^8.5.25",
     "storybook": "10.5.5",
     "typescript": "^7.0.2",
-    "vite": "^8.1.5"
+    "vite": "^8.1.6"
   }
 }
