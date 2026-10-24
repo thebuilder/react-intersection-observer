@@ -27,7 +27,7 @@
   "devDependencies": {
     "@biomejs/biome": "^2.5.6",
     "@storybook/addon-docs": "10.5.5",
-    "@storybook/addon-vitest": "10.5.5",
+    "@storybook/addon-vitest": "10.6.2",
     "@storybook/builder-vite": "10.5.5",
     "@storybook/react": "10.5.5",
     "@storybook/react-vite": "10.5.5",
